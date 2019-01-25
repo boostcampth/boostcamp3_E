@@ -5,6 +5,12 @@
 
 > 기능정의서
 
+https://docs.google.com/document/d/1TTTtluPmB0fyN89_CRHUAK8T2xtDxzuhcyXaWuzecbM/edit
+
 > 화면정의서
 
+https://docs.google.com/document/d/1vVOnKNhLd52Nxs6HSa2ITW-s6aV5g4Dg6K3eIxgleHg/edit
+
 > 프로젝트 일정
+
+https://docs.google.com/spreadsheets/d/1j1As8H0BpbUjSVd2XuXzCKQ_vNdLAyI5-lePyBhfS8M/edit#gid=321824552
