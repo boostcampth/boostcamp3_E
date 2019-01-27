@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "41173084181",
+    "firebase_url": "https://boostcamp-1548575868471.firebaseio.com",
+    "project_id": "boostcamp-1548575868471",
+    "storage_bucket": "boostcamp-1548575868471.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41173084181:android:8f367b030a08186b",
+        "android_client_info": {
+          "package_name": "com.teame.boostcamp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41173084181-36vtfpq04119rfrbf1a7k53pl98obcn3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt9MagpKg2tFNkgbjLM1cGOVaeK6EHm7M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
