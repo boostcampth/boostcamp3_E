@@ -3,13 +3,19 @@
 buildscript {
     
     repositories {
+        mavenCentral()
         google()
         jcenter()
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
-        
 
+    dependencies {
+        classpath 'com.google.gms:google-services:4.2.0'
+        // keep gradle3.2.1 becuase Firebase Crashlytics Crash with gradle 3.3.0
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'io.fabric.tools:gradle:1.27.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -19,7 +25,11 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+        }
     }
+
 }
 
 task clean(type: Delete) {
