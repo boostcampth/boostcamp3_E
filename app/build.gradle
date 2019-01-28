@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -24,8 +25,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    // multiDex
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
-
     // merterial
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'com.google.android.material:material:1.0.0'
