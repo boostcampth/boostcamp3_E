@@ -33,4 +33,8 @@ https://docs.google.com/spreadsheets/d/1j1As8H0BpbUjSVd2XuXzCKQ_vNdLAyI5-lePyBhf
 이 스타일가이드는 아래 글을 기반으로 PRND프로젝트와 구성원의 스타일에 맞게 논의되어 작성되었습니다.
 - [A successful XML naming convention](https://jeroenmols.com/blog/2016/03/07/resourcenaming/)
 - [Best practices for happy Android resources](https://blog.shazam.com/best-practices-for-happy-android-resources-9445c1b521d6)
+<<<<<<< HEAD
 - [Project guidelines](https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
+=======
+- [Project guidelines](https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
+>>>>>>> 94f34ee70745ff90d60cd5d98720a89d45aa8939
