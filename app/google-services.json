@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:41173084181:android:8f367b030a08186b",
+        "mobilesdk_app_id": "1:41173084181:android:0cf0156690474284",
         "android_client_info": {
-          "package_name": "com.teame.boostcamp"
+          "package_name": "com.teame.boostcamp.myapplication"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "41173084181-5m1raa2dtnmoemggs64melmnmssnh462.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teame.boostcamp.myapplication",
+            "certificate_hash": "0d3e5b3fcfe1125bf940a2faa1f1d12880470008"
+          }
+        },
         {
           "client_id": "41173084181-36vtfpq04119rfrbf1a7k53pl98obcn3.apps.googleusercontent.com",
           "client_type": 3
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41173084181-36vtfpq04119rfrbf1a7k53pl98obcn3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
