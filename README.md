@@ -15,6 +15,10 @@ https://docs.google.com/document/d/1vVOnKNhLd52Nxs6HSa2ITW-s6aV5g4Dg6K3eIxgleHg/
 
 https://docs.google.com/spreadsheets/d/1j1As8H0BpbUjSVd2XuXzCKQ_vNdLAyI5-lePyBhfS8M/edit#gid=321824552
 
+
+## 작업하기 전에 PULL하기
+
+
 # 코드 컨벤션
 
 # 목록
@@ -24,10 +28,10 @@ https://docs.google.com/spreadsheets/d/1j1As8H0BpbUjSVd2XuXzCKQ_vNdLAyI5-lePyBhf
 - [Gradle](Gradle.md)
 - [Architecture](Architecture.md)
 
+# Feature 작성 방법
+1. 이슈 작성
+2. 브랜치 생성(feature/BCE-이슈번호-이슈제목)
 
-# 기타
-- Style Guide에 대한 개선사항 제안이나 Pull request는 언제나 환영입니다. 저희의 Contributor가 되어주세요.
-- PRND에서는 함께하실 여러분들을 채용하고 있습니다. [채용정보 확인하기](http://www.prnd.co.kr/category/jobs/)
 
 # 참고
 이 스타일가이드는 아래 글을 기반으로 PRND프로젝트와 구성원의 스타일에 맞게 논의되어 작성되었습니다.
