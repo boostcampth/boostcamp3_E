@@ -4,12 +4,12 @@
 
 > 주제설명 : 여행또는 출장등의 목적으로 국내,해외로 가야 하는 상황에서 각 국가마다 꼭 사야하는 꿀템들을 알려주고 아이템에 대한 개인의 의견들을 모아 판단에 도움을 주는 어플리케이션
 
-> 기능정의서
-- https://docs.google.com/document/d/1TTTtluPmB0fyN89_CRHUAK8T2xtDxzuhcyXaWuzecbM/edit
-
 > 화면정의서
+- https://docs.google.com/document/d/1vVOnKNhLd52Nxs6HSa2ITW-s6aV5g4Dg6K3eIxgleHg/edit
+
+> 기능정의서
 - 시나리오 : https://docs.google.com/document/d/1TTTtluPmB0fyN89_CRHUAK8T2xtDxzuhcyXaWuzecbM/edit
-- 기능 별 정리 : https://docs.google.com/document/d/1TTTtluPmB0fyN89_CRHUAK8T2xtDxzuhcyXaWuzecbM/edit
+- 기능 별 정리 : https://docs.google.com/spreadsheets/d/1usNgQ-SyEAl3jbu0Sbijl_P1VRxrJf0II-cLIESnH2c/edit?ts=5c493e1a#gid=0
 
 > 프로젝트 일정
 - https://docs.google.com/spreadsheets/d/1j1As8H0BpbUjSVd2XuXzCKQ_vNdLAyI5-lePyBhfS8M/edit#gid=1772226991
@@ -30,7 +30,7 @@
 - AAC : [Room](https://developer.android.com/reference/androidx/room/package-summary), [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager/basics)
 - Serverless & Network : [Firebase](https://firebase.google.com/docs/android/setup), [Naver shopping API](https://developers.naver.com/docs/search/shopping/), [retrofit2](https://github.com/square/retrofit)
 - Degine : [material](https://material.io/develop/android/)
-- Util : [Rxjava2](https://github.com/ReactiveX/RxJava) ([Rxjava2 Marble](http://reactivex.io/documentation/operators.html)), [TedPermission](https://github.com/ParkSangGwon/TedPermission)
+- Util : [AndroidX](https://developer.android.com/jetpack/androidx/), [DataBinding](https://developer.android.com/topic/libraries/data-binding/?hl=ko), [Rxjava2](https://github.com/ReactiveX/RxJava) ([Rxjava2 Marble](http://reactivex.io/documentation/operators.html)), [TedPermission](https://github.com/ParkSangGwon/TedPermission)
 
 ## 코드 컨벤션 <img src="https://d29fhpw069ctt2.cloudfront.net/icon/image/74149/preview.svg" width="24" height="24">
 
@@ -59,3 +59,8 @@
 
 ### 앱 타이틀 컬러
 - [머테리얼 추천 조합 컬러사용](https://material.io/tools/color/#!/?view.left=0&view.right=0&primary.color=0000c6&primary.text.color=ffffff&secondary.color=1b00d4)
+
+### 패키지 생성 참고자료
+- [google i/o sample](https://github.com/google/iosched)
+- [google blueprint](https://github.com/googlesamples/android-architecture)
+- [내생각](https://github.com/GODueol)

@@ -1,0 +1,5 @@
+##  util
+
+- 각종 helper, Databinding, 기타기능 util 등의 자바파일이 위치하게됨
+- 특정 ui에 종속되는 util은 하위패키지를 따로 생성
+- 하나의 util이 너무많은 클레스가 생성되면 util기능 단위로 하위 pakage를 생성 ex) notification
