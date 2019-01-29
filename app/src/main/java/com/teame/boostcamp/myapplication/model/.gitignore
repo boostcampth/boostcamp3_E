@@ -1,0 +1,5 @@
+## model
+
+- 모델 패키지는 MVP중 M(model)들을 담당하며 그에 필요한 DO(entitiy)을 같이 포함하는 패키지
+
+- model 패키지에서 별도 화면에서만 필요한 model은 내부에 패키지를 별도로 생성하여 entitiy와 repository를 생성해줌

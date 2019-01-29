@@ -1,0 +1,5 @@
+## Entity
+
+- POJO, DAO 등 데이터를 위한 Object파일들이 들어감
+
+ ex) User.java / CheckList.java /

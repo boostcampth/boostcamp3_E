@@ -1,0 +1,4 @@
+## service
+
+- MVP외에 구분하기 애매한 유틸작용들을 하는 service, broadcast가 위치하게됨
+- service root패키지에는 범용 서비스, 그 외 특정 화면에서 쓰이게되는 서비스는 내부 패키지로 생성한다.

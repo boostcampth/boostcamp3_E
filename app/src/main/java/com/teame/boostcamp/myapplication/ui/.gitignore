@@ -1,0 +1,7 @@
+## ui
+
+- MVP의 V(View) 와 P(Presenter)가 같이 존재하게됨
+
+- 가장 상위인 MainActivity와 탭은 ui root 패키지에 위치하며 그 외의 기능은 기능별로 내부 패키지화 하여 구현된다.
+
+- ui패키지 아래에는 V, P만 존재하게됨
