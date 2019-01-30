@@ -29,6 +29,16 @@
         </activity>
         <activity android:name=".ui.example.ExampleActivity">
         </activity>
+        <activity android:name=".authentication.LoginActivity"/>
+        <activity android:name=".authentication.SignUpActivity"/>
+
     </application>
 
+    <!-- 네이버 쇼핑 API
+    Client ID : z9Z80PiumT1gVVUgqs6K
+    Client Secret : 7TtoP9_U9U
+    -->
+    <!-- Google API
+    API KEY : AIzaSyD9S-SgzzyU7zPnlQYTC_5KFEfwLwDF2eY
+    -->
 </manifest>
