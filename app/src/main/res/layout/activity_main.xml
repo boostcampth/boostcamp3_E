@@ -12,6 +12,6 @@
         android:layout_height="match_parent"
         android:id="@+id/fragment"
         class="com.teame.boostcamp.myapplication.ui.ChekListCreateFragment"
-        tools:layout="@layout/fragment_tab1_main"/>
+        tools:layout="@layout/fragment_search"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,37 +1,22 @@
 package com.teame.boostcamp.myapplication.ui;
 
-<<<<<<< Updated upstream
-public class ChekListCreateFragment {
-=======
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.teame.boostcamp.myapplication.R;
 
 public class ChekListCreateFragment extends Fragment implements OnMapReadyCallback {
@@ -42,14 +27,8 @@ public class ChekListCreateFragment extends Fragment implements OnMapReadyCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_tab1_main, container, false);
-        TextInputEditText text=(TextInputEditText)view.findViewById(R.id.searchText);
-        text.setOnFocusChangeListener((v, hasFocus) -> {
-            if(hasFocus){
-                ll.setVisibility(View.VISIBLE);
-            }
-        });
-        map=(MapView)view.findViewById(R.id.map);
+        View view=inflater.inflate(R.layout.fragment_search, container, false);
+        map=(MapView)view.findViewById(R.id.mv_googlemap);
         map.getMapAsync(this);
         return view;
     }
@@ -102,5 +81,4 @@ public class ChekListCreateFragment extends Fragment implements OnMapReadyCallba
                 .position(new LatLng(0, 0))
                 .title("Marker"));
     }
->>>>>>> Stashed changes
 }
