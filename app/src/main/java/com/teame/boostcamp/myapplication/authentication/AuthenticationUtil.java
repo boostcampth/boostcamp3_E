@@ -15,12 +15,12 @@ public class AuthenticationUtil {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
-    public AuthenticationUtil(){
+    public AuthenticationUtil() {
         this.mAuth = FirebaseAuth.getInstance();
 
     }
 
-    public Single<Boolean> doLogIn(Activity activity, String email, String password){
+    public Single<Boolean> doLogIn(Activity activity, String email, String password) {
 
         return Single.create(emitter -> {
             mAuth.signInWithEmailAndPassword(email, password)
@@ -35,7 +35,7 @@ public class AuthenticationUtil {
 
     }
 
-    public Single<Boolean> checkEmailAvailable(String email){
+    public Single<Boolean> checkEmailAvailable(String email) {
         return Single.create(emitter -> {
             mAuth.fetchSignInMethodsForEmail(email)
                     .addOnCompleteListener(task -> {
@@ -44,17 +44,17 @@ public class AuthenticationUtil {
                             List<String> signInMethods = result.getSignInMethods();
                             if (!signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
                                 emitter.onSuccess(true);
-                            }else{
+                            } else {
                                 emitter.onError(new Exception("Duplicated Email"));
                             }
-                        }else {
+                        } else {
                             emitter.onError(new Exception("This email pattern is not available"));
                         }
                     });
         });
     }
 
-    public Single<Boolean> doSignUp(Activity activity, String email, String password, User userData){
+    public Single<Boolean> doSignUp(Activity activity, String email, String password, User userData) {
         db = FirebaseFirestore.getInstance();
         return Single.create(emitter -> {
             mAuth.createUserWithEmailAndPassword(email, password)

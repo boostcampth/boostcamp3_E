@@ -4,12 +4,13 @@ import android.app.Activity;
 
 public interface LoginContractor {
 
-    interface View{
+    interface View {
         void makeToast(String message);
+
         void startSingUpActivity();
     }
 
-    interface Presenter{
+    interface Presenter {
         void onLogInButtonClicked(Activity activity, String email, String password);
     }
 }

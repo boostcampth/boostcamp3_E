@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil;
 public class SignUpActivity extends AppCompatActivity implements SignUpContractor.View {
     private ActivitySignupBinding binding;
     private SignUpPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,12 +26,12 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContracto
         initView();
     }
 
-    public void initView(){
+    public void initView() {
         binding.btnEmailcheck.setOnClickListener(v -> {
             String email = binding.etEmail.getText().toString();
-            if(!TextUtils.isEmpty(email)) {
+            if (!TextUtils.isEmpty(email)) {
                 onEmailCheckButtonClicked(email);
-            }else{
+            } else {
                 makeToast("이메일을 입력해 주세요");
             }
         });
@@ -46,13 +47,12 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContracto
                 String password = binding.etPassword.getText().toString();
                 String passwordConfirm = binding.etPasswordconfirm.getText().toString();
 
-                if(password.equals(passwordConfirm) && !TextUtils.isEmpty(passwordConfirm)){
+                if (password.equals(passwordConfirm) && !TextUtils.isEmpty(passwordConfirm)) {
                     binding.tvPasswordCheck.setText("비밀번호가 일치합니다.");
                     binding.tvPasswordCheck.setTextColor(Color.GREEN);
-                }else if(TextUtils.isEmpty(password)){
+                } else if (TextUtils.isEmpty(password)) {
                     binding.tvPasswordCheck.setText("");
-                }
-                else{
+                } else {
                     binding.tvPasswordCheck.setText("비밀번호가 일치하지 않습니다.");
                     binding.tvPasswordCheck.setTextColor(Color.RED);
                 }
@@ -66,11 +66,13 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContracto
         binding.sbAge.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                binding.tvAge.setText(progress+"");
+                binding.tvAge.setText(progress + "");
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
@@ -78,32 +80,31 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContracto
         });
     }
 
-    public void onEmailCheckButtonClicked(String email){
-        if(!TextUtils.isEmpty(email)){
+    public void onEmailCheckButtonClicked(String email) {
+        if (!TextUtils.isEmpty(email)) {
             presenter.onEmailCheckButtonClicked(email);
-        }else{
+        } else {
             makeToast("이메일을 입력해 주세요");
         }
     }
 
-    public void onSignUpButtonClicked(){
+    public void onSignUpButtonClicked() {
         String email = binding.etEmail.getText().toString();
         String password = binding.etPassword.getText().toString();
         String passwordConfirm = binding.etPasswordconfirm.toString();
         int age = binding.sbAge.getProgress();
         String sex = null;
-        if(binding.rbFemale.isChecked()){
+        if (binding.rbFemale.isChecked()) {
             sex = "F";
-        }
-        else if(binding.rbMale.isChecked()){
+        } else if (binding.rbMale.isChecked()) {
             sex = "M";
         }
-        if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(sex) && age  > 1 && passwordConfirm.equals(password)){
+        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(sex) && age > 1 && passwordConfirm.equals(password)) {
             User userData = new User(email, password, age, sex);
             presenter.onSignUpButtonClicked(this, email, password, userData);
 
 
-        }else{
+        } else {
             makeToast("값을 다 입력해주세요");
             return;
         }
@@ -111,7 +112,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContracto
 
     }
 
-    public void makeToast(String message){
+    public void makeToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
