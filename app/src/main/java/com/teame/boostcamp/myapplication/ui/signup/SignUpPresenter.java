@@ -3,39 +3,59 @@ package com.teame.boostcamp.myapplication.ui.signup;
 
 import android.app.Activity;
 
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.teame.boostcamp.myapplication.model.entitiy.User;
-import com.teame.boostcamp.myapplication.util.AuthenticationUtil;
 
-import io.reactivex.disposables.CompositeDisposable;
+import java.util.List;
 
-public class SignUpPresenter implements SignUpContractor.Presenter {
-    private SignUpContractor.View view;
-    private CompositeDisposable signUpDisposable = new CompositeDisposable();
+public class SignUpPresenter implements SignUpContract.Presenter {
+    private SignUpContract.View view;
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
 
-    public SignUpPresenter(SignUpContractor.View view) {
+    public SignUpPresenter(SignUpContract.View view, FirebaseAuth auth) {
         this.view = view;
+        this.auth = auth;
     }
 
     @Override
-    public void onEmailCheckButtonClicked(String email) {
-        signUpDisposable.add(new AuthenticationUtil().checkEmailAvailable(email)
-                .subscribe(aBoolean -> {
-                            view.showToast("사용가능한 이메일 입니다.");
-                        }, throwable -> {
-                            view.showToast("중복되었거나 유효하지 않은 이메일 형식입니다");
+    public void checkEmailValidation(String email) {
+        view.showSignUpLoading(true);
+        auth.fetchSignInMethodsForEmail(email)
+                .addOnCompleteListener(task -> {
+                    view.showSignUpLoading(false);
+                    if (task.isSuccessful()) {
+                        SignInMethodQueryResult result = task.getResult();
+                        List<String> signInMethods = result.getSignInMethods();
+                        if (!signInMethods.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+                            view.succeedEmailValidation();
+                        } else {
+                            view.occurEmailDuplication();
                         }
-                ));
+                    } else {
+                        view.occurEmailFormatError();
+                    }
+                });
     }
 
     @Override
-    public void onSignUpButtonClicked(Activity activity, String email, String password, User userData) {
-        signUpDisposable.add(new AuthenticationUtil().doSignUp(activity, email, password, userData)
-                .subscribe(aBoolean -> {
-                            view.startMainActivity();
-                        }, throwable -> {
-                            view.showToast("실패");
-                        }
-                ));
+    public void doSignUp(String email, String password, User userData) {
+        view.showSignUpLoading(true);
+        db = FirebaseFirestore.getInstance();
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener((Activity) view, task -> {
+                    view.showSignUpLoading(false);
+                    if (task.isSuccessful()) {
+                        db.collection("users").document(auth.getUid()).set(userData);
+                        view.succeedSignUp();
+                    } else {
+                        view.occurSignUpError();
+                    }
+                });
+
     }
 
 
@@ -46,8 +66,6 @@ public class SignUpPresenter implements SignUpContractor.Presenter {
 
     @Override
     public void onDetach() {
-        if (signUpDisposable.isDisposed()) {
-            signUpDisposable.clear();
-        }
+
     }
 }

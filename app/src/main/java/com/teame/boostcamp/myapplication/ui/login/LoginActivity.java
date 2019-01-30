@@ -3,13 +3,15 @@ package com.teame.boostcamp.myapplication.ui.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ActivityLoginBinding;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.signup.SignUpActivity;
 
-public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginContractor.Presenter> implements LoginContractor.View {
+public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginContract.Presenter> implements LoginContract.View {
 
     @Override
     protected int getLayoutResourceId() {
@@ -22,19 +24,25 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     }
 
     @Override
-    protected LoginContractor.Presenter getPresenter() {
-        return new LoginPresenter(this);
+    protected LoginContract.Presenter getPresenter() {
+        return new LoginPresenter(this, FirebaseAuth.getInstance());
+    }
+
+    @Override
+    public void setPresenter(Object presenter) {
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+        presenter.checkLogIn();
     }
 
     private void initView() {
         binding.btnLogin.setOnClickListener(v -> onLogInButtonClicked());
-        binding.btnRegister.setOnClickListener(v -> startSingUpActivity());
+        binding.btnRegister.setOnClickListener(v -> startSignUpActivity());
     }
 
     private void onLogInButtonClicked() {
@@ -42,21 +50,51 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
         String password = binding.etPassword.getText().toString();
 
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-            presenter.onLogInButtonClicked(this, email, password);
+            presenter.doLogIn(email, password);
         } else {
-            showToast("아이디 또는 비밀번호를 입력해 주세요");
+            showToast(getString(R.string.login_empty_input_error));
         }
     }
 
-    @Override
-    public void startSingUpActivity() {
+    private void startSignUpActivity() {
         presenter.onDetach();
         startActivity(new Intent(this, SignUpActivity.class));
     }
 
-    @Override   // 로그인 성공 후 메인액티비티 이동 메서드
-    public void startMainActivity() {
-        presenter.onDetach();
-        showToast("성공");    // 테스트토스트
+    // 로그인 성공 후 메인액티비티 이동 메서드
+    @Override
+    public void succeedLogIn() {
+        showToast(getString(R.string.login_success));
+        /*
+         * 메인 액티비티 이동 코드 작성
+         * */
+        finish();
     }
+
+    @Override
+    public void occurLogInError() {
+        showToast(getString(R.string.login_error));
+    }
+
+    //로그인 체크 후 메인액티비티 이동 메서드
+    @Override
+    public void isLogIn(boolean logInCheck) {
+        if (logInCheck) {
+            /*
+            메인 액티비티로 이동 코드 작성
+             */
+            finish();
+        }
+    }
+
+    @Override
+    public void showLogInLoading(boolean visibility) {
+        if (visibility) {
+            binding.pbLoginloading.setVisibility(View.VISIBLE);
+        } else {
+            binding.pbLoginloading.setVisibility(View.GONE);
+        }
+    }
+
+
 }

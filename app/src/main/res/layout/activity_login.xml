@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -10,7 +9,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tfl_email"
+            android:id="@+id/til_email"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -19,7 +18,7 @@
             android:layout_marginTop="100dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:hint="  Email"
+            android:hint="@string/email_hint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imv_logo">
@@ -36,7 +35,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tfl_password"
+            android:id="@+id/til_password"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -45,10 +44,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:hint="  Password"
+            android:hint="@string/password_hint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tfl_email">
+            app:layout_constraintTop_toBottomOf="@+id/til_email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_password"
@@ -70,10 +69,8 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <com.google.android.material.button.MaterialButton
@@ -85,11 +82,11 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="40dp"
             android:padding="20dp"
-            android:text="로그인"
+            android:text="@string/login"
             android:textSize="18sp"
             app:backgroundTint="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tfl_password" />
+            app:layout_constraintTop_toBottomOf="@+id/til_password" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_register"
@@ -102,13 +99,30 @@
             android:layout_marginEnd="50dp"
             android:layout_marginRight="50dp"
             android:padding="20dp"
-            android:text="회원가입"
+            android:text="@string/signup"
             android:textSize="18sp"
             app:backgroundTint="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/btn_login"
-            app:layout_constraintTop_toBottomOf="@+id/tfl_password" />
+            app:layout_constraintTop_toBottomOf="@+id/til_password" />
+
+        <ProgressBar
+            android:id="@+id/pb_loginloading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

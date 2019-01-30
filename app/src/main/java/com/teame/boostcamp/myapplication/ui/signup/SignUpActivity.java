@@ -5,18 +5,20 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.SeekBar;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ActivitySignupBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.User;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 
-public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignUpContractor.Presenter> implements SignUpContractor.View {
+public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignUpContract.Presenter> implements SignUpContract.View {
 
     @Override
-    protected SignUpContractor.Presenter getPresenter() {
-        return new SignUpPresenter(this);
+    protected SignUpContract.Presenter getPresenter() {
+        return new SignUpPresenter(this, FirebaseAuth.getInstance());
     }
 
     @Override
@@ -30,18 +32,24 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
     }
 
     @Override
+    public void setPresenter(Object presenter) {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
     }
 
+
     public void initView() {
         binding.btnEmailcheck.setOnClickListener(v -> {
             String email = binding.etEmail.getText().toString();
             if (!TextUtils.isEmpty(email)) {
-                onEmailCheckButtonClicked(email);
+                presenter.checkEmailValidation(email);
             } else {
-                showToast("이메일을 입력해 주세요");
+                showToast(getString(R.string.empty_email));
             }
         });
         binding.btnRegister.setOnClickListener(v -> onSignUpButtonClicked());
@@ -57,12 +65,12 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
                 String passwordConfirm = binding.etPasswordconfirm.getText().toString();
 
                 if (password.equals(passwordConfirm) && !TextUtils.isEmpty(passwordConfirm)) {
-                    binding.tvPasswordCheck.setText("비밀번호가 일치합니다.");
+                    binding.tvPasswordCheck.setText(getString(R.string.password_confirm_true));
                     binding.tvPasswordCheck.setTextColor(Color.GREEN);
                 } else if (TextUtils.isEmpty(password)) {
                     binding.tvPasswordCheck.setText("");
                 } else {
-                    binding.tvPasswordCheck.setText("비밀번호가 일치하지 않습니다.");
+                    binding.tvPasswordCheck.setText(R.string.password_confirm_false);
                     binding.tvPasswordCheck.setTextColor(Color.RED);
                 }
             }
@@ -89,14 +97,6 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
         });
     }
 
-    private void onEmailCheckButtonClicked(String email) {
-        if (!TextUtils.isEmpty(email)) {
-            presenter.onEmailCheckButtonClicked(email);
-        } else {
-            showToast("이메일을 입력해 주세요");
-        }
-    }
-
     private void onSignUpButtonClicked() {
         String email = binding.etEmail.getText().toString();
         String password = binding.etPassword.getText().toString();
@@ -110,11 +110,11 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
         }
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(sex) && age > 1) {
             User userData = new User(email, password, age, sex);
-            presenter.onSignUpButtonClicked(this, email, password, userData);
+            presenter.doSignUp(email, password, userData);
 
 
         } else {
-            showToast("값을 다 입력해주세요");
+            showToast(getString(R.string.signup_empty_input_error));
 
         }
 
@@ -122,9 +122,38 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
     }
 
     @Override
-    public void startMainActivity() {       // 회원가입 완료 후 메인액티비티 이동 메서드
-        presenter.onDetach();
-        showToast("회원가입 성공"); // 테스트 토스트 - 지워주세요
+    public void succeedEmailValidation() {
+        showToast(getString(R.string.email_validation));
+    }
+
+    @Override
+    public void occurEmailDuplication() {
+        showToast(getString(R.string.email_duplication));
+    }
+
+    @Override
+    public void occurEmailFormatError() {
+        showToast(getString(R.string.email_format_error));
+    }
+
+    @Override
+    public void succeedSignUp() {
+        showToast(getString(R.string.signup_success));
+        finish();
+    }
+
+    @Override
+    public void occurSignUpError() {
+        showToast(getString(R.string.signup_error));
+    }
+
+    @Override
+    public void showSignUpLoading(boolean visibility) {
+        if (visibility) {
+            binding.pbSinguploading.setVisibility(View.VISIBLE);
+        } else {
+            binding.pbSinguploading.setVisibility(View.GONE);
+        }
     }
 
 
