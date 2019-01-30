@@ -3,4 +3,27 @@
     <string name="bottom_tab_main">Main</string>
     <string name="bottom_tab_my_list">MyList</string>
     <string name="bottom_tab_sns">SNS</string>
+    <string name="login_success">로그인 성공</string>
+    <string name="login_error">이메일과 비밀번호를 확인해 주세요</string>
+    <string name="login_empty_input_error">이메일 또는 비밀번호를 입력해 주세요</string>
+    <string name="signup_empty_input_error">값을 다 입력해주세요</string>
+    <string name="signup_success">회원가입 성공</string>
+    <string name="signup_error">값들을 다시 확인해주세요</string>
+    <string name="empty_email">이메일을 입력해 주세요</string>
+    <string name="email_validation">사용가능한 이메일 입니다.</string>
+    <string name="email_duplication">중복된 이메일 입니다</string>
+    <string name="email_format_error">잘못된 이메일 형식입니다</string>
+    <string name="email_hint">  Email</string>
+    <string name="email_check">이메일 체크</string>
+    <string name="password_confirm_true">비밀번호가 일치합니다</string>
+    <string name="password_confirm_false">비밀번호가 일치하지 않습니다</string>
+    <string name="password_hint">  Password</string>
+    <string name="login">로그인</string>
+    <string name="signup">회원가입</string>
+    <string name="password_confirm_hint">  Password Confirm</string>
+    <string name="male">남성</string>
+    <string name="female">여성</string>
+    <string name="age">나이</string>
+
+
 </resources>

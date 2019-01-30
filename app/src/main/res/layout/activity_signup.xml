@@ -9,7 +9,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tfl_email"
+            android:id="@+id/til_email"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="0dp"
             android:layout_height="57dp"
@@ -18,7 +18,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:hint="  Email"
+            android:hint="@string/email_hint"
             app:layout_constraintEnd_toStartOf="@+id/btn_emailcheck"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tfl_password"
+            android:id="@+id/til_password"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="0dp"
             android:layout_height="57dp"
@@ -45,10 +45,10 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:hint="  Password"
+            android:hint="@string/password_hint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tfl_email">
+            app:layout_constraintTop_toBottomOf="@+id/til_email">
 
             <com.google.android.material.textfield.TextInputEditText
 
@@ -61,7 +61,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tfl_passwordconfirm"
+            android:id="@+id/til_passwordconfirm"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="0dp"
             android:layout_height="57dp"
@@ -70,11 +70,11 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:hint="  Password Confirm"
+            android:hint="@string/password_confirm_hint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tfl_password">
+            app:layout_constraintTop_toBottomOf="@+id/til_password">
 
             <com.google.android.material.textfield.TextInputEditText
 
@@ -95,7 +95,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:text="중복체크"
+            android:text="@string/email_check"
             app:backgroundTint="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -119,13 +119,13 @@
                 android:id="@+id/rb_male"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="남성" />
+                android:text="@string/male" />
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/rb_female"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="여성" />
+                android:text="@string/female" />
         </RadioGroup>
 
         <androidx.appcompat.widget.AppCompatSeekBar
@@ -152,7 +152,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
-            android:text="나이"
+            android:text="@string/age"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/sb_age" />
@@ -166,7 +166,7 @@
             android:layout_marginRight="32dp"
             android:layout_marginBottom="32dp"
             android:padding="20dp"
-            android:text="회원가입"
+            android:text="@string/signup"
             android:textSize="18sp"
             app:backgroundTint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -192,7 +192,24 @@
             android:layout_marginTop="8dp"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tfl_passwordconfirm" />
+            app:layout_constraintTop_toBottomOf="@+id/til_passwordconfirm" />
+
+        <ProgressBar
+        android:id="@+id/pb_singuploading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

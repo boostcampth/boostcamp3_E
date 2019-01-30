@@ -1,13 +1,16 @@
 package com.teame.boostcamp.myapplication.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;
 import com.teame.boostcamp.myapplication.ui.base.BaseActivity;
+import com.teame.boostcamp.myapplication.ui.login.LoginActivity;
 import com.teame.boostcamp.myapplication.util.DLog;
 
 import androidx.fragment.app.Fragment;
@@ -28,6 +31,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding.bnvMainNavigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
+        binding.testbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(i);
+            }
+        });
         setupViewPager();
     }
 

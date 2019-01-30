@@ -3,27 +3,38 @@ package com.teame.boostcamp.myapplication.ui.login;
 
 import android.app.Activity;
 
-import com.teame.boostcamp.myapplication.util.AuthenticationUtil;
+import com.google.firebase.auth.FirebaseAuth;
 
-import io.reactivex.disposables.CompositeDisposable;
+public class LoginPresenter implements LoginContract.Presenter {
+    private LoginContract.View view;
+    private FirebaseAuth auth;
 
-public class LoginPresenter implements LoginContractor.Presenter {
-    private LoginContractor.View view;
-    private CompositeDisposable logInDisposable = new CompositeDisposable();
-
-    public LoginPresenter(LoginContractor.View view) {
+    public LoginPresenter(LoginContract.View view, FirebaseAuth auth) {
         this.view = view;
+        this.auth = auth;
     }
 
     @Override
-    public void onLogInButtonClicked(Activity activity, String email, String password) {
-        logInDisposable.add(new AuthenticationUtil().doLogIn(activity, email, password)
-                .subscribe(aBoolean -> {
-                            view.startMainActivity();
-                        }, throwable -> {
-                            view.showToast("에메일과 비밀번호를 확인해 주세요");
-                        }
-                ));
+    public void doLogIn(String email, String password) {
+        view.showLogInLoading(true);
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener((Activity) view, task -> {
+                    view.showLogInLoading(false);
+                    if (task.isSuccessful()) {
+                        view.succeedLogIn();
+                    } else {
+                        view.occurLogInError();
+                    }
+                });
+    }
+
+    @Override
+    public void checkLogIn() {
+        if (auth.getCurrentUser() != null) {
+            view.isLogIn(true);
+        } else {
+            view.isLogIn(false);
+        }
     }
 
     @Override
@@ -33,8 +44,6 @@ public class LoginPresenter implements LoginContractor.Presenter {
 
     @Override
     public void onDetach() {
-        if (logInDisposable.isDisposed()) {
-            logInDisposable.clear();
-        }
+
     }
 }
