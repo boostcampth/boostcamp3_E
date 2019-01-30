@@ -61,7 +61,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         mainViewPagerAdapter.addFragment(fragmentWallet);
         mainViewPagerAdapter.addFragment(fragmentNavigationDrawer);
         binding.vpFragment.setAdapter(mainViewPagerAdapter);
-        DLog.d(mainViewPagerAdapter.getCount() + "::sd");
         binding.vpFragment.setOffscreenPageLimit(mainViewPagerAdapter.getCount()-1);
     }
 
