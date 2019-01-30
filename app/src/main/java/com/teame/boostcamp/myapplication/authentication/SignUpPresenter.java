@@ -3,10 +3,10 @@ package com.teame.boostcamp.myapplication.authentication;
 
 import android.app.Activity;
 
-public class SignUpPresenter implements SignUpContractor.Presenter{
+public class SignUpPresenter implements SignUpContractor.Presenter {
     private SignUpContractor.View view;
 
-    public SignUpPresenter(SignUpContractor.View view){
+    public SignUpPresenter(SignUpContractor.View view) {
         this.view = view;
     }
 

@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil;
 public class LoginActivity extends AppCompatActivity implements LoginContractor.View {
     private ActivityLoginBinding binding;
     private LoginPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,18 +26,18 @@ public class LoginActivity extends AppCompatActivity implements LoginContractor.
         binding.btnRegister.setOnClickListener(v -> startSingUpActivity());
     }
 
-    public void onLogInButtonClicked(){
+    public void onLogInButtonClicked() {
         String email = binding.etEmail.getText().toString();
         String password = binding.etPassword.getText().toString();
 
-        if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
+        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
             presenter.onLogInButtonClicked(this, email, password);
-        }else{
+        } else {
             makeToast("아이디 또는 비밀번호를 입력해 주세요");
         }
     }
 
-    public void makeToast(String message){
+    public void makeToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
