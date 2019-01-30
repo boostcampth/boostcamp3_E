@@ -7,7 +7,7 @@
 
         <variable
             name="loginActivity"
-            type="com.teame.boostcamp.myapplication.authentication.LoginActivity" />
+            type="com.teame.boostcamp.myapplication.ui.login.LoginActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -116,17 +116,6 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/btn_login"
             app:layout_constraintTop_toBottomOf="@+id/tfl_password" />
-
-        <CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="140dp"
-            android:layout_marginLeft="140dp"
-            android:layout_marginTop="16dp"
-            android:text="로그인 기억하기"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

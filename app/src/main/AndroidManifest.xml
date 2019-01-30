@@ -29,8 +29,8 @@
         </activity>
         <activity android:name=".ui.example.ExampleActivity">
         </activity>
-        <activity android:name=".authentication.LoginActivity"/>
-        <activity android:name=".authentication.SignUpActivity"/>
+        <activity android:name=".ui.login.LoginActivity"/>
+        <activity android:name=".ui.signup.SignUpActivity"/>
 
     </application>
 

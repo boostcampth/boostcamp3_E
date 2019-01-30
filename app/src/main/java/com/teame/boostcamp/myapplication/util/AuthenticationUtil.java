@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.authentication;
+package com.teame.boostcamp.myapplication.util;
 
 import android.app.Activity;
 
@@ -6,6 +6,7 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.teame.boostcamp.myapplication.model.entitiy.User;
 
 import java.util.List;
 

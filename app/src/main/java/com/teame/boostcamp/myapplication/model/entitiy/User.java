@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.authentication;
+package com.teame.boostcamp.myapplication.model.entitiy;
 
 public class User {
 
