@@ -22,7 +22,7 @@
             android:hint="  Email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView">
+            app:layout_constraintTop_toBottomOf="@+id/imv_logo">
 
             <com.google.android.material.textfield.TextInputEditText
 
@@ -60,8 +60,8 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
-            android:id="@+id/imageView"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imv_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
