@@ -10,5 +10,5 @@ public interface BasePresenter {
     /**
      * presenter가 떨어졌을떄 해줘야할 일들 작성
      * ex) dispose() , clear() etc.. */
-    void onDettach();
+    void onDetach();
 }

@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.authentication;
+package com.teame.boostcamp.myapplication.ui.signup;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -6,23 +6,32 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ActivitySignupBinding;
+import com.teame.boostcamp.myapplication.model.entitiy.User;
+import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
+public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignUpContractor.Presenter> implements SignUpContractor.View {
 
-public class SignUpActivity extends AppCompatActivity implements SignUpContractor.View {
-    private ActivitySignupBinding binding;
-    private SignUpPresenter presenter;
+    @Override
+    protected SignUpContractor.Presenter getPresenter() {
+        return new SignUpPresenter(this);
+    }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_signup;
+    }
+
+    @Override
+    protected String getClassName() {
+        return "SignUpActivity";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.presenter = new SignUpPresenter(this);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_signup);
         initView();
     }
 
@@ -32,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContracto
             if (!TextUtils.isEmpty(email)) {
                 onEmailCheckButtonClicked(email);
             } else {
-                makeToast("이메일을 입력해 주세요");
+                showToast("이메일을 입력해 주세요");
             }
         });
         binding.btnRegister.setOnClickListener(v -> onSignUpButtonClicked());
@@ -80,15 +89,15 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContracto
         });
     }
 
-    public void onEmailCheckButtonClicked(String email) {
+    private void onEmailCheckButtonClicked(String email) {
         if (!TextUtils.isEmpty(email)) {
             presenter.onEmailCheckButtonClicked(email);
         } else {
-            makeToast("이메일을 입력해 주세요");
+            showToast("이메일을 입력해 주세요");
         }
     }
 
-    public void onSignUpButtonClicked() {
+    private void onSignUpButtonClicked() {
         String email = binding.etEmail.getText().toString();
         String password = binding.etPassword.getText().toString();
         String passwordConfirm = binding.etPasswordconfirm.toString();
@@ -99,26 +108,23 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContracto
         } else if (binding.rbMale.isChecked()) {
             sex = "M";
         }
-        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(sex) && age > 1 && passwordConfirm.equals(password)) {
+        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(sex) && age > 1) {
             User userData = new User(email, password, age, sex);
             presenter.onSignUpButtonClicked(this, email, password, userData);
 
 
         } else {
-            makeToast("값을 다 입력해주세요");
-            return;
+            showToast("값을 다 입력해주세요");
+
         }
 
 
     }
 
-    public void makeToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
-    public void startNextActivity() {       // 로그인 후 다음화면 이동 메서드
-
+    public void startMainActivity() {       // 회원가입 완료 후 메인액티비티 이동 메서드
+        presenter.onDetach();
+        showToast("회원가입 성공"); // 테스트 토스트 - 지워주세요
     }
 
 

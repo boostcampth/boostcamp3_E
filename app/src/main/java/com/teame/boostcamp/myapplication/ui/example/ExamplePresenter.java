@@ -28,11 +28,12 @@ public class ExamplePresenter implements ExampleContract.Presenter {
 
     }
 
+
     /**
      * presenter가 떨어졌을떄 해줘야할 일들 작성
      * ex) dispose() , clear() etc.. */
     @Override
-    public void onDettach() {
+    public void onDetach() {
 
     }
 }
