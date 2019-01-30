@@ -11,6 +11,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -20,6 +21,10 @@ android {
     }
     dataBinding {
         enabled = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -40,6 +45,8 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
     // glide
     implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.0.0-beta01'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     //googleMap
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
