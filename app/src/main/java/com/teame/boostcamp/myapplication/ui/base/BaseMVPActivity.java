@@ -2,7 +2,7 @@ package com.teame.boostcamp.myapplication.ui.base;
 
 import android.os.Bundle;
 
-import com.teame.boostcamp.myapplication.util.DLog;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
@@ -20,7 +20,7 @@ public abstract class BaseMVPActivity <V extends ViewDataBinding,P extends BaseP
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        DLog.i(getClassName()+"::onCreate");
+        DLogUtil.i(getClassName()+"::onCreate");
         super.onCreate(savedInstanceState);
         presenter = getPresenter();
     }

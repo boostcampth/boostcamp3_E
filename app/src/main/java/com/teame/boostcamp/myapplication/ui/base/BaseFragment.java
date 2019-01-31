@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.teame.boostcamp.myapplication.util.DLog;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,14 +39,14 @@ public abstract class BaseFragment<V extends ViewDataBinding, P extends BasePres
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        DLog.i(getClassName()+"::onCreate");
+        DLogUtil.i(getClassName()+"::onCreate");
         super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        DLog.i(getClassName()+"::onCreateView");
+        DLogUtil.i(getClassName()+"::onCreateView");
         binding = DataBindingUtil.inflate(inflater, getLayoutResourceId(), container, false);
         View view = binding.getRoot();
         return view;
@@ -55,43 +55,43 @@ public abstract class BaseFragment<V extends ViewDataBinding, P extends BasePres
 
     @Override
     public void onStart() {
-        DLog.i(getClassName()+"::onStart");
+        DLogUtil.i(getClassName()+"::onStart");
         super.onStart();
     }
 
     @Override
     public void onResume() {
-        DLog.i(getClassName()+"::onResume");
+        DLogUtil.i(getClassName()+"::onResume");
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        DLog.i(getClassName()+"::onPause");
+        DLogUtil.i(getClassName()+"::onPause");
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        DLog.i(getClassName()+"::onStop");
+        DLogUtil.i(getClassName()+"::onStop");
         super.onStop();
     }
 
     @Override
     public void onDestroyView() {
-        DLog.i(getClassName()+"::onDestroyView");
+        DLogUtil.i(getClassName()+"::onDestroyView");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        DLog.i(getClassName()+"::onDestroy");
+        DLogUtil.i(getClassName()+"::onDestroy");
         super.onDestroy();
     }
 
     @Override
     public void onDetach() {
-        DLog.i(getClassName()+"::onDetach");
+        DLogUtil.i(getClassName()+"::onDetach");
         super.onDetach();
     }
 

@@ -3,7 +3,7 @@ package com.teame.boostcamp.myapplication.ui.base;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.teame.boostcamp.myapplication.util.DLog;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,38 +22,38 @@ public abstract class BaseActivity<V extends ViewDataBinding> extends AppCompatA
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        DLog.i(getClassName()+"::onCreate");
+        DLogUtil.i(getClassName()+"::onCreate");
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, getLayoutResourceId());
     }
 
     @Override
     protected void onStart() {
-        DLog.i(getClassName()+"::onStart");
+        DLogUtil.i(getClassName()+"::onStart");
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        DLog.i(getClassName()+"::onResume");
+        DLogUtil.i(getClassName()+"::onResume");
         super.onResume();
     }
 
     @Override
     protected void onStop() {
-        DLog.i(getClassName()+"::onStop");
+        DLogUtil.i(getClassName()+"::onStop");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        DLog.i(getClassName()+"::onDestroy");
+        DLogUtil.i(getClassName()+"::onDestroy");
         super.onDestroy();
     }
 
     @Override
     protected void onRestart() {
-        DLog.i(getClassName()+"::onRestart");
+        DLogUtil.i(getClassName()+"::onRestart");
         super.onRestart();
     }
 

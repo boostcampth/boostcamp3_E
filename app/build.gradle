@@ -62,6 +62,7 @@ dependencies {
     implementation "androidx.room:room-runtime:2.1.0-alpha04"
     annotationProcessor "androidx.room:room-compiler:2.1.0-alpha04"
     implementation "androidx.room:room-rxjava2:2.1.0-alpha04"
+
     //WorkManager
     implementation "android.arch.work:work-runtime:1.0.0-beta03"
     implementation "android.arch.work:work-rxjava2:1.0.0-beta03"
