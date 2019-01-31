@@ -163,5 +163,11 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDetach();
+    }
+
 
 }

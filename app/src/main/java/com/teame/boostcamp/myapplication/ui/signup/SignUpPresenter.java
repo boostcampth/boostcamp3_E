@@ -66,6 +66,6 @@ public class SignUpPresenter implements SignUpContract.Presenter {
 
     @Override
     public void onDetach() {
-
+        this.view=null;
     }
 }

@@ -44,6 +44,6 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void onDetach() {
-
+        this.view=null;
     }
 }

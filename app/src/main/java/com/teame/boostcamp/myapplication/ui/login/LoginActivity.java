@@ -92,5 +92,9 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDetach();
+    }
 }
