@@ -8,7 +8,6 @@ import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;
 import com.teame.boostcamp.myapplication.ui.base.BaseActivity;
-import com.teame.boostcamp.myapplication.util.DLog;
 
 import androidx.fragment.app.Fragment;
 

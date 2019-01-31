@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
-import com.teame.boostcamp.myapplication.util.ResourceProvider;
+import com.teame.boostcamp.myapplication.util.ResourceProviderUtil;
 
 public class ExampleActivity extends BaseMVPActivity<ActivityMainBinding, ExampleContract.Presenter> implements ExampleContract.View {
 
@@ -26,8 +26,8 @@ public class ExampleActivity extends BaseMVPActivity<ActivityMainBinding, Exampl
      */
     @Override
     protected ExampleContract.Presenter getPresenter() {
-        ResourceProvider resourceProvider = new ResourceProvider(this);
-        return new ExamplePresenter(this, resourceProvider);
+        ResourceProviderUtil resourceProviderUtil = new ResourceProviderUtil(this);
+        return new ExamplePresenter(this, resourceProviderUtil);
     }
 
     /**
