@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_screen"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/iv_back"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/btn_all_back" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:id="@+id/iv_confirm"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="@dimen/space_median"
+                        android:layout_marginEnd="@dimen/space_median"
+                        app:srcCompat="@drawable/btn_all_confirm" />
+
+                </LinearLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/view_background"
+                    android:layout_width="0dp"
+                    android:layout_height="68dp"
+                    android:layout_marginLeft="@dimen/space_x_small"
+                    android:layout_marginTop="@dimen/space_x_small"
+                    android:layout_marginRight="@dimen/space_x_small"
+                    android:background="@color/colorWhite"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/Widget.MyListItem.TextView"
+                    android:layout_marginLeft="@dimen/space_x_small"
+                    android:text="@string/create_list_title"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_background"
+                    app:layout_constraintLeft_toLeftOf="@+id/view_background"
+                    app:layout_constraintTop_toTopOf="@+id/view_background"
+                    tools:text="이거 사! 추천 리스트" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_close_rv_recommend_list"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_margin="@dimen/space_x_small"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_background"
+                    app:layout_constraintRight_toRightOf="@+id/view_background"
+                    app:layout_constraintTop_toTopOf="@+id/view_background"
+                    app:srcCompat="@drawable/btn_my_list_hide_list" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_recommend_list"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorGray"
+                    app:layout_constraintLeft_toLeftOf="@+id/view_background"
+                    app:layout_constraintRight_toRightOf="@+id/view_background"
+                    app:layout_constraintTop_toBottomOf="@+id/view_background"
+                    tools:listitem="@layout/item_my_list_recommend_list" />
+
+                <View
+                    android:id="@+id/view_add_item_background"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="@dimen/space_x_small"
+                    android:background="@color/colorWhite"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_recommend_list" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_add_item"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="@dimen/space_x_small"
+                    android:background="@color/colorWhite"
+                    android:hint="@string/list_item_add_hint"
+                    android:maxLength="30"
+                    android:singleLine="true"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/view_add_item_background"
+                    app:layout_constraintLeft_toLeftOf="@+id/view_add_item_background"
+                    app:layout_constraintRight_toLeftOf="@id/ib_add_item"
+                    app:layout_constraintTop_toTopOf="@id/view_add_item_background" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_add_item"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintBottom_toBottomOf="@id/view_add_item_background"
+                    app:layout_constraintRight_toRightOf="@id/view_add_item_background"
+                    app:layout_constraintTop_toTopOf="@id/view_add_item_background"
+                    app:srcCompat="@drawable/btn_add_item" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

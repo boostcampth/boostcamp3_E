@@ -9,4 +9,26 @@
     </style>
     <style name="MainFragmentTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
+
+    <style name="Widget.MyListItem.TextView" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:layout_marginLeft">8dp</item>
+    </style>
+
+    <style name="RatioImageView">
+        <item name="android:layout_width">@dimen/space_s_large</item>
+        <item name="android:layout_height">@dimen/space_large</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

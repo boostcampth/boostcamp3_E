@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            style="@style/RatioImageView"
+            app:srcCompat="@drawable/ic_item_ratio_full_star" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            style="@style/RatioImageView"
+            app:srcCompat="@drawable/ic_item_ratio_full_star" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            style="@style/RatioImageView"
+            app:srcCompat="@drawable/ic_item_ratio_full_star" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            style="@style/RatioImageView"
+            app:srcCompat="@drawable/ic_item_ratio_full_star" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            style="@style/RatioImageView"
+            app:srcCompat="@drawable/ic_item_ratio_empty_star" />
+    </LinearLayout>
+</layout>
