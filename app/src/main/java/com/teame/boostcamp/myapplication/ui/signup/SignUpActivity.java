@@ -43,7 +43,7 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
     }
 
 
-    public void initView() {
+    private void initView() {
         binding.btnEmailcheck.setOnClickListener(v -> {
             String email = binding.etEmail.getText().toString();
             if (!TextUtils.isEmpty(email)) {
