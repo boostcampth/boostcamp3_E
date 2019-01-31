@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mv_googlemap"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/v_background"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_search"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:inputType="text"
+            android:maxLines="1"
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/space_median"
+            android:layout_marginRight="@dimen/space_median"
+            android:background="@drawable/shape_roundedbox"
+            android:imeOptions="actionSend"
+            android:padding="5dp"
+            android:hint="장소를 입력하세요."
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_search"
+            app:layout_constraintLeft_toLeftOf="@id/v_background"
+            app:layout_constraintRight_toRightOf="@id/v_background"
+            app:layout_constraintTop_toTopOf="@id/v_background" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_userpin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/img_fragment_checklist_create_userpinview"
+            android:visibility="gone"
+            app:layout_constraintLeft_toRightOf="@id/guideline_card_right"
+            app:layout_constraintRight_toRightOf="@id/mv_googlemap"
+            app:layout_constraintTop_toBottomOf="@id/guideline_search" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_ex_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/v_background"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.11" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_card_top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_card_left"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_card_right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <include
+            android:id="@+id/include_user_shopping_preview"
+            layout="@layout/layout_user_shopping_preview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/space_large"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/guideline_card_left"
+            app:layout_constraintRight_toLeftOf="@id/guideline_card_right"
+            app:layout_constraintTop_toBottomOf="@id/guideline_card_top" />
+
+        <include
+            android:id="@+id/include_visited"
+            layout="@layout/layout_visited"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/mv_googlemap"
+            app:layout_constraintLeft_toLeftOf="@id/mv_googlemap"
+            app:layout_constraintRight_toRightOf="@id/mv_googlemap"
+            app:layout_constraintTop_toBottomOf="@id/guideline_card_top" />
+
+        <include
+            layout="@layout/layout_period_setting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="@id/mv_googlemap"
+            app:layout_constraintRight_toRightOf="@id/mv_googlemap"
+            app:layout_constraintTop_toBottomOf="@id/guideline_search" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

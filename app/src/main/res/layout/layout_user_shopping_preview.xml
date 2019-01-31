@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcv_user_shopping_preview"
+        style="@style/Widget.MaterialComponents.CardView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="4dp">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/tv_user_shopping_preview_place"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="장소"
+                android:textSize="17sp" />
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/tv_user_shopping_preview_period"
+                android:paddingBottom="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="2019.01.12~2019.01.23"
+                android:textSize="17sp" />
+
+            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+                android:id="@+id/tv_user_shopping_preview_user_hashtags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="#aaa #bbb #ccc #ddd #fff"
+                android:textSize="17sp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
