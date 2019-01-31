@@ -51,7 +51,7 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
 
 
     private void initView() {
-        binding.btnEmailcheck.setOnClickListener(v -> {
+        binding.btnEmailcheck.setOnClickListener(__ -> {
             String email = binding.etEmail.getText().toString();
             if (!TextUtils.isEmpty(email)) {
                 presenter.checkEmailValidation(email);
@@ -59,7 +59,7 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
                 showToast(getString(R.string.empty_email));
             }
         });
-        binding.btnRegister.setOnClickListener(v -> onSignUpButtonClicked());
+        binding.btnRegister.setOnClickListener(__ -> onSignUpButtonClicked());
         binding.etPasswordconfirm.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
