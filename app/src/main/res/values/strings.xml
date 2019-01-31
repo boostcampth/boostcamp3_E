@@ -3,4 +3,7 @@
     <string name="bottom_tab_main">Main</string>
     <string name="bottom_tab_my_list">MyList</string>
     <string name="bottom_tab_sns">SNS</string>
+
+    <string name="my_list_item_min_parice">최저가</string>
+    <string name="my_list_item_add_hint">찾는 아이템이 없으면 추가해보세요!</string>
 </resources>
