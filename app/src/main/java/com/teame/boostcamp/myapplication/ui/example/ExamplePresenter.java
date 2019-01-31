@@ -1,24 +1,24 @@
 package com.teame.boostcamp.myapplication.ui.example;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.util.ResourceProviderUtil;
+import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
 public class ExamplePresenter implements ExampleContract.Presenter {
 
     private ExampleContract.View view;
-    private ResourceProviderUtil resourceProviderUtil;
+    private ResourceProvider resourceProvider;
 
     /**
      * view를 받고 자기자신(presenter)를 view.setPresenter(this)로 반환시켜준다. */
-    protected ExamplePresenter(ExampleContract.View view, ResourceProviderUtil resourceProviderUtil){
+    protected ExamplePresenter(ExampleContract.View view, ResourceProvider resourceProvider){
         this.view = view;
-        this.resourceProviderUtil = resourceProviderUtil;
+        this.resourceProvider = resourceProvider;
         view.setPresenter(this);
     }
 
     @Override
     public void showTost() {
-        view.showTost(resourceProviderUtil.getString(R.string.app_name));
+        view.showTost(resourceProvider.getString(R.string.app_name));
     }
 
     /**
