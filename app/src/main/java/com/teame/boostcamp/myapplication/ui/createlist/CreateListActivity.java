@@ -1,5 +1,7 @@
 package com.teame.boostcamp.myapplication.ui.createlist;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.teame.boostcamp.myapplication.R;
@@ -23,10 +25,15 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         return "CreateListActivity";
     }
 
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, CreateListActivity.class);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(binding.toolbarScreen);
     }
 
 }
