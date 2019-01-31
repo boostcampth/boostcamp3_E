@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/mcv_visited"
+        android:id="@+id/cv_visited"
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_visited_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
                 android:text="TEST"
                 android:textSize="17sp" />
 
-            <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_visited_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
