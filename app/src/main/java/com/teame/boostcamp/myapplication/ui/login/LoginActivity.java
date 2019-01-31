@@ -41,13 +41,13 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     }
 
     private void initView() {
-        binding.btnLogin.setOnClickListener(__ -> onLogInButtonClicked());
-        binding.btnRegister.setOnClickListener(__ -> SignUpActivity.startActivity(this));
+        binding.buttonLogin.setOnClickListener(__ -> onLogInButtonClicked());
+        binding.buttonRegister.setOnClickListener(__ -> SignUpActivity.startActivity(this));
     }
 
     private void onLogInButtonClicked() {
-        String email = binding.etEmail.getText().toString();
-        String password = binding.etPassword.getText().toString();
+        String email = binding.tietEmail.getText().toString();
+        String password = binding.tietPassword.getText().toString();
 
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
             presenter.doLogIn(email, password);

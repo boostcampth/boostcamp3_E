@@ -51,16 +51,16 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
 
 
     private void initView() {
-        binding.btnEmailcheck.setOnClickListener(__ -> {
-            String email = binding.etEmail.getText().toString();
+        binding.buttonEmailcheck.setOnClickListener(__ -> {
+            String email = binding.tietEmail.getText().toString();
             if (!TextUtils.isEmpty(email)) {
                 presenter.checkEmailValidation(email);
             } else {
                 showToast(getString(R.string.empty_email));
             }
         });
-        binding.btnRegister.setOnClickListener(__ -> onSignUpButtonClicked());
-        binding.etPasswordconfirm.addTextChangedListener(new TextWatcher() {
+        binding.buttonRegister.setOnClickListener(__ -> onSignUpButtonClicked());
+        binding.tietPasswordconfirm.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -68,8 +68,8 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String password = binding.etPassword.getText().toString();
-                String passwordConfirm = binding.etPasswordconfirm.getText().toString();
+                String password = binding.tietPassword.getText().toString();
+                String passwordConfirm = binding.tietPasswordconfirm.getText().toString();
 
                 if (password.equals(passwordConfirm) && !TextUtils.isEmpty(passwordConfirm)) {
                     binding.tvPasswordCheck.setText(getString(R.string.password_confirm_true));
@@ -105,9 +105,9 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
     }
 
     private void onSignUpButtonClicked() {
-        String email = binding.etEmail.getText().toString();
-        String password = binding.etPassword.getText().toString();
-        String passwordConfirm = binding.etPasswordconfirm.toString();
+        String email = binding.tietEmail.getText().toString();
+        String password = binding.tietPassword.getText().toString();
+        String passwordConfirm = binding.tietPasswordconfirm.toString();
         int age = binding.sbAge.getProgress();
         String sex = null;
         if (binding.rbFemale.isChecked()) {
