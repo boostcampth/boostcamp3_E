@@ -1,5 +1,7 @@
 package com.teame.boostcamp.myapplication.ui.signup;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -40,6 +42,11 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+    }
+
+    public static void startActivity(Context context){
+        Intent intent = new Intent(context, SignUpActivity.class);
+        context.startActivity(intent);
     }
 
 
