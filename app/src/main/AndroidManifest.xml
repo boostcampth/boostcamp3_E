@@ -10,13 +10,25 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        tools:replace="android:label"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        tools:replace="android:label">
 
         <!-- 구글맵 3.3 이슈 해결-->
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".ui.createlist.CreateListActivity"
+            android:label="@string/title_activity_create_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <!-- 구글맵 3.3 이슈 해결 -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD9S-SgzzyU7zPnlQYTC_5KFEfwLwDF2eY" />
@@ -28,8 +40,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.example.ExampleActivity">
-        </activity>
+        <activity android:name=".ui.example.ExampleActivity"></activity>
     </application>
 
     <!-- 네이버 쇼핑 API

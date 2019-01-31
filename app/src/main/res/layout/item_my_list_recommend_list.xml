@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_item_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp"
+            android:background="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_item_image"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/btn_bottom_sns" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_item_name"
+                    style="@style/Widget.MyListItem.TextView"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintVertical_chainStyle="spread_inside"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_item_ratio"
+                    app:layout_constraintLeft_toRightOf="@id/iv_item_image"
+                    app:layout_constraintTop_toTopOf="@+id/iv_item_image"
+                    android:text="이름"
+                    tools:text="이름" />
+
+
+                <include
+                    android:id="@+id/include_rating"
+                    layout="@layout/layout_star_ratio"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_item_min_price"
+                    app:layout_constraintLeft_toRightOf="@+id/iv_item_image"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_item_name"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_item_ratio"
+                    style="@style/Widget.MyListItem.TextView"
+                    app:layout_constraintBottom_toBottomOf="@id/include_rating"
+                    app:layout_constraintLeft_toRightOf="@+id/include_rating"
+                    android:text="8.55"
+                    tools:text="8.55" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_item_min_text"
+                    style="@style/Widget.MyListItem.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/my_list_item_min_parice"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_item_image"
+                    app:layout_constraintLeft_toRightOf="@+id/iv_item_image"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_item_ratio"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_item_min_price"
+                    style="@style/Widget.MyListItem.TextView"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_item_image"
+                    app:layout_constraintLeft_toRightOf="@+id/tv_item_min_text"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_item_ratio"
+                    android:text="10,000원"
+                    tools:text="10,000원" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_show_item_detail"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="8dp"
+                    app:srcCompat="@drawable/btn_item_detail"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

@@ -1,14 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorGray">
 
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="test_my" />
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/v_background"
+                android:layout_width="0dp"
+                android:layout_height="68dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@color/colorWhite"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </FrameLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Widget.MyListItem.TextView"
+                android:layout_marginLeft="8dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/v_background"
+                app:layout_constraintLeft_toLeftOf="@+id/v_background"
+                app:layout_constraintTop_toTopOf="@+id/v_background"
+                android:text="이거 사! 추천 리스트"
+                tools:text="이거 사! 추천 리스트" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_close_rv_recommend_list"
+                android:layout_height="36dp"
+                android:layout_width="36dp"
+                android:layout_margin="8dp"
+                app:srcCompat="@drawable/btn_my_list_hide_list"
+                app:layout_constraintTop_toTopOf="@+id/v_background"
+                app:layout_constraintRight_toRightOf="@+id/v_background"
+                app:layout_constraintBottom_toBottomOf="@+id/v_background" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_recommend_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorGray"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@+id/v_background"
+                app:layout_constraintRight_toRightOf="@+id/v_background"
+                app:layout_constraintTop_toBottomOf="@+id/v_background"
+                tools:listitem="@layout/item_my_list_recommend_list" />
+
+
+            <View
+                android:id="@+id/v_add_item_background"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:background="@color/colorWhite"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rv_recommend_list"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_add_item"
+                android:hint="@string/my_list_item_add_hint"
+                android:singleLine="true"
+                android:layout_marginLeft="8dp"
+                android:maxLength="30"
+                android:textSize="20sp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/colorWhite"
+                app:layout_constraintLeft_toLeftOf="@+id/v_add_item_background"
+                app:layout_constraintTop_toTopOf="@id/v_add_item_background"
+                app:layout_constraintBottom_toBottomOf="@id/v_add_item_background"
+                app:layout_constraintRight_toLeftOf="@id/ib_add_item"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_add_item"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintRight_toRightOf="@id/v_add_item_background"
+                app:srcCompat="@drawable/btn_add_item"
+                 app:layout_constraintTop_toTopOf="@id/v_add_item_background"
+                app:layout_constraintBottom_toBottomOf="@id/v_add_item_background"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>
