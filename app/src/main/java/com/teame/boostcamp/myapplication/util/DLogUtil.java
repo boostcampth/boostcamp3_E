@@ -4,9 +4,9 @@ import android.util.Log;
 import com.teame.boostcamp.myapplication.MainApplication;
 
 /**
- ** DLog
+ ** DLogUtil
  ** release 환경에서 로그를 숨기는 Log Util*/
-public class DLog {
+public class DLogUtil {
     static final String TAG = "TeamE";
 
     /**
