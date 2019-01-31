@@ -41,8 +41,8 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     }
 
     private void initView() {
-        binding.btnLogin.setOnClickListener(v -> onLogInButtonClicked());
-        binding.btnRegister.setOnClickListener(v -> SignUpActivity.startActivity(this));
+        binding.btnLogin.setOnClickListener(__ -> onLogInButtonClicked());
+        binding.btnRegister.setOnClickListener(__ -> SignUpActivity.startActivity(this));
     }
 
     private void onLogInButtonClicked() {
@@ -56,7 +56,7 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
         }
     }
 
-    
+
     // 로그인 성공 후 메인액티비티 이동 메서드
     @Override
     public void succeedLogIn() {
