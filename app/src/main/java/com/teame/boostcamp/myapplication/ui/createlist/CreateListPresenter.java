@@ -11,7 +11,7 @@ public class CreateListPresenter implements CreateListContract.Presenter {
     }
 
     @Override
-    public void onDettach() {
+    public void onDetach() {
 
     }
 
