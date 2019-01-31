@@ -24,9 +24,7 @@
     <string name="male">남성</string>
     <string name="female">여성</string>
     <string name="age">나이</string>
-
-
-
+    <string name="sns_my_post">내 게시물</string>
     <string name="list_item_min_parice">최저가</string>
     <string name="create_list_title">이거 사! 추천 리스트</string>
     <string name="list_item_add_hint">찾는 아이템이 없으면 추가해보세요!</string>
