@@ -100,7 +100,7 @@
                     app:layout_constraintLeft_toLeftOf="@+id/view_background"
                     app:layout_constraintRight_toRightOf="@+id/view_background"
                     app:layout_constraintTop_toBottomOf="@+id/view_background"
-                    tools:listitem="@layout/item_my_list_recommend_list" />
+                    tools:listitem="@layout/item_my_list_item" />
 
                 <View
                     android:id="@+id/view_add_item_background"
