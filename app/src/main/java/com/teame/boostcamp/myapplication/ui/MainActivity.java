@@ -31,7 +31,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         setupViewPager();
     }
 
-
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
             = item -> {
         switch (item.getItemId()) {
@@ -47,7 +46,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         }
         return false;
     };
-
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupViewPager() {

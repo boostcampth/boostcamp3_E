@@ -3,6 +3,7 @@ package com.teame.boostcamp.myapplication.ui.Search;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.FragmentSearchBinding;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 
@@ -78,13 +80,20 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
 
     private void setUp(){
         binding.mvGooglemap.getMapAsync(this);
+        binding.toolbarSearch.setOnClickListener(v -> {
+            binding.svPlace.setIconified(false);
+        });
+        binding.svPlace.setMaxWidth(binding.toolbarSearch.getWidth());
+        binding.svPlace.setOnQueryTextFocusChangeListener((__, hasFocus) -> {
+            if(!hasFocus)
+                binding.svPlace.setIconified(true);
+        });
         binding.svPlace.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 onSearchSubmit(query);
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;

@@ -33,18 +33,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_roundedbox"
-            android:layout_margin="@dimen/space_x_large"
+            app:layout_constraintVertical_bias="0.8"
+            android:layout_marginHorizontal="@dimen/space_x_large"
             app:layout_constraintBottom_toTopOf="@id/guideline_search"
             app:layout_constraintLeft_toLeftOf="@id/view_background"
             app:layout_constraintRight_toRightOf="@id/view_background"
-            app:layout_constraintTop_toTopOf="@id/view_background">
+            app:layout_constraintTop_toTopOf="@id/view_background"/>
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/sv_place"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </androidx.appcompat.widget.Toolbar>
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/sv_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="@id/toolbar_search"
+            app:layout_constraintTop_toTopOf="@id/toolbar_search"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_search"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_userpin"

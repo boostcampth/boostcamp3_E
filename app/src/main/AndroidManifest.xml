@@ -24,7 +24,8 @@
             android:value="AIzaSyD9S-SgzzyU7zPnlQYTC_5KFEfwLwDF2eY" />
 
         <activity android:name=".ui.MainActivity"
-            android:theme="@style/MainFragmentTheme">
+            android:theme="@style/MainFragmentTheme"
+            android:windowSoftInputMode="adjustPan|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
