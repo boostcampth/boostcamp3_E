@@ -24,7 +24,7 @@
     <string name="male">남성</string>
     <string name="female">여성</string>
     <string name="age">나이</string>
-
+    <string name="menu_search">Search</string>
 
 
     <string name="list_item_min_parice">최저가</string>
