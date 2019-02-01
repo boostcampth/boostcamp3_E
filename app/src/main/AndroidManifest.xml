@@ -36,6 +36,7 @@
         <activity android:name=".ui.login.LoginActivity" />
         <activity android:name=".ui.signup.SignUpActivity" />
 
+        <activity android:name=".ui.addpost.AddPostActivity" />
     </application>
 
     <!-- 네이버 쇼핑 API

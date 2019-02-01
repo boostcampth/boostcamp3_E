@@ -18,7 +18,7 @@ public class ExamplePresenter implements ExampleContract.Presenter {
 
     @Override
     public void showTost() {
-        view.showTost(resourceProvider.getString(R.string.app_name));
+//        view.showTost(resourceProvider.getString(R.string.app_name));
     }
 
     /**

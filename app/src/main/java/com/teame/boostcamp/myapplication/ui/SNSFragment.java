@@ -8,6 +8,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSnsBinding;
+import com.teame.boostcamp.myapplication.ui.addpost.AddPostActivity;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.ui.tabmypost.TabMyPostFragment;
 import com.teame.boostcamp.myapplication.ui.tabsns.TabSNSFragment;
@@ -50,6 +51,7 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.fabAddPost.setOnClickListener(__ -> AddPostActivity.startActivity(getContext()));
         binding.tlSns.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
