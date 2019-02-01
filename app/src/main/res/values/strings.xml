@@ -25,6 +25,8 @@
     <string name="female">여성</string>
     <string name="age">나이</string>
     <string name="menu_search">Search</string>
+    <string name="permission_location_title">위치 권한 설정</string>
+    <string name="permission_location_message">위치 권한을 설정하시겠습니까?</string>
 
 
     <string name="list_item_min_parice">최저가</string>
