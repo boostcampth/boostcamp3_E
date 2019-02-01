@@ -2,9 +2,9 @@ package com.teame.boostcamp.myapplication.util;
 
 import android.Manifest;
 import android.content.Context;
-import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermissionResult;
 import com.gun0912.tedpermission.TedPermissionResult;
 import com.tedpark.tedpermission.rx2.TedRx2Permission;
 
