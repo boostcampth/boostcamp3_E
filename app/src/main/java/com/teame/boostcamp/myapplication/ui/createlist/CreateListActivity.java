@@ -6,13 +6,14 @@ import android.os.Bundle;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ActivityCreateListBinding;
+import com.teame.boostcamp.myapplication.model.repository.ShoppingListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 
-public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBinding,CreateListContract.Presenter> implements CreateListContract.View {
+public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBinding, CreateListContract.Presenter> implements CreateListContract.View {
 
     @Override
     protected CreateListContract.Presenter getPresenter() {
-        return new CreateListPresenter();
+        return new CreateListPresenter(this,ShoppingListRepository.getInstance());
     }
 
     @Override
