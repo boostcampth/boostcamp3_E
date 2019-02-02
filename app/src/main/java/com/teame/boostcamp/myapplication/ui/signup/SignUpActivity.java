@@ -29,11 +29,6 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
     }
 
     @Override
-    protected String getClassName() {
-        return "SignUpActivity";
-    }
-
-    @Override
     public void setPresenter(Object presenter) {
 
     }

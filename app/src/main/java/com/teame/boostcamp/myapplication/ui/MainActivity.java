@@ -19,11 +19,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     @Override
-    protected String getClassName() {
-        return "MainActivity";
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding.bnvMainNavigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);

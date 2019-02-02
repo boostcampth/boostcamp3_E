@@ -18,11 +18,6 @@ public class TabSNSFragment extends BaseFragment<FragmentTabSnsBinding, TabSNSFr
         return null;
     }
 
-    @Override
-    protected String getClassName() {
-        return "TabSNSFragment";
-    }
-
     @Deprecated
     public TabSNSFragment() {
         // 기본 생성자는 쓰지 말것 (new Instance 사용)
