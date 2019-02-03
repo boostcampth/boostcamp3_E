@@ -52,6 +52,8 @@ public class Item {
     }
 
     public Double getRatio() {
+        if(ratio == null)
+            return 0.0;
         return ratio;
     }
 
@@ -95,5 +97,13 @@ public class Item {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Item){
+            Item p = (Item) o;
+            return this.name.equals(p.getName());
+        } else
+            return false;
+    }
 
 }

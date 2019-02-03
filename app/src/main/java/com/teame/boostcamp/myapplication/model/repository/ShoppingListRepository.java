@@ -6,6 +6,7 @@ import com.teame.boostcamp.myapplication.model.repository.remote.ShoppingListRem
 import java.util.List;
 
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class ShoppingListRepository implements ShoppingListDataSource {
 
@@ -26,7 +27,7 @@ public class ShoppingListRepository implements ShoppingListDataSource {
 
     @Override
     public Single<List<Item>> getItemList() {
-        return shoppingListRemoteDataSource.getItemList();
+        return shoppingListRemoteDataSource.getItemList().observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override

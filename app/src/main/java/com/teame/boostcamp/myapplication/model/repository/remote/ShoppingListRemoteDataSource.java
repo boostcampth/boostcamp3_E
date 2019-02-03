@@ -71,7 +71,6 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
                             Item item = document.toObject(Item.class);
                             String key = document.getReference().getId();
                             item.setKey(key);
-                            DLogUtil.d(item.toString());
                             subject.onNext(item);
                         }
                     } else {
@@ -90,7 +89,6 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
                             Item item = document.toObject(Item.class);
                             String key = document.getReference().getId();
                             item.setKey(key);
-                            DLogUtil.d(item.toString());
                             subject.onNext(item);
                         }
                     } else {
