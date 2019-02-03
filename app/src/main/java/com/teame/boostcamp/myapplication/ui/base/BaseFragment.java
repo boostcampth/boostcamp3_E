@@ -48,6 +48,7 @@ public abstract class BaseFragment<V extends ViewDataBinding, P extends BasePres
         DLogUtil.i(getClass().getSimpleName()+"::onCreateView");
         binding = DataBindingUtil.inflate(inflater, getLayoutResourceId(), container, false);
         View view = binding.getRoot();
+        presenter = getPresenter();
         return view;
     }
 
