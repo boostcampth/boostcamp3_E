@@ -30,16 +30,6 @@ public class ExampleActivity extends BaseMVPActivity<ActivityMainBinding, Exampl
         return new ExamplePresenter(this, resourceProvider);
     }
 
-    /**
-     * 생명주기 로그를 위해 BaseActivity에 현재 Activity이름을 알리기위해 구현 (필요없다면 return null)
-     *
-     * @return String
-     */
-    @Override
-    protected String getClassName() {
-        return "ExampleActivity";
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

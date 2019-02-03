@@ -20,7 +20,7 @@ public abstract class BaseMVPActivity <V extends ViewDataBinding,P extends BaseP
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        DLogUtil.i(getClassName()+"::onCreate");
+        DLogUtil.i(getClass().getSimpleName()+"::onCreate");
         super.onCreate(savedInstanceState);
         presenter = getPresenter();
     }

@@ -18,11 +18,6 @@ public class TabMyPostFragment extends BaseFragment<FragmentTabMypostBinding, Ta
         return null;
     }
 
-    @Override
-    protected String getClassName() {
-        return "TabMyPostFragment";
-    }
-
     @Deprecated
     public TabMyPostFragment() {
         // 기본 생성자는 쓰지 말것 (new Instance 사용)
