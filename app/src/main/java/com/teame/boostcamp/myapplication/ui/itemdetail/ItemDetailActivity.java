@@ -23,11 +23,6 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
     }
 
     @Override
-    protected String getClassName() {
-        return null;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }

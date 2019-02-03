@@ -19,11 +19,6 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     }
 
     @Override
-    protected String getClassName() {
-        return "LoginActivity";
-    }
-
-    @Override
     protected LoginContract.Presenter getPresenter() {
         return new LoginPresenter(this, FirebaseAuth.getInstance());
     }

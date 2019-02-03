@@ -18,11 +18,6 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
         return null;
     }
 
-    @Override
-    protected String getClassName() {
-        return "MyListFragment";
-    }
-
     @Deprecated
     public MyListFragment() {
         // 기본 생성자는 쓰지 말것 (new Instance 사용)
