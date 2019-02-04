@@ -7,6 +7,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;
+import com.teame.boostcamp.myapplication.ui.Search.SearchFragment;
 import com.teame.boostcamp.myapplication.ui.base.BaseActivity;
 
 import androidx.fragment.app.Fragment;
@@ -25,7 +26,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         setupViewPager();
     }
 
-
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
             = item -> {
         switch (item.getItemId()) {
@@ -42,13 +42,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         return false;
     };
 
-
     @SuppressLint("ClickableViewAccessibility")
     private void setupViewPager() {
         //ViewPager remove swipe
         binding.vpFragment.setOnTouchListener((__, ___) -> true);
         MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
-        Fragment fragmentHome = CheckListCreateFragment.newInstance();
+        Fragment fragmentHome = SearchFragment.newInstance();
         Fragment fragmentWallet = MyListFragment.newInstance();
         Fragment fragmentNavigationDrawer = SNSFragment.newInstance();
         mainViewPagerAdapter.addFragment(fragmentHome);
