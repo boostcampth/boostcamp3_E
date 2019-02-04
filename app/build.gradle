@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.teame.boostcamp.myapplication"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -19,6 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     dataBinding {
         enabled = true
     }
@@ -34,6 +35,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     // merterial
+
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'com.google.android.material:material:1.0.0'
     // rx
@@ -72,6 +74,9 @@ dependencies {
 
     //material calender view
     implementation 'com.applandeo:material-calendar-view:1.5.1'
+
+    //lottie
+    implementation 'com.airbnb.android:lottie:3.0.0-beta1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'

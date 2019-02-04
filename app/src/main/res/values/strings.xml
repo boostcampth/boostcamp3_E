@@ -35,4 +35,5 @@
     <string name="list_item_add_hint">찾는 아이템이 없으면 추가해보세요!</string>
     <string name="title_activity_create_list">CreateListActivity</string>
     <string name="title_activity_item_detail">ItemDetailActivity</string>
+    <string name="decide">decide</string>
 </resources>
