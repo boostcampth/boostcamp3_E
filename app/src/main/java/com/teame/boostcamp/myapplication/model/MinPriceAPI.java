@@ -42,6 +42,6 @@ public class MinPriceAPI {
     public interface API {
         @GET("v1/search/shop.json?display=1&start=1&sort=asc")
         @Headers({"X-Naver-Client-Id:z9Z80PiumT1gVVUgqs6K", "X-Naver-Client-Secret:7TtoP9_U9U"})
-        Single<MinPriceResponse> getMinPrice(@Query("query") String str);
+        Observable<MinPriceResponse> getMinPrice(@Query("query") String str);
     }
 }

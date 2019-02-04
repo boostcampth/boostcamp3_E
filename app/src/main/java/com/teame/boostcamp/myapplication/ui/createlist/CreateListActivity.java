@@ -23,8 +23,13 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subjects.PublishSubject;
 
 public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBinding, CreateListContract.Presenter> implements CreateListContract.View {
+
+    CompositeDisposable disposable = new CompositeDisposable();
+    PublishSubject<RecyclerView> subject = PublishSubject.create();
 
     @Override
     protected CreateListContract.Presenter getPresenter() {
@@ -83,9 +88,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
         adapter.setOnItemClickListener((view, position, isCheck) ->
                 presenter.selectItem(position, isCheck));
-        binding.etAddItem.setOnClickListener(view -> {
-
-        });
+        binding.etAddItem.setOnClickListener(view -> binding.ablTopControl.setExpanded(false));
         binding.ibAddItem.setOnClickListener(v -> {
             String itemName = binding.etAddItem.getText().toString();
             presenter.addItem(itemName);
@@ -96,6 +99,9 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     protected void onPause() {
         super.onPause();
         presenter.onDetach();
+        if (disposable.isDisposed()) {
+            disposable.dispose();
+        }
     }
 
     @Override
@@ -125,13 +131,13 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
                 final Animation animShake
                         = AnimationUtils.loadAnimation(layout.getContext(), R.anim.anim_shake);
                 layout.startAnimation(animShake);
-            }else{
+            } else {
                 adapter.setAnimPosition(position);
                 linearLayoutManager.scrollToPosition(position);
             }
-
-            DLogUtil.e("position : " + position);
         }
-
+        DLogUtil.e("position : " + position);
+        binding.ablTopControl.setExpanded(false);
     }
+
 }

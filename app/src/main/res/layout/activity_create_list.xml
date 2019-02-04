@@ -8,6 +8,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/abl_top_control"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:fitsSystemWindows="true"
@@ -52,12 +53,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="4dp"
-            android:paddingBottom="108dp"
+            android:paddingBottom="54dp"
             android:windowSoftInputMode="adjustResize"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/item_my_list_item" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_edit_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

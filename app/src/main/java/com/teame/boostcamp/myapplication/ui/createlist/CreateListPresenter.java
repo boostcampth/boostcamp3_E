@@ -32,11 +32,14 @@ public class CreateListPresenter implements CreateListContract.Presenter {
 
     @Override
     public void onDetach() {
-        disposable.dispose();
+        if(disposable.isDisposed()){
+            disposable.dispose();
+        }
     }
 
     /**
-     * 쇼핑리스트를 고르는데 필요한 정보를 가져옴 */
+     * 쇼핑리스트를 고르는데 필요한 정보를 가져옴
+     */
     @Override
     public void loadListData(ItemListRecyclerAdapter adapter) {
         this.adapter = adapter;
@@ -52,7 +55,8 @@ public class CreateListPresenter implements CreateListContract.Presenter {
     }
 
     /**
-     * 선택한 아이템의 체크여부에 따라 HashMap에 추가하거나 제거함 */
+     * 선택한 아이템의 체크여부에 따라 HashMap에 추가하거나 제거함
+     */
     @Override
     public void selectItem(int position, boolean isCheck) {
         if (isCheck) {
@@ -69,7 +73,7 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         item.setName(itemName);
         int hitPosition = adapter.searchItem(item);
 
-        if(hitPosition==-1){
+        if (hitPosition == -1) {
             adapter.addItem(item);
         }
 
@@ -77,11 +81,13 @@ public class CreateListPresenter implements CreateListContract.Presenter {
     }
 
     /**
-     * 선택한 리스트 아이템을 넘겨줌 */
+     * 선택한 리스트 아이템을 넘겨줌
+     */
     @Override
     public void decideShoppingList() {
         List<Item> saveList = new ArrayList<>(checkedList.values());
         view.goNextStep(saveList);
     }
+
 
 }

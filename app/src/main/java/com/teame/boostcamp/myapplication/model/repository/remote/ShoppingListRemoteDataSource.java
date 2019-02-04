@@ -104,7 +104,7 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
                 .addOnFailureListener(e -> DLogUtil.e("error : " + e.toString()));
 
         // 가져온 리스트를 MinPriceAPI를 통해 최저가를 붙여준 후 모든아이템을 List로 반환해줌
-        return subject.flatMapSingle(targetItem ->
+        /*return subject.flatMapSingle(targetItem ->
                 MinPriceAPI.getInstance()
                         .api
                         .getMinPrice(targetItem.getName())
@@ -112,8 +112,8 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
                             targetItem.setMinPriceResponse(minPriceResponse);
                             return targetItem;
                         }))
-                .toList();
-        /*
+                .toList();*/
+
         return subject.flatMap(targetItem ->
                 Observable.just(targetItem)
                         .observeOn(Schedulers.io())
@@ -126,8 +126,6 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
                                     return item;
                                 }))
                 .toList();
-
-        */
     }
 
     /**
