@@ -45,11 +45,6 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
         return presenter;
     }
 
-    @Override
-    protected String getClassName() {
-        return "SearchFragment";
-    }
-
     @Deprecated
     public SearchFragment() {
         // 기본 생성자는 쓰지 말것 (new Instance 사용)
