@@ -20,11 +20,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         return R.layout.activity_create_list;
     }
 
-    @Override
-    protected String getClassName() {
-        return "CreateListActivity";
-    }
-
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, CreateListActivity.class);
         context.startActivity(intent);

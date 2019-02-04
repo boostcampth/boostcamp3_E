@@ -28,12 +28,6 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
         return null;
     }
 
-    @Override
-    protected String getClassName() {
-        return "SNSFragment";
-    }
-
-
     @Deprecated
     public SNSFragment() {
         // 기본 생성자는 쓰지 말것 (new Instance 사용)

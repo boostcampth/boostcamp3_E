@@ -21,7 +21,6 @@ public abstract class BaseFragment<V extends ViewDataBinding, P extends BasePres
     // View에 바인드될 Presenter를 받아오기 위한 추상클레스
     protected abstract P getPresenter();
 
-    protected abstract String getClassName();
     // BaseActivity를 상속하면 binding과 presenter는 상단의 추상클레스만 구현하면 사용 가능.
     protected V binding;
     protected P presenter;
@@ -39,59 +38,60 @@ public abstract class BaseFragment<V extends ViewDataBinding, P extends BasePres
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        DLogUtil.i(getClassName()+"::onCreate");
+        DLogUtil.i(getClass().getSimpleName()+"::onCreate");
         super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        DLogUtil.i(getClassName()+"::onCreateView");
+        DLogUtil.i(getClass().getSimpleName()+"::onCreateView");
         binding = DataBindingUtil.inflate(inflater, getLayoutResourceId(), container, false);
         View view = binding.getRoot();
+        presenter = getPresenter();
         return view;
     }
 
 
     @Override
     public void onStart() {
-        DLogUtil.i(getClassName()+"::onStart");
+        DLogUtil.i(getClass().getSimpleName()+"::onStart");
         super.onStart();
     }
 
     @Override
     public void onResume() {
-        DLogUtil.i(getClassName()+"::onResume");
+        DLogUtil.i(getClass().getSimpleName()+"::onResume");
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        DLogUtil.i(getClassName()+"::onPause");
+        DLogUtil.i(getClass().getSimpleName()+"::onPause");
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        DLogUtil.i(getClassName()+"::onStop");
+        DLogUtil.i(getClass().getSimpleName()+"::onStop");
         super.onStop();
     }
 
     @Override
     public void onDestroyView() {
-        DLogUtil.i(getClassName()+"::onDestroyView");
+        DLogUtil.i(getClass().getSimpleName()+"::onDestroyView");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        DLogUtil.i(getClassName()+"::onDestroy");
+        DLogUtil.i(getClass().getSimpleName()+"::onDestroy");
         super.onDestroy();
     }
 
     @Override
     public void onDetach() {
-        DLogUtil.i(getClassName()+"::onDetach");
+        DLogUtil.i(getClass().getSimpleName()+"::onDetach");
         super.onDetach();
     }
 
