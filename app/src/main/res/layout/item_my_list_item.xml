@@ -7,6 +7,10 @@
         <variable
             name="item"
             type="com.teame.boostcamp.myapplication.model.entitiy.Item"/>
+
+        <variable
+            name="starCount"
+            type="int"/>
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -74,6 +78,7 @@
                 <include
                     android:id="@+id/include_rating"
                     layout="@layout/layout_star_ratio"
+                    starCount="@{starCount}"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_marginLeft="8dp"
