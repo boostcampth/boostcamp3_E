@@ -62,7 +62,7 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
         PublishSubject<Item> subject = PublishSubject.create();
 
         // 국가의 Base Shopping List를 가져옴
-        Task base = baseRef.get()
+            Task base = baseRef.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
