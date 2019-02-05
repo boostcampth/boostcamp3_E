@@ -37,4 +37,132 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
         Intent intent = new Intent(context, ItemDetailActivity.class);
         context.startActivity(intent);
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    /*
+     */
+
+    private void initView() {
+        ItemDetailRecyclerAdapter adapter = new ItemDetailRecyclerAdapter();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
+                RecyclerView.VERTICAL,
+                false);
+        binding.rvReplyList.setLayoutManager(linearLayoutManager);
+        binding.rvReplyList.setAdapter(adapter);
+        RecyclerView.ItemDecoration dividerItemDecoration =
+                new DividerItemDecorator(ContextCompat.getDrawable(getBaseContext()
+                        , R.drawable.divider_decoration));
+        binding.rvReplyList.addItemDecoration(dividerItemDecoration);
+        presenter.loadReplyList(adapter);
+
+        // Default 5점
+        binding.etReview.setStarCount(5);
+
+        binding.etReview.includeSelectRation.ivStar1.setOnClickListener(this);
+        binding.etReview.includeSelectRation.ivStar2.setOnClickListener(this);
+        binding.etReview.includeSelectRation.ivStar3.setOnClickListener(this);
+        binding.etReview.includeSelectRation.ivStar4.setOnClickListener(this);
+        binding.etReview.includeSelectRation.ivStar5.setOnClickListener(this);
+
+        binding.etReview.tvWriteReply.setOnClickListener(view -> {
+            if (binding.etReview.tieWriteReview.getVisibility() == View.VISIBLE) {
+                int ratio = binding.etReview.getStarCount();
+                String content = binding.etReview.tieWriteReview.getText().toString();
+                binding.etReview.setIsExtend(false);
+                hideSoftKeyboard(ItemDetailActivity.this);
+
+                // TODO : key값 조정
+                String itemId = "ket1";
+                presenter.writeReply(itemId, content, ratio);
+            }
+        });
+        binding.etReview.tvHintWrite.setOnClickListener(__ -> {
+            DLogUtil.d("click");
+            binding.viewFake.setVisibility(View.VISIBLE);
+            binding.etReview.setIsExtend(true);
+            binding.etReview.tieWriteReview.post(() -> {
+                binding.etReview.tieWriteReview.setFocusableInTouchMode(true);
+                binding.etReview.tieWriteReview.requestFocus();
+                showKeyboard(this);
+            });
+        });
+
+        binding.viewFake.setOnTouchListener((v, event) -> {
+            DLogUtil.e("test");
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    binding.etReview.setIsExtend(false);
+                    hideSoftKeyboard(ItemDetailActivity.this);
+                    binding.viewFake.setVisibility(View.GONE);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    v.performClick();
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    public static void showKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            inputMethodManager.toggleSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
+                    InputMethodManager.SHOW_FORCED, 0);
+        }
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    @Override
+    public void successWriteItem() {
+        //TODO  스크롤 최상단으로
+        binding.rvReplyList.smoothScrollToPosition(0);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_star1:
+                binding.etReview.setStarCount(1);
+                break;
+            case R.id.iv_star2:
+                binding.etReview.setStarCount(2);
+                break;
+            case R.id.iv_star3:
+                binding.etReview.setStarCount(3);
+                break;
+            case R.id.iv_star4:
+                binding.etReview.setStarCount(4);
+                break;
+            case R.id.iv_star5:
+                binding.etReview.setStarCount(5);
+                break;
+
+        }
+    }
 }
