@@ -1,5 +1,6 @@
 package com.teame.boostcamp.myapplication.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ItemListRecyclerAdapter extends RecyclerView.Adapter<ItemListRecyclerAdapter.ViewHolder> {
-
-    private List<Item> itemList = new ArrayList<>();
+public class ItemListRecyclerAdapter extends BaseRecyclerAdatper<Item, ItemListRecyclerAdapter.ViewHolder> {
     private List<Boolean> checkList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
     private int animPosition = -1;
@@ -55,7 +54,9 @@ public class ItemListRecyclerAdapter extends RecyclerView.Adapter<ItemListRecycl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.binding.setItem(itemList.get(position));
+        Item item = itemList.get(position);
+        holder.binding.setItem(item);
+        holder.binding.setStarCount(item.ratio.intValue());
 
         if (checkList.get(position)) {
             holder.binding.lavCheckAnim.setProgress(1);
@@ -73,14 +74,6 @@ public class ItemListRecyclerAdapter extends RecyclerView.Adapter<ItemListRecycl
         DLogUtil.d(itemList.get(position).toString());
     }
 
-    @Override
-    public int getItemCount() {
-        if (itemList == null)
-            return 0;
-
-        return itemList.size();
-    }
-
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
@@ -95,15 +88,6 @@ public class ItemListRecyclerAdapter extends RecyclerView.Adapter<ItemListRecycl
             checkList.add(false);
         }
         notifyDataSetChanged();
-    }
-
-    /**
-     * 아이템을 추가하고 그 범위만큼 notify
-     */
-    public void addItems(List<Item> items) {
-        int position = this.itemList.size();
-        this.itemList.addAll(items);
-        notifyItemRangeInserted(position, items.size());
     }
 
     /**
@@ -126,11 +110,13 @@ public class ItemListRecyclerAdapter extends RecyclerView.Adapter<ItemListRecycl
         return this.itemList.get(position);
     }
 
-
+    /**
+     * ItemName을 기준으로 해당 아이템 position 반환
+     */
     public int searchItem(Item target) {
         if (itemList.contains(target)) {
             for (int i = 0; i < itemList.size(); i++) {
-                if (itemList.get(i).getName().equals(target.getName())) {
+                if (TextUtils.equals(itemList.get(i).getName(), target.getName())) {
                     return i;
                 }
             }

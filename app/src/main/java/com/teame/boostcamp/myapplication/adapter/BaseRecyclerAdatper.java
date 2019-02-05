@@ -1,0 +1,65 @@
+package com.teame.boostcamp.myapplication.adapter;
+
+import com.teame.boostcamp.myapplication.model.entitiy.Item;
+import com.teame.boostcamp.myapplication.model.entitiy.Reply;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+abstract class BaseRecyclerAdatper<T,H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> {
+
+    public List<T> itemList = new ArrayList<>();
+
+    /**
+     * 최초 아이템 init*/
+    public void initItems(List<T> itemList) {
+        this.itemList = itemList;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 아이템을 추가하고 그 범위만큼 notify
+     */
+    public void addItems(List<T> items) {
+        int position = this.itemList.size();
+        this.itemList.addAll(items);
+        notifyItemRangeInserted(position, items.size());
+    }
+
+    /**
+     * 아이템 추가 (단일)
+     */
+    public void addItem(T item) {
+        int position = this.itemList.size();
+        this.itemList.add(item);
+        notifyItemInserted(position);
+    }
+
+    /**
+     * position 위치에 item 추가 */
+    public void addItem(int position, T item){
+        if(position > this.itemList.size()){
+            return;
+        }
+        this.itemList.add(position, item);
+        notifyItemInserted(position);
+    }
+
+
+    /**
+     * 해당 position 의 item 반환
+     */
+    public T getItem(int position) {
+        if (position < 0 || itemList.size() <= position) {
+            return null;
+        }
+        return this.itemList.get(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return itemList.size();
+    }
+}
