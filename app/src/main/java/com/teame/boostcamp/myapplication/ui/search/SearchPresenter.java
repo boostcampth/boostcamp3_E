@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.ui.Search;
+package com.teame.boostcamp.myapplication.ui.search;
 
 import android.content.SharedPreferences;
 import android.location.Address;
@@ -7,21 +7,14 @@ import android.preference.PreferenceManager;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.teame.boostcamp.myapplication.adapter.SearchAdapter.ExListAdapterContract;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
-import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import androidx.collection.CircularArray;
 
 public class SearchPresenter implements SearchContract.Presenter {
 

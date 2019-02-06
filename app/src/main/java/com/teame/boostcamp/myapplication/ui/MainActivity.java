@@ -7,7 +7,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;
-import com.teame.boostcamp.myapplication.ui.Search.SearchFragment;
+import com.teame.boostcamp.myapplication.ui.search.SearchFragment;
 import com.teame.boostcamp.myapplication.ui.base.BaseActivity;
 
 import androidx.fragment.app.Fragment;

@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.ui.Search;
+package com.teame.boostcamp.myapplication.ui.search;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;

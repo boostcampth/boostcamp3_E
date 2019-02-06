@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.ui.Search;
+package com.teame.boostcamp.myapplication.ui.search;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.teame.boostcamp.myapplication.adapter.SearchAdapter.ExListAdapterContract;

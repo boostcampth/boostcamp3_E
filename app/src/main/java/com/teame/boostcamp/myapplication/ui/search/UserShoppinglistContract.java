@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.ui.Search;
+package com.teame.boostcamp.myapplication.ui.search;
 
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;

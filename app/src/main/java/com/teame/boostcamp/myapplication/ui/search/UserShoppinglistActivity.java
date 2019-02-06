@@ -1,10 +1,6 @@
-package com.teame.boostcamp.myapplication.ui.Search;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+package com.teame.boostcamp.myapplication.ui.search;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
