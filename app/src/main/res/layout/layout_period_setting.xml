@@ -9,12 +9,5 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
     app:cardBackgroundColor="@color/colorWhite"
     app:cardCornerRadius="10dp">
 
-    <com.applandeo.materialcalendarview.CalendarView
-        android:id="@+id/cv_calendar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:selectionColor="@color/colorAccent"
-        app:todayLabelColor="@color/colorPrimary"
-        app:type="range_picker" />
 </com.google.android.material.card.MaterialCardView>
 </layout>
