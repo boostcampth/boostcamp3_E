@@ -35,6 +35,8 @@
             android:background="@drawable/shape_roundedbox"
             app:layout_constraintVertical_bias="0.8"
             android:layout_marginHorizontal="@dimen/space_x_large"
+            app:contentInsetStart="8dp"
+            app:contentInsetEnd="8dp"
             app:layout_constraintBottom_toTopOf="@id/guideline_search"
             app:layout_constraintLeft_toLeftOf="@id/view_background"
             app:layout_constraintRight_toRightOf="@id/view_background"
@@ -62,12 +64,12 @@
             android:id="@+id/rv_ex_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="visible"
+            android:visibility="gone"
+            android:background="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_background"
-            tools:listitem="@layout/item_ex_search"/>
+            app:layout_constraintTop_toBottomOf="@+id/view_background"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_search"

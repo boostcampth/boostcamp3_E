@@ -13,28 +13,27 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.teame.boostcamp.myapplication.R;
+import com.teame.boostcamp.myapplication.adapter.SearchAdapter.ExListAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSearchBinding;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
-
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import io.reactivex.disposables.Disposable;
 
 public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchContract.Presenter> implements OnMapReadyCallback, SearchContract.View {
 
-    private GoogleMap googleMap = null;
-    private static final float ZOOM = 16;
+    private GoogleMap googleMap=null;
+    private static final float ZOOM=16;
     private Disposable disposable;
-
     @Override
     protected int getLayoutResourceId() {
         return R.layout.fragment_search;
@@ -60,46 +59,125 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+        View view=super.onCreateView(inflater,container,savedInstanceState);
         setPresenter(new SearchPresenter(this, new ResourceProvider(getContext())));
         setUp();
         return view;
     }
 
-    private void setUp() {
+    private void setUp(){
+        //adapter setting
+        ExListAdapter adapter=new ExListAdapter();
+        adapter.setOnItemClickListener(text -> {
+            presenter.onSearchSubmit(text);
+        });
+
+        //RecyclerView setting
+        LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
+        DividerItemDecoration divider=new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
+        binding.rvExList.addItemDecoration(divider);
+        binding.rvExList.setLayoutManager(layoutManager);
+        binding.rvExList.setAdapter(adapter);
+        binding.rvExList.setOnTouchListener((v, event) -> {
+            if(event.getAction()==MotionEvent.ACTION_DOWN){
+                InputKeyboardUtil.hideKeyboard(getActivity());
+                return true;
+            }
+            return false;
+        });
+
+        //presenter setting
+        presenter.setAdpaterView(adapter);
+        presenter.setAdpaterModel(adapter);
+
+        //googlemap setting
         binding.mvGooglemap.getMapAsync(this);
+
+        //SearchBar setting
         binding.toolbarSearch.setOnClickListener(__ -> {
             binding.svPlace.setIconified(false);
+            showExSearchView();
         });
         binding.svPlace.setMaxWidth(binding.toolbarSearch.getWidth());
         binding.svPlace.setOnQueryTextFocusChangeListener((__, hasFocus) -> {
-            if (!hasFocus)
-                binding.svPlace.setIconified(true);
+            if(hasFocus) {
+                if(binding.rvExList.getVisibility()==View.GONE)
+                    showExSearchView();
+            }
+            else{
+                hideExSearchView();
+            }
         });
         binding.svPlace.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                onSearchSubmit(query);
+                presenter.onSearchSubmit(query);
+                InputKeyboardUtil.hideKeyboard(getActivity());
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                //presenter.onTextChange(newText);
+                return true;
             }
         });
     }
 
-    private void onSearchSubmit(String place) {
+    private void onSearchSubmit(String place){
         presenter.onSearchSubmit(place);
+    }
+
+    @Override
+    public void showPositionInMap(LatLng latlon) {
+        binding.svPlace.clearFocus();
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlon,ZOOM));
+        hideExSearchView();
+    }
+
+    public void showExSearchView() {
+        binding.rvExList.setVisibility(View.VISIBLE);
+        binding.viewBackground.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+        presenter.initView();
+    }
+
+    @Override
+    public void hideExSearchView(){
+        binding.svPlace.clearFocus();
+        binding.svPlace.setIconified(true);
+        binding.rvExList.setVisibility(View.GONE);
+        binding.viewBackground.setBackgroundColor(getResources().getColor(R.color.colorClear));
+    }
+
+    @Override
+    public void showFragmentToast(String text) {
+        binding.svPlace.clearFocus();
+        super.showToast(text);
+    }
+
+    @Override
+    public void showSearchResult() {
+
+    }
+
+    @Override
+    public void showUserPin() {
+
+    }
+
+    @Override
+    public void userPinClicked() {
+
+    }
+
+    @Override
+    public void showPeriodSetting() {
+
     }
 
     @Override
@@ -124,7 +202,14 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     public void onDestroy() {
         super.onDestroy();
         binding.mvGooglemap.onDestroy();
-        disposable.dispose();
+        if(disposable!=null)
+            disposable.dispose();
+    }
+
+    @Override
+    public void onDetach() {
+        presenter.onDetach();
+        super.onDetach();
     }
 
     @Override
@@ -147,17 +232,18 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
-        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-        if (ActivityCompat.checkSelfPermission(getContext(), TedPermissionUtil.LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        this.googleMap=googleMap;
+        FusedLocationProviderClient fusedLocationClient= LocationServices.getFusedLocationProviderClient(getContext());
+        if(ActivityCompat.checkSelfPermission(getContext(), TedPermissionUtil.LOCATION)== PackageManager.PERMISSION_GRANTED){
             fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
-                LatLng latlnt = new LatLng(task.getResult().getLatitude(), task.getResult().getLongitude());
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt, ZOOM));
+                LatLng latlnt=new LatLng(task.getResult().getLatitude(),task.getResult().getLongitude());
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt,ZOOM));
             });
-        } else {
-            disposable = TedPermissionUtil.requestPermission(getContext(), getString(R.string.permission_location_title), getString(R.string.permission_location_message), TedPermissionUtil.LOCATION)
+        }
+        else{
+            disposable = TedPermissionUtil.requestPermission(getContext(),getString(R.string.permission_location_title),getString(R.string.permission_location_message),TedPermissionUtil.LOCATION)
                     .subscribe(tedPermissionResult -> {
-                        if (tedPermissionResult.isGranted()) {
+                        if(tedPermissionResult.isGranted()) {
                             fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
                                 LatLng latlnt = new LatLng(task.getResult().getLatitude(), task.getResult().getLongitude());
                                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt, ZOOM));
@@ -165,35 +251,5 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
                         }
                     });
         }
-    }
-
-    @Override
-    public void showPositionInMap(LatLng latlon) {
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlon, ZOOM));
-    }
-
-    @Override
-    public void showExSearchList(List<String> exsearch) {
-
-    }
-
-    @Override
-    public void showSearchResult() {
-
-    }
-
-    @Override
-    public void showUserPin() {
-
-    }
-
-    @Override
-    public void userPinClicked() {
-
-    }
-
-    @Override
-    public void showPeriodSetting() {
-
     }
 }
