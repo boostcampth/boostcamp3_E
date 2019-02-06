@@ -24,6 +24,7 @@ public interface CreateListContract {
         void addItem(String itemName);
 
         void decideShoppingList();
+
     }
 
 }

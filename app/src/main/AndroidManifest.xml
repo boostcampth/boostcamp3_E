@@ -37,6 +37,13 @@
         <activity android:name=".ui.signup.SignUpActivity" />
         <activity android:name=".ui.addpost.AddPostActivity"/>
 
+        <activity
+            android:name=".ui.itemdetail.ItemDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.createlist.CreateListActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|adjustResize" />
     </application>
 
     <!-- 네이버 쇼핑 API

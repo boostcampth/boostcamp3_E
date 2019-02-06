@@ -9,4 +9,9 @@ public class TextViewUtil {
         return num.toString();
     }
 
+    @BindingConversion
+    public static String convertintToDisplayedString(int number) {
+        return String.valueOf(number);
+    }
+
 }

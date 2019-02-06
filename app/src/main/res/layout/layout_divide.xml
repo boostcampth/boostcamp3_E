@@ -11,7 +11,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:layout_marginLeft="@dimen/space_x_small"
         android:background="@color/colorDivide"/>
 
 

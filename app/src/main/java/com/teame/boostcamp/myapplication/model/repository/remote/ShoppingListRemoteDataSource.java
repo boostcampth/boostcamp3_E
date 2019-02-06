@@ -62,7 +62,7 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
         PublishSubject<Item> subject = PublishSubject.create();
 
         // 국가의 Base Shopping List를 가져옴
-        Task base = baseRef.get()
+            Task base = baseRef.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
@@ -104,6 +104,16 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
                 .addOnFailureListener(e -> DLogUtil.e("error : " + e.toString()));
 
         // 가져온 리스트를 MinPriceAPI를 통해 최저가를 붙여준 후 모든아이템을 List로 반환해줌
+        /*return subject.flatMapSingle(targetItem ->
+                MinPriceAPI.getInstance()
+                        .api
+                        .getMinPrice(targetItem.getName())
+                        .map(minPriceResponse -> {
+                            targetItem.setMinPriceResponse(minPriceResponse);
+                            return targetItem;
+                        }))
+                .toList();*/
+
         return subject.flatMap(targetItem ->
                 Observable.just(targetItem)
                         .observeOn(Schedulers.io())
