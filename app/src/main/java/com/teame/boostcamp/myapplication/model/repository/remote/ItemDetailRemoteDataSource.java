@@ -13,6 +13,7 @@ import com.teame.boostcamp.myapplication.util.DLogUtil;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
@@ -65,7 +66,7 @@ public class ItemDetailRemoteDataSource implements ItemDetailDataSource {
     }
 
     @Override
-    public Subject<Reply> writeReply(String itemID, String content, int ratio) {
+    public Observable<Reply> writeReply(String itemID, String content, int ratio) {
         Reply reply = new Reply();
         reply.setContent(content);
         reply.setRatio((double) ratio);
