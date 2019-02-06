@@ -102,9 +102,6 @@ public class SearchPresenter implements SearchContract.Presenter {
     public void onDetach() {
         geocoder=null;
         view=null;
-        //Test용
-        if(exList.size()>0)
-            exList.clear();
         SharedPreferences.Editor editor=prefExSearch.edit();
         String json=gson.toJson(exList);
         editor.putString(PREF_EX_SEARCH,json);
