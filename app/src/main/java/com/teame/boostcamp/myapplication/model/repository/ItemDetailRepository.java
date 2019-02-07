@@ -9,8 +9,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.subjects.Subject;
 
 public class ItemDetailRepository implements ItemDetailDataSource {
 
@@ -39,7 +39,7 @@ public class ItemDetailRepository implements ItemDetailDataSource {
     }
 
     @Override
-    public Subject<Reply> writeReply(String itemId, String content, int ratio) {
+    public Observable<Reply> writeReply(String itemId, String content, int ratio) {
         return itemDetailRemoteDataSource.writeReply(itemId,content,ratio);
     }
 
