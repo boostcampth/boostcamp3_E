@@ -10,7 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.ShoppingListDataSource;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
@@ -56,10 +56,10 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
      * 유저가 선택할 리스트를 가져옴
      */
     @Override
-    public Single<List<Item>> getItemList() {
+    public Single<List<Goods>> getItemList() {
         DLogUtil.d(":: 진입");
 
-        PublishSubject<Item> subject = PublishSubject.create();
+        PublishSubject<Goods> subject = PublishSubject.create();
 
         // 국가의 Base Shopping List를 가져옴
             Task base = baseRef.get()
@@ -68,7 +68,7 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
 
                         for (DocumentSnapshot document : documents) {
-                            Item item = document.toObject(Item.class);
+                            Goods item = document.toObject(Goods.class);
                             String key = document.getReference().getId();
                             item.setKey(key);
                             subject.onNext(item);
@@ -86,7 +86,7 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
 
                         for (DocumentSnapshot document : documents) {
-                            Item item = document.toObject(Item.class);
+                            Goods item = document.toObject(Goods.class);
                             String key = document.getReference().getId();
                             item.setKey(key);
                             subject.onNext(item);
@@ -131,7 +131,7 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
     /**
      * 유저가 선택한 리스트를 저장함 */
     @Override
-    public void saveMyChoiceList(List<Item> list) {
+    public void saveMyChoiceList(List<Goods> list) {
         FirebaseUser user = auth.getCurrentUser();
         String userId;
 
@@ -153,8 +153,8 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
         CollectionReference myThisListItemRef = myThisListRef.collection("items");
         WriteBatch batch = db.batch();
         // 선택된 각 아이템을 ID, Item 할당
-        for (Item item : list) {
-            DocumentReference itemRef = myThisListItemRef.document(item.key);
+        for (Goods item : list) {
+            DocumentReference itemRef = myThisListItemRef.document(item.getKey());
             batch.set(itemRef, item);
         }
 

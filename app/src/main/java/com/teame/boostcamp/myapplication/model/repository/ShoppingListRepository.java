@@ -1,6 +1,6 @@
 package com.teame.boostcamp.myapplication.model.repository;
 
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.remote.ShoppingListRemoteDataSource;
 
 import java.util.List;
@@ -26,12 +26,12 @@ public class ShoppingListRepository implements ShoppingListDataSource {
 
 
     @Override
-    public Single<List<Item>> getItemList() {
+    public Single<List<Goods>> getItemList() {
         return shoppingListRemoteDataSource.getItemList().observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public void saveMyChoiceList(List<Item> list) {
+    public void saveMyChoiceList(List<Goods> list) {
         shoppingListRemoteDataSource.saveMyChoiceList(list);
     }
 }

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.teame.boostcamp.myapplication.model.entitiy.Item"/>
+            type="com.teame.boostcamp.myapplication.model.entitiy.Goods"/>
 
         <variable
             name="starCount"
@@ -99,7 +99,7 @@
                     style="@style/Widget.MyListItem.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/list_item_min_parice"
+                    android:text="@string/list_goods_min_parice"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_item_image"
                     app:layout_constraintLeft_toRightOf="@+id/iv_item_image"
                     app:layout_constraintTop_toBottomOf="@+id/tv_item_ratio"/>

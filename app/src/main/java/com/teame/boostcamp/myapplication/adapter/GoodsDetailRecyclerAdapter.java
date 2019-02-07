@@ -1,24 +1,19 @@
 package com.teame.boostcamp.myapplication.adapter;
 
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemDetailReplyBinding;
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ItemDetailRecyclerAdapter extends BaseRecyclerAdatper<Reply, ItemDetailRecyclerAdapter.ViewHolder> {
+public class GoodsDetailRecyclerAdapter extends BaseRecyclerAdatper<Reply, GoodsDetailRecyclerAdapter.ViewHolder> {
 
 
     @NonNull

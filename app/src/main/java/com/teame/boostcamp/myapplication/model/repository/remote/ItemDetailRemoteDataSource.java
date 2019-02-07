@@ -16,18 +16,17 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.Subject;
 
 public class ItemDetailRemoteDataSource implements ItemDetailDataSource {
 
-    private static final String QUERY_ITEM = "item";
-    private static final String QUERY_ITEM_REPLY = "review";
+    private static final String QUERY_GOODS = "item";
+    private static final String QUERY_GOODS_REPLY = "review";
 
     private static ItemDetailRemoteDataSource INSTANCE;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference replyRef = db.collection(QUERY_ITEM);
+    private CollectionReference replyRef = db.collection(QUERY_GOODS);
 
     private ItemDetailRemoteDataSource() {
     }
@@ -46,7 +45,7 @@ public class ItemDetailRemoteDataSource implements ItemDetailDataSource {
         PublishSubject<Reply> subject = PublishSubject.create();
 
         Task reply = replyRef.document(itemUid)
-                .collection(QUERY_ITEM_REPLY)
+                .collection(QUERY_GOODS_REPLY)
                 .get()
                 .addOnSuccessListener(documents -> {
 
@@ -75,7 +74,7 @@ public class ItemDetailRemoteDataSource implements ItemDetailDataSource {
         reply.setWriteDate(nowDate);
         PublishSubject<Reply> subject = PublishSubject.create();
         Task saveReply = replyRef.document(itemUid)
-                .collection(QUERY_ITEM_REPLY)
+                .collection(QUERY_GOODS_REPLY)
                 .add(reply)
                 .addOnSuccessListener(aVoid -> {
                     subject.onNext(reply);

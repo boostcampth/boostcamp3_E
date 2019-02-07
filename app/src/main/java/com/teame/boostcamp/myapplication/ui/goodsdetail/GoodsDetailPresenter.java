@@ -1,26 +1,25 @@
-package com.teame.boostcamp.myapplication.ui.itemdetail;
+package com.teame.boostcamp.myapplication.ui.goodsdetail;
 
-import com.teame.boostcamp.myapplication.adapter.ItemDetailRecyclerAdapter;
-import com.teame.boostcamp.myapplication.model.entitiy.Reply;
+import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.repository.ItemDetailRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class ItemDetailPresenter implements ItemDetailContract.Presenter {
+public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
 
     private ItemDetailRepository repository;
     private CompositeDisposable disposable = new CompositeDisposable();
-    private ItemDetailRecyclerAdapter adapter;
-    private ItemDetailContract.View view;
+    private GoodsDetailRecyclerAdapter adapter;
+    private GoodsDetailContract.View view;
 
-    public ItemDetailPresenter(ItemDetailContract.View view , ItemDetailRepository repository) {
+    public GoodsDetailPresenter(GoodsDetailContract.View view , ItemDetailRepository repository) {
         this.repository = repository;
         this.view = view;
     }
 
     @Override
-    public void loadReplyList(ItemDetailRecyclerAdapter adapter, String itemUid) {
+    public void loadReplyList(GoodsDetailRecyclerAdapter adapter, String itemUid) {
         this.adapter = adapter;
         disposable.add(repository.getReplyList(itemUid)
                 .subscribe(list -> {

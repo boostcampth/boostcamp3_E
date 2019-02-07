@@ -12,9 +12,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.ItemListRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityCreateListBinding;
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.ShoppingListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
@@ -78,7 +78,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_all_back);
-        ItemListRecyclerAdapter adapter = new ItemListRecyclerAdapter();
+        GoodsListRecyclerAdapter adapter = new GoodsListRecyclerAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
                 false);
@@ -105,7 +105,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     }
 
     @Override
-    public void goNextStep(List<Item> list) {
+    public void goNextStep(List<Goods> list) {
         // TODO : 저장된 아이템 해쉬테그, 제목 결정하는 곳으로 넘겨주기
         showToast("NextStep");
     }
@@ -113,7 +113,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     @Override
     public void showAddedItem(int position) {
 
-        ItemListRecyclerAdapter adapter = (ItemListRecyclerAdapter) binding.rvRecommendList.getAdapter();
+        GoodsListRecyclerAdapter adapter = (GoodsListRecyclerAdapter) binding.rvRecommendList.getAdapter();
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) binding.rvRecommendList.getLayoutManager();
 
         if (position == -1) {
