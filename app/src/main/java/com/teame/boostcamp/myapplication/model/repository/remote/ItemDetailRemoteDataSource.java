@@ -22,7 +22,6 @@ public class ItemDetailRemoteDataSource implements ItemDetailDataSource {
 
     private static final String QUERY_ITEM = "item";
     private static final String QUERY_ITEM_REPLY = "review";
-    private static final String QUERY_ITEM_KEY = "ket1";
 
     private static ItemDetailRemoteDataSource INSTANCE;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -42,11 +41,11 @@ public class ItemDetailRemoteDataSource implements ItemDetailDataSource {
 
 
     @Override
-    public Single<List<Reply>> getReplyList() {
+    public Single<List<Reply>> getReplyList(String itemUid) {
 
         PublishSubject<Reply> subject = PublishSubject.create();
 
-        Task reply = replyRef.document(QUERY_ITEM_KEY)
+        Task reply = replyRef.document(itemUid)
                 .collection(QUERY_ITEM_REPLY)
                 .get()
                 .addOnSuccessListener(documents -> {
@@ -66,7 +65,7 @@ public class ItemDetailRemoteDataSource implements ItemDetailDataSource {
     }
 
     @Override
-    public Observable<Reply> writeReply(String itemID, String content, int ratio) {
+    public Observable<Reply> writeReply(String itemUid, String content, int ratio) {
         Reply reply = new Reply();
         reply.setContent(content);
         reply.setRatio((double) ratio);
@@ -75,7 +74,7 @@ public class ItemDetailRemoteDataSource implements ItemDetailDataSource {
         Date nowDate = new Date(now);
         reply.setWriteDate(nowDate);
         PublishSubject<Reply> subject = PublishSubject.create();
-        Task saveReply = replyRef.document(QUERY_ITEM_KEY)
+        Task saveReply = replyRef.document(itemUid)
                 .collection(QUERY_ITEM_REPLY)
                 .add(reply)
                 .addOnSuccessListener(aVoid -> {

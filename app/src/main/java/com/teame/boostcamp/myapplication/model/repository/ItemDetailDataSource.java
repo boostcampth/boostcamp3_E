@@ -9,7 +9,7 @@ import io.reactivex.Single;
 
 public interface ItemDetailDataSource {
 
-    Single<List<Reply>> getReplyList();
+    Single<List<Reply>> getReplyList(String itemUid);
 
-    Observable<Reply> writeReply(String itemId, String content, int ratio);
+    Observable<Reply> writeReply(String itemUid, String content, int ratio);
 }

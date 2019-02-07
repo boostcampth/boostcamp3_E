@@ -11,7 +11,7 @@ public interface ItemDetailContract {
     }
 
     interface Presenter extends BasePresenter {
-        void loadReplyList(ItemDetailRecyclerAdapter adapter);
+        void loadReplyList(ItemDetailRecyclerAdapter adapter, String itemUid);
 
         void writeReply(String itemId,String content,int ratio);
     }

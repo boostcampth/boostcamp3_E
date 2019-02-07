@@ -20,9 +20,9 @@ public class ItemDetailPresenter implements ItemDetailContract.Presenter {
     }
 
     @Override
-    public void loadReplyList(ItemDetailRecyclerAdapter adapter) {
+    public void loadReplyList(ItemDetailRecyclerAdapter adapter, String itemUid) {
         this.adapter = adapter;
-        disposable.add(repository.getReplyList()
+        disposable.add(repository.getReplyList(itemUid)
                 .subscribe(list -> {
                             adapter.initItems(list);
                             DLogUtil.d(list.toString());

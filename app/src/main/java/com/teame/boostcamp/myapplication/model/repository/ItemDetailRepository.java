@@ -11,6 +11,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.subjects.Subject;
 
 public class ItemDetailRepository implements ItemDetailDataSource {
 
@@ -29,8 +30,8 @@ public class ItemDetailRepository implements ItemDetailDataSource {
     }
 
     @Override
-    public Single<List<Reply>> getReplyList() {
-        return itemDetailRemoteDataSource.getReplyList()
+    public Single<List<Reply>> getReplyList(String itemUid) {
+        return itemDetailRemoteDataSource.getReplyList(itemUid)
                 .map(unsortedList -> {
                     List<Reply> sortedList = new ArrayList<>(unsortedList);
                     Collections.sort(sortedList, new descToDateSort());
@@ -39,8 +40,8 @@ public class ItemDetailRepository implements ItemDetailDataSource {
     }
 
     @Override
-    public Observable<Reply> writeReply(String itemId, String content, int ratio) {
-        return itemDetailRemoteDataSource.writeReply(itemId,content,ratio);
+    public Observable<Reply> writeReply(String itemUid, String content, int ratio) {
+        return itemDetailRemoteDataSource.writeReply(itemUid,content,ratio);
     }
 
     // Reply데이터 내림차순 정렬 Comparator
