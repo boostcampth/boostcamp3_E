@@ -44,6 +44,9 @@
             android:name=".ui.createlist.CreateListActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|adjustResize" />
+
+        <activity android:name=".ui.listitems.ListItemActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
     <!-- 네이버 쇼핑 API
