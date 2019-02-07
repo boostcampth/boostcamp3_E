@@ -22,6 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBinding, ItemDetailContract.Presenter> implements ItemDetailContract.View, View.OnClickListener {
 
+    // 테스트 Default값
+    private final static String EXTRA_ITEM_UID = "EXTRA_ITEM_UID";
+
     @Override
     protected ItemDetailContract.Presenter getPresenter() {
         ItemDetailRepository repository = ItemDetailRepository.getInstance();
@@ -33,8 +36,9 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
         return R.layout.activity_item_detail;
     }
 
-    public static void startActivity(Context context) {
+    public static void startActivity(Context context, String itemUid) {
         Intent intent = new Intent(context, ItemDetailActivity.class);
+        intent.putExtra(EXTRA_ITEM_UID, itemUid);
         context.startActivity(intent);
     }
 
@@ -53,6 +57,16 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
      */
 
     private void initView() {
+        Intent intent = getIntent();
+        final String itemUid;
+
+        if (intent.getStringExtra(EXTRA_ITEM_UID) != null) {
+            itemUid = intent.getStringExtra(EXTRA_ITEM_UID);
+        } else {
+            // 테스트 코드
+            itemUid = "ket1";
+        }
+
         ItemDetailRecyclerAdapter adapter = new ItemDetailRecyclerAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
@@ -63,7 +77,7 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
                 new DividerItemDecorator(ContextCompat.getDrawable(getBaseContext()
                         , R.drawable.divider_decoration));
         binding.rvReplyList.addItemDecoration(dividerItemDecoration);
-        presenter.loadReplyList(adapter);
+        presenter.loadReplyList(adapter, itemUid);
 
         // Default 5점
         binding.etReview.setStarCount(5);
@@ -74,7 +88,9 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
         binding.etReview.includeSelectRation.ivStar4.setOnClickListener(this);
         binding.etReview.includeSelectRation.ivStar5.setOnClickListener(this);
 
-        binding.etReview.tvWriteReply.setOnClickListener(view -> {
+        binding.etReview.tvWriteReply.setOnClickListener(view ->
+
+        {
             if (binding.etReview.tieWriteReview.getVisibility() == View.VISIBLE) {
                 int ratio = binding.etReview.getStarCount();
                 String content = binding.etReview.tieWriteReview.getText().toString();
@@ -82,11 +98,12 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
                 hideSoftKeyboard(ItemDetailActivity.this);
 
                 // TODO : key값 조정
-                String itemId = "ket1";
-                presenter.writeReply(itemId, content, ratio);
+                presenter.writeReply(itemUid, content, ratio);
             }
         });
-        binding.etReview.tvHintWrite.setOnClickListener(__ -> {
+        binding.etReview.tvHintWrite.setOnClickListener(__ ->
+
+        {
             DLogUtil.d("click");
             binding.viewFake.setVisibility(View.VISIBLE);
             binding.etReview.setIsExtend(true);
@@ -97,7 +114,9 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
             });
         });
 
-        binding.viewFake.setOnTouchListener((v, event) -> {
+        binding.viewFake.setOnTouchListener((v, event) ->
+
+        {
             DLogUtil.e("test");
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
