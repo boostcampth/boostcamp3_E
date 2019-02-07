@@ -22,7 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ItemListRecyclerAdapter extends BaseRecyclerAdatper<Item, ItemListRecyclerAdapter.ViewHolder> {
     private List<Boolean> checkList = new ArrayList<>();
-    private OnItemClickListener onItemClickListener;
+    private OnCheckItemClickListener onItemClickListener;
+    private OnItemDetailListener onItemDetailListener;
     private int animPosition = -1;
 
 
@@ -37,16 +38,23 @@ public class ItemListRecyclerAdapter extends BaseRecyclerAdatper<Item, ItemListR
                 .inflate(R.layout.item_my_list_item, parent, false);
         final ViewHolder holder = new ViewHolder(itemView);
 
-        itemView.setOnClickListener(view -> {
+        holder.binding.getRoot().setOnClickListener(view -> {
             if (onItemClickListener != null) {
-                DLogUtil.e("리스너 :" + holder.getAdapterPosition());
                 int position = holder.getLayoutPosition();
-
+                DLogUtil.e("리스너 :" + holder.getAdapterPosition());
                 boolean oldBoolean = checkList.get(position);
                 checkList.set(position, !oldBoolean);
                 holder.setChecked(!oldBoolean);
 
-                onItemClickListener.onItemClick(view, position, !oldBoolean);
+                onItemClickListener.onitemClick(view, position, !oldBoolean);
+            }
+        });
+
+        holder.binding.ivShowItemDetail.setOnClickListener(view -> {
+            int position = holder.getLayoutPosition();
+            DLogUtil.e("리스너 :" + holder.getAdapterPosition());
+            if(onItemDetailListener!=null){
+                onItemDetailListener.onClick(view, position);
             }
         });
         return holder;
@@ -54,28 +62,32 @@ public class ItemListRecyclerAdapter extends BaseRecyclerAdatper<Item, ItemListR
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Item item = itemList.get(position);
-        holder.binding.setItem(item);
-        holder.binding.setStarCount(item.ratio.intValue());
+            Item item = itemList.get(position);
+            holder.binding.setItem(item);
+            holder.binding.setStarCount(item.getRatio().intValue());
 
-        if (checkList.get(position)) {
-            holder.binding.lavCheckAnim.setProgress(1);
-        } else {
-            holder.binding.lavCheckAnim.setProgress(0);
-        }
+            if (checkList.get(position)) {
+                holder.binding.lavCheckAnim.setProgress(1);
+            } else {
+                holder.binding.lavCheckAnim.setProgress(0);
+            }
 
-        if (position == animPosition) {
-            final Animation animShake
-                    = AnimationUtils.loadAnimation(holder.binding.getRoot().getContext(), R.anim.anim_shake);
-            holder.binding.cvItemLayout.startAnimation(animShake);
-            animPosition = -1;
-        }
+            if (position == animPosition) {
+                final Animation animShake
+                        = AnimationUtils.loadAnimation(holder.binding.getRoot().getContext(), R.anim.anim_shake);
+                holder.binding.cvItemLayout.startAnimation(animShake);
+                animPosition = -1;
+            }
 
-        DLogUtil.d(itemList.get(position).toString());
+            DLogUtil.d(itemList.get(position).toString());
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnCheckItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemDetailListener(OnItemDetailListener onItemDetailListener){
+        this.onItemDetailListener = onItemDetailListener;
     }
 
 

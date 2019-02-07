@@ -88,9 +88,7 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
         binding.etReview.includeSelectRation.ivStar4.setOnClickListener(this);
         binding.etReview.includeSelectRation.ivStar5.setOnClickListener(this);
 
-        binding.etReview.tvWriteReply.setOnClickListener(view ->
-
-        {
+        binding.etReview.tvWriteReply.setOnClickListener(view -> {
             if (binding.etReview.tieWriteReview.getVisibility() == View.VISIBLE) {
                 int ratio = binding.etReview.getStarCount();
                 String content = binding.etReview.tieWriteReview.getText().toString();
@@ -101,9 +99,7 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
                 presenter.writeReply(itemUid, content, ratio);
             }
         });
-        binding.etReview.tvHintWrite.setOnClickListener(__ ->
-
-        {
+        binding.etReview.tvHintWrite.setOnClickListener(__ -> {
             DLogUtil.d("click");
             binding.viewFake.setVisibility(View.VISIBLE);
             binding.etReview.setIsExtend(true);
@@ -113,10 +109,10 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
                 showKeyboard(this);
             });
         });
-
-        binding.viewFake.setOnTouchListener((v, event) ->
-
-        {
+        binding.etReview.tieWriteReview.setOnClickListener(__ -> {
+            binding.viewFake.setVisibility(View.VISIBLE);
+        });
+        binding.viewFake.setOnTouchListener((v, event) -> {
             DLogUtil.e("test");
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
