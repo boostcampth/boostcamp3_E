@@ -47,6 +47,10 @@
 
         <activity android:name=".ui.listgoods.ListGoodsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.createlistinfo.CreateListInfo"
+            android:label="@string/title_activity_create_list_info"></activity>
     </application>
 
     <!-- 네이버 쇼핑 API
