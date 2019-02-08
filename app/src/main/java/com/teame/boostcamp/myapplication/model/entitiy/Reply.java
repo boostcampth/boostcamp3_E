@@ -9,13 +9,9 @@ import java.util.Date;
 public class Reply {
 
     private String content;
-
     private Double ratio;
-
     private Date writeDate;
-
     private String writer;
-
     private String errorMessage = null;
 
     public String getContent() {

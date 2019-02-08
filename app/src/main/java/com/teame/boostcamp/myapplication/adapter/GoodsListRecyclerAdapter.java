@@ -10,7 +10,7 @@ import android.widget.Checkable;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemMyListItemBinding;
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ItemListRecyclerAdapter extends BaseRecyclerAdatper<Item, ItemListRecyclerAdapter.ViewHolder> {
+public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsListRecyclerAdapter.ViewHolder> {
     private List<Boolean> checkList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
     private int animPosition = -1;
@@ -54,9 +54,9 @@ public class ItemListRecyclerAdapter extends BaseRecyclerAdatper<Item, ItemListR
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Item item = itemList.get(position);
+        Goods item = itemList.get(position);
         holder.binding.setItem(item);
-        holder.binding.setStarCount(item.ratio.intValue());
+        holder.binding.setStarCount(item.getRatio().intValue());
 
         if (checkList.get(position)) {
             holder.binding.lavCheckAnim.setProgress(1);
@@ -82,7 +82,7 @@ public class ItemListRecyclerAdapter extends BaseRecyclerAdatper<Item, ItemListR
     /**
      * 최초 아이템 init
      */
-    public void initItems(List<Item> itemList) {
+    public void initItems(List<Goods> itemList) {
         this.itemList = itemList;
         for (int i = 0; i < itemList.size(); i++) {
             checkList.add(false);
@@ -93,7 +93,7 @@ public class ItemListRecyclerAdapter extends BaseRecyclerAdatper<Item, ItemListR
     /**
      * 아이템 추가 (단일)
      */
-    public void addItem(Item item) {
+    public void addItem(Goods item) {
         int position = this.itemList.size();
         this.itemList.add(item);
         this.checkList.add(true);
@@ -103,7 +103,7 @@ public class ItemListRecyclerAdapter extends BaseRecyclerAdatper<Item, ItemListR
     /**
      * 해당 position 의 item 반환
      */
-    public Item getItem(int position) {
+    public Goods getItem(int position) {
         if (position < 0 || itemList.size() <= position) {
             return null;
         }
@@ -113,7 +113,7 @@ public class ItemListRecyclerAdapter extends BaseRecyclerAdatper<Item, ItemListR
     /**
      * ItemName을 기준으로 해당 아이템 position 반환
      */
-    public int searchItem(Item target) {
+    public int searchItem(Goods target) {
         if (itemList.contains(target)) {
             for (int i = 0; i < itemList.size(); i++) {
                 if (TextUtils.equals(itemList.get(i).getName(), target.getName())) {

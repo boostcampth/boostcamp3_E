@@ -3,24 +3,16 @@ package com.teame.boostcamp.myapplication.model.repository.remote;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
-import com.teame.boostcamp.myapplication.model.MinPriceAPI;
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
 import com.teame.boostcamp.myapplication.model.repository.PostListDataSource;
-import com.teame.boostcamp.myapplication.model.repository.ShoppingListDataSource;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
 public class PostListRemoteDataSource implements PostListDataSource {

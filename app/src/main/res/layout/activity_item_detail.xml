@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.teame.boostcamp.myapplication.model.entitiy.Item"/>
+            type="com.teame.boostcamp.myapplication.model.entitiy.Goods"/>
     </data>
 
 

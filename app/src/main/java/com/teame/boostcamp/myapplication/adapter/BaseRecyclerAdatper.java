@@ -1,8 +1,5 @@
 package com.teame.boostcamp.myapplication.adapter;
 
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
-import com.teame.boostcamp.myapplication.model.entitiy.Reply;
-
 import java.util.ArrayList;
 import java.util.List;
 

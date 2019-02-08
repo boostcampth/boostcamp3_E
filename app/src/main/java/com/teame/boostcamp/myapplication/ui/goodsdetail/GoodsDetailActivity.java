@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.ui.itemdetail;
+package com.teame.boostcamp.myapplication.ui.goodsdetail;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.ItemDetailRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityItemDetailBinding;
-import com.teame.boostcamp.myapplication.model.repository.ItemDetailRepository;
+import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.DividerItemDecorator;
@@ -20,15 +20,15 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBinding, ItemDetailContract.Presenter> implements ItemDetailContract.View, View.OnClickListener {
+public class GoodsDetailActivity extends BaseMVPActivity<ActivityItemDetailBinding, GoodsDetailContract.Presenter> implements GoodsDetailContract.View, View.OnClickListener {
 
     // 테스트 Default값
     private final static String EXTRA_ITEM_UID = "EXTRA_ITEM_UID";
 
     @Override
-    protected ItemDetailContract.Presenter getPresenter() {
-        ItemDetailRepository repository = ItemDetailRepository.getInstance();
-        return new ItemDetailPresenter(this, repository);
+    protected GoodsDetailContract.Presenter getPresenter() {
+        GoodsDetailRepository repository = GoodsDetailRepository.getInstance();
+        return new GoodsDetailPresenter(this, repository);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
     }
 
     public static void startActivity(Context context, String itemUid) {
-        Intent intent = new Intent(context, ItemDetailActivity.class);
+        Intent intent = new Intent(context, GoodsDetailActivity.class);
         intent.putExtra(EXTRA_ITEM_UID, itemUid);
         context.startActivity(intent);
     }
@@ -67,7 +67,7 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
             itemUid = "ket1";
         }
 
-        ItemDetailRecyclerAdapter adapter = new ItemDetailRecyclerAdapter();
+        GoodsDetailRecyclerAdapter adapter = new GoodsDetailRecyclerAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
                 false);
@@ -95,7 +95,7 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
                 int ratio = binding.etReview.getStarCount();
                 String content = binding.etReview.tieWriteReview.getText().toString();
                 binding.etReview.setIsExtend(false);
-                hideSoftKeyboard(ItemDetailActivity.this);
+                hideSoftKeyboard(GoodsDetailActivity.this);
 
                 // TODO : key값 조정
                 presenter.writeReply(itemUid, content, ratio);
@@ -121,7 +121,7 @@ public class ItemDetailActivity extends BaseMVPActivity<ActivityItemDetailBindin
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     binding.etReview.setIsExtend(false);
-                    hideSoftKeyboard(ItemDetailActivity.this);
+                    hideSoftKeyboard(GoodsDetailActivity.this);
                     binding.viewFake.setVisibility(View.GONE);
                     break;
                 case MotionEvent.ACTION_UP:

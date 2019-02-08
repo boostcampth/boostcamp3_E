@@ -38,7 +38,7 @@
         <activity android:name=".ui.addpost.AddPostActivity"/>
 
         <activity
-            android:name=".ui.itemdetail.ItemDetailActivity"
+            android:name=".ui.goodsdetail.GoodsDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.createlist.CreateListActivity"

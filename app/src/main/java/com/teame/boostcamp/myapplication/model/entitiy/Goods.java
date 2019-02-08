@@ -2,31 +2,15 @@ package com.teame.boostcamp.myapplication.model.entitiy;
 
 import com.google.firebase.firestore.Exclude;
 
-public class Item {
+public class Goods {
 
-    @Exclude
-    public String key;
+    private String key;
+    private String name;
+    private Double ratio;
+    private String lPrice;
+    private String img;
+    private String link;
 
-    public String name;
-
-    public Double ratio;
-
-    @Exclude
-    public String lPrice;
-
-    @Exclude
-    public String img;
-
-    @Exclude
-    public String link;
-
-    public Item() {
-
-    }
-
-    public Item(String key) {
-        this.key = key;
-    }
 
     public void setMinPriceResponse(MinPriceResponse minPriceResponse) {
         MinPriceResponse.Item info = minPriceResponse.getItems().get(0);
@@ -35,6 +19,7 @@ public class Item {
         this.lPrice = info.getLprice();
     }
 
+    @Exclude
     public String getKey() {
         return key;
     }
@@ -61,14 +46,16 @@ public class Item {
         this.ratio = ratio;
     }
 
-    public String getlPrice() {
+    @Exclude
+    public String getLPrice() {
         return lPrice;
     }
 
-    public void setlPrice(String lPrice) {
+    public void setLPrice(String lPrice) {
         this.lPrice = lPrice;
     }
 
+    @Exclude
     public String getImg() {
         return img;
     }
@@ -77,6 +64,7 @@ public class Item {
         this.img = img;
     }
 
+    @Exclude
     public String getLink() {
         return link;
     }
@@ -99,8 +87,8 @@ public class Item {
 
     @Override
     public boolean equals(Object o){
-        if(o instanceof Item){
-            Item p = (Item) o;
+        if(o instanceof Goods){
+            Goods p = (Goods) o;
             return this.name.equals(p.getName());
         } else
             return false;
