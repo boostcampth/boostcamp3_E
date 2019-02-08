@@ -41,9 +41,9 @@ public class CreateListPresenter implements CreateListContract.Presenter {
      * 쇼핑리스트를 고르는데 필요한 정보를 가져옴
      */
     @Override
-    public void loadListData(GoodsListRecyclerAdapter adapter) {
+    public void loadListData(GoodsListRecyclerAdapter adapter,String nation, String city) {
         this.adapter = adapter;
-        disposable.add(shoppingListRepository.getItemList()
+        disposable.add(shoppingListRepository.getItemList(nation,city)
                 .subscribe(
                         list -> {
                             adapter.initItems(list);
@@ -77,7 +77,7 @@ public class CreateListPresenter implements CreateListContract.Presenter {
             adapter.addItem(item);
         }
 
-        view.showAddedItem(hitPosition);
+        view.showAddedGoods(hitPosition);
     }
 
     /**
@@ -86,7 +86,12 @@ public class CreateListPresenter implements CreateListContract.Presenter {
     @Override
     public void decideShoppingList() {
         List<Goods> saveList = new ArrayList<>(checkedList.values());
-        view.goNextStep(saveList);
+        if(saveList.size()<=0){
+            view.emptyCheckGoods();
+        }else{
+            view.goNextStep(saveList);
+        }
+
     }
 
 

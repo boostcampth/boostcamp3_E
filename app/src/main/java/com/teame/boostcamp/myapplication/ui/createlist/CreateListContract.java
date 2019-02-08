@@ -12,12 +12,14 @@ public interface CreateListContract {
     interface View extends BaseView<Presenter> {
         void goNextStep(List<Goods> list);
 
-        void showAddedItem(int position);
+        void showAddedGoods(int position);
+
+        void emptyCheckGoods();
     }
 
     interface Presenter extends BasePresenter {
 
-        void loadListData(GoodsListRecyclerAdapter adapter);
+        void loadListData(GoodsListRecyclerAdapter adapter,String nation, String city);
 
         void selectItem(int position, boolean isCheck);
 
