@@ -7,7 +7,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-public interface ItemDetailDataSource {
+public interface GoodsDetailDataSource {
 
     Single<List<Reply>> getReplyList(String itemUid);
 
