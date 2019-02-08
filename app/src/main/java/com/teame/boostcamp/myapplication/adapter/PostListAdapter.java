@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemPostBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
+import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemViewHolder> implements OnPostClickListener {
     private List<Post> postList = new ArrayList<>();
     private Context context;
-
 
     public void add(Post post) {
         postList.add(post);
@@ -85,13 +86,21 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
 
     @Override
     public void onLikeButtonClick(int i) {
-        if(postList.get(i).getLikedUidList().contains(FirebaseAuth.getInstance().getUid())){
-            postList.get(i).decreaseLike();
-            postList.get(i).getLikedUidList().remove(FirebaseAuth.getInstance().getUid());
+        Post post = postList.get(i);
+        String uid = FirebaseAuth.getInstance().getUid();
+        if(post.getLikedUidList().contains(uid)){
+            post.decreaseLike();
+            post.getLikedUidList().remove(uid);
+            FirebaseFirestore.getInstance().collection("posts")
+                    .document(uid+post.getCreatedDate())
+                    .set(post);
             notifyDataSetChanged();
         }else{
-            postList.get(i).increaseLike();
-            postList.get(i).getLikedUidList().add(FirebaseAuth.getInstance().getUid());
+            post.increaseLike();
+            post.getLikedUidList().add(uid);
+            FirebaseFirestore.getInstance().collection("posts")
+                    .document(uid+post.getCreatedDate())
+                    .set(post);
             notifyDataSetChanged();
         }
     }
