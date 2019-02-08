@@ -8,7 +8,5 @@ import io.reactivex.Single;
 
 public interface GoodsListDataSource {
 
-    Single<List<Goods>> getItemList();
-
-    void saveMyChoiceList(List<Goods> list);
+    Single<List<Goods>> getItemList(String nation, String city);
 }

@@ -37,4 +37,9 @@ public class MyListRepository implements MyListDataSoruce {
         return myListRemoteDataSource.getMyListItems(headerUid)
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    @Override
+    public Single<Boolean> saveMyList(List<Goods> goodsList, List<String> hashTag, GoodsListHeader header) {
+        return myListRemoteDataSource.saveMyList(goodsList, hashTag, header).observeOn(AndroidSchedulers.mainThread());
+    }
 }
