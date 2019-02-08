@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsListHeader, GoodsListHeaderRecyclerAdapter.ViewHolder> {
 
     private OnItemClickListener onItemClickListener;
-    private OnItemAlaramListener onItemAlaramListener;
+    private OnItemClickListener onItemAlaramListener;
 
     @NonNull
     @Override
@@ -36,7 +36,7 @@ public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsLis
             if (onItemAlaramListener != null) {
                 DLogUtil.d("position :" + holder.getLayoutPosition());
                 int position = holder.getLayoutPosition();
-                onItemAlaramListener.onAlaramClick(view, position);
+                onItemAlaramListener.onItemClick(view, position);
             }
         });
         return holder;
@@ -51,7 +51,7 @@ public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsLis
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setOnItemAlaramListener(OnItemAlaramListener onItemAlaramListener){
+    public void setOnItemAlaramListener(OnItemClickListener onItemAlaramListener){
         this.onItemAlaramListener = onItemAlaramListener;
     }
 

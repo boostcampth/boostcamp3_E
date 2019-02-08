@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsListRecyclerAdapter.ViewHolder> {
     private List<Boolean> checkList = new ArrayList<>();
     private OnCheckItemClickListener onItemClickListener;
-    private OnItemDetailListener onItemDetailListener;
+    private OnItemClickListener onItemDetailListener;
     private int animPosition = -1;
 
 
@@ -54,7 +54,7 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
             int position = holder.getLayoutPosition();
             DLogUtil.e("리스너 :" + holder.getAdapterPosition());
             if(onItemDetailListener!=null){
-                onItemDetailListener.onClick(view, position);
+                onItemDetailListener.onItemClick(view, position);
             }
         });
         return holder;
@@ -86,7 +86,7 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setOnItemDetailListener(OnItemDetailListener onItemDetailListener){
+    public void setOnItemDetailListener(OnItemClickListener onItemDetailListener){
         this.onItemDetailListener = onItemDetailListener;
     }
 
