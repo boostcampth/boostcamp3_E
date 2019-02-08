@@ -1,8 +1,11 @@
 package com.teame.boostcamp.myapplication.model.entitiy;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.firestore.Exclude;
 
-public class Goods {
+public class Goods implements Parcelable {
 
     private String key;
     private String name;
@@ -11,6 +14,34 @@ public class Goods {
     private String img;
     private String link;
 
+
+    public Goods(){
+
+    }
+    protected Goods(Parcel in) {
+        key = in.readString();
+        name = in.readString();
+        if (in.readByte() == 0) {
+            ratio = null;
+        } else {
+            ratio = in.readDouble();
+        }
+        lPrice = in.readString();
+        img = in.readString();
+        link = in.readString();
+    }
+
+    public static final Creator<Goods> CREATOR = new Creator<Goods>() {
+        @Override
+        public Goods createFromParcel(Parcel in) {
+            return new Goods(in);
+        }
+
+        @Override
+        public Goods[] newArray(int size) {
+            return new Goods[size];
+        }
+    };
 
     public void setMinPriceResponse(MinPriceResponse minPriceResponse) {
         MinPriceResponse.Item info = minPriceResponse.getItems().get(0);
@@ -94,4 +125,23 @@ public class Goods {
             return false;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(key);
+        parcel.writeString(name);
+        if (ratio == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(ratio);
+        }
+        parcel.writeString(lPrice);
+        parcel.writeString(img);
+        parcel.writeString(link);
+    }
 }
