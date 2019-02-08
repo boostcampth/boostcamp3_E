@@ -26,12 +26,7 @@ public class GoodsListRepository implements GoodsListDataSource {
 
 
     @Override
-    public Single<List<Goods>> getItemList() {
-        return shoppingListRemoteDataSource.getItemList().observeOn(AndroidSchedulers.mainThread());
-    }
-
-    @Override
-    public void saveMyChoiceList(List<Goods> list) {
-        shoppingListRemoteDataSource.saveMyChoiceList(list);
+    public Single<List<Goods>> getItemList(String nation, String city) {
+        return shoppingListRemoteDataSource.getItemList(nation,city).observeOn(AndroidSchedulers.mainThread());
     }
 }

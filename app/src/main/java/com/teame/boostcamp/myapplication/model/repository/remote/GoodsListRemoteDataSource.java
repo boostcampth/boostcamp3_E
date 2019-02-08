@@ -2,13 +2,9 @@ package com.teame.boostcamp.myapplication.model.repository.remote;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListDataSource;
@@ -24,22 +20,10 @@ import io.reactivex.subjects.PublishSubject;
 public class GoodsListRemoteDataSource implements GoodsListDataSource {
 
     private static final String QUERY_COUNTRY = "country";
-    private static final String QUERY_COUNTRY_TARGET = "japan";
-    private static final String QUERY_COUNTRY_TARGET2 = "osaka";
     private static final String QUERY_COUNTRY_BASE_LIST = "baselist";
 
     private static GoodsListRemoteDataSource INSTANCE;
-
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference baseRef = db.collection(QUERY_COUNTRY)
-            .document(QUERY_COUNTRY_TARGET)
-            .collection(QUERY_COUNTRY_BASE_LIST);
-
-    private CollectionReference countryRef = db.collection(QUERY_COUNTRY)
-            .document(QUERY_COUNTRY_TARGET)
-            .collection("osaka");
 
     private GoodsListRemoteDataSource() {
     }
@@ -56,8 +40,15 @@ public class GoodsListRemoteDataSource implements GoodsListDataSource {
      * 유저가 선택할 리스트를 가져옴
      */
     @Override
-    public Single<List<Goods>> getItemList() {
+    public Single<List<Goods>> getItemList(String nation, String city) {
         DLogUtil.d(":: 진입");
+        CollectionReference baseRef = db.collection(QUERY_COUNTRY)
+                .document(nation)
+                .collection(QUERY_COUNTRY_BASE_LIST);
+
+        CollectionReference countryRef = db.collection(QUERY_COUNTRY)
+                .document(nation)
+                .collection(city);
 
         PublishSubject<Goods> subject = PublishSubject.create();
 
@@ -126,49 +117,5 @@ public class GoodsListRemoteDataSource implements GoodsListDataSource {
                                     return item;
                                 }))
                 .toList();
-    }
-
-    /**
-     * 유저가 선택한 리스트를 저장함 */
-    @Override
-    public void saveMyChoiceList(List<Goods> list) {
-        FirebaseUser user = auth.getCurrentUser();
-        String userId;
-
-        if (user != null) {
-            userId = user.getUid();
-            DLogUtil.d("userId : " + user.getUid());
-        } else {
-            return;
-        }
-
-        CollectionReference myListRef = db.collection("users")
-                .document(userId)
-                .collection("mylist");
-
-        // 마이리스트 도큐먼트 ID
-        String myListId = getMyListID();
-        // 생성되는 Mylist의 ID 할당
-        DocumentReference myThisListRef = myListRef.document(myListId);
-        CollectionReference myThisListItemRef = myThisListRef.collection("items");
-        WriteBatch batch = db.batch();
-        // 선택된 각 아이템을 ID, Item 할당
-        for (Goods item : list) {
-            DocumentReference itemRef = myThisListItemRef.document(item.getKey());
-            batch.set(itemRef, item);
-        }
-
-        batch.commit()
-                .addOnSuccessListener(aVoid -> DLogUtil.d("성공"))
-                .addOnFailureListener(e -> DLogUtil.e("fail : " + e.getMessage()));
-
-    }
-
-    /**
-     * 저장될 MyList의 고유ID를 만듦
-     */
-    private String getMyListID() {
-        // 리스트의 UID 생성 = 국가 + 지역 + 출발일자
-        return "일본오사카20190128";
     }
 }

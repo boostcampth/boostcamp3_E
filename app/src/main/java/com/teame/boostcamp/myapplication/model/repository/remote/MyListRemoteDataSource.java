@@ -4,8 +4,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
@@ -43,25 +45,23 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
     @Override
     public Single<List<GoodsListHeader>> getMyList() {
         String uid = auth.getUid();
-        // TODO : uid 테스트 코드.
-        uid = "4qr7xncum1Na7WYz6vD1NPaxFAp1";
         PublishSubject<GoodsListHeader> subject = PublishSubject.create();
 
         Task myList = userRef.document(uid).collection(QUERY_MY_LIST).get()
-                     .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
 
-                            for (DocumentSnapshot document : documents) {
-                                String key = document.getId();
-                                GoodsListHeader listHeader = document.toObject(GoodsListHeader.class);
-                                listHeader.setKey(key);
-                                subject.onNext(listHeader);
-                            }
-                        } else {
-                            DLogUtil.d("No such document");
+                        for (DocumentSnapshot document : documents) {
+                            String key = document.getId();
+                            GoodsListHeader listHeader = document.toObject(GoodsListHeader.class);
+                            listHeader.setKey(key);
+                            subject.onNext(listHeader);
                         }
-                    });
+                    } else {
+                        DLogUtil.d("No such document");
+                    }
+                });
 
         Tasks.whenAll(myList).addOnCompleteListener(task -> subject.onComplete());
         return subject.toList();
@@ -71,8 +71,6 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
     public Single<List<Goods>> getMyListItems(String headerUid) {
         DLogUtil.d(":: 진입");
         String uid = auth.getUid();
-        // TODO : uid 테스트 코드.
-        uid = "4qr7xncum1Na7WYz6vD1NPaxFAp1";
         PublishSubject<Goods> subject = PublishSubject.create();
         Task myList = userRef.document(uid).collection(QUERY_MY_LIST)
                 .document(headerUid)
@@ -112,5 +110,40 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
                                     return item;
                                 }))
                 .toList();
+    }
+
+    @Override
+    public Single<Boolean> saveMyList(List<Goods> goodsList, List<String> hashTag, GoodsListHeader header) {
+        DLogUtil.d(":: 진입");
+        PublishSubject<Boolean> subject = PublishSubject.create();
+
+        String uid = auth.getUid();
+        header.setKey(uid);
+        CollectionReference myListRef = userRef.document(uid).collection(QUERY_MY_LIST);
+        String myListUid = myListRef.document().getId();
+
+        DocumentReference myListDocRef = myListRef.document(myListUid);
+        CollectionReference myListItemRef = myListDocRef.collection(QUERY_MY_GOODS);
+
+        // 선택된 각 아이템을 ID, Item 할당
+        WriteBatch batch = db.batch();
+        batch.set(myListDocRef, header);
+        for (Goods item : goodsList) {
+            DocumentReference itemRef = myListItemRef.document(item.getKey());
+            batch.set(itemRef, item);
+        }
+
+        batch.commit()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        subject.onNext(true);
+                    } else {
+                        subject.onError(task.getException());
+                    }
+                    subject.onComplete();
+                });
+
+        return subject.subscribeOn(Schedulers.io()).flatMapSingle(Single::just)
+                .single(true);
     }
 }

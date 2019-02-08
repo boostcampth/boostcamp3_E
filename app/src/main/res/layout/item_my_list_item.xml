@@ -34,7 +34,6 @@
             android:layout_margin="1dp"
             app:cardCornerRadius="4dp"
             app:cardElevation="1dp"
-            android:background="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -119,7 +118,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginRight="@dimen/space_x_small"
-                    app:srcCompat="@drawable/btn_item_detail"
+                    app:srcCompat="@drawable/btn_show_detail"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
