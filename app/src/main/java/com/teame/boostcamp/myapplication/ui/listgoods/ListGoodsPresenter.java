@@ -1,7 +1,7 @@
-package com.teame.boostcamp.myapplication.ui.listitems;
+package com.teame.boostcamp.myapplication.ui.listgoods;
 
-import com.teame.boostcamp.myapplication.adapter.ItemListRecyclerAdapter;
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
+import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
@@ -11,15 +11,15 @@ import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class ListItemPresenter implements ListItemContract.Presenter {
+public class ListGoodsPresenter implements ListGoodsContract.Presenter {
 
-    private ListItemContract.View view;
+    private ListGoodsContract.View view;
     private MyListRepository myListRepository;
     private CompositeDisposable disposable;
-    private HashMap<Integer, Item> checkedList = new HashMap<>();
-    private ItemListRecyclerAdapter adapter;
+    private HashMap<Integer, Goods> checkedList = new HashMap<>();
+    private GoodsListRecyclerAdapter adapter;
 
-    ListItemPresenter(ListItemContract.View view, MyListRepository myListRepository) {
+    ListGoodsPresenter(ListGoodsContract.View view, MyListRepository myListRepository) {
         this.view = view;
         this.myListRepository = myListRepository;
         disposable = new CompositeDisposable();
@@ -41,7 +41,7 @@ public class ListItemPresenter implements ListItemContract.Presenter {
      * 쇼핑리스트를 고르는데 필요한 정보를 가져옴
      */
     @Override
-    public void loadListData(ItemListRecyclerAdapter adapter,String headerUid) {
+    public void loadListData(GoodsListRecyclerAdapter adapter,String headerUid) {
         this.adapter = adapter;
         disposable.add(myListRepository.getMyListItems(headerUid)
                 .subscribe(
@@ -60,7 +60,7 @@ public class ListItemPresenter implements ListItemContract.Presenter {
     @Override
     public void selectItem(int position, boolean isCheck) {
         if (isCheck) {
-            Item item = adapter.getItem(position);
+            Goods item = adapter.getItem(position);
             checkedList.put(position, item);
         } else {
             checkedList.remove(position);
@@ -69,7 +69,7 @@ public class ListItemPresenter implements ListItemContract.Presenter {
 
     @Override
     public void getDetailItemUid(int position) {
-        Item item = adapter.getItem(position);
+        Goods item = adapter.getItem(position);
 
         DLogUtil.d("position : " +position);
         DLogUtil.d(item.toString());
@@ -83,7 +83,7 @@ public class ListItemPresenter implements ListItemContract.Presenter {
      */
     @Override
     public void getCheckedList() {
-        List<Item> saveList = new ArrayList<>(checkedList.values());
+        List<Goods> saveList = new ArrayList<>(checkedList.values());
         view.saveCheckedList(saveList);
     }
 }

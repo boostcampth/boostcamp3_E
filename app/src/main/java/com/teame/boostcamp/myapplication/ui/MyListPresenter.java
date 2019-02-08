@@ -1,8 +1,8 @@
 package com.teame.boostcamp.myapplication.ui;
 
 
-import com.teame.boostcamp.myapplication.adapter.ItemListHeaderRecyclerAdapter;
-import com.teame.boostcamp.myapplication.model.entitiy.ItemListHeader;
+import com.teame.boostcamp.myapplication.adapter.GoodsListHeaderRecyclerAdapter;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
@@ -12,7 +12,7 @@ public class MyListPresenter implements MyListContract.Presenter {
 
     private MyListRepository repository;
     private CompositeDisposable disposable = new CompositeDisposable();
-    private ItemListHeaderRecyclerAdapter adapter;
+    private GoodsListHeaderRecyclerAdapter adapter;
     private MyListContract.View view;
 
     public MyListPresenter(MyListContract.View view, MyListRepository repository) {
@@ -20,7 +20,7 @@ public class MyListPresenter implements MyListContract.Presenter {
         this.repository = repository;
     }
     @Override
-    public void loadMyList(ItemListHeaderRecyclerAdapter adapter) {
+    public void loadMyList(GoodsListHeaderRecyclerAdapter adapter) {
         this.adapter = adapter;
         disposable.add(repository.getMyList()
                 .subscribe(list -> {
@@ -33,7 +33,7 @@ public class MyListPresenter implements MyListContract.Presenter {
 
     @Override
     public void getMyListUid(int position) {
-        ItemListHeader header = adapter.getItem(position);
+        GoodsListHeader header = adapter.getItem(position);
 
         DLogUtil.d("position : " +position);
         DLogUtil.d(header.toString());

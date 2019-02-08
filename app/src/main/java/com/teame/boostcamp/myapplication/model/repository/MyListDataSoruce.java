@@ -1,14 +1,14 @@
 package com.teame.boostcamp.myapplication.model.repository;
 
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
-import com.teame.boostcamp.myapplication.model.entitiy.ItemListHeader;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 
 import java.util.List;
 
 import io.reactivex.Single;
 
 public interface MyListDataSoruce {
-    Single<List<ItemListHeader>> getMyList();
+    Single<List<GoodsListHeader>> getMyList();
 
-    Single<List<Item>> getMyListItems(String headerUid);
+    Single<List<Goods>> getMyListItems(String headerUid);
 }

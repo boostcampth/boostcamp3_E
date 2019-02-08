@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.ui.listitems;
+package com.teame.boostcamp.myapplication.ui.listgoods;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,12 +9,12 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.ItemListRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityListItemBinding;
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
-import com.teame.boostcamp.myapplication.ui.itemdetail.ItemDetailActivity;
+import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 
 import java.util.List;
 
@@ -22,14 +22,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
 
-public class ListItemActivity extends BaseMVPActivity<ActivityListItemBinding, ListItemContract.Presenter> implements ListItemContract.View {
+public class ListGoodsActivity extends BaseMVPActivity<ActivityListItemBinding, ListGoodsContract.Presenter> implements ListGoodsContract.View {
 
     public static final String EXTRA_HEADER_UID = "EXTRA_HEADER_UID";
     private CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
-    protected ListItemContract.Presenter getPresenter() {
-        return new ListItemPresenter(this, MyListRepository.getInstance());
+    protected ListGoodsContract.Presenter getPresenter() {
+        return new ListGoodsPresenter(this, MyListRepository.getInstance());
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ListItemActivity extends BaseMVPActivity<ActivityListItemBinding, L
     }
 
     public static void startActivity(Context context, String headerUid) {
-        Intent intent = new Intent(context, ListItemActivity.class);
+        Intent intent = new Intent(context, ListGoodsActivity.class);
         intent.putExtra(EXTRA_HEADER_UID, headerUid);
         context.startActivity(intent);
     }
@@ -84,7 +84,7 @@ public class ListItemActivity extends BaseMVPActivity<ActivityListItemBinding, L
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_all_back);
-        ItemListRecyclerAdapter adapter = new ItemListRecyclerAdapter();
+        GoodsListRecyclerAdapter adapter = new GoodsListRecyclerAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
                 false);
@@ -108,14 +108,14 @@ public class ListItemActivity extends BaseMVPActivity<ActivityListItemBinding, L
     }
 
     @Override
-    public void saveCheckedList(List<Item> list) {
+    public void saveCheckedList(List<Goods> list) {
         // TODO : 저장된 아이템 해쉬테그, 제목 결정하는 곳으로 넘겨주기
         showToast("NextStep");
     }
 
     @Override
     public void showDetailItem(String itemUid) {
-        ItemDetailActivity.startActivity(this, itemUid);
+        GoodsDetailActivity.startActivity(this, itemUid);
     }
 
 }

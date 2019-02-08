@@ -5,7 +5,7 @@ import com.google.firebase.firestore.Exclude;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ItemListHeader {
+public class GoodsListHeader {
 
     private String title;
     private Date startDate;

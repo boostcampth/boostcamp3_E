@@ -8,7 +8,7 @@
     <data>
         <variable
             name="item"
-            type="com.teame.boostcamp.myapplication.model.entitiy.ItemListHeader"/>
+            type="com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader"/>
 
     </data>
 

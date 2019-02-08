@@ -6,14 +6,14 @@ import android.view.ViewGroup;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemMyListHeaderBinding;
-import com.teame.boostcamp.myapplication.model.entitiy.ItemListHeader;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ItemListHeaderRecyclerAdapter extends BaseRecyclerAdatper<ItemListHeader, ItemListHeaderRecyclerAdapter.ViewHolder> {
+public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsListHeader, GoodsListHeaderRecyclerAdapter.ViewHolder> {
 
     private OnItemClickListener onItemClickListener;
     private OnItemAlaramListener onItemAlaramListener;

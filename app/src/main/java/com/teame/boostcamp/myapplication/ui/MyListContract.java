@@ -1,6 +1,6 @@
 package com.teame.boostcamp.myapplication.ui;
 
-import com.teame.boostcamp.myapplication.adapter.ItemListHeaderRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.GoodsListHeaderRecyclerAdapter;
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
 
@@ -11,7 +11,7 @@ interface MyListContract {
     }
 
     interface Presenter extends BasePresenter {
-        void loadMyList(ItemListHeaderRecyclerAdapter adapter);
+        void loadMyList(GoodsListHeaderRecyclerAdapter adapter);
 
         void getMyListUid(int position);
     }

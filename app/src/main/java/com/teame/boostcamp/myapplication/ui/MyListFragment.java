@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.ItemListHeaderRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.GoodsListHeaderRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentMyListBinding;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
-import com.teame.boostcamp.myapplication.ui.listitems.ListItemActivity;
+import com.teame.boostcamp.myapplication.ui.listgoods.ListGoodsActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,7 +57,7 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
 
     private void initView() {
 
-        ItemListHeaderRecyclerAdapter adapter = new ItemListHeaderRecyclerAdapter();
+        GoodsListHeaderRecyclerAdapter adapter = new GoodsListHeaderRecyclerAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
                 RecyclerView.VERTICAL,
                 false);
@@ -76,6 +76,6 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
 
     @Override
     public void showMyListItems(String headerKey) {
-        ListItemActivity.startActivity(getContext(), headerKey);
+        ListGoodsActivity.startActivity(getContext(), headerKey);
     }
 }

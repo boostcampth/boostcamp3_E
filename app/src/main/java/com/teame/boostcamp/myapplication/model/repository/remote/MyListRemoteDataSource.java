@@ -7,8 +7,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
-import com.teame.boostcamp.myapplication.model.entitiy.ItemListHeader;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.MyListDataSoruce;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
@@ -22,7 +22,7 @@ import io.reactivex.subjects.PublishSubject;
 public class MyListRemoteDataSource implements MyListDataSoruce {
     private static final String QUERY_USER = "users";
     private static final String QUERY_MY_LIST = "mylist";
-    private static final String QUERY_MY_ITEMS = "items";
+    private static final String QUERY_MY_GOODS = "items";
     private static MyListRemoteDataSource INSTANCE;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -41,11 +41,11 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
 
 
     @Override
-    public Single<List<ItemListHeader>> getMyList() {
+    public Single<List<GoodsListHeader>> getMyList() {
         String uid = auth.getUid();
         // TODO : uid 테스트 코드.
         uid = "4qr7xncum1Na7WYz6vD1NPaxFAp1";
-        PublishSubject<ItemListHeader> subject = PublishSubject.create();
+        PublishSubject<GoodsListHeader> subject = PublishSubject.create();
 
         Task myList = userRef.document(uid).collection(QUERY_MY_LIST).get()
                      .addOnCompleteListener(task -> {
@@ -54,7 +54,7 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
 
                             for (DocumentSnapshot document : documents) {
                                 String key = document.getId();
-                                ItemListHeader listHeader = document.toObject(ItemListHeader.class);
+                                GoodsListHeader listHeader = document.toObject(GoodsListHeader.class);
                                 listHeader.setKey(key);
                                 subject.onNext(listHeader);
                             }
@@ -68,21 +68,21 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
     }
 
     @Override
-    public Single<List<Item>> getMyListItems(String headerUid) {
+    public Single<List<Goods>> getMyListItems(String headerUid) {
         DLogUtil.d(":: 진입");
         String uid = auth.getUid();
         // TODO : uid 테스트 코드.
         uid = "4qr7xncum1Na7WYz6vD1NPaxFAp1";
-        PublishSubject<Item> subject = PublishSubject.create();
+        PublishSubject<Goods> subject = PublishSubject.create();
         Task myList = userRef.document(uid).collection(QUERY_MY_LIST)
                 .document(headerUid)
-                .collection(QUERY_MY_ITEMS).get()
+                .collection(QUERY_MY_GOODS).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
 
                         for (DocumentSnapshot document : documents) {
-                            Item item = document.toObject(Item.class);
+                            Goods item = document.toObject(Goods.class);
                             String key = document.getReference().getId();
                             item.setKey(key);
                             subject.onNext(item);

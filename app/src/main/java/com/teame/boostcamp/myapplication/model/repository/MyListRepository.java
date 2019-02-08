@@ -1,12 +1,11 @@
 package com.teame.boostcamp.myapplication.model.repository;
 
-import com.teame.boostcamp.myapplication.model.entitiy.Item;
-import com.teame.boostcamp.myapplication.model.entitiy.ItemListHeader;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.remote.MyListRemoteDataSource;
 
 import java.util.List;
 
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -29,12 +28,12 @@ public class MyListRepository implements MyListDataSoruce {
 
 
     @Override
-    public Single<List<ItemListHeader>> getMyList() {
+    public Single<List<GoodsListHeader>> getMyList() {
         return myListRemoteDataSource.getMyList();
     }
 
     @Override
-    public Single<List<Item>> getMyListItems(String headerUid) {
+    public Single<List<Goods>> getMyListItems(String headerUid) {
         return myListRemoteDataSource.getMyListItems(headerUid)
                 .observeOn(AndroidSchedulers.mainThread());
     }
