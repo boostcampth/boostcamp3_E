@@ -37,4 +37,5 @@
     <string name="write">등록</string>
     <string name="write_reply_hint">사용 후기를 입력해 주세요 :)</string>
     <string name="write_reply_hint2">이용자들이 참고할수 있는 사항을 입력해주세요 :)</string>
+    <string name="from">~</string>
 </resources>

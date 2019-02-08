@@ -2,7 +2,7 @@ package com.teame.boostcamp.myapplication.adapter;
 
 import android.view.View;
 
-public interface OnItemClickListener {
+public interface OnItemDetailListener {
 
-    void onItemClick(View v,int position);
+    void onClick(View v, int position);
 }
