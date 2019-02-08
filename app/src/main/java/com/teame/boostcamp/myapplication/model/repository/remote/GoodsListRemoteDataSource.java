@@ -11,7 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
-import com.teame.boostcamp.myapplication.model.repository.ShoppingListDataSource;
+import com.teame.boostcamp.myapplication.model.repository.GoodsListDataSource;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.List;
@@ -21,14 +21,14 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
-public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
+public class GoodsListRemoteDataSource implements GoodsListDataSource {
 
     private static final String QUERY_COUNTRY = "country";
     private static final String QUERY_COUNTRY_TARGET = "japan";
     private static final String QUERY_COUNTRY_TARGET2 = "osaka";
     private static final String QUERY_COUNTRY_BASE_LIST = "baselist";
 
-    private static ShoppingListRemoteDataSource INSTANCE;
+    private static GoodsListRemoteDataSource INSTANCE;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -41,12 +41,12 @@ public class ShoppingListRemoteDataSource implements ShoppingListDataSource {
             .document(QUERY_COUNTRY_TARGET)
             .collection("osaka");
 
-    private ShoppingListRemoteDataSource() {
+    private GoodsListRemoteDataSource() {
     }
 
-    public static ShoppingListRemoteDataSource getInstance() {
+    public static GoodsListRemoteDataSource getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ShoppingListRemoteDataSource();
+            INSTANCE = new GoodsListRemoteDataSource();
         }
         return INSTANCE;
     }

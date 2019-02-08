@@ -15,7 +15,7 @@ import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityCreateListBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
-import com.teame.boostcamp.myapplication.model.repository.ShoppingListRepository;
+import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
@@ -33,7 +33,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
     @Override
     protected CreateListContract.Presenter getPresenter() {
-        return new CreateListPresenter(this, ShoppingListRepository.getInstance());
+        return new CreateListPresenter(this, GoodsListRepository.getInstance());
     }
 
     @Override

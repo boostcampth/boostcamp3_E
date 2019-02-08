@@ -6,7 +6,7 @@ import java.util.List;
 
 import io.reactivex.Single;
 
-public interface ShoppingListDataSource {
+public interface GoodsListDataSource {
 
     Single<List<Goods>> getItemList();
 

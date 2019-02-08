@@ -1,7 +1,7 @@
 package com.teame.boostcamp.myapplication.model.repository;
 
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
-import com.teame.boostcamp.myapplication.model.repository.remote.ItemDetailRemoteDataSource;
+import com.teame.boostcamp.myapplication.model.repository.remote.GoodsDetailRemoteDataSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,20 +11,19 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.subjects.Subject;
 
-public class ItemDetailRepository implements ItemDetailDataSource {
+public class GoodsDetailRepository implements GoodsDetailDataSource {
 
-    private static ItemDetailRepository INSTANCE;
-    private ItemDetailRemoteDataSource itemDetailRemoteDataSource;
+    private static GoodsDetailRepository INSTANCE;
+    private GoodsDetailRemoteDataSource itemDetailRemoteDataSource;
 
-    private ItemDetailRepository() {
-        this.itemDetailRemoteDataSource = ItemDetailRemoteDataSource.getInstance();
+    private GoodsDetailRepository() {
+        this.itemDetailRemoteDataSource = GoodsDetailRemoteDataSource.getInstance();
     }
 
-    public static ItemDetailRepository getInstance() {
+    public static GoodsDetailRepository getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ItemDetailRepository();
+            INSTANCE = new GoodsDetailRepository();
         }
         return INSTANCE;
     }

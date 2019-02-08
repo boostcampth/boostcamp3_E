@@ -2,7 +2,7 @@ package com.teame.boostcamp.myapplication.ui.createlist;
 
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
-import com.teame.boostcamp.myapplication.model.repository.ShoppingListRepository;
+import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
@@ -14,12 +14,12 @@ import io.reactivex.disposables.CompositeDisposable;
 public class CreateListPresenter implements CreateListContract.Presenter {
 
     private CreateListContract.View view;
-    private ShoppingListRepository shoppingListRepository;
+    private GoodsListRepository shoppingListRepository;
     private CompositeDisposable disposable;
     private HashMap<Integer, Goods> checkedList = new HashMap<>();
     private GoodsListRecyclerAdapter adapter;
 
-    CreateListPresenter(CreateListContract.View view, ShoppingListRepository shoppingListRepository) {
+    CreateListPresenter(CreateListContract.View view, GoodsListRepository shoppingListRepository) {
         this.view = view;
         this.shoppingListRepository = shoppingListRepository;
         disposable = new CompositeDisposable();

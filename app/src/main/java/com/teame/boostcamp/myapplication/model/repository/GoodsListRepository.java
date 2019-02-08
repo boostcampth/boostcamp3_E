@@ -1,27 +1,27 @@
 package com.teame.boostcamp.myapplication.model.repository;
 
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
-import com.teame.boostcamp.myapplication.model.repository.remote.ShoppingListRemoteDataSource;
+import com.teame.boostcamp.myapplication.model.repository.remote.GoodsListRemoteDataSource;
 
 import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class ShoppingListRepository implements ShoppingListDataSource {
+public class GoodsListRepository implements GoodsListDataSource {
 
-    private static ShoppingListRepository INSTANCE;
-    private ShoppingListRemoteDataSource shoppingListRemoteDataSource;
+    private static GoodsListRepository INSTANCE;
+    private GoodsListRemoteDataSource shoppingListRemoteDataSource;
 
-    public static ShoppingListRepository getInstance() {
+    public static GoodsListRepository getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ShoppingListRepository();
+            INSTANCE = new GoodsListRepository();
         }
         return INSTANCE;
     }
 
-    private ShoppingListRepository() {
-        this.shoppingListRemoteDataSource = ShoppingListRemoteDataSource.getInstance();
+    private GoodsListRepository() {
+        this.shoppingListRemoteDataSource = GoodsListRemoteDataSource.getInstance();
     }
 
 

@@ -1,19 +1,19 @@
 package com.teame.boostcamp.myapplication.ui.goodsdetail;
 
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
-import com.teame.boostcamp.myapplication.model.repository.ItemDetailRepository;
+import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import io.reactivex.disposables.CompositeDisposable;
 
 public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
 
-    private ItemDetailRepository repository;
+    private GoodsDetailRepository repository;
     private CompositeDisposable disposable = new CompositeDisposable();
     private GoodsDetailRecyclerAdapter adapter;
     private GoodsDetailContract.View view;
 
-    public GoodsDetailPresenter(GoodsDetailContract.View view , ItemDetailRepository repository) {
+    public GoodsDetailPresenter(GoodsDetailContract.View view , GoodsDetailRepository repository) {
         this.repository = repository;
         this.view = view;
     }

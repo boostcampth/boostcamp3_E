@@ -7,7 +7,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
-import com.teame.boostcamp.myapplication.model.repository.ItemDetailDataSource;
+import com.teame.boostcamp.myapplication.model.repository.GoodsDetailDataSource;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.Date;
@@ -17,23 +17,23 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 
-public class ItemDetailRemoteDataSource implements ItemDetailDataSource {
+public class GoodsDetailRemoteDataSource implements GoodsDetailDataSource {
 
     private static final String QUERY_GOODS = "item";
     private static final String QUERY_GOODS_REPLY = "review";
 
-    private static ItemDetailRemoteDataSource INSTANCE;
+    private static GoodsDetailRemoteDataSource INSTANCE;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference replyRef = db.collection(QUERY_GOODS);
 
-    private ItemDetailRemoteDataSource() {
+    private GoodsDetailRemoteDataSource() {
     }
 
-    public static ItemDetailRemoteDataSource getInstance() {
+    public static GoodsDetailRemoteDataSource getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ItemDetailRemoteDataSource();
+            INSTANCE = new GoodsDetailRemoteDataSource();
         }
         return INSTANCE;
     }

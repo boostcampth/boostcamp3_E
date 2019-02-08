@@ -11,7 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityItemDetailBinding;
-import com.teame.boostcamp.myapplication.model.repository.ItemDetailRepository;
+import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.DividerItemDecorator;
@@ -27,7 +27,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityItemDetailBindi
 
     @Override
     protected GoodsDetailContract.Presenter getPresenter() {
-        ItemDetailRepository repository = ItemDetailRepository.getInstance();
+        GoodsDetailRepository repository = GoodsDetailRepository.getInstance();
         return new GoodsDetailPresenter(this, repository);
     }
 
