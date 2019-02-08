@@ -1,5 +1,6 @@
 package com.teame.boostcamp.myapplication.model.entitiy;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class Post {
@@ -8,6 +9,7 @@ public class Post {
     private User userData;
     private Object itemList;
     private int like;
+    private String createdDate;
     private ArrayList<String> imagePathList;
     private ArrayList<String> likedUidList;
 
@@ -19,6 +21,7 @@ public class Post {
         this.imagePathList = imagePathList;
         this.like = 0;
         this.likedUidList = new ArrayList<>();
+        this.createdDate = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(System.currentTimeMillis());
     }
 
     public String getTitle() {
@@ -55,6 +58,14 @@ public class Post {
 
     public ArrayList<String> getImagePathList() {
         return imagePathList;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 
     public void setImagePathList(ArrayList<String> imagePathList) {

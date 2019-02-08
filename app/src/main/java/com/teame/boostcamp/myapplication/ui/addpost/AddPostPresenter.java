@@ -42,12 +42,10 @@ public class AddPostPresenter implements AddPostContract.Presenter {
         }
         Post post = new Post(title, content, storagePathList);
         db = FirebaseFirestore.getInstance();
-        db.collection("posts").add(post).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                view.succeedAddPost();
-            }
-        });
+        db.collection("posts")
+                .document(FirebaseAuth.getInstance().getUid()+post.getCreatedDate())
+                .set(post)
+                .addOnCompleteListener(__ -> view.succeedAddPost());
 
     }
 

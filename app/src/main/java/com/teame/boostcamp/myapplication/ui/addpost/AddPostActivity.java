@@ -4,25 +4,32 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.PreviewImageAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityAddPostBinding;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 
 import java.util.ArrayList;
 
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import io.reactivex.disposables.Disposable;
 
 
 public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, AddPostContract.Presenter> implements AddPostContract.View {
     private PreviewImageAdapter adapter;
     public static int READ_REQUEST_CODE = 42;
     private LinearLayoutManager layoutManager;
+    private Disposable disposable;
 
     @Override
     protected int getLayoutResourceId() {
@@ -43,7 +50,6 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-
     }
 
 
@@ -59,7 +65,17 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     }
 
     private void onAddImagesButtonClicked() {
-        pickGalleryImages();
+        if (ActivityCompat.checkSelfPermission(this, TedPermissionUtil.STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            pickGalleryImages();
+        } else {
+            disposable = TedPermissionUtil.requestPermission(this, "저장소 권한", "저장소 권한", TedPermissionUtil.STORAGE)
+                    .subscribe(tedPermissionResult -> {
+                        pickGalleryImages();
+                    });
+        }
+
+
+
     }
 
     private void onAddPostButtonClicked() {
