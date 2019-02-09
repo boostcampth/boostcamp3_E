@@ -21,7 +21,7 @@ public class AddPostPresenter implements AddPostContract.Presenter {
     private StorageReference mStorageRef;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
-
+    private static final String POST_PATH = "posts";
     public AddPostPresenter(AddPostContract.View view) {
         this.view = view;
     }
@@ -41,7 +41,7 @@ public class AddPostPresenter implements AddPostContract.Presenter {
         }
         Post post = new Post(title, content, storagePathList);
         db = FirebaseFirestore.getInstance();
-        db.collection("posts")
+        db.collection(POST_PATH)
                 .document(FirebaseAuth.getInstance().getUid()+post.getCreatedDate())
                 .set(post)
                 .addOnCompleteListener(__ -> view.succeedAddPost());
