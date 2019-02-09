@@ -2,7 +2,6 @@ package com.teame.boostcamp.myapplication.ui.createlist;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.teame.boostcamp.myapplication.R;
+import com.teame.boostcamp.myapplication.adapter.CheckedGoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityCreateListBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
@@ -111,10 +111,23 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
                 false);
         binding.rvRecommendList.setLayoutManager(linearLayoutManager);
         binding.rvRecommendList.setAdapter(adapter);
-        presenter.loadListData(adapter, header.getNation(), header.getCity());
+
+        CheckedGoodsListRecyclerAdapter checkedAdapter = new CheckedGoodsListRecyclerAdapter();
+        LinearLayoutManager selectedLinearLayoutManager = new LinearLayoutManager(this,
+                RecyclerView.VERTICAL,
+                false);
+        binding.rvSelected.setLayoutManager(selectedLinearLayoutManager);
+        binding.rvSelected.setAdapter(checkedAdapter);
+        presenter.loadListData(adapter, checkedAdapter, header.getNation(), header.getCity());
         adapter.setOnItemDetailListener((__, position) -> presenter.getDetailItemUid(position));
-        adapter.setOnItemClickListener((view, position, isCheck) ->
-                presenter.selectItem(position, isCheck));
+        adapter.setOnItemClickListener((view, position, isCheck) -> {
+                    presenter.checkedItem(position, isCheck);
+                }
+        );
+
+        checkedAdapter.setOnItemDeleteListener((v, position) -> {
+            presenter.deleteItem(position);
+        });
         binding.etAddItem.setOnClickListener(view -> binding.ablTopControl.setExpanded(false));
         binding.ibAddItem.setOnClickListener(v -> {
             String itemName = binding.etAddItem.getText().toString();
@@ -190,4 +203,15 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         GoodsDetailActivity.startActivity(this, item);
     }
 
+    @Override
+    public void notifyDeleteItem(int position, int oldPosition) {
+
+        GoodsListRecyclerAdapter.ViewHolder holder = (GoodsListRecyclerAdapter.ViewHolder) binding.rvRecommendList.findViewHolderForAdapterPosition(position);
+        if (holder != null) {
+            holder.itemView.findViewById(R.id.cv_item_layout).performClick();
+        } else {
+            ((GoodsListRecyclerAdapter) binding.rvRecommendList.getAdapter()).unCheckItem(position);
+            ((CheckedGoodsListRecyclerAdapter) binding.rvSelected.getAdapter()).removeItem(oldPosition);
+        }
+    }
 }

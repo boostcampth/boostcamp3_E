@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:duration="20"
+        motion:interpolator="linear">
+        <OnSwipe
+            motion:touchAnchorId="@+id/rv_selected"
+            motion:touchAnchorSide="right"
+            motion:dragDirection="dragLeft" />
+
+        <ConstraintSet android:id="@+id/start">
+            <Constraint
+                android:id="@id/rv_selected"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:alpha="0"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"/>
+            <Constraint
+                android:id="@id/cl_root"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                motion:layout_constraintWidth_default="percent"
+                motion:layout_constraintWidth_percent="1"
+                motion:layout_constraintLeft_toRightOf="@id/rv_selected"
+                motion:layout_constraintTop_toTopOf="parent"/>
+
+
+        </ConstraintSet>
+
+        <ConstraintSet android:id="@+id/end">
+            <Constraint
+                android:id="@id/rv_selected"
+                android:layout_width="0dp"
+                android:alpha="1"
+                android:layout_height="match_parent"
+                motion:layout_constraintEnd_toStartOf="@id/guideline_point"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"/>
+            <Constraint
+                android:id="@id/cl_root"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                motion:layout_constraintWidth_default="percent"
+                motion:layout_constraintWidth_percent="1"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                motion:layout_constraintLeft_toRightOf="@+id/rv_selected"
+                motion:layout_constraintTop_toTopOf="parent"/>
+        </ConstraintSet>
+    </Transition>
+
+</MotionScene>

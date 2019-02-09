@@ -36,6 +36,7 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_list_goods, parent, false);
         final ViewHolder holder = new ViewHolder(itemView);
+
         holder.binding.npCount.setOnValueChangedListener((__, ___, newValue) -> {
             int position = holder.getLayoutPosition();
             Goods item = itemList.get(position);
@@ -78,7 +79,7 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
         holder.binding.setItem(item);
         holder.binding.setStarCount(item.getRatio().intValue());
         if (checkList.get(position)) {
-            if(item.getCount()==0){
+            if (item.getCount() == 0) {
                 item.setCount(1);
                 holder.binding.npCount.setValue(1);
             }
@@ -107,7 +108,6 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
     public void setOnItemDetailListener(OnItemClickListener onItemDetailListener) {
         this.onItemDetailListener = onItemDetailListener;
     }
-
 
     /**
      * 최초 아이템 init
@@ -153,6 +153,13 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
         }
         // 아이템이 없다면
         return -1;
+    }
+
+    public void unCheckItem(int position) {
+        if (position < 0 || itemList.size() <= position) {
+            return;
+        }
+        checkList.set(position, false);
     }
 
     /**

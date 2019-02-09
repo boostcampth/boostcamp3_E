@@ -3,112 +3,138 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/ml_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/motion_create_side">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/abl_top_control"
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/cl_root"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/abl_top_control"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginRight="20dp"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
-                app:expandedTitleGravity="bottom|right"
-                app:expandedTitleMarginTop="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
+                android:theme="@style/AppTheme.AppBarOverlay">
 
-                <ImageView
-                    android:id="@+id/iv_backdrop"
+                <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fitsSystemWindows="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/img_japen_test"
-                    app:layout_collapseMode="parallax" />
+                    app:contentScrim="?attr/colorPrimary"
+                    app:expandedTitleGravity="bottom|right"
+                    app:expandedTitleMarginTop="?attr/actionBarSize"
+                    app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar_screen"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:fitsSystemWindows="true"
-                    app:layout_collapseMode="pin"
-                    app:layout_scrollFlags="scroll|enterAlways|snap"
-                    app:navigationIcon="@drawable/btn_all_back"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"
-                    app:title="추천리스트"
-                    app:titleTextColor="@color/colorWhite" />
+                    <ImageView
+                        android:id="@+id/iv_backdrop"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fitsSystemWindows="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_japen_test"
+                        app:layout_collapseMode="parallax" />
 
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar_screen"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:fitsSystemWindows="true"
+                        app:layout_collapseMode="pin"
+                        app:layout_scrollFlags="scroll|enterAlways|snap"
+                        app:navigationIcon="@drawable/btn_all_back"
+                        app:popupTheme="@style/AppTheme.PopupOverlay"
+                        app:title="추천리스트"
+                        app:titleTextColor="@color/colorWhite" />
 
-        </com.google.android.material.appbar.AppBarLayout>
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_recommend_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="4dp"
-            android:paddingBottom="54dp"
-            android:windowSoftInputMode="adjustResize"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/item_list_goods" />
+            </com.google.android.material.appbar.AppBarLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_anchorGravity="bottom"
-            android:layout_gravity="bottom"
-            app:layout_anchor="@id/cl_edit_layout" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_edit_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:layout_behavior=".util.QuickReturnFooterBehavior">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_recommend_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="20dp"
+                android:paddingBottom="54dp"
+                android:windowSoftInputMode="adjustResize"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:listitem="@layout/item_list_goods" />
 
             <View
-                android:id="@+id/view_add_item_background"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="@dimen/space_x_small"
-                android:layout_marginRight="@dimen/space_x_small"
-                android:background="@color/colorWhite"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                app:layout_anchor="@id/cl_edit_layout"
+                app:layout_anchorGravity="bottom" />
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/et_add_item"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginLeft="@dimen/space_x_small"
-                android:maxLines="1"
-                android:background="@color/colorWhite"
-                android:hint="@string/list_goods_add_hint"
-                android:maxLength="20"
-                android:singleLine="true"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/view_add_item_background"
-                app:layout_constraintLeft_toLeftOf="@+id/view_add_item_background"
-                app:layout_constraintRight_toLeftOf="@id/ib_add_item"
-                app:layout_constraintTop_toTopOf="@id/view_add_item_background" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_edit_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="20dp"
+                app:layout_behavior=".util.QuickReturnFooterBehavior">
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/ib_add_item"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:layout_constraintBottom_toBottomOf="@id/view_add_item_background"
-                app:layout_constraintRight_toRightOf="@id/view_add_item_background"
-                app:layout_constraintTop_toTopOf="@id/view_add_item_background"
-                app:srcCompat="@drawable/btn_add_item" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:id="@+id/view_add_item_background"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="@dimen/space_x_small"
+                    android:layout_marginRight="@dimen/space_x_small"
+                    android:background="@color/colorWhite"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
 
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_add_item"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="@dimen/space_x_small"
+                    android:background="@color/colorWhite"
+                    android:hint="@string/list_goods_add_hint"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/view_add_item_background"
+                    app:layout_constraintLeft_toLeftOf="@+id/view_add_item_background"
+                    app:layout_constraintRight_toLeftOf="@id/ib_add_item"
+                    app:layout_constraintTop_toTopOf="@id/view_add_item_background" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_add_item"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintBottom_toBottomOf="@id/view_add_item_background"
+                    app:layout_constraintRight_toRightOf="@id/view_add_item_background"
+                    app:layout_constraintTop_toTopOf="@id/view_add_item_background"
+                    app:srcCompat="@drawable/btn_add_item" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_selected"
+            android:layout_width="180dp"
+            android:layout_height="match_parent"
+            android:text="내가 선택한 리스트"
+            android:textSize="20sp"
+            tools:listitem="@layout/item_checked_goods"/>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

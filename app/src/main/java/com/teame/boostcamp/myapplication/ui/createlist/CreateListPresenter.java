@@ -1,6 +1,10 @@
 package com.teame.boostcamp.myapplication.ui.createlist;
 
+import android.text.TextUtils;
+
+import com.teame.boostcamp.myapplication.adapter.CheckedGoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.SelectedGoodsRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
@@ -16,9 +20,9 @@ public class CreateListPresenter implements CreateListContract.Presenter {
     private CreateListContract.View view;
     private GoodsListRepository shoppingListRepository;
     private CompositeDisposable disposable;
-    private HashMap<Integer, Goods> checkedList = new HashMap<>();
+    private List<Goods> checkedList = new ArrayList<>();
     private GoodsListRecyclerAdapter adapter;
-
+    private CheckedGoodsListRecyclerAdapter checkedAdapter;
     CreateListPresenter(CreateListContract.View view, GoodsListRepository shoppingListRepository) {
         this.view = view;
         this.shoppingListRepository = shoppingListRepository;
@@ -32,7 +36,7 @@ public class CreateListPresenter implements CreateListContract.Presenter {
 
     @Override
     public void onDetach() {
-        if(disposable.isDisposed()){
+        if (disposable.isDisposed()) {
             disposable.dispose();
         }
     }
@@ -47,12 +51,14 @@ public class CreateListPresenter implements CreateListContract.Presenter {
      * 쇼핑리스트를 고르는데 필요한 정보를 가져옴
      */
     @Override
-    public void loadListData(GoodsListRecyclerAdapter adapter,String nation, String city) {
+    public void loadListData(GoodsListRecyclerAdapter adapter, CheckedGoodsListRecyclerAdapter checkedAdapter, String nation, String city) {
         this.adapter = adapter;
-        disposable.add(shoppingListRepository.getItemList(nation,city)
+        this.checkedAdapter = checkedAdapter;
+        disposable.add(shoppingListRepository.getItemList(nation, city)
                 .subscribe(
                         list -> {
                             adapter.initItems(list);
+                            checkedAdapter.initItems(checkedList);
                             DLogUtil.d(list.toString());
                         },
                         e -> DLogUtil.d(e.getMessage())
@@ -64,12 +70,15 @@ public class CreateListPresenter implements CreateListContract.Presenter {
      * 선택한 아이템의 체크여부에 따라 HashMap에 추가하거나 제거함
      */
     @Override
-    public void selectItem(int position, boolean isCheck) {
+    public void checkedItem(int position, boolean isCheck) {
+        final Goods item = adapter.getItem(position);
         if (isCheck) {
-            Goods item = adapter.getItem(position);
-            checkedList.put(position, item);
+            checkedAdapter.addItem(item);
         } else {
-            checkedList.remove(position);
+            int targetPosition = searchItem(item);
+            if(targetPosition == -1)
+                return;
+            checkedAdapter.removeItem(targetPosition);
         }
     }
 
@@ -81,6 +90,7 @@ public class CreateListPresenter implements CreateListContract.Presenter {
 
         if (hitPosition == -1) {
             adapter.addItem(item);
+            checkedAdapter.addItem(item);
         }
 
         view.showAddedGoods(hitPosition);
@@ -91,11 +101,33 @@ public class CreateListPresenter implements CreateListContract.Presenter {
      */
     @Override
     public void decideShoppingList() {
-        List<Goods> saveList = new ArrayList<>(checkedList.values());
-        if(saveList.size()<=0){
+        if (checkedList.size() <= 0) {
             view.emptyCheckGoods();
-        }else{
-            view.goNextStep(saveList);
+        } else {
+            view.goNextStep(checkedList);
         }
+    }
+
+    @Override
+    public void deleteItem(int position) {
+        Goods deleteGoods = checkedList.get(position);
+        int listPosition = adapter.searchItem(deleteGoods);
+        view.notifyDeleteItem(listPosition,position);
+    }
+
+
+    /**
+     * ItemName을 기준으로 해당 아이템 position 반환
+     */
+    public int searchItem(Goods target) {
+        if (checkedList.contains(target)) {
+            for (int i = 0; i < checkedList.size(); i++) {
+                if (TextUtils.equals(checkedList.get(i).getName(), target.getName())) {
+                    return i;
+                }
+            }
+        }
+        // 아이템이 없다면
+        return -1;
     }
 }
