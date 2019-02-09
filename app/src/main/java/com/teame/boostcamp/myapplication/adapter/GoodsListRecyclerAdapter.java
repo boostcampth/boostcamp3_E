@@ -9,7 +9,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Checkable;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.databinding.ItemMyListItemBinding;
+import com.teame.boostcamp.myapplication.databinding.ItemListGoodsBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
@@ -26,7 +26,6 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
     private OnItemClickListener onItemDetailListener;
     private int animPosition = -1;
 
-
     public void setAnimPosition(int position) {
         animPosition = position;
     }
@@ -35,17 +34,30 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_my_list_item, parent, false);
+                .inflate(R.layout.item_list_goods, parent, false);
         final ViewHolder holder = new ViewHolder(itemView);
+        holder.binding.npCount.setOnValueChangedListener((__, ___, newValue) -> {
+            int position = holder.getLayoutPosition();
+            Goods item = itemList.get(position);
+            item.setCount(newValue);
+        });
 
-        holder.binding.getRoot().setOnClickListener(view -> {
+        holder.binding.cvItemLayout.setOnClickListener(view -> {
             if (onItemClickListener != null) {
                 int position = holder.getLayoutPosition();
                 DLogUtil.e("리스너 :" + holder.getAdapterPosition());
                 boolean oldBoolean = checkList.get(position);
                 checkList.set(position, !oldBoolean);
                 holder.setChecked(!oldBoolean);
-
+                if (!oldBoolean) {
+                    Goods item = itemList.get(position);
+                    item.setCount(1);
+                    holder.binding.npCount.setVisibility(View.VISIBLE);
+                    holder.binding.npCount.setValue(1);
+                } else {
+                    itemList.get(position).setCount(0);
+                    holder.binding.npCount.setVisibility(View.GONE);
+                }
                 onItemClickListener.onitemClick(view, position, !oldBoolean);
             }
         });
@@ -53,7 +65,7 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
         holder.binding.ivShowItemDetail.setOnClickListener(view -> {
             int position = holder.getLayoutPosition();
             DLogUtil.e("리스너 :" + holder.getAdapterPosition());
-            if(onItemDetailListener!=null){
+            if (onItemDetailListener != null) {
                 onItemDetailListener.onItemClick(view, position);
             }
         });
@@ -65,28 +77,30 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
         Goods item = itemList.get(position);
         holder.binding.setItem(item);
         holder.binding.setStarCount(item.getRatio().intValue());
+        if (checkList.get(position)) {
+            holder.binding.lavCheckAnim.setProgress(1);
+            holder.binding.npCount.setVisibility(View.VISIBLE);
+            holder.binding.npCount.setValue(item.getCount());
+        } else {
+            holder.binding.lavCheckAnim.setProgress(0);
+            holder.binding.npCount.setVisibility(View.GONE);
+        }
 
-            if (checkList.get(position)) {
-                holder.binding.lavCheckAnim.setProgress(1);
-            } else {
-                holder.binding.lavCheckAnim.setProgress(0);
-            }
+        if (position == animPosition) {
+            final Animation animShake
+                    = AnimationUtils.loadAnimation(holder.binding.getRoot().getContext(), R.anim.anim_shake);
+            holder.binding.cvItemLayout.startAnimation(animShake);
+            animPosition = -1;
+        }
 
-            if (position == animPosition) {
-                final Animation animShake
-                        = AnimationUtils.loadAnimation(holder.binding.getRoot().getContext(), R.anim.anim_shake);
-                holder.binding.cvItemLayout.startAnimation(animShake);
-                animPosition = -1;
-            }
-
-            DLogUtil.d(itemList.get(position).toString());
+        DLogUtil.d(itemList.get(position).toString());
     }
 
     public void setOnItemClickListener(OnCheckItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setOnItemDetailListener(OnItemClickListener onItemDetailListener){
+    public void setOnItemDetailListener(OnItemClickListener onItemDetailListener) {
         this.onItemDetailListener = onItemDetailListener;
     }
 
@@ -148,7 +162,7 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
 
     public class ViewHolder extends RecyclerView.ViewHolder implements Checkable {
 
-        private ItemMyListItemBinding binding;
+        private ItemListGoodsBinding binding;
         private boolean isCheck = false;
 
         ViewHolder(@NonNull View itemView) {

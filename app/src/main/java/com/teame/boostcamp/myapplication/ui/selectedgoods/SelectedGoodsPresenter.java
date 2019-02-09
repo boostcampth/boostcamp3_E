@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.ui.listgoods;
+package com.teame.boostcamp.myapplication.ui.selectedgoods;
 
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
@@ -11,15 +11,15 @@ import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class ListGoodsPresenter implements ListGoodsContract.Presenter {
+public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
 
-    private ListGoodsContract.View view;
+    private SelectedGoodsContract.View view;
     private MyListRepository myListRepository;
     private CompositeDisposable disposable;
     private HashMap<Integer, Goods> checkedList = new HashMap<>();
     private GoodsListRecyclerAdapter adapter;
 
-    ListGoodsPresenter(ListGoodsContract.View view, MyListRepository myListRepository) {
+    SelectedGoodsPresenter(SelectedGoodsContract.View view, MyListRepository myListRepository) {
         this.view = view;
         this.myListRepository = myListRepository;
         disposable = new CompositeDisposable();
@@ -70,12 +70,7 @@ public class ListGoodsPresenter implements ListGoodsContract.Presenter {
     @Override
     public void getDetailItemUid(int position) {
         Goods item = adapter.getItem(position);
-
-        DLogUtil.d("position : " +position);
-        DLogUtil.d(item.toString());
-
-        String itemUid = item.getKey();
-        view.showDetailItem(itemUid);
+        view.showDetailItem(item);
     }
 
     /**

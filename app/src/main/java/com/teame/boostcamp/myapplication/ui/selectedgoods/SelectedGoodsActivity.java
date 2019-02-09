@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.ui.listgoods;
+package com.teame.boostcamp.myapplication.ui.selectedgoods;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.view.WindowManager;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
-import com.teame.boostcamp.myapplication.databinding.ActivityListItemBinding;
+import com.teame.boostcamp.myapplication.databinding.ActivitySelectedGoodsBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
@@ -22,19 +22,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
 
-public class ListGoodsActivity extends BaseMVPActivity<ActivityListItemBinding, ListGoodsContract.Presenter> implements ListGoodsContract.View {
+public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoodsBinding, SelectedGoodsContract.Presenter> implements SelectedGoodsContract.View {
 
     public static final String EXTRA_HEADER_UID = "EXTRA_HEADER_UID";
     private CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
-    protected ListGoodsContract.Presenter getPresenter() {
-        return new ListGoodsPresenter(this, MyListRepository.getInstance());
+    protected SelectedGoodsContract.Presenter getPresenter() {
+        return new SelectedGoodsPresenter(this, MyListRepository.getInstance());
     }
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.activity_list_item;
+        return R.layout.activity_selected_goods;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ListGoodsActivity extends BaseMVPActivity<ActivityListItemBinding, 
     }
 
     public static void startActivity(Context context, String headerUid) {
-        Intent intent = new Intent(context, ListGoodsActivity.class);
+        Intent intent = new Intent(context, SelectedGoodsActivity.class);
         intent.putExtra(EXTRA_HEADER_UID, headerUid);
         context.startActivity(intent);
     }
@@ -114,8 +114,8 @@ public class ListGoodsActivity extends BaseMVPActivity<ActivityListItemBinding, 
     }
 
     @Override
-    public void showDetailItem(String itemUid) {
-        GoodsDetailActivity.startActivity(this, itemUid);
+    public void showDetailItem(Goods item) {
+        GoodsDetailActivity.startActivity(this, item);
     }
 
 }

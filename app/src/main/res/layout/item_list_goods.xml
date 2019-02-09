@@ -4,28 +4,79 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="item"
-            type="com.teame.boostcamp.myapplication.model.entitiy.Goods"/>
+            type="com.teame.boostcamp.myapplication.model.entitiy.Goods" />
 
         <variable
             name="starCount"
-            type="int"/>
+            type="int" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_small"
-        android:layout_marginRight="16dp">
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lav_check_anim"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            app:lottie_fileName="animation_check.json"
-            android:layout_gravity="center"
-            android:layout_margin="16dp"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lav_check_anim"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="@id/guideline_check"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_fileName="animation_check.json" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@{String.format(@string/goods_count,item.count)}"
+                android:textSize="11sp"
+                android:visibility="@{item.count!=0}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="@id/guideline_check" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="60dp" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/np_count"
+                android:visibility="gone"
+                android:layout_width="32dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/guideline_check"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:np_dividerColor="@color/colorPrimaryDark"
+                app:np_dividerDistance="24dp"
+                app:np_selectedTextSize="14sp"
+                app:np_max="99"
+                app:np_min="1"
+                app:np_selectedTextColor="@color/colorPrimaryDark"
+                app:np_textSize="12sp">
+            </com.shawnlin.numberpicker.NumberPicker>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_item_layout"
@@ -36,19 +87,22 @@
             app:cardElevation="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_item_image"
+                    error="@{@drawable/ic_no_image}"
+                    imgUrl="@{item.img}"
+                    rounded="@{4}"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginLeft="8dp"
@@ -57,40 +111,37 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    imgUrl="@{item.img}"
-                    error="@{@drawable/ic_no_image}"
-                    rounded="@{4}"
                     tools:src="@drawable/btn_bottom_sns" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_item_name"
                     style="@style/Widget.MyListItem.TextView"
+                    android:text="@{item.name}"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:layout_constraintVertical_chainStyle="spread_inside"
                     app:layout_constraintBottom_toTopOf="@+id/tv_item_ratio"
                     app:layout_constraintLeft_toRightOf="@id/iv_item_image"
                     app:layout_constraintTop_toTopOf="@+id/iv_item_image"
-                    android:text="@{item.name}"
+                    app:layout_constraintVertical_chainStyle="spread_inside"
                     tools:text="이름" />
 
                 <include
                     android:id="@+id/include_rating"
                     layout="@layout/layout_star_ratio"
                     starCount="@{starCount}"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     app:layout_constraintBottom_toTopOf="@+id/tv_item_min_price"
                     app:layout_constraintLeft_toRightOf="@+id/iv_item_image"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_item_name"/>
+                    app:layout_constraintTop_toBottomOf="@+id/tv_item_name" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_item_ratio"
                     style="@style/Widget.MyListItem.TextView"
+                    android:text="@{item.ratio}"
                     app:layout_constraintBottom_toBottomOf="@id/include_rating"
                     app:layout_constraintLeft_toRightOf="@+id/include_rating"
-                    android:text="@{item.ratio}"
                     tools:text="8.55" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -98,19 +149,10 @@
                     style="@style/Widget.MyListItem.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/list_goods_min_parice"
+                    android:text="@{String.format(@string/min_price(item.Lprice))}"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_item_image"
                     app:layout_constraintLeft_toRightOf="@+id/iv_item_image"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_item_ratio"/>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_item_min_price"
-                    style="@style/Widget.MyListItem.TextView"
-                    android:layout_marginLeft="4dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_item_image"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_item_min_text"
                     app:layout_constraintTop_toBottomOf="@+id/tv_item_ratio"
-                    android:text="@{item.lPrice}"
                     tools:text="10,000원" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -118,10 +160,10 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginRight="@dimen/space_x_small"
-                    app:srcCompat="@drawable/btn_show_detail"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/btn_show_detail" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
