@@ -78,6 +78,10 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
         holder.binding.setItem(item);
         holder.binding.setStarCount(item.getRatio().intValue());
         if (checkList.get(position)) {
+            if(item.getCount()==0){
+                item.setCount(1);
+                holder.binding.npCount.setValue(1);
+            }
             holder.binding.lavCheckAnim.setProgress(1);
             holder.binding.npCount.setVisibility(View.VISIBLE);
             holder.binding.npCount.setValue(item.getCount());
