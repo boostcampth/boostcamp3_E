@@ -56,7 +56,7 @@
             android:paddingBottom="54dp"
             android:windowSoftInputMode="adjustResize"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/item_my_list_item" />
+            tools:listitem="@layout/item_list_goods" />
 
         <View
             android:layout_width="match_parent"
@@ -64,6 +64,7 @@
             app:layout_anchorGravity="bottom"
             android:layout_gravity="bottom"
             app:layout_anchor="@id/cl_edit_layout" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_edit_layout"
             android:layout_width="match_parent"

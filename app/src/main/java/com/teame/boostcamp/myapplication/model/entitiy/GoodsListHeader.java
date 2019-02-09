@@ -22,7 +22,6 @@ public class GoodsListHeader implements Parcelable {
     private Double lng;
 
     public GoodsListHeader(){
-
     }
 
     protected GoodsListHeader(Parcel in) {

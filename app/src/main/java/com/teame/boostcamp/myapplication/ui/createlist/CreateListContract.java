@@ -15,9 +15,13 @@ public interface CreateListContract {
         void showAddedGoods(int position);
 
         void emptyCheckGoods();
+
+        void showDetailItem(Goods item);
     }
 
     interface Presenter extends BasePresenter {
+
+        void getDetailItemUid(int position);
 
         void loadListData(GoodsListRecyclerAdapter adapter,String nation, String city);
 

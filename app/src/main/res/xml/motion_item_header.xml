@@ -29,14 +29,17 @@
 
             <Constraint
                 android:id="@id/iv_item_image"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="350dp"
+                motion:layout_constraintLeft_toLeftOf="parent"
+                motion:layout_constraintRight_toRightOf="parent"
                 motion:layout_constraintTop_toTopOf="parent"/>
 
             <Constraint
                 android:id="@id/tv_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 motion:layout_constraintBottom_toTopOf="@+id/include_rating"
                 motion:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -44,6 +47,7 @@
                 android:id="@id/include_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 motion:layout_constraintBottom_toTopOf="@+id/tv_item_min_price"
                 motion:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -51,6 +55,7 @@
                 android:id="@id/tv_item_min_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 motion:layout_constraintBottom_toBottomOf="@+id/guideline_bottom"
                 motion:layout_constraintLeft_toLeftOf="parent" />
 

@@ -21,6 +21,7 @@ import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.createlistinfo.CreateListInfo;
+import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
@@ -111,7 +112,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         binding.rvRecommendList.setLayoutManager(linearLayoutManager);
         binding.rvRecommendList.setAdapter(adapter);
         presenter.loadListData(adapter, header.getNation(), header.getCity());
-
+        adapter.setOnItemDetailListener((__, position) -> presenter.getDetailItemUid(position));
         adapter.setOnItemClickListener((view, position, isCheck) ->
                 presenter.selectItem(position, isCheck));
         binding.etAddItem.setOnClickListener(view -> binding.ablTopControl.setExpanded(false));
@@ -182,6 +183,11 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     @Override
     public void emptyCheckGoods() {
         showToast(getString(R.string.empty_goods));
+    }
+
+    @Override
+    public void showDetailItem(Goods item) {
+        GoodsDetailActivity.startActivity(this, item);
     }
 
 }

@@ -37,6 +37,12 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         }
     }
 
+    @Override
+    public void getDetailItemUid(int position) {
+        Goods item = adapter.getItem(position);
+        view.showDetailItem(item);
+    }
+
     /**
      * 쇼핑리스트를 고르는데 필요한 정보를 가져옴
      */
@@ -91,8 +97,5 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         }else{
             view.goNextStep(saveList);
         }
-
     }
-
-
 }
