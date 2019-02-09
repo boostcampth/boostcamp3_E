@@ -107,7 +107,9 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     protected void onDestroy() {
         super.onDestroy();
         presenter.onDetach();
-        disposable.dispose();
+        if(!disposable.isDisposed()){
+            disposable.dispose();
+        }
     }
 
     @Override
