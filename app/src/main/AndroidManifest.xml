@@ -35,7 +35,22 @@
         <activity android:name=".ui.example.ExampleActivity"/>
         <activity android:name=".ui.login.LoginActivity" />
         <activity android:name=".ui.signup.SignUpActivity" />
+        <activity android:name=".ui.addpost.AddPostActivity"/>
 
+        <activity
+            android:name=".ui.goodsdetail.GoodsDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.createlist.CreateListActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|adjustResize" />
+
+        <activity android:name=".ui.listgoods.ListGoodsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.createlistinfo.CreateListInfo"
+            android:label="@string/title_activity_create_list_info"></activity>
     </application>
 
     <!-- 네이버 쇼핑 API

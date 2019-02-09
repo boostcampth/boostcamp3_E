@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.teame.boostcamp.myapplication"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -69,6 +69,12 @@ dependencies {
 
     //TedPermission
     implementation 'gun0912.ted:tedpermission-rx2:2.2.2'
+
+    //material calender view
+    implementation 'com.applandeo:material-calendar-view:1.5.1'
+
+    //lottie
+    implementation 'com.airbnb.android:lottie:3.0.0-beta1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'

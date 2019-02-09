@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="reply"
+            type="com.teame.boostcamp.myapplication.model.entitiy.Reply" />
+
+        <variable
+            name="starCount"
+            type="Integer" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/include_rating"
+            layout="@layout/layout_star_ratio"
+            starCount="@{starCount}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/space_x_small"
+            android:layout_marginTop="@dimen/space_x_small"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_item_ratio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text=""
+            app:layout_constraintBottom_toBottomOf="@+id/include_rating"
+            app:layout_constraintLeft_toRightOf="@+id/include_rating"
+            app:layout_constraintTop_toTopOf="@+id/include_rating" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_review_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/space_x_small"
+            android:layout_marginRight="@dimen/space_x_small"
+            android:text="@{reply.content}"
+            android:textColor="@color/colorBlack"
+            app:layout_constraintLeft_toRightOf="@+id/tv_item_ratio"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/include_rating"
+            tools:text="내용" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_review_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@{reply.stringDate}"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_review_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_review_content"
+            tools:text="2019.3.03" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
