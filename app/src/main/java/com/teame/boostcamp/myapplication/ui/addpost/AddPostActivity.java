@@ -27,8 +27,8 @@ import io.reactivex.disposables.Disposable;
 
 public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, AddPostContract.Presenter> implements AddPostContract.View {
     private PreviewImageAdapter adapter;
-    public static int READ_REQUEST_CODE = 42;
-    public static int TAKE_PICTURE_REQUEST_CODE = 27;
+    public static final int READ_REQUEST_CODE = 42;
+    public static final int TAKE_PICTURE_REQUEST_CODE = 27;
     private LinearLayoutManager layoutManager;
     private Disposable disposable;
 
