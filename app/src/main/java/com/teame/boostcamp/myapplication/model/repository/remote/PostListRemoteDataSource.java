@@ -18,11 +18,7 @@ import io.reactivex.subjects.PublishSubject;
 public class PostListRemoteDataSource implements PostListDataSource {
 
     private static final String QUERY_POST = "posts";
-    /*
-    private static final String QUERY_COUNTRY_TARGET = "japan";
-    private static final String QUERY_COUNTRY_TARGET2 = "osaka";
-    private static final String QUERY_COUNTRY_BASE_LIST = "baselist";
-    */
+
 
     private static PostListRemoteDataSource INSTANCE;
 
@@ -30,11 +26,6 @@ public class PostListRemoteDataSource implements PostListDataSource {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference baseRef = db.collection(QUERY_POST);
-    /*
-    private CollectionReference countryRef = db.collection(QUERY_COUNTRY)
-            .document(QUERY_COUNTRY_TARGET)
-            .collection("osaka");
-            */
 
     private PostListRemoteDataSource() {
     }
@@ -45,6 +36,8 @@ public class PostListRemoteDataSource implements PostListDataSource {
         }
         return INSTANCE;
     }
+
+
 
 
     /**

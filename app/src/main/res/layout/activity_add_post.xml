@@ -7,6 +7,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,7 +43,7 @@
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ib_test"
+                app:layout_constraintTop_toBottomOf="@+id/ib_gallery_pick"
                 tools:listitem="@layout/item_preview_image" />
 
 
@@ -84,19 +85,30 @@
             </androidx.appcompat.widget.AppCompatSpinner>
 
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/ib_test"
+                android:id="@+id/ib_gallery_pick"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
+                android:background="@color/colorWhite"
+                app:layout_constraintEnd_toStartOf="@+id/ib_take_picture"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/til_post_title"
+                app:srcCompat="@drawable/btn_image_add" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_take_picture"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@color/colorWhite"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ib_gallery_pick"
                 app:layout_constraintTop_toBottomOf="@+id/til_post_title"
-                app:srcCompat="@drawable/btn_image_add" />
+                app:srcCompat="@drawable/btn_camera" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bt_add_post"

@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import com.teame.boostcamp.myapplication.R;
@@ -13,16 +16,21 @@ import com.teame.boostcamp.myapplication.adapter.PreviewImageAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityAddPostBinding;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 
 import java.util.ArrayList;
 
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import io.reactivex.disposables.Disposable;
 
 
 public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, AddPostContract.Presenter> implements AddPostContract.View {
     private PreviewImageAdapter adapter;
-    public static int READ_REQUEST_CODE = 42;
+    public static final int READ_REQUEST_CODE = 42;
+    public static final int TAKE_PICTURE_REQUEST_CODE = 27;
     private LinearLayoutManager layoutManager;
+    private Disposable disposable;
 
     @Override
     protected int getLayoutResourceId() {
@@ -43,7 +51,6 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-
     }
 
 
@@ -54,12 +61,34 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
 
     private void initView() {
         adapter = new PreviewImageAdapter(getApplicationContext(), new ArrayList<>());
-        binding.ibTest.setOnClickListener(__ -> onAddImagesButtonClicked());
+        binding.ibGalleryPick.setOnClickListener(__ -> onAddImagesButtonClicked());
+        binding.ibTakePicture.setOnClickListener(__ -> onTakePictureButtonClicked());
         binding.btAddPost.setOnClickListener(__ -> onAddPostButtonClicked());
+        layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        binding.rvPreviewImage.setLayoutManager(layoutManager);
+        binding.rvPreviewImage.setAdapter(adapter);
     }
 
     private void onAddImagesButtonClicked() {
-        pickGalleryImages();
+        if (ActivityCompat.checkSelfPermission(this, TedPermissionUtil.STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            pickGalleryImages();
+        } else {
+            disposable = TedPermissionUtil.requestPermission(this, "저장소 권한", "저장소 권한", TedPermissionUtil.STORAGE)
+                    .subscribe(tedPermissionResult -> {
+                        pickGalleryImages();
+                    });
+        }
+    }
+    private void onTakePictureButtonClicked(){
+        if (ActivityCompat.checkSelfPermission(this, TedPermissionUtil.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            takePicture();
+        } else {
+            disposable = TedPermissionUtil.requestPermission(this, "카메라 권한", "카메라 권한", TedPermissionUtil.CAMERA)
+                    .subscribe(tedPermissionResult -> {
+                        takePicture();
+                    });
+        }
     }
 
     private void onAddPostButtonClicked() {
@@ -67,7 +96,7 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
         String content = binding.tietPostContent.getText().toString();
 
         if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
-            presenter.addPost(title, content, adapter.getUriList());
+            presenter.addPost(title, content, adapter.getBitmapList());
         }
         else{
             showToast("제목과 내용을 입력해 주세요");
@@ -78,6 +107,9 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     protected void onDestroy() {
         super.onDestroy();
         presenter.onDetach();
+        if(!disposable.isDisposed()){
+            disposable.dispose();
+        }
     }
 
     @Override
@@ -87,6 +119,14 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(intent, READ_REQUEST_CODE);
+    }
+
+    @Override
+    public void takePicture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(takePictureIntent.resolveActivity(getPackageManager())!=null){
+            startActivityForResult(takePictureIntent, TAKE_PICTURE_REQUEST_CODE);
+        }
     }
 
     @Override
@@ -113,19 +153,15 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
                         }
                     }
                 }
-                showSelectedImages();
             } catch (Exception e) {
                 DLogUtil.d(e.toString());
             }
 
+        }else if(requestCode == TAKE_PICTURE_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            adapter.add((Bitmap) resultData.getExtras().get("data"));
         }
     }
 
-    private void showSelectedImages() {
-        layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        binding.rvPreviewImage.setLayoutManager(layoutManager);
-        binding.rvPreviewImage.setAdapter(adapter);
-    }
+
 }
 

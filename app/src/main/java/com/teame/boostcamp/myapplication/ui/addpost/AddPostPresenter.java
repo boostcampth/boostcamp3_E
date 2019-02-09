@@ -1,53 +1,50 @@
 package com.teame.boostcamp.myapplication.ui.addpost;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
 import com.teame.boostcamp.myapplication.util.LocalImageUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 public class AddPostPresenter implements AddPostContract.Presenter {
     private AddPostContract.View view;
     private StorageReference mStorageRef;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
-
+    private static final String POST_PATH = "posts";
     public AddPostPresenter(AddPostContract.View view) {
         this.view = view;
     }
 
 
     @Override
-    public void addPost(String title, String content, List<Uri> uriList) {
+    public void addPost(String title, String content, List<Bitmap> bitmapList) {
         auth = FirebaseAuth.getInstance();
         ArrayList<String> storagePathList = new ArrayList<>();
-        for(int i=0; i<uriList.size(); i++){
-            Uri file = Uri.fromFile(new File(LocalImageUtil.getPath( (Context) view, uriList.get(i))));
+        for(int i=0; i<bitmapList.size(); i++){
+            //Uri file = Uri.fromFile(new File(LocalImageUtil.getPath( (Context) view, uriList.get(i))));
             mStorageRef = FirebaseStorage.getInstance().getReference().child("images/post/"+auth.getUid() + "/" + title + "/" + i + ".jpg");
             storagePathList.add("images/post/"+auth.getUid() + "/" + title + "/" + i + ".jpg");
-            mStorageRef.putFile(file);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmapList.get(i).compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
+            mStorageRef.putBytes(baos.toByteArray());
         }
         Post post = new Post(title, content, storagePathList);
         db = FirebaseFirestore.getInstance();
-        db.collection("posts").add(post).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                view.succeedAddPost();
-            }
-        });
+        db.collection(POST_PATH)
+                .document(FirebaseAuth.getInstance().getUid()+post.getCreatedDate())
+                .set(post)
+                .addOnCompleteListener(__ -> view.succeedAddPost());
 
     }
 

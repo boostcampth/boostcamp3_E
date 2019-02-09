@@ -40,17 +40,5 @@ public class TabSNSPresenter implements TabSNSContract.Presenter {
                         e -> DLogUtil.d(e.getMessage())
                 )
         );
-
-        /*
-        db = FirebaseFirestore.getInstance();
-        db.collection("posts")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        for(QueryDocumentSnapshot document : task.getResult()){
-                            view.addData(document.toObject(Post.class));
-                        }
-                    }
-                });*/
     }
 }

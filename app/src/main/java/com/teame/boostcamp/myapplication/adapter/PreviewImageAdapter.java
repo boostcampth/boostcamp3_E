@@ -1,6 +1,7 @@
 package com.teame.boostcamp.myapplication.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,20 +19,24 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PreviewImageAdapter extends RecyclerView.Adapter<PreviewImageAdapter.ItemViewHolder> implements OnPreviewImageClickListener {
-    private List<Uri> uriList;
+    private List<Bitmap> bitmapList;
     Context context;
 
-    public List<Uri> getUriList(){
-        return uriList;
+    public List<Bitmap> getBitmapList(){
+        return bitmapList;
     }
     public void add(Uri uri) {
-        uriList.add(uri);
+        bitmapList.add(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(context, uri, 400), LocalImageUtil.getPath(context, uri)));
+        notifyDataSetChanged();
+    }
+    public void add(Bitmap bitmap){
+        bitmapList.add(bitmap);
         notifyDataSetChanged();
     }
 
-    public PreviewImageAdapter(Context context, ArrayList<Uri> uriList) {
+    public PreviewImageAdapter(Context context, ArrayList<Bitmap> bitmapList) {
         this.context = context;
-        this.uriList = uriList;
+        this.bitmapList = bitmapList;
     }
 
     @NonNull
@@ -45,19 +50,18 @@ public class PreviewImageAdapter extends RecyclerView.Adapter<PreviewImageAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
-        String filePath = LocalImageUtil.getPath(context, uriList.get(i));
-        holder.binding.ivPreviewImage.setImageBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(context, uriList.get(i), 400), filePath));
+        holder.binding.ivPreviewImage.setImageBitmap(bitmapList.get(i));
         holder.binding.ibDeletePreviewImage.setOnClickListener(v -> onDeleteButtonClick(i));
     }
 
     @Override
     public int getItemCount() {
-        return uriList.size();
+        return bitmapList.size();
     }
 
     @Override
     public void onDeleteButtonClick(int i) {
-        uriList.remove(i);
+        bitmapList.remove(i);
         notifyDataSetChanged();
     }
 
