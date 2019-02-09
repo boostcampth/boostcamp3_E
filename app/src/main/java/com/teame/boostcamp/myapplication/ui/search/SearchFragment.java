@@ -65,10 +65,14 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=super.onCreateView(inflater,container,savedInstanceState);
+        return super.onCreateView(inflater,container,savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         setPresenter(new SearchPresenter(this, new ResourceProvider(getContext())));
         setUp();
-        return view;
     }
 
     private void setUp(){
