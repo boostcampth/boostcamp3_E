@@ -1,6 +1,6 @@
 package com.teame.boostcamp.myapplication.ui.selectedgoods;
 
-import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.SelectedGoodsRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
@@ -17,7 +17,7 @@ public interface SelectedGoodsContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadListData(GoodsListRecyclerAdapter adapter, String headerUid);
+        void loadListData(SelectedGoodsRecyclerAdapter adapter, String headerUid);
 
         void selectItem(int position, boolean isCheck);
 

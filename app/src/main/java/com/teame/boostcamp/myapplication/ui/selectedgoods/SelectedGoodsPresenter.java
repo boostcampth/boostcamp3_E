@@ -1,6 +1,7 @@
 package com.teame.boostcamp.myapplication.ui.selectedgoods;
 
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.SelectedGoodsRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
@@ -17,7 +18,7 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
     private MyListRepository myListRepository;
     private CompositeDisposable disposable;
     private HashMap<Integer, Goods> checkedList = new HashMap<>();
-    private GoodsListRecyclerAdapter adapter;
+    private SelectedGoodsRecyclerAdapter adapter;
 
     SelectedGoodsPresenter(SelectedGoodsContract.View view, MyListRepository myListRepository) {
         this.view = view;
@@ -41,7 +42,7 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
      * 쇼핑리스트를 고르는데 필요한 정보를 가져옴
      */
     @Override
-    public void loadListData(GoodsListRecyclerAdapter adapter,String headerUid) {
+    public void loadListData(SelectedGoodsRecyclerAdapter adapter, String headerUid) {
         this.adapter = adapter;
         disposable.add(myListRepository.getMyListItems(headerUid)
                 .subscribe(

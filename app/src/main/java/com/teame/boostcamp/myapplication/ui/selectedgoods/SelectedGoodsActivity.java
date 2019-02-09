@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.SelectedGoodsRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivitySelectedGoodsBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
@@ -84,7 +84,7 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_all_back);
-        GoodsListRecyclerAdapter adapter = new GoodsListRecyclerAdapter();
+        SelectedGoodsRecyclerAdapter adapter = new SelectedGoodsRecyclerAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
                 false);
