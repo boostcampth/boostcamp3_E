@@ -4,8 +4,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Checkable;
 
 import com.teame.boostcamp.myapplication.R;
@@ -17,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,11 +23,6 @@ public class SelectedGoodsRecyclerAdapter extends BaseRecyclerAdatper<Goods, Sel
     private List<Boolean> checkList = new ArrayList<>();
     private OnCheckItemClickListener onItemClickListener;
     private OnItemClickListener onItemDetailListener;
-    private int animPosition = -1;
-
-    public void setAnimPosition(int position) {
-        animPosition = position;
-    }
 
     @NonNull
     @Override
@@ -36,11 +30,6 @@ public class SelectedGoodsRecyclerAdapter extends BaseRecyclerAdatper<Goods, Sel
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_list_goods, parent, false);
         final ViewHolder holder = new ViewHolder(itemView);
-        holder.binding.npCount.setOnValueChangedListener((__, ___, newValue) -> {
-            int position = holder.getLayoutPosition();
-            Goods item = itemList.get(position);
-            item.setCount(newValue);
-        });
 
         holder.binding.cvItemLayout.setOnClickListener(view -> {
             if (onItemClickListener != null) {
@@ -49,14 +38,10 @@ public class SelectedGoodsRecyclerAdapter extends BaseRecyclerAdatper<Goods, Sel
                 boolean oldBoolean = checkList.get(position);
                 checkList.set(position, !oldBoolean);
                 holder.setChecked(!oldBoolean);
-                if (!oldBoolean) {
-                    Goods item = itemList.get(position);
-                    item.setCount(1);
-                    holder.binding.npCount.setVisibility(View.VISIBLE);
-                    holder.binding.npCount.setValue(1);
-                } else {
-                    itemList.get(position).setCount(0);
-                    holder.binding.npCount.setVisibility(View.GONE);
+                if(!oldBoolean){
+                    holder.binding.cvBlur.setVisibility(View.VISIBLE);
+                }else{
+                    holder.binding.cvBlur.setVisibility(View.GONE);
                 }
                 onItemClickListener.onitemClick(view, position, !oldBoolean);
             }
@@ -77,20 +62,15 @@ public class SelectedGoodsRecyclerAdapter extends BaseRecyclerAdatper<Goods, Sel
         Goods item = itemList.get(position);
         holder.binding.setItem(item);
         holder.binding.setStarCount(item.getRatio().intValue());
+
         if (checkList.get(position)) {
             holder.binding.lavCheckAnim.setProgress(1);
-            holder.binding.npCount.setVisibility(View.VISIBLE);
-            holder.binding.npCount.setValue(item.getCount());
+            holder.binding.cvItemLayout.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.colorGray));
+            holder.binding.cvBlur.setVisibility(View.VISIBLE);
         } else {
             holder.binding.lavCheckAnim.setProgress(0);
-            holder.binding.npCount.setVisibility(View.GONE);
-        }
-
-        if (position == animPosition) {
-            final Animation animShake
-                    = AnimationUtils.loadAnimation(holder.binding.getRoot().getContext(), R.anim.anim_shake);
-            holder.binding.cvItemLayout.startAnimation(animShake);
-            animPosition = -1;
+            holder.binding.cvItemLayout.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.colorWhite));
+            holder.binding.cvBlur.setVisibility(View.GONE);
         }
 
         DLogUtil.d(itemList.get(position).toString());

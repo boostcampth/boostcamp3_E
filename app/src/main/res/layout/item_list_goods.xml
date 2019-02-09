@@ -59,22 +59,21 @@
 
             <com.shawnlin.numberpicker.NumberPicker
                 android:id="@+id/np_count"
-                android:visibility="gone"
                 android:layout_width="32dp"
                 android:layout_height="0dp"
                 android:layout_marginRight="8dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/guideline_check"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:np_dividerColor="@color/colorPrimaryDark"
                 app:np_dividerDistance="24dp"
-                app:np_selectedTextSize="14sp"
                 app:np_max="99"
                 app:np_min="1"
                 app:np_selectedTextColor="@color/colorPrimaryDark"
-                app:np_textSize="12sp">
-            </com.shawnlin.numberpicker.NumberPicker>
+                app:np_selectedTextSize="14sp"
+                app:np_textSize="12sp"></com.shawnlin.numberpicker.NumberPicker>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -154,6 +153,18 @@
                     app:layout_constraintLeft_toRightOf="@+id/iv_item_image"
                     app:layout_constraintTop_toBottomOf="@+id/tv_item_ratio"
                     tools:text="10,000원" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_blur"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/colorBlurGray"
+                    app:cardCornerRadius="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_show_item_detail"
