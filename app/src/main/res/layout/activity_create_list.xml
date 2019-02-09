@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="count"
+            type="androidx.databinding.ObservableField&lt;String&gt;"/>
+    </data>
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/ml_root"
         android:layout_width="match_parent"
@@ -136,5 +141,58 @@
             android:text="내가 선택한 리스트"
             android:textSize="20sp"
             tools:listitem="@layout/item_checked_goods"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="가"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="선"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="택"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="한"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="리"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="스"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="트"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{count.get()}"/>
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

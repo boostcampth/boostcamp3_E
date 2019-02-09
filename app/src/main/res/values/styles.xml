@@ -42,7 +42,19 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="enjoyTextAs">
+        <item name="android:scaleY">1.0</item>
+        <item name="android:scaleX">1.0</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 
+    <style name="enjoyTextBe">
+        <item name="android:scaleY">1.5</item>
+        <item name="android:scaleX">1.5</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

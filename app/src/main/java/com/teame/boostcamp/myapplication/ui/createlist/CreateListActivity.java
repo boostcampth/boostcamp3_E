@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
@@ -37,7 +39,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
     private static final String EXTRA_GOODS_LIST_HDAER = "EXTRA_GOODS_LIST_HDAER";
     CompositeDisposable disposable = new CompositeDisposable();
-    PublishSubject<RecyclerView> subject = PublishSubject.create();
+    ObservableField<String> countString = new ObservableField<>("0");
 
     @Override
     protected CreateListContract.Presenter getPresenter() {
@@ -87,6 +89,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        binding.setCount(countString);
         initView();
     }
 
@@ -122,6 +125,11 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         adapter.setOnItemDetailListener((__, position) -> presenter.getDetailItemUid(position));
         adapter.setOnItemClickListener((view, position, isCheck) -> {
                     presenter.checkedItem(position, isCheck);
+                    if (isCheck) {
+                        addItem();
+                    } else {
+                        removeItem();
+                    }
                 }
         );
 
@@ -172,6 +180,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         if (position == -1) {
             // 리스트에 아이템이 없으면
             int lastPosition = adapter.getItemCount();
+            addItem();
             DLogUtil.e("lastPositin : " + lastPosition);
             linearLayoutManager.scrollToPosition(lastPosition - 1);
         } else {
@@ -212,6 +221,20 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         } else {
             ((GoodsListRecyclerAdapter) binding.rvRecommendList.getAdapter()).unCheckItem(position);
             ((CheckedGoodsListRecyclerAdapter) binding.rvSelected.getAdapter()).removeItem(oldPosition);
+            removeItem();
         }
+
+    }
+
+    public void addItem() {
+        String tmpString = countString.get();
+        int count = Integer.valueOf(tmpString);
+        countString.set(String.valueOf(++count));
+    }
+
+    public void removeItem() {
+        String tmpString = countString.get();
+        int count = Integer.valueOf(tmpString);
+        countString.set(String.valueOf(--count));
     }
 }
