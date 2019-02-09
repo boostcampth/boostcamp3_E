@@ -93,7 +93,6 @@
                 android:layout_marginTop="8dp"
                 android:background="@color/colorWhite"
                 app:layout_constraintEnd_toStartOf="@+id/ib_take_picture"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/til_post_title"
                 app:srcCompat="@drawable/btn_image_add" />
@@ -107,7 +106,6 @@
                 android:layout_marginRight="8dp"
                 android:background="@color/colorWhite"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/ib_gallery_pick"
                 app:layout_constraintTop_toBottomOf="@+id/til_post_title"
                 app:srcCompat="@drawable/btn_camera" />
