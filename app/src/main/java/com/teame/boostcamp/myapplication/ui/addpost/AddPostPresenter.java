@@ -32,11 +32,10 @@ public class AddPostPresenter implements AddPostContract.Presenter {
         auth = FirebaseAuth.getInstance();
         ArrayList<String> storagePathList = new ArrayList<>();
         for(int i=0; i<bitmapList.size(); i++){
-            //Uri file = Uri.fromFile(new File(LocalImageUtil.getPath( (Context) view, uriList.get(i))));
             mStorageRef = FirebaseStorage.getInstance().getReference().child("images/post/"+auth.getUid() + "/" + title + "/" + i + ".jpg");
             storagePathList.add("images/post/"+auth.getUid() + "/" + title + "/" + i + ".jpg");
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmapList.get(i).compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
+            bitmapList.get(i).compress(Bitmap.CompressFormat.JPEG, 100, baos);
             mStorageRef.putBytes(baos.toByteArray());
         }
         Post post = new Post(title, content, storagePathList);
@@ -45,11 +44,6 @@ public class AddPostPresenter implements AddPostContract.Presenter {
                 .document(FirebaseAuth.getInstance().getUid()+post.getCreatedDate())
                 .set(post)
                 .addOnCompleteListener(__ -> view.succeedAddPost());
-
-    }
-
-    @Override
-    public void takePicture() {
 
     }
 
