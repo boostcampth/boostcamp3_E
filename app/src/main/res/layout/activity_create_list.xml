@@ -138,53 +138,52 @@
             android:id="@+id/rv_selected"
             android:layout_width="180dp"
             android:layout_height="match_parent"
-            android:text="내가 선택한 리스트"
             android:textSize="20sp"
             tools:listitem="@layout/item_checked_goods"/>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv1"
+            android:id="@+id/tv_anim_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="내"/>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv2"
+            android:id="@+id/tv_anim_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="가"/>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv3"
+            android:id="@+id/tv_anim_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="선"/>
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv4"
+            android:id="@+id/tv_anim_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="택"/>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv5"
+            android:id="@+id/tv_anim_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="한"/>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv6"
+            android:id="@+id/tv_anim_6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="리"/>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv7"
+            android:id="@+id/tv_anim_7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="스"/>
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv8"
+            android:id="@+id/tv_anim_8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="트"/>

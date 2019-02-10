@@ -31,7 +31,7 @@
                 motion:layout_constraintTop_toBottomOf="@id/tv_count" />
 
             <Constraint
-                android:id="@id/tv1"
+                android:id="@id/tv_anim_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -42,58 +42,58 @@
                 motion:layout_constraintTop_toTopOf="parent" />
 
             <Constraint
-                android:id="@id/tv2"
+                android:id="@id/tv_anim_2"
                 style="@style/enjoyTextAs"
-                motion:layout_constraintCircle="@id/tv1"
+                motion:layout_constraintCircle="@id/tv_anim_1"
                 motion:layout_constraintCircleAngle="180"
                 motion:layout_constraintCircleRadius="14dp" />
 
             <Constraint
-                android:id="@id/tv3"
+                android:id="@id/tv_anim_3"
                 style="@style/enjoyTextAs"
-                motion:layout_constraintCircle="@id/tv2"
+                motion:layout_constraintCircle="@id/tv_anim_2"
                 motion:layout_constraintCircleAngle="180"
                 motion:layout_constraintCircleRadius="14dp" />
 
             <Constraint
-                android:id="@id/tv4"
+                android:id="@id/tv_anim_4"
                 style="@style/enjoyTextAs"
-                motion:layout_constraintCircle="@id/tv3"
+                motion:layout_constraintCircle="@id/tv_anim_3"
                 motion:layout_constraintCircleAngle="180"
                 motion:layout_constraintCircleRadius="14dp" />
 
             <Constraint
-                android:id="@id/tv5"
+                android:id="@id/tv_anim_5"
                 style="@style/enjoyTextAs"
-                motion:layout_constraintCircle="@id/tv4"
+                motion:layout_constraintCircle="@id/tv_anim_4"
                 motion:layout_constraintCircleAngle="180"
                 motion:layout_constraintCircleRadius="14dp" />
 
             <Constraint
-                android:id="@id/tv6"
+                android:id="@id/tv_anim_6"
                 style="@style/enjoyTextAs"
-                motion:layout_constraintCircle="@id/tv5"
+                motion:layout_constraintCircle="@id/tv_anim_5"
                 motion:layout_constraintCircleAngle="180"
                 motion:layout_constraintCircleRadius="14dp" />
 
             <Constraint
-                android:id="@id/tv7"
+                android:id="@id/tv_anim_7"
                 style="@style/enjoyTextAs"
-                motion:layout_constraintCircle="@id/tv6"
+                motion:layout_constraintCircle="@id/tv_anim_6"
                 motion:layout_constraintCircleAngle="180"
                 motion:layout_constraintCircleRadius="14dp" />
 
             <Constraint
-                android:id="@id/tv8"
+                android:id="@id/tv_anim_8"
                 style="@style/enjoyTextAs"
-                motion:layout_constraintCircle="@id/tv7"
+                motion:layout_constraintCircle="@id/tv_anim_7"
                 motion:layout_constraintCircleAngle="180"
                 motion:layout_constraintCircleRadius="14dp" />
 
             <Constraint
                 android:id="@id/tv_count"
                 style="@style/enjoyTextAs"
-                motion:layout_constraintCircle="@id/tv8"
+                motion:layout_constraintCircle="@id/tv_anim_8"
                 motion:layout_constraintCircleAngle="180"
                 motion:layout_constraintCircleRadius="14dp" />
         </ConstraintSet>
@@ -118,10 +118,10 @@
                 motion:layout_constraintBottom_toBottomOf="parent"
                 motion:layout_constraintEnd_toStartOf="@id/guideline_point"
                 motion:layout_constraintStart_toStartOf="parent"
-                motion:layout_constraintTop_toBottomOf="@id/tv1" />
+                motion:layout_constraintTop_toBottomOf="@id/tv_anim_1" />
 
             <Constraint
-                android:id="@id/tv1"
+                android:id="@id/tv_anim_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -132,58 +132,58 @@
                 motion:layout_constraintTop_toTopOf="parent" />
 
             <Constraint
-                android:id="@id/tv2"
+                android:id="@id/tv_anim_2"
                 style="@style/enjoyTextBe"
-                motion:layout_constraintCircle="@id/tv1"
+                motion:layout_constraintCircle="@id/tv_anim_1"
                 motion:layout_constraintCircleAngle="90"
                 motion:layout_constraintCircleRadius="20dp" />
 
             <Constraint
-                android:id="@id/tv3"
+                android:id="@id/tv_anim_3"
                 style="@style/enjoyTextBe"
-                motion:layout_constraintCircle="@id/tv2"
+                motion:layout_constraintCircle="@id/tv_anim_2"
                 motion:layout_constraintCircleAngle="90"
                 motion:layout_constraintCircleRadius="28dp" />
 
             <Constraint
-                android:id="@id/tv4"
+                android:id="@id/tv_anim_4"
                 style="@style/enjoyTextBe"
-                motion:layout_constraintCircle="@id/tv3"
+                motion:layout_constraintCircle="@id/tv_anim_3"
                 motion:layout_constraintCircleAngle="90"
                 motion:layout_constraintCircleRadius="20dp" />
 
             <Constraint
-                android:id="@id/tv5"
+                android:id="@id/tv_anim_5"
                 style="@style/enjoyTextBe"
-                motion:layout_constraintCircle="@id/tv4"
+                motion:layout_constraintCircle="@id/tv_anim_4"
                 motion:layout_constraintCircleAngle="90"
                 motion:layout_constraintCircleRadius="20dp" />
 
             <Constraint
-                android:id="@id/tv6"
+                android:id="@id/tv_anim_6"
                 style="@style/enjoyTextBe"
-                motion:layout_constraintCircle="@id/tv5"
+                motion:layout_constraintCircle="@id/tv_anim_5"
                 motion:layout_constraintCircleAngle="90"
                 motion:layout_constraintCircleRadius="28dp" />
 
             <Constraint
-                android:id="@id/tv7"
+                android:id="@id/tv_anim_7"
                 style="@style/enjoyTextBe"
-                motion:layout_constraintCircle="@id/tv6"
+                motion:layout_constraintCircle="@id/tv_anim_6"
                 motion:layout_constraintCircleAngle="90"
                 motion:layout_constraintCircleRadius="20dp" />
 
             <Constraint
-                android:id="@id/tv8"
+                android:id="@id/tv_anim_8"
                 style="@style/enjoyTextBe"
-                motion:layout_constraintCircle="@id/tv7"
+                motion:layout_constraintCircle="@id/tv_anim_7"
                 motion:layout_constraintCircleAngle="90"
                 motion:layout_constraintCircleRadius="20dp" />
 
             <Constraint
                 android:id="@id/tv_count"
                 style="@style/enjoyTextBe"
-                motion:layout_constraintCircle="@id/tv8"
+                motion:layout_constraintCircle="@id/tv_anim_8"
                 motion:layout_constraintCircleAngle="90"
                 motion:layout_constraintCircleRadius="20dp" />
         </ConstraintSet>
