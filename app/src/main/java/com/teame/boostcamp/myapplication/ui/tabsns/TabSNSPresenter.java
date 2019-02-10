@@ -25,7 +25,9 @@ public class TabSNSPresenter implements TabSNSContract.Presenter {
     @Override
     public void onDetach() {
         this.view = null;
-        disposable.dispose();
+        if(disposable!=null){
+            disposable.dispose();
+        }
     }
 
     @Override
