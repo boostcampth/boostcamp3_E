@@ -94,7 +94,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         if (header == null) {
             // 테스트 코드
             header = new GoodsListHeader();
-            header.setNation("japan");
+            header.setNation("JP");
             header.setCity("osaka");
             header.setStartDate(Calendar.getInstance().getTime());
             header.setEndDate(Calendar.getInstance().getTime());
@@ -137,7 +137,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         if (header == null) {
             // 테스트 코드
             header = new GoodsListHeader();
-            header.setNation("japan");
+            header.setNation("JP");
             header.setCity("osaka");
             header.setStartDate(Calendar.getInstance().getTime());
             header.setEndDate(Calendar.getInstance().getTime());

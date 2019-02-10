@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.firestore.Exclude;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 public class Goods implements Parcelable {
 
@@ -44,7 +45,13 @@ public class Goods implements Parcelable {
     };
 
     public void setMinPriceResponse(MinPriceResponse minPriceResponse) {
-        MinPriceResponse.Item info = minPriceResponse.getItems().get(0);
+        MinPriceResponse.Item info;
+        try{
+            info = minPriceResponse.getItems().get(0);
+        }catch (Exception ignored){
+            return;
+        }
+
         this.img = info.getImage();
         this.link = info.getLink();
         this.lPrice = info.getLprice();
