@@ -44,6 +44,16 @@ abstract class BaseRecyclerAdatper<T,H extends RecyclerView.ViewHolder> extends 
         notifyItemInserted(position);
     }
 
+    /**
+     * position 위치의 item 삭제
+     * */
+    public void removeItem(int position) {
+        if (this.itemList != null && position < this.itemList.size()) {
+            this.itemList.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, this.itemList.size());
+        }
+    }
 
     /**
      * 해당 position 의 item 반환

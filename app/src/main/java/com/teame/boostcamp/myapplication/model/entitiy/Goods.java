@@ -5,19 +5,25 @@ import android.os.Parcelable;
 
 import com.google.firebase.firestore.Exclude;
 
-public class Goods implements Parcelable {
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+import androidx.databinding.library.baseAdapters.BR;
+
+public class Goods extends BaseObservable implements Parcelable {
 
     private String key;
     private String name;
     private Double ratio;
-    private String lPrice;
+    private String lprice;
     private String img;
     private String link;
-
+    private int count=0;
 
     public Goods(){
 
     }
+
+
     protected Goods(Parcel in) {
         key = in.readString();
         name = in.readString();
@@ -26,9 +32,10 @@ public class Goods implements Parcelable {
         } else {
             ratio = in.readDouble();
         }
-        lPrice = in.readString();
+        lprice = in.readString();
         img = in.readString();
         link = in.readString();
+        count = in.readInt();
     }
 
     public static final Creator<Goods> CREATOR = new Creator<Goods>() {
@@ -47,7 +54,7 @@ public class Goods implements Parcelable {
         MinPriceResponse.Item info = minPriceResponse.getItems().get(0);
         this.img = info.getImage();
         this.link = info.getLink();
-        this.lPrice = info.getLprice();
+        this.lprice = info.getLprice();
     }
 
     @Exclude
@@ -59,31 +66,27 @@ public class Goods implements Parcelable {
         this.key = key;
     }
 
+    @Bindable
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+        notifyPropertyChanged(BR.name);
     }
 
+    @Bindable
     public Double getRatio() {
         if(ratio == null)
             return 0.0;
         return ratio;
     }
 
+
     public void setRatio(Double ratio) {
         this.ratio = ratio;
-    }
-
-    @Exclude
-    public String getLPrice() {
-        return lPrice;
-    }
-
-    public void setLPrice(String lPrice) {
-        this.lPrice = lPrice;
+        notifyPropertyChanged(BR.ratio);
     }
 
     @Exclude
@@ -104,16 +107,25 @@ public class Goods implements Parcelable {
         this.link = link;
     }
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "key='" + key + '\'' +
-                ", name='" + name + '\'' +
-                ", ratio=" + ratio +
-                ", lPrice='" + lPrice + '\'' +
-                ", img='" + img + '\'' +
-                ", link='" + link + '\'' +
-                '}';
+    @Bindable
+    @Exclude
+    public String getLprice() {
+        return lprice;
+    }
+
+    public void setLprice(String lprice) {
+        this.lprice = lprice;
+        notifyPropertyChanged(BR.lprice);
+    }
+
+    @Bindable
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+        notifyPropertyChanged(BR.count);
     }
 
     @Override
@@ -123,6 +135,19 @@ public class Goods implements Parcelable {
             return this.name.equals(p.getName());
         } else
             return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Goods{" +
+                "key='" + key + '\'' +
+                ", name='" + name + '\'' +
+                ", ratio=" + ratio +
+                ", lprice='" + lprice + '\'' +
+                ", img='" + img + '\'' +
+                ", link='" + link + '\'' +
+                ", count=" + count +
+                '}';
     }
 
     @Override
@@ -140,8 +165,9 @@ public class Goods implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeDouble(ratio);
         }
-        parcel.writeString(lPrice);
+        parcel.writeString(lprice);
         parcel.writeString(img);
         parcel.writeString(link);
+        parcel.writeInt(count);
     }
 }

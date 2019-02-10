@@ -55,7 +55,7 @@
             android:layout_marginTop="4dp"
             android:windowSoftInputMode="adjustResize"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/item_my_list_item" />
+            tools:listitem="@layout/item_list_goods" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

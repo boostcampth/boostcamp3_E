@@ -9,7 +9,7 @@ import com.teame.boostcamp.myapplication.adapter.GoodsListHeaderRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentMyListBinding;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
-import com.teame.boostcamp.myapplication.ui.listgoods.ListGoodsActivity;
+import com.teame.boostcamp.myapplication.ui.selectedgoods.SelectedGoodsActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -76,6 +76,6 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
 
     @Override
     public void showMyListItems(String headerKey) {
-        ListGoodsActivity.startActivity(getContext(), headerKey);
+        SelectedGoodsActivity.startActivity(getContext(), headerKey);
     }
 }
