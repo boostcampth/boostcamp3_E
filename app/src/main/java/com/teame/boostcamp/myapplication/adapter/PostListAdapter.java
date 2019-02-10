@@ -1,20 +1,16 @@
 package com.teame.boostcamp.myapplication.adapter;
 
 import android.content.Context;
-import android.os.Build;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemPostBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
-import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemViewHolder> implements OnPostClickListener {
     private List<Post> postList = new ArrayList<>();
     private Context context;
+    private static final String LIKE_UPDATE = "update Like";
 
     public void add(Post post) {
         postList.add(post);
@@ -52,36 +49,36 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
-        StorageReference mStorageRef;
-        holder.binding.tvPostTitle.setText(postList.get(i).getTitle());
-        holder.binding.tvPostContent.setText(postList.get(i).getContent());
-        holder.binding.tvPostLikeCount.setText(postList.get(i).getLikeString());
-        if(postList.get(i).getLikedUidList().contains(FirebaseAuth.getInstance().getUid())){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.binding.ibPostLike.setImageDrawable(context.getDrawable(R.drawable.ic_star_black_24dp));
-            }
+        holder.binding.setPost(postList.get(i));
+        holder.binding.setUid(FirebaseAuth.getInstance().getUid());
+        holder.binding.ibPostLike.setOnClickListener(__ -> {
+            onLikeButtonClick(i);
+        });
+        holder.binding.vpPostImages.setAdapter(new PostImagePagerAdapter(context, postList.get(i).getImagePathList()));
+
+    }
+    @Override
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position, @NonNull List<Object> payloads) {
+        if(payloads.isEmpty()){
+            super.onBindViewHolder(holder, position, payloads);
         }else{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.binding.ibPostLike.setImageDrawable(context.getDrawable(R.drawable.ic_star_border_black_24dp));
+            for(Object payload : payloads){
+                if (payload instanceof String){
+                    String type = (String) payload;
+
+                    if(TextUtils.equals(type, LIKE_UPDATE) && holder instanceof ItemViewHolder){
+                        holder.binding.setPost(postList.get(position));
+                    }
+
+                }
             }
         }
 
-        holder.binding.ibPostLike.setOnClickListener(__ -> onLikeButtonClick(i));
-        for(String path: postList.get(i).getImagePathList()){
-            mStorageRef = FirebaseStorage.getInstance().getReference(path);
-            mStorageRef.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(context).load(uri.toString()).into(holder.binding.ivPostImages));
-        }
     }
 
     @Override
     public int getItemCount() {
         return postList.size();
-    }
-
-
-    @Override
-    public void onPostClick(int i) {
-
     }
 
     @Override
@@ -94,14 +91,14 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
             FirebaseFirestore.getInstance().collection("posts")
                     .document(uid+post.getCreatedDate())
                     .set(post);
-            notifyDataSetChanged();
+            notifyItemChanged(i, LIKE_UPDATE);
         }else{
             post.increaseLike();
             post.getLikedUidList().add(uid);
             FirebaseFirestore.getInstance().collection("posts")
                     .document(uid+post.getCreatedDate())
                     .set(post);
-            notifyDataSetChanged();
+            notifyItemChanged(i, LIKE_UPDATE);
         }
     }
 
