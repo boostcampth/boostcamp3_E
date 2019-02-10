@@ -6,9 +6,10 @@
     android:orientation="vertical">
 
     <data>
+
         <variable
             name="item"
-            type="com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader"/>
+            type="com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader" />
 
     </data>
 
@@ -20,21 +21,21 @@
             android:id="@+id/tv_start_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginLeft="@dimen/space_x_small"
+            android:text="@{item.stringStringDate}"
+            android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/tv_end_date"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@{item.stringStringDate}"
-            android:layout_marginLeft="@dimen/space_x_small"
-            tools:text="2019.22.22"
-            android:textStyle="bold"
-            android:textSize="14sp"/>
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="2019.22.22" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/from"
             android:layout_marginLeft="4dp"
+            android:text="@string/from"
             app:layout_constraintBottom_toTopOf="@+id/tv_start_date"
             app:layout_constraintLeft_toRightOf="@id/tv_start_date"
             app:layout_constraintTop_toBottomOf="@+id/tv_start_date" />
@@ -44,12 +45,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{item.stringEndDate}"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toRightOf="@id/tv_start_date"
             app:layout_constraintRight_toRightOf="@id/tv_start_date"
             app:layout_constraintTop_toBottomOf="@+id/tv_start_date"
-            android:textSize="12sp"
             tools:text="2019.33.33" />
 
         <com.google.android.material.card.MaterialCardView
@@ -69,26 +70,41 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_list_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{item.title}"
                     android:layout_marginLeft="@dimen/space_x_small"
-                    tools:text="오사카20190119"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="@{item.title}"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintRight_toLeftOf="@+id/iv_alarm"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="오사카20190119" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_alarm"
+                    android:layout_width="@dimen/space_x_large"
+                    android:layout_height="@dimen/space_x_large"
+                    android:layout_margin="@dimen/space_x_small"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/iv_delete"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/btn_add_alarm" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_delete"
                     android:layout_width="@dimen/space_x_large"
                     android:layout_height="@dimen/space_x_large"
                     android:layout_margin="@dimen/space_x_large"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/btn_add_alarm" />
+                    app:srcCompat="@drawable/btn_remove" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
