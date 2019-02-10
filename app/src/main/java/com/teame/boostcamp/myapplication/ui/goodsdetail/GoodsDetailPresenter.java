@@ -1,6 +1,7 @@
 package com.teame.boostcamp.myapplication.ui.goodsdetail;
 
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
+import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
@@ -13,7 +14,7 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
     private GoodsDetailRecyclerAdapter adapter;
     private GoodsDetailContract.View view;
 
-    public GoodsDetailPresenter(GoodsDetailContract.View view , GoodsDetailRepository repository) {
+    public GoodsDetailPresenter(GoodsDetailContract.View view, GoodsDetailRepository repository) {
         this.repository = repository;
         this.view = view;
     }
@@ -41,6 +42,14 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
                         },
                         e -> DLogUtil.e(e.getMessage())
                 ));
+    }
+
+    @Override
+    public void deleteReply(String itemId, int position) {
+        Reply item = adapter.getItem(position);
+        disposable.add(repository.deleteReply(itemId, item.getKey())
+                .subscribe(b -> adapter.removeItem(position),
+                        e -> DLogUtil.e(e.getMessage())));
     }
 
 

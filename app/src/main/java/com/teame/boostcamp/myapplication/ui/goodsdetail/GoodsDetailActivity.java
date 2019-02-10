@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ActivityItemDetailBinding;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
@@ -53,8 +56,12 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityItemDetailBindi
         super.onResume();
     }
 
-    /*
-     */
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.onDetach();
+    }
 
     private void initView() {
         Intent intent = getIntent();
@@ -68,6 +75,9 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityItemDetailBindi
         }
 
         GoodsDetailRecyclerAdapter adapter = new GoodsDetailRecyclerAdapter();
+        adapter.setOnItemDeleteListener((v, position) -> {
+            presenter.deleteReply(itemUid, position);
+        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
                 false);
@@ -90,13 +100,19 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityItemDetailBindi
 
         binding.etReview.tvWriteReply.setOnClickListener(view -> {
             if (binding.etReview.tieWriteReview.getVisibility() == View.VISIBLE) {
-                int ratio = binding.etReview.getStarCount();
-                String content = binding.etReview.tieWriteReview.getText().toString();
-                binding.etReview.setIsExtend(false);
-                hideSoftKeyboard(GoodsDetailActivity.this);
+                String replyText = binding.etReview.tieWriteReview.getText().toString();
 
-                // TODO : key값 조정
-                presenter.writeReply(itemUid, content, ratio);
+                if (replyText.trim().length() >= 5) {
+                    int ratio = binding.etReview.getStarCount();
+                    String content = binding.etReview.tieWriteReview.getText().toString();
+                    binding.etReview.setIsExtend(false);
+                    hideSoftKeyboard(GoodsDetailActivity.this);
+
+                    // TODO : key값 조정
+                    presenter.writeReply(itemUid, content, ratio);
+                } else {
+                    showToast(getString(R.string.notice_reply_length));
+                }
             }
         });
         binding.etReview.tvHintWrite.setOnClickListener(__ -> {
