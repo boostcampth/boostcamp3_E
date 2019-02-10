@@ -17,7 +17,7 @@ public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsLis
 
     private OnItemClickListener onItemClickListener;
     private OnItemAlaramListener onItemAlaramListener;
-
+    private OnItemClickListener onItemDeleteListener;
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,6 +39,14 @@ public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsLis
                 onItemAlaramListener.onAlaramClick(view, position);
             }
         });
+
+        holder.binding.ivDelete.setOnClickListener(view -> {
+            if (onItemDeleteListener != null) {
+                DLogUtil.d("position :" + holder.getLayoutPosition());
+                int position = holder.getLayoutPosition();
+                onItemDeleteListener.onItemClick(view, position);
+            }
+        });
         return holder;
     }
 
@@ -54,6 +62,10 @@ public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsLis
     public void setOnItemAlaramListener(OnItemAlaramListener onItemAlaramListener){
         this.onItemAlaramListener = onItemAlaramListener;
     }
+    public void setOnItemDeleteListener(OnItemClickListener onItemDeleteListener){
+        this.onItemDeleteListener = onItemDeleteListener;
+    }
+
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{

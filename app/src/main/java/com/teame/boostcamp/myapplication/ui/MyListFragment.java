@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsListHeaderRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.OnItemAlaramListener;
 import com.teame.boostcamp.myapplication.databinding.FragmentMyListBinding;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
@@ -70,6 +71,7 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
             dialog.setMessage(position+"번째 리스트 알림설정")
                     .show();
         });
+        adapter.setOnItemDeleteListener((v, position) -> presenter.deleteMyList(position));
         binding.rvMyList.setLayoutManager(linearLayoutManager);
         binding.rvMyList.setAdapter(adapter);
     }

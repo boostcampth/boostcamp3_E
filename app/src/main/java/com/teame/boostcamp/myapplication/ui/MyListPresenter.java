@@ -19,6 +19,7 @@ public class MyListPresenter implements MyListContract.Presenter {
         this.view = view;
         this.repository = repository;
     }
+
     @Override
     public void loadMyList(GoodsListHeaderRecyclerAdapter adapter) {
         this.adapter = adapter;
@@ -35,11 +36,20 @@ public class MyListPresenter implements MyListContract.Presenter {
     public void getMyListUid(int position) {
         GoodsListHeader header = adapter.getItem(position);
 
-        DLogUtil.d("position : " +position);
+        DLogUtil.d("position : " + position);
         DLogUtil.d(header.toString());
 
         String headerKey = header.getKey();
         view.showMyListItems(headerKey);
+    }
+
+    @Override
+    public void deleteMyList(int position) {
+        GoodsListHeader header = adapter.getItem(position);
+        disposable.add(repository.deleteMyList(header.getKey())
+                .subscribe(b -> adapter.removeItem(position)
+                        , e -> DLogUtil.e(e.getMessage()))
+        );
     }
 
     @Override
