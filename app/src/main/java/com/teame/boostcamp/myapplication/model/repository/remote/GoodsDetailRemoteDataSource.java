@@ -52,6 +52,7 @@ public class GoodsDetailRemoteDataSource implements GoodsDetailDataSource {
                     for (DocumentSnapshot document : documents) {
                         Reply item = document.toObject(Reply.class);
                         DLogUtil.d(item.toString());
+                        item.setKey(document.getId());
                         subject.onNext(item);
                     }
 
@@ -64,7 +65,7 @@ public class GoodsDetailRemoteDataSource implements GoodsDetailDataSource {
     }
 
     @Override
-    public Observable<Reply> writeReply(String itemUid, String content, int ratio) {
+    public Single<Reply> writeReply(String itemUid, String content, int ratio) {
         Reply reply = new Reply();
         reply.setContent(content);
         reply.setRatio((double) ratio);
@@ -73,10 +74,12 @@ public class GoodsDetailRemoteDataSource implements GoodsDetailDataSource {
         Date nowDate = new Date(now);
         reply.setWriteDate(nowDate);
         PublishSubject<Reply> subject = PublishSubject.create();
-        Task saveReply = replyRef.document(itemUid)
+        String key = replyRef.getId();
+        Task saveReply = replyRef.document(key)
                 .collection(QUERY_GOODS_REPLY)
                 .add(reply)
                 .addOnSuccessListener(aVoid -> {
+                    reply.setKey(key);
                     subject.onNext(reply);
                 })
                 .addOnFailureListener(subject::onError);
@@ -84,6 +87,27 @@ public class GoodsDetailRemoteDataSource implements GoodsDetailDataSource {
             subject.onComplete();
         });
 
-        return subject;
+        return subject.flatMapSingle(Single::just).single(reply);
+    }
+
+    @Override
+    public Single<Boolean> deleteReply(String itemUid, String replyUid) {
+        PublishSubject<Boolean> subject = PublishSubject.create();
+
+        Task saveReply = replyRef.document(itemUid)
+                .collection(QUERY_GOODS_REPLY)
+                .document(replyUid)
+                .delete();
+
+        Tasks.whenAll(saveReply).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                subject.onNext(true);
+            } else {
+                subject.onError(task.getException());
+            }
+            subject.onComplete();
+        });
+
+        return subject.flatMapSingle(Single::just).single(true);
     }
 }
