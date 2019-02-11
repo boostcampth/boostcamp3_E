@@ -54,7 +54,7 @@
             android:id="@+id/iv_userpin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/btn_fragment_checklist_create_userpinview"
+            app:srcCompat="@drawable/btn_create_userpinview"
             android:visibility="gone"
             app:layout_constraintLeft_toRightOf="@id/guideline_card_right"
             app:layout_constraintRight_toRightOf="@id/mv_googlemap"

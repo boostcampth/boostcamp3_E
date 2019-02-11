@@ -106,7 +106,7 @@
             android:id="@+id/view_fake"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/background_transparent"
+            android:background="@color/colorClear"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/et_review"
             app:layout_constraintLeft_toLeftOf="parent"

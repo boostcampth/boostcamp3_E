@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.adapter.SearchAdapter;
+package com.teame.boostcamp.myapplication.adapter.searchadapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

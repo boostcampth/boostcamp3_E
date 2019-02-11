@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.adapter.SearchAdapter;
+package com.teame.boostcamp.myapplication.adapter.searchadapter;
 
 import java.util.ArrayList;
 import java.util.List;

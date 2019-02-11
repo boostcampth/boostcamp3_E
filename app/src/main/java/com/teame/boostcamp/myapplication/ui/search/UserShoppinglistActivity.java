@@ -1,5 +1,8 @@
 package com.teame.boostcamp.myapplication.ui.search;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -7,9 +10,16 @@ import android.view.MenuItem;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ActivityUsersShoppinglistBinding;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 
+import java.util.ArrayList;
+
 public class UserShoppinglistActivity extends BaseMVPActivity<ActivityUsersShoppinglistBinding, UserShoppinglistContract.Presenter> {
+
+    private static final String EXTRA_GOODSLIST="EXTRA_GOODSLIST";
+    private static final int REQUEST_CODE=111;
+    private ArrayList<Goods> goodsArrayList;
 
     @Override
     protected UserShoppinglistContract.Presenter getPresenter() {
@@ -49,5 +59,13 @@ public class UserShoppinglistActivity extends BaseMVPActivity<ActivityUsersShopp
         setSupportActionBar(binding.tbBackImport);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
+        goodsArrayList=getIntent().getParcelableArrayListExtra(EXTRA_GOODSLIST);
+        //TODO: 유저 리스트 호출 구현
+    }
+
+    public static void startActivity(Context context, ArrayList<Goods> goodslist){
+        Intent intent=new Intent(context,UserShoppinglistActivity.class);
+        intent.putParcelableArrayListExtra(EXTRA_GOODSLIST,goodslist);
+        ((Activity)context).startActivityForResult(intent,REQUEST_CODE);
     }
 }

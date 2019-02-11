@@ -1,6 +1,11 @@
 package com.teame.boostcamp.myapplication.ui.search;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -12,19 +17,32 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.SearchAdapter.ExListAdapter;
+import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSearchBinding;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.model.entitiy.UserPinPreview;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import io.reactivex.disposables.Disposable;
@@ -34,6 +52,12 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     private GoogleMap googleMap=null;
     private static final float ZOOM=16;
     private Disposable disposable;
+    private Marker userMarker=null;
+    private boolean isShowUserPin=false;
+    private String currentNation="";
+    private String currentCity="";
+    private Marker currentMarker;
+    private static final int REQUEST_RESULT_CODE=111;
     @Override
     protected int getLayoutResourceId() {
         return R.layout.fragment_search;
@@ -88,12 +112,29 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
         binding.rvExList.addItemDecoration(divider);
         binding.rvExList.setLayoutManager(layoutManager);
         binding.rvExList.setAdapter(adapter);
-        binding.rvExList.setOnTouchListener((v, event) -> {
+        binding.rvExList.setOnTouchListener((__, event) -> {
             if(event.getAction()==MotionEvent.ACTION_DOWN){
                 InputKeyboardUtil.hideKeyboard(getActivity());
                 return true;
             }
             return false;
+        });
+
+        //view setting
+        binding.ivUserpin.setOnClickListener(__ -> {
+            if(isShowUserPin){
+                isShowUserPin=false;
+                hideUserPin();
+                binding.ivUserpin.setImageResource(R.drawable.btn_create_userpinview);
+            }
+            else{
+                isShowUserPin=true;
+                presenter.showUserPin();
+                binding.ivUserpin.setImageResource(R.drawable.btn_uncreate_userpinview);
+            }
+        });
+        binding.includeUserShoppingPreview.cvUserShoppingPreview.setOnClickListener(__ -> {
+            presenter.getUserPinGoodsList(currentMarker);
         });
 
         //presenter setting
@@ -133,15 +174,26 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
         });
     }
 
-    private void onSearchSubmit(String place){
-        presenter.onSearchSubmit(place);
+    @Override
+    public void showUserGoodsListActivity(List<Goods> list) {
+        UserShoppinglistActivity.startActivity(getContext(),(ArrayList<Goods>)list);
     }
 
     @Override
-    public void showPositionInMap(LatLng latlon) {
+    public void showPositionInMap(LatLng latlon, String currentNation, String currentCity) {
         binding.svPlace.clearFocus();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlon,ZOOM));
-        hideExSearchView();
+        this.currentNation=currentNation;
+        this.currentCity=currentCity;
+    }
+
+    @Override
+    public void showUserPin(LatLng location) {
+        googleMap.addMarker(new MarkerOptions().position(location));
+    }
+
+    public void hideUserPin(){
+        googleMap.clear();
     }
 
     public void showExSearchView() {
@@ -165,23 +217,33 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     }
 
     @Override
-    public void showSearchResult() {
-
+    public void showSearchResult(int count) {
+        binding.ivUserpin.setVisibility(View.VISIBLE);
+        binding.includeVisited.cvVisited.setVisibility(View.VISIBLE);
+        binding.includeVisited.tvVisitedPlace.setText(currentCity);
+        binding.includeVisited.tvVisitedCount.setText(count+"명이 이곳을 방문하였습니다.");
+        binding.rvExList.setVisibility(View.GONE);
+        binding.includePeriodSetting.cvPeriodSetting.setVisibility(View.GONE);
+        binding.includeUserShoppingPreview.cvUserShoppingPreview.setVisibility(View.GONE);
     }
 
     @Override
-    public void showUserPin() {
-
-    }
-
-    @Override
-    public void userPinClicked() {
-
+    public void showUserPinPreview(UserPinPreview preview) {
+        binding.includeUserShoppingPreview.cvUserShoppingPreview.setVisibility(View.VISIBLE);
+        binding.includeVisited.cvVisited.setVisibility(View.GONE);
+        binding.includeUserShoppingPreview.setPreview(preview);
     }
 
     @Override
     public void showPeriodSetting() {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode==REQUEST_RESULT_CODE){
+            //TODO: 만약 UserShoppinglistActivity에서 Import를 했다면 여기서 처리
+        }
     }
 
     @Override
@@ -242,6 +304,11 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
             fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
                 LatLng latlnt=new LatLng(task.getResult().getLatitude(),task.getResult().getLongitude());
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt,ZOOM));
+            })
+            .addOnFailureListener(exception->{
+                DLogUtil.e(exception.toString());
+                LatLng latlnt = new LatLng(0,0);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt, ZOOM));
             });
         }
         else{
@@ -251,9 +318,40 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
                             fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
                                 LatLng latlnt = new LatLng(task.getResult().getLatitude(), task.getResult().getLongitude());
                                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt, ZOOM));
+                            })
+                            .addOnFailureListener(exception->{
+                                DLogUtil.e(exception.toString());
+                                LatLng latlnt = new LatLng(0,0);
+                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt, ZOOM));
                             });
                         }
                     });
         }
+        googleMap.setOnMarkerClickListener(marker -> {
+            presenter.getUserPinPreview(marker);
+            currentMarker=marker;
+            return true;
+        });
+        googleMap.setOnMapLongClickListener(latLng -> {
+            if(userMarker!=null)
+                userMarker.remove();
+            userMarker=googleMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .icon(vectorDescriptor(getContext(),R.drawable.btn_location_marker))
+                    .title("이 지역 선택"));
+            userMarker.showInfoWindow();
+        });
+        googleMap.setOnInfoWindowClickListener(marker -> {
+            showPeriodSetting();
+        });
+    }
+
+    private BitmapDescriptor vectorDescriptor(Context context, int vectorId){
+        Drawable background= ContextCompat.getDrawable(context,vectorId);
+        background.setBounds(0,0,background.getIntrinsicWidth(),background.getIntrinsicHeight());
+        Bitmap vectorImage=Bitmap.createBitmap(background.getIntrinsicWidth(),background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas=new Canvas(vectorImage);
+        background.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(vectorImage);
     }
 }

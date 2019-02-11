@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="preview"
+            type="com.teame.boostcamp.myapplication.model.entitiy.UserPinPreview"/>
+    </data>
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_user_shopping_preview"
         style="@style/Widget.MaterialComponents.CardView"
@@ -21,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:text="장소"
+                android:text="@{preview.city}"
                 android:textSize="17sp" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -31,8 +38,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:text="2019.01.12~2019.01.23"
-                android:textSize="17sp" />
+                startDate="@{preview.start}"
+                endDate="@{preview.end}"
+                android:textSize="12sp" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_user_shopping_preview_user_hashtags"
@@ -41,7 +49,7 @@
                 android:layout_marginLeft="8dp"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:text="#aaa #bbb #ccc #ddd #fff"
+                android:text="@{preview.hashTag}"
                 android:textSize="17sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </com.google.android.material.card.MaterialCardView>

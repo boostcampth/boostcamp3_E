@@ -59,6 +59,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.firebaseui:firebase-ui-storage:4.1.0'
+    implementation 'com.google.firebase:firebase-database:16.0.3'
+
     //ROOM
     implementation "androidx.room:room-runtime:2.1.0-alpha04"
     annotationProcessor "androidx.room:room-compiler:2.1.0-alpha04"
@@ -72,10 +74,13 @@ dependencies {
     implementation 'gun0912.ted:tedpermission-rx2:2.2.2'
 
     //material calender view
-    implementation 'com.applandeo:material-calendar-view:1.5.1'
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
 
     //lottie
     implementation 'com.airbnb.android:lottie:3.0.0-beta1'
+
+    //geofirestore
+    implementation 'com.firebase:geofire-android:2.3.1'
 
     //ui
     implementation 'com.shawnlin:number-picker:2.4.7'
