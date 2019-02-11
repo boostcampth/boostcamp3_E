@@ -5,14 +5,24 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.model.entitiy.MinPriceResponse;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListDataSource;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
@@ -53,7 +63,7 @@ public class GoodsListRemoteDataSource implements GoodsListDataSource {
         PublishSubject<Goods> subject = PublishSubject.create();
 
         // 국가의 Base Shopping List를 가져옴
-            Task base = baseRef.get()
+        Task base = baseRef.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
@@ -105,15 +115,18 @@ public class GoodsListRemoteDataSource implements GoodsListDataSource {
                         }))
                 .toList();*/
 
-        return subject.flatMap(targetItem ->
+        return subject.zipWith(Observable.interval(200, TimeUnit.MILLISECONDS), (item, i) -> item).subscribeOn(Schedulers.io()).flatMap(targetItem ->
                 Observable.just(targetItem)
                         .observeOn(Schedulers.io())
                         .zipWith(MinPriceAPI.getInstance()
                                         .api
                                         .getMinPrice(targetItem.getName())
                                         .subscribeOn(Schedulers.io()),
-                                (item, minPriceResponse) -> {
+                                (item, response) -> {
+                                    MinPriceResponse minPriceResponse = response.body();
+                                    DLogUtil.d(item + "/" + minPriceResponse.toString());
                                     item.setMinPriceResponse(minPriceResponse);
+
                                     return item;
                                 }))
                 .toList();
