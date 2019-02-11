@@ -49,6 +49,12 @@
     <string name="cancel_create_list">선택한 내용이 전부 사라질수 있습니다.\n 정말 뒤로가시겠 습니까?</string>
     <string name="confirm">확인</string>
     <string name="notice_reply_length">댓글은 5자 이상 입력해 주세요.</string>
+    <string name="none_item">추가로 보여드릴 %s 정보가 없네요 :(\n처음으로 작성해보세요!</string>
+    <string name="toast_goods">꿀템 리스트</string>
+    <string name="toast_reply">사용자 댓글</string>
+    <string name="fail_load"><![CDATA[정보를 가져오는데 실패했습니다 :<]]></string>
+    <string name="toast_mylist">내 리스트</string>
+    <string name="toast_my_items">내 아이템</string>
     <string name="post_replay_hint">댓글 달기...</string>
     <string name="like">좋아요  </string>
     <string name="like_number">개</string>
