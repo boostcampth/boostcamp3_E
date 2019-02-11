@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 
+import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.CheckedGoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
@@ -24,6 +25,7 @@ import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.createlistinfo.CreateListInfo;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
+import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 
@@ -95,6 +97,8 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     }
 
     public void initView() {
+        binding.includeLoading.lavLoading.playAnimation();
+        binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
         GoodsListHeader header = getIntent().getParcelableExtra(EXTRA_GOODS_LIST_HDAER);
         if (header == null) {
             // 테스트 코드
@@ -231,6 +235,17 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
             removeItem();
         }
 
+    }
+
+    @Override
+    public void finishLoad(int size) {
+        binding.includeLoading.lavLoading.cancelAnimation();
+        binding.includeLoading.lavLoading.setVisibility(View.GONE);
+        if(size== Constant.LOADING_NONE_ITEM){
+            showLongToast(String.format(getString(R.string.none_item),getString(R.string.toast_goods)));
+        }else if(size== Constant.FAIL_LOAD){
+            showLongToast(getString(R.string.fail_load));
+        }
     }
 
     public void addItem() {
