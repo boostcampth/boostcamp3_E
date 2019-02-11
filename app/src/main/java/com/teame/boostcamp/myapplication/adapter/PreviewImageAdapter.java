@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemPreviewImageBinding;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,11 +49,14 @@ public class PreviewImageAdapter extends RecyclerView.Adapter<PreviewImageAdapte
         holder.setPreviewImageClickListener(this);
         return holder;
     }
-
+    @BindingAdapter({"loadImage"})
+    public static void setImageBitmap(ImageView imageView, Bitmap bitmap){
+        imageView.setImageBitmap(bitmap);
+    }
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
-        holder.binding.ivPreviewImage.setImageBitmap(bitmapList.get(i));
-        holder.binding.ibDeletePreviewImage.setOnClickListener(v -> onDeleteButtonClick(i));
+        holder.binding.setBitmap(bitmapList.get(i));
+        holder.binding.ibDeletePreviewImage.setOnClickListener(__->onDeleteButtonClick(i));
     }
 
     @Override
@@ -62,7 +67,7 @@ public class PreviewImageAdapter extends RecyclerView.Adapter<PreviewImageAdapte
     @Override
     public void onDeleteButtonClick(int i) {
         bitmapList.remove(i);
-        notifyDataSetChanged();
+        notifyItemChanged(i);
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {

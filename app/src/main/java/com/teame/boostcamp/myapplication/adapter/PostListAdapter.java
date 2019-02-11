@@ -65,11 +65,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
             for(Object payload : payloads){
                 if (payload instanceof String){
                     String type = (String) payload;
-
                     if(TextUtils.equals(type, LIKE_UPDATE) && holder instanceof ItemViewHolder){
                         holder.binding.setPost(postList.get(position));
                     }
-
                 }
             }
         }
