@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
@@ -25,6 +27,7 @@ import com.teame.boostcamp.myapplication.ui.createlistinfo.CreateListInfo;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -138,7 +141,13 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         checkedAdapter.setOnItemDeleteListener((v, position) -> {
             presenter.deleteItem(position);
         });
-        binding.etAddItem.setOnClickListener(view -> binding.ablTopControl.setExpanded(false));
+
+        binding.etAddItem.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                binding.ablTopControl.setExpanded(false);
+            }
+        });
+
         binding.ibAddItem.setOnClickListener(v -> {
             String itemName = binding.etAddItem.getText().toString();
             presenter.addItem(itemName);
@@ -250,4 +259,26 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         int count = Integer.valueOf(tmpString);
         countString.set(String.valueOf(--count));
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        View view = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(event);
+
+        if (view instanceof EditText) {
+            View w = getCurrentFocus();
+            int scrcoords[] = new int[2];
+            w.getLocationOnScreen(scrcoords);
+            float x = event.getRawX() + w.getLeft() - scrcoords[0];
+            float y = event.getRawY() + w.getTop() - scrcoords[1];
+
+            if (event.getAction() == MotionEvent.ACTION_UP
+                    && (x < w.getLeft() || x >= w.getRight()
+                    || y < w.getTop() || y > w.getBottom()) ) {
+                InputKeyboardUtil.hideKeyboard(this);
+            }
+        }
+        return ret;
+    }
+
 }
