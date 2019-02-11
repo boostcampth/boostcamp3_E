@@ -4,6 +4,7 @@ import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.SelectedGoodsRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
+import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
@@ -48,9 +49,13 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
                 .subscribe(
                         list -> {
                             adapter.initItems(list);
+                            view.finishLoad(list.size());
                             DLogUtil.d(list.toString());
                         },
-                        e -> DLogUtil.d(e.getMessage())
+                        e -> {
+                            view.finishLoad(Constant.FAIL_LOAD);
+                            DLogUtil.d(e.getMessage());
+                        }
                 )
         );
     }

@@ -6,6 +6,7 @@ import com.teame.boostcamp.myapplication.adapter.CheckedGoodsListRecyclerAdapter
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
+import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
@@ -60,9 +61,13 @@ public class CreateListPresenter implements CreateListContract.Presenter {
                         list -> {
                             adapter.initItems(list);
                             checkedAdapter.initItems(checkedList);
+                            view.finishLoad(list.size());
                             DLogUtil.d(list.toString());
                         },
-                        e -> DLogUtil.d(e.getMessage())
+                        e -> {
+                            DLogUtil.d(e.getMessage());
+                            view.finishLoad(Constant.FAIL_LOAD);
+                        }
                 )
         );
     }
