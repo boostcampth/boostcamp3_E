@@ -144,7 +144,7 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
         for (Goods item : goodsList) {
             DocumentReference itemRef = myListItemRef.document(item.getKey());
             batch.set(itemRef, item);
-            batch.set(locationItemRef.document(item.getKey()), header);
+            batch.set(locationItemRef.document(item.getKey()), item);
         }
 
 
