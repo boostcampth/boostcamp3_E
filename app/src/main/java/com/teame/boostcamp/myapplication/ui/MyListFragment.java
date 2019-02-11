@@ -70,6 +70,7 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
             dialog.setMessage(position+"번째 리스트 알림설정")
                     .show();
         });
+        adapter.setOnItemDeleteListener((v, position) -> presenter.deleteMyList(position));
         binding.rvMyList.setLayoutManager(linearLayoutManager);
         binding.rvMyList.setAdapter(adapter);
     }
