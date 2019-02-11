@@ -124,7 +124,6 @@ public class GoodsListRemoteDataSource implements GoodsListDataSource {
                                         .subscribeOn(Schedulers.io()),
                                 (item, response) -> {
                                     MinPriceResponse minPriceResponse = response.body();
-                                    DLogUtil.d(item + "/" + minPriceResponse.toString());
                                     item.setMinPriceResponse(minPriceResponse);
 
                                     return item;

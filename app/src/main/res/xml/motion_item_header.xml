@@ -68,12 +68,13 @@
 
             <Constraint
                 android:id="@id/tv_item_title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 motion:layout_constraintTop_toTopOf="parent"
                 motion:layout_constraintBottom_toBottomOf="parent"
-                motion:layout_constraintRight_toLeftOf="@+id/include_rating"/>
+                motion:layout_constraintRight_toLeftOf="@+id/include_rating"
+                motion:layout_constraintLeft_toRightOf="@+id/iv_item_image"/>
 
             <Constraint
                 android:id="@id/tv_item_ratio"

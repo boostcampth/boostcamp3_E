@@ -48,5 +48,6 @@
     <string name="already_tag">이미 선택한 태그입니다.</string>
     <string name="cancel_create_list">선택한 내용이 전부 사라질수 있습니다.\n 정말 뒤로가시겠 습니까?</string>
     <string name="confirm">확인</string>
+    <string name="notice_reply_length">댓글은 5자 이상 입력해 주세요.</string>
 
 </resources>

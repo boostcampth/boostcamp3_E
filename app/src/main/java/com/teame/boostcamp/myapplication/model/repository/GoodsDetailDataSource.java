@@ -11,5 +11,7 @@ public interface GoodsDetailDataSource {
 
     Single<List<Reply>> getReplyList(String itemUid);
 
-    Observable<Reply> writeReply(String itemUid, String content, int ratio);
+    Single<Reply> writeReply(String itemUid, String content, int ratio);
+
+    Single<Boolean> deleteReply(String itemUid,String replyUid);
 }

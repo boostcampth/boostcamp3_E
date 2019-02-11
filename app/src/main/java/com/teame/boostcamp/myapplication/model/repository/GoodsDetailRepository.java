@@ -11,6 +11,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class GoodsDetailRepository implements GoodsDetailDataSource {
 
@@ -39,8 +40,13 @@ public class GoodsDetailRepository implements GoodsDetailDataSource {
     }
 
     @Override
-    public Observable<Reply> writeReply(String itemUid, String content, int ratio) {
+    public Single<Reply> writeReply(String itemUid, String content, int ratio) {
         return itemDetailRemoteDataSource.writeReply(itemUid,content,ratio);
+    }
+
+    @Override
+    public Single<Boolean> deleteReply(String itemUid,String replyUid) {
+        return itemDetailRemoteDataSource.deleteReply(itemUid,replyUid).observeOn(AndroidSchedulers.mainThread());
     }
 
     // Reply데이터 내림차순 정렬 Comparator

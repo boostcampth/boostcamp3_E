@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ActivityGoodsDetailBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
@@ -56,8 +58,12 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         super.onResume();
     }
 
-    /*
-     */
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.onDetach();
+    }
 
     private void initView() {
         Intent intent = getIntent();
@@ -69,6 +75,9 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         binding.tvItemMinPrice.setPaintFlags(binding.tvItemMinPrice.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         GoodsDetailRecyclerAdapter adapter = new GoodsDetailRecyclerAdapter();
+        adapter.setOnItemDeleteListener((v, position) -> {
+            presenter.deleteReply(item.getKey(), position);
+        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
                 false);
@@ -80,7 +89,8 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         binding.rvReplyList.addItemDecoration(dividerItemDecoration);
 
         presenter.loadReplyList(adapter, item.getKey());
-
+        //Defailt 5점
+        binding.etReview.setStarCount(5);
         binding.etReview.includeSelectRation.ivStar1.setOnClickListener(this);
         binding.etReview.includeSelectRation.ivStar2.setOnClickListener(this);
         binding.etReview.includeSelectRation.ivStar3.setOnClickListener(this);
@@ -94,14 +104,20 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
 
         binding.etReview.tvWriteReply.setOnClickListener(view -> {
             if (binding.etReview.tieWriteReview.getVisibility() == View.VISIBLE) {
-                int ratio = binding.etReview.getStarCount();
-                String content = binding.etReview.tieWriteReview.getText().toString();
-                binding.etReview.setIsExtend(false);
-                hideSoftKeyboard(GoodsDetailActivity.this);
+                String replyText = binding.etReview.tieWriteReview.getText().toString();
 
-                // TODO : key값 조정
-                presenter.writeReply(item.getKey(), content, ratio);
-            }
+                if (replyText.trim().length() >= 5) {
+                    int ratio = binding.etReview.getStarCount();
+                    String content = binding.etReview.tieWriteReview.getText().toString();
+                    binding.etReview.setIsExtend(false);
+                    hideSoftKeyboard(GoodsDetailActivity.this);
+
+                    // TODO : key값 조정
+                    presenter.writeReply(item.getKey(), content, ratio);
+                } else {
+                    showToast(getString(R.string.notice_reply_length));
+                }
+               }
         });
 
         binding.etReview.tvHintWrite.setOnClickListener(__ -> {

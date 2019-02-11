@@ -8,11 +8,21 @@ import java.util.Date;
 
 public class Reply {
 
+    private String key;
     private String content;
     private Double ratio;
     private Date writeDate;
     private String writer;
     private String errorMessage = null;
+
+    @Exclude
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getContent() {
         return content;

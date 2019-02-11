@@ -14,6 +14,8 @@ public interface GoodsDetailContract {
         void loadReplyList(GoodsDetailRecyclerAdapter adapter, String itemUid);
 
         void writeReply(String itemId,String content,int ratio);
+
+        void deleteReply(String itemId,int position);
     }
 
 }
