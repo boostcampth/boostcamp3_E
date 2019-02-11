@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.BindingConversion;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,7 +47,10 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
         holder.setPostClickListener(this);
         return holder;
     }
-
+    @BindingConversion
+    public static int showIndicator(int size){
+        return size > 1 ? View.VISIBLE : View.GONE;
+    }
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
         holder.binding.setPost(postList.get(i));
