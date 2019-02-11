@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.firestore.Exclude;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;

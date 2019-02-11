@@ -6,12 +6,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class MinPriceResponse {
-    @Override
-    public String toString() {
-        return "MinPriceResponse{" +
-                "items=" + items +
-                '}';
-    }
 
     @SerializedName("items")
     @Expose
@@ -59,16 +53,6 @@ public class MinPriceResponse {
 
         public void setLprice(String lprice) {
             this.lprice = lprice;
-        }
-
-
-        @Override
-        public String toString() {
-            return "Item{" +
-                    "link='" + link + '\'' +
-                    ", image='" + image + '\'' +
-                    ", lprice='" + lprice + '\'' +
-                    '}';
         }
 
     }

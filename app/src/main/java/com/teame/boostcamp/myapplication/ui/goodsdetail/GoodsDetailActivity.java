@@ -76,7 +76,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
 
         GoodsDetailRecyclerAdapter adapter = new GoodsDetailRecyclerAdapter();
         adapter.setOnItemDeleteListener((v, position) -> {
-            presenter.deleteReply(itemUid, position);
+            presenter.deleteReply(item.getKey(), position);
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,

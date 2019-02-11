@@ -38,6 +38,9 @@
                 android:id="@+id/tv_item_title"
                 style="@style/Widget.DetailItem.TextView"
                 android:text="@{item.name}"
+                android:gravity="right"
+                android:maxLines="2"
+                android:ellipsize="end"
                 tools:text="동전파스" />
 
             <include

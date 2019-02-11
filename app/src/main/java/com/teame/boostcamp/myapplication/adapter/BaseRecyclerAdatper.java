@@ -68,15 +68,4 @@ abstract class BaseRecyclerAdatper<T,H extends RecyclerView.ViewHolder> extends 
     public int getItemCount() {
         return itemList.size();
     }
-
-    /**
-     * position 위치의 item 삭제
-     * */
-    public void removeItem(int position) {
-        if (this.itemList != null && position < this.itemList.size()) {
-            this.itemList.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, this.itemList.size());
-        }
-    }
 }
