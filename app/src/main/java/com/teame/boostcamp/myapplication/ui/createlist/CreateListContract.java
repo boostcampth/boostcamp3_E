@@ -36,6 +36,9 @@ public interface CreateListContract {
         void decideShoppingList();
 
         void deleteItem(int position);
+
+        void minusCount();
+
     }
 
 }

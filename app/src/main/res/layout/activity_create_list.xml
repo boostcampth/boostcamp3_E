@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="count"
-            type="androidx.databinding.ObservableField&lt;String&gt;"/>
+            name="presenter"
+            type="com.teame.boostcamp.myapplication.ui.createlist.CreateListPresenter"/>
     </data>
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/ml_root"
@@ -192,6 +192,6 @@
             android:id="@+id/tv_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{count}"/>
+            android:text="@{presenter.count}"/>
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
