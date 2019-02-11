@@ -23,7 +23,7 @@ public class TextViewUtil {
     }
 
     @BindingAdapter({"startDate","endDate"})
-    public static void convertDateToSimpleDateFormat(TextView textView, Date start, Date end){
+    public static void setPreviewText(TextView textView, Date start, Date end){
         if(start==null||end==null)
             return;
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -31,4 +31,8 @@ public class TextViewUtil {
         textView.setText(text);
     }
 
+    @BindingAdapter({"count"})
+    public static void setVisitedText(TextView textView, int count){
+        textView.setText(count+"명이 이곳을 방문하였습니다.");
+    }
 }

@@ -251,8 +251,8 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     public void showSearchResult(int count) {
         binding.ivUserpin.setVisibility(View.VISIBLE);
         binding.includeVisited.cvVisited.setVisibility(View.VISIBLE);
-        binding.includeVisited.tvVisitedPlace.setText(currentCity);
-        binding.includeVisited.tvVisitedCount.setText(count+"명이 이곳을 방문하였습니다.");
+        binding.includeVisited.setCity(currentCity);
+        binding.includeVisited.setCount(count);
         binding.rvExList.setVisibility(View.GONE);
         binding.includePeriodSetting.cvPeriodSetting.setVisibility(View.GONE);
         binding.includeUserShoppingPreview.cvUserShoppingPreview.setVisibility(View.GONE);
