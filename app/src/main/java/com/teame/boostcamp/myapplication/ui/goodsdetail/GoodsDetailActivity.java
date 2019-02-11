@@ -9,15 +9,15 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
+import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ActivityGoodsDetailBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
+import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.DividerItemDecorator;
 
@@ -71,6 +71,9 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         item = intent.getParcelableExtra(EXTRA_GOODS);
 
         binding.setItem(item);
+
+        binding.includeLoading.lavLoading.playAnimation();
+        binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
         // 밑줄 넣기
         binding.tvItemMinPrice.setPaintFlags(binding.tvItemMinPrice.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
@@ -117,7 +120,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
                 } else {
                     showToast(getString(R.string.notice_reply_length));
                 }
-               }
+            }
         });
 
         binding.etReview.tvHintWrite.setOnClickListener(__ -> {
@@ -149,6 +152,17 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
             }
             return false;
         });
+    }
+
+    @Override
+    public void finishLoad(int size) {
+        binding.includeLoading.lavLoading.cancelAnimation();
+        binding.includeLoading.lavLoading.setVisibility(View.GONE);
+        if (size == Constant.LOADING_NONE_ITEM) {
+            showLongToast(String.format(getString(R.string.none_item), getString(R.string.toast_reply)));
+        } else if (size == Constant.FAIL_LOAD) {
+            showLongToast(getString(R.string.fail_load));
+        }
     }
 
     @Override

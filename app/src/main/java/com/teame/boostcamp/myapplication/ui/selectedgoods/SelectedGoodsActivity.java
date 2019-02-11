@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 
+import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.SelectedGoodsRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivitySelectedGoodsBinding;
@@ -15,6 +17,7 @@ import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
+import com.teame.boostcamp.myapplication.util.Constant;
 
 import java.util.List;
 
@@ -84,6 +87,9 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_all_back);
+        binding.includeLoading.lavLoading.playAnimation();
+        binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
+
         SelectedGoodsRecyclerAdapter adapter = new SelectedGoodsRecyclerAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
@@ -98,6 +104,17 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
         adapter.setOnItemDetailListener((__, position) -> presenter.getDetailItemUid(position));
     }
 
+    @Override
+    public void finishLoad(int size) {
+        binding.includeLoading.lavLoading.cancelAnimation();
+        binding.includeLoading.lavLoading.setVisibility(View.GONE);
+
+        if (size == Constant.LOADING_NONE_ITEM) {
+            showLongToast(String.format(getString(R.string.none_item), getString(R.string.toast_my_items)));
+        } else if (size == Constant.FAIL_LOAD) {
+            showLongToast(getString(R.string.fail_load));
+        }
+    }
     @Override
     protected void onPause() {
         super.onPause();
