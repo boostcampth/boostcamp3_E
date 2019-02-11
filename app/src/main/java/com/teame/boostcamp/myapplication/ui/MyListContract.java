@@ -14,5 +14,7 @@ interface MyListContract {
         void loadMyList(GoodsListHeaderRecyclerAdapter adapter);
 
         void getMyListUid(int position);
+
+        void deleteMyList(int position);
     }
 }

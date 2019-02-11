@@ -42,4 +42,9 @@ public class MyListRepository implements MyListDataSoruce {
     public Single<Boolean> saveMyList(List<Goods> goodsList, List<String> hashTag, GoodsListHeader header) {
         return myListRemoteDataSource.saveMyList(goodsList, hashTag, header).observeOn(AndroidSchedulers.mainThread());
     }
+
+    @Override
+    public Single<Boolean> deleteMyList(String headerUid) {
+        return myListRemoteDataSource.deleteMyList(headerUid).observeOn(AndroidSchedulers.mainThread());
+    }
 }

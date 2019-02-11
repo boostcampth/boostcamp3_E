@@ -1,5 +1,6 @@
 package com.teame.boostcamp.myapplication.model.repository.remote;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -8,14 +9,18 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.gson.Gson;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
+import com.teame.boostcamp.myapplication.model.entitiy.MinPriceResponse;
 import com.teame.boostcamp.myapplication.model.repository.MyListDataSoruce;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
@@ -98,15 +103,18 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
                 .addOnFailureListener(e -> DLogUtil.e("error : " + e.toString()));
 
         // 가져온 리스트를 MinPriceAPI를 통해 최저가를 붙여준 후 모든아이템을 List로 반환해줌
-        return subject.flatMap(targetItem ->
+        return subject.zipWith(Observable.interval(200, TimeUnit.MILLISECONDS), (item, i) -> item).subscribeOn(Schedulers.io()).flatMap(targetItem ->
                 Observable.just(targetItem)
                         .observeOn(Schedulers.io())
                         .zipWith(MinPriceAPI.getInstance()
                                         .api
                                         .getMinPrice(targetItem.getName())
                                         .subscribeOn(Schedulers.io()),
-                                (item, minPriceResponse) -> {
+                                (item, response) -> {
+                                    MinPriceResponse minPriceResponse = response.body();
+                                    DLogUtil.d(item + "/" + minPriceResponse.toString());
                                     item.setMinPriceResponse(minPriceResponse);
+
                                     return item;
                                 }))
                 .toList();
@@ -145,5 +153,44 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
 
         return subject.subscribeOn(Schedulers.io()).flatMapSingle(Single::just)
                 .single(true);
+    }
+
+    @Override
+    public Single<Boolean> deleteMyList(String headerUid) {
+        DLogUtil.d(":: 진입");
+        PublishSubject<Boolean> subject = PublishSubject.create();
+
+        String uid = auth.getUid();
+        DocumentReference myListRef = userRef.document(uid).collection(QUERY_MY_LIST).document(headerUid);
+        CollectionReference myListItemsRef = userRef.document(uid)
+                .collection(QUERY_MY_LIST)
+                .document(headerUid)
+                .collection(QUERY_MY_GOODS);
+
+        WriteBatch batch = db.batch();
+        batch.delete(myListRef);
+        myListRef.delete();
+        Task delete = myListItemsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                for (DocumentSnapshot document : documents) {
+                    batch.delete(document.getReference());
+                }
+            } else {
+                DLogUtil.d("No such document");
+            }
+        });
+
+        Tasks.whenAll(delete).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                subject.onNext(true);
+            } else {
+                subject.onError(task.getException());
+            }
+            batch.commit();
+            subject.onComplete();
+        });
+
+        return subject.flatMapSingle(Single::just).single(true);
     }
 }

@@ -1,6 +1,7 @@
-package com.teame.boostcamp.myapplication.ui.listgoods;
+package com.teame.boostcamp.myapplication.ui.selectedgoods;
 
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.SelectedGoodsRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
@@ -11,15 +12,15 @@ import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class ListGoodsPresenter implements ListGoodsContract.Presenter {
+public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
 
-    private ListGoodsContract.View view;
+    private SelectedGoodsContract.View view;
     private MyListRepository myListRepository;
     private CompositeDisposable disposable;
     private HashMap<Integer, Goods> checkedList = new HashMap<>();
-    private GoodsListRecyclerAdapter adapter;
+    private SelectedGoodsRecyclerAdapter adapter;
 
-    ListGoodsPresenter(ListGoodsContract.View view, MyListRepository myListRepository) {
+    SelectedGoodsPresenter(SelectedGoodsContract.View view, MyListRepository myListRepository) {
         this.view = view;
         this.myListRepository = myListRepository;
         disposable = new CompositeDisposable();
@@ -41,7 +42,7 @@ public class ListGoodsPresenter implements ListGoodsContract.Presenter {
      * 쇼핑리스트를 고르는데 필요한 정보를 가져옴
      */
     @Override
-    public void loadListData(GoodsListRecyclerAdapter adapter,String headerUid) {
+    public void loadListData(SelectedGoodsRecyclerAdapter adapter, String headerUid) {
         this.adapter = adapter;
         disposable.add(myListRepository.getMyListItems(headerUid)
                 .subscribe(
@@ -70,12 +71,7 @@ public class ListGoodsPresenter implements ListGoodsContract.Presenter {
     @Override
     public void getDetailItemUid(int position) {
         Goods item = adapter.getItem(position);
-
-        DLogUtil.d("position : " +position);
-        DLogUtil.d(item.toString());
-
-        String itemUid = item.getKey();
-        view.showDetailItem(itemUid);
+        view.showDetailItem(item);
     }
 
     /**

@@ -13,4 +13,6 @@ public interface MyListDataSoruce {
     Single<List<Goods>> getMyListItems(String headerUid);
 
     Single<Boolean> saveMyList(List<Goods> goodsList,List<String> hashTag, GoodsListHeader header);
+
+    Single<Boolean> deleteMyList(String headerUid);
 }

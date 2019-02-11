@@ -17,6 +17,5 @@ public interface AddPostContract {
 
     interface Presenter extends BasePresenter {
         void addPost(String title, String content, List<Bitmap> bitmapList);
-        void takePicture();
     }
 }

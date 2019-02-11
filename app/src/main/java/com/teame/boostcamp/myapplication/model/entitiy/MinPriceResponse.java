@@ -6,6 +6,13 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class MinPriceResponse {
+    @Override
+    public String toString() {
+        return "MinPriceResponse{" +
+                "items=" + items +
+                '}';
+    }
+
     @SerializedName("items")
     @Expose
     private List<Item> items = null;
@@ -20,7 +27,6 @@ public class MinPriceResponse {
 
 
     public class Item {
-
         @SerializedName("link")
         @Expose
         private String link;
@@ -54,5 +60,16 @@ public class MinPriceResponse {
         public void setLprice(String lprice) {
             this.lprice = lprice;
         }
+
+
+        @Override
+        public String toString() {
+            return "Item{" +
+                    "link='" + link + '\'' +
+                    ", image='" + image + '\'' +
+                    ", lprice='" + lprice + '\'' +
+                    '}';
+        }
+
     }
 }

@@ -43,9 +43,10 @@
         <activity
             android:name=".ui.createlist.CreateListActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|adjustResize" />
+            android:windowSoftInputMode="adjustPan|adjustResize" >
+        </activity>
 
-        <activity android:name=".ui.listgoods.ListGoodsActivity"
+        <activity android:name=".ui.selectedgoods.SelectedGoodsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity

@@ -6,6 +6,8 @@ public class TextViewUtil {
 
     @BindingConversion
     public static String convertDoubleToDisplayedString(Double num) {
+        if(num==null)
+            return null;
         return num.toString();
     }
 

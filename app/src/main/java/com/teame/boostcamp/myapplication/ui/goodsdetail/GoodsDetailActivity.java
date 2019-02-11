@@ -3,17 +3,19 @@ package com.teame.boostcamp.myapplication.ui.goodsdetail;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
-import com.teame.boostcamp.myapplication.databinding.ActivityItemDetailBinding;
+import com.teame.boostcamp.myapplication.databinding.ActivityGoodsDetailBinding;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
@@ -23,10 +25,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class GoodsDetailActivity extends BaseMVPActivity<ActivityItemDetailBinding, GoodsDetailContract.Presenter> implements GoodsDetailContract.View, View.OnClickListener {
+public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBinding, GoodsDetailContract.Presenter> implements GoodsDetailContract.View, View.OnClickListener {
 
     // 테스트 Default값
-    private final static String EXTRA_ITEM_UID = "EXTRA_ITEM_UID";
+    private final static String EXTRA_GOODS = "EXTRA_GOODS";
 
     @Override
     protected GoodsDetailContract.Presenter getPresenter() {
@@ -36,12 +38,12 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityItemDetailBindi
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.activity_item_detail;
+        return R.layout.activity_goods_detail;
     }
 
-    public static void startActivity(Context context, String itemUid) {
+    public static void startActivity(Context context, Goods item) {
         Intent intent = new Intent(context, GoodsDetailActivity.class);
-        intent.putExtra(EXTRA_ITEM_UID, itemUid);
+        intent.putExtra(EXTRA_GOODS, item);
         context.startActivity(intent);
     }
 
@@ -65,14 +67,12 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityItemDetailBindi
 
     private void initView() {
         Intent intent = getIntent();
-        final String itemUid;
+        final Goods item;
+        item = intent.getParcelableExtra(EXTRA_GOODS);
 
-        if (intent.getStringExtra(EXTRA_ITEM_UID) != null) {
-            itemUid = intent.getStringExtra(EXTRA_ITEM_UID);
-        } else {
-            // 테스트 코드
-            itemUid = "ket1";
-        }
+        binding.setItem(item);
+        // 밑줄 넣기
+        binding.tvItemMinPrice.setPaintFlags(binding.tvItemMinPrice.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         GoodsDetailRecyclerAdapter adapter = new GoodsDetailRecyclerAdapter();
         adapter.setOnItemDeleteListener((v, position) -> {
@@ -87,16 +87,20 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityItemDetailBindi
                 new DividerItemDecorator(ContextCompat.getDrawable(getBaseContext()
                         , R.drawable.divider_decoration));
         binding.rvReplyList.addItemDecoration(dividerItemDecoration);
-        presenter.loadReplyList(adapter, itemUid);
 
-        // Default 5점
+        presenter.loadReplyList(adapter, item.getKey());
+        //Defailt 5점
         binding.etReview.setStarCount(5);
-
         binding.etReview.includeSelectRation.ivStar1.setOnClickListener(this);
         binding.etReview.includeSelectRation.ivStar2.setOnClickListener(this);
         binding.etReview.includeSelectRation.ivStar3.setOnClickListener(this);
         binding.etReview.includeSelectRation.ivStar4.setOnClickListener(this);
         binding.etReview.includeSelectRation.ivStar5.setOnClickListener(this);
+
+        binding.tvItemMinPrice.setOnClickListener(view -> {
+            Intent LpriceIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getLink()));
+            startActivity(LpriceIntent);
+        });
 
         binding.etReview.tvWriteReply.setOnClickListener(view -> {
             if (binding.etReview.tieWriteReview.getVisibility() == View.VISIBLE) {
@@ -109,12 +113,13 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityItemDetailBindi
                     hideSoftKeyboard(GoodsDetailActivity.this);
 
                     // TODO : key값 조정
-                    presenter.writeReply(itemUid, content, ratio);
+                    presenter.writeReply(item.getKey(), content, ratio);
                 } else {
                     showToast(getString(R.string.notice_reply_length));
                 }
-            }
+               }
         });
+
         binding.etReview.tvHintWrite.setOnClickListener(__ -> {
             DLogUtil.d("click");
             binding.viewFake.setVisibility(View.VISIBLE);
