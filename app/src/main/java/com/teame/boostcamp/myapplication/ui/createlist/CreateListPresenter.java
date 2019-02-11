@@ -85,8 +85,9 @@ public class CreateListPresenter implements CreateListContract.Presenter {
             int targetPosition = searchItem(item);
             if (targetPosition == -1)
                 return;
-            checkedAdapter.removeItem(targetPosition);
+
             minusCount();
+            checkedAdapter.removeItem(targetPosition);
         }
     }
 
@@ -122,7 +123,6 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         Goods deleteGoods = checkedList.get(position);
         int listPosition = adapter.searchItem(deleteGoods);
         view.notifyDeleteItem(listPosition, position);
-        minusCount();
     }
 
     @Override

@@ -7,12 +7,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
@@ -27,13 +25,11 @@ import com.teame.boostcamp.myapplication.ui.createlistinfo.CreateListInfo;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
-import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import androidx.databinding.ObservableField;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
@@ -185,7 +181,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         if (position == -1) {
             // 리스트에 아이템이 없으면
             int lastPosition = adapter.getItemCount();
-            addItem();
             DLogUtil.e("lastPositin : " + lastPosition);
             linearLayoutManager.scrollToPosition(lastPosition - 1);
         } else {
@@ -225,28 +220,21 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
             holder.itemView.findViewById(R.id.cv_item_layout).performClick();
         } else {
             ((GoodsListRecyclerAdapter) binding.rvRecommendList.getAdapter()).unCheckItem(position);
-            ((CheckedGoodsListRecyclerAdapter) binding.rvSelected.getAdapter()).removeItem(oldPosition);
+            binding.rvSelected.postDelayed(() ->
+                    ((CheckedGoodsListRecyclerAdapter)binding.rvSelected.getAdapter()).removeItem(oldPosition),1000);
             presenter.minusCount();
         }
-
     }
 
     @Override
     public void finishLoad(int size) {
         binding.includeLoading.lavLoading.cancelAnimation();
         binding.includeLoading.lavLoading.setVisibility(View.GONE);
-        if(size== Constant.LOADING_NONE_ITEM){
-            showLongToast(String.format(getString(R.string.none_item),getString(R.string.toast_goods)));
-        }else if(size== Constant.FAIL_LOAD){
+        if (size == Constant.LOADING_NONE_ITEM) {
+            showLongToast(String.format(getString(R.string.none_item), getString(R.string.toast_goods)));
+        } else if (size == Constant.FAIL_LOAD) {
             showLongToast(getString(R.string.fail_load));
         }
     }
 
-    public void addItem() {
-        String tmpString = countString.get();
-        int count = Integer.valueOf(tmpString);
-        countString.set(String.valueOf(++count));
-    }
-
-    }
 }
