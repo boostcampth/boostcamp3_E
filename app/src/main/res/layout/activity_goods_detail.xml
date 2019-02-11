@@ -14,6 +14,15 @@
         android:layout_height="match_parent"
         app:layoutDescription="@xml/motion_item_root">
 
+        <include android:id="@+id/include_loading"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            layout="@layout/layout_loading"/>
+
         <androidx.constraintlayout.motion.widget.MotionLayout
             android:id="@+id/ct_root"
             android:layout_width="match_parent"
@@ -101,17 +110,6 @@
                 tools:listitem="@layout/item_detail_reply" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <View
-            android:id="@+id/view_fake"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/background_transparent"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/et_review"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <include
             android:id="@+id/et_review"

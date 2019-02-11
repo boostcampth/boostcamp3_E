@@ -72,6 +72,7 @@
             android:textSize="14sp"
             android:maxLength="150"
             android:maxLines="3"
+            android:focusable="true"
             android:visibility="@{isExtend}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
