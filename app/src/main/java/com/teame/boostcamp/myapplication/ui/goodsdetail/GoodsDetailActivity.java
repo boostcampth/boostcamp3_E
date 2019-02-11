@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.ui.goodsdetail;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -8,19 +7,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ActivityGoodsDetailBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.DividerItemDecorator;
 import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 
@@ -110,9 +104,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
                 int ratio = binding.etReview.getStarCount();
                 String content = binding.etReview.tieWriteReview.getText().toString();
                 binding.etReview.setIsExtend(false);
-                hideSoftKeyboard(GoodsDetailActivity.this);
-
-                // TODO : key값 조정
+                InputKeyboardUtil.hideKeyboard(GoodsDetailActivity.this);
                 presenter.writeReply(item.getKey(), content, ratio);
             }
         });
@@ -123,7 +115,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
                 binding.etReview.tieWriteReview.postDelayed(() ->{
                     binding.etReview.tieWriteReview.requestFocus();
                 },50);
-                showKeyboard(this);
+                InputKeyboardUtil.showKeyboard(this);
             } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 view.performClick();
             }
@@ -134,24 +126,6 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-    }
-
-    public static void showKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null) {
-            inputMethodManager.toggleSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
-                    InputMethodManager.SHOW_FORCED, 0);
-        }
-    }
-
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null) {
-            inputMethodManager.hideSoftInputFromWindow(
-                    activity.getCurrentFocus().getWindowToken(), 0);
-        }
     }
 
     @Override
@@ -199,8 +173,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
             if (event.getAction() == MotionEvent.ACTION_UP
                     && (x < w.getLeft() || x >= w.getRight()
                     || y < w.getTop() || y > w.getBottom())) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+                InputKeyboardUtil.hideKeyboard(this);
                 binding.etReview.setIsExtend(false);
             }
         }

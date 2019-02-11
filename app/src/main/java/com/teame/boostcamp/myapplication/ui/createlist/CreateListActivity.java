@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.ui.createlist;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.teame.boostcamp.myapplication.R;
@@ -27,17 +25,16 @@ import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.createlistinfo.CreateListInfo;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.subjects.PublishSubject;
 
 public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBinding, CreateListContract.Presenter> implements CreateListContract.View {
 
@@ -263,8 +260,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
             if (event.getAction() == MotionEvent.ACTION_UP
                     && (x < w.getLeft() || x >= w.getRight()
                     || y < w.getTop() || y > w.getBottom()) ) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+                InputKeyboardUtil.hideKeyboard(this);
             }
         }
         return ret;
