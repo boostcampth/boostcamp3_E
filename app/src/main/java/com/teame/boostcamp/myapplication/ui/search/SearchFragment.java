@@ -218,7 +218,9 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
 
     @Override
     public void showUserPin(LatLng location) {
-        googleMap.addMarker(new MarkerOptions().position(location));
+        googleMap.addMarker(new MarkerOptions()
+                .position(location)
+                .icon(vectorDescriptor(getContext(),R.drawable.btn_uncllick_marker)));
     }
 
     public void hideUserPin(){
@@ -268,14 +270,6 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
         binding.includePeriodSetting.cvPeriodSetting.setVisibility(View.VISIBLE);
         binding.includeVisited.cvVisited.setVisibility(View.GONE);
         binding.fabCreateChecklist.show();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode==REQUEST_RESULT_CODE){
-            //TODO: 만약 UserShoppinglistActivity에서 Import를 했다면 여기서 처리
-            DLogUtil.e("진입!");
-        }
     }
 
     @Override
@@ -361,6 +355,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
                     }));
         }
         googleMap.setOnMarkerClickListener(marker -> {
+            marker.setIcon(vectorDescriptor(getContext(),R.drawable.btn_click_marker));
             presenter.getUserPinPreview(marker);
             currentMarker=marker;
             return true;
