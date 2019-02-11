@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.ui.login;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ActivityLoginBinding;
+import com.teame.boostcamp.myapplication.ui.MainActivity;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.signup.SignUpActivity;
 
@@ -56,9 +56,7 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     @Override
     public void succeedLogIn() {
         showToast(getString(R.string.login_success));
-        /*
-         * 메인 액티비티 이동 코드 작성
-         * */
+        MainActivity.startActivity(this);
         finish();
     }
 
@@ -71,9 +69,7 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     @Override
     public void isLogIn(boolean logInCheck) {
         if (logInCheck) {
-            /*
-            메인 액티비티로 이동 코드 작성
-             */
+            MainActivity.startActivity(this);
             finish();
         }
     }
