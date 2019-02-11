@@ -8,7 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.teame.boostcamp.myapplication.R;
@@ -20,6 +22,7 @@ import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.DividerItemDecorator;
+import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -104,48 +107,25 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
 
         binding.etReview.tvWriteReply.setOnClickListener(view -> {
             if (binding.etReview.tieWriteReview.getVisibility() == View.VISIBLE) {
-                String replyText = binding.etReview.tieWriteReview.getText().toString();
+                int ratio = binding.etReview.getStarCount();
+                String content = binding.etReview.tieWriteReview.getText().toString();
+                binding.etReview.setIsExtend(false);
+                hideSoftKeyboard(GoodsDetailActivity.this);
 
-                if (replyText.trim().length() >= 5) {
-                    int ratio = binding.etReview.getStarCount();
-                    String content = binding.etReview.tieWriteReview.getText().toString();
-                    binding.etReview.setIsExtend(false);
-                    hideSoftKeyboard(GoodsDetailActivity.this);
-
-                    // TODO : key값 조정
-                    presenter.writeReply(item.getKey(), content, ratio);
-                } else {
-                    showToast(getString(R.string.notice_reply_length));
-                }
-               }
+                // TODO : key값 조정
+                presenter.writeReply(item.getKey(), content, ratio);
+            }
         });
 
-        binding.etReview.tvHintWrite.setOnClickListener(__ -> {
-            DLogUtil.d("click");
-            binding.viewFake.setVisibility(View.VISIBLE);
-            binding.etReview.setIsExtend(true);
-            binding.etReview.tieWriteReview.post(() -> {
-                binding.etReview.tieWriteReview.setFocusableInTouchMode(true);
-                binding.etReview.tieWriteReview.requestFocus();
+        binding.etReview.tvHintWrite.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                binding.etReview.setIsExtend(true);
+                binding.etReview.tieWriteReview.postDelayed(() ->{
+                    binding.etReview.tieWriteReview.requestFocus();
+                },50);
                 showKeyboard(this);
-            });
-        });
-        binding.etReview.tieWriteReview.setOnClickListener(__ -> {
-            binding.viewFake.setVisibility(View.VISIBLE);
-        });
-        binding.viewFake.setOnTouchListener((v, event) -> {
-            DLogUtil.e("test");
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    binding.etReview.setIsExtend(false);
-                    hideSoftKeyboard(GoodsDetailActivity.this);
-                    binding.viewFake.setVisibility(View.GONE);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    v.performClick();
-                    break;
-                default:
-                    break;
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                view.performClick();
             }
             return false;
         });
@@ -200,5 +180,30 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
                 break;
 
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        View view = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(event);
+
+        if (view instanceof EditText) {
+
+            int scrcoords[] = new int[2];
+
+            binding.etReview.clEditLayout.getLocationOnScreen(scrcoords);
+            View w = binding.etReview.clEditLayout;
+            float x = event.getRawX() + w.getLeft() - scrcoords[0];
+            float y = event.getRawY() + w.getTop() - scrcoords[1];
+
+            if (event.getAction() == MotionEvent.ACTION_UP
+                    && (x < w.getLeft() || x >= w.getRight()
+                    || y < w.getTop() || y > w.getBottom())) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+                binding.etReview.setIsExtend(false);
+            }
+        }
+        return ret;
     }
 }
