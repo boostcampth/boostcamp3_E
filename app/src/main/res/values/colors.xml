@@ -10,4 +10,6 @@
     <color name="colorDivide">#EFF0F2</color>
     <color name="colorDivideShadow">#E4E4E4</color>
     <color name="colorClear">#00000000</color>
+    <color name="colorDeepSkyBlue">#00BFFF</color>
+    <color name="colorBlurGray">#CCA9A9A9</color>
 </resources>

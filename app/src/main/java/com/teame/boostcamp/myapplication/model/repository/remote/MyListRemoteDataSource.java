@@ -9,13 +9,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.gson.Gson;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
+import com.teame.boostcamp.myapplication.model.entitiy.MinPriceResponse;
 import com.teame.boostcamp.myapplication.model.repository.MyListDataSoruce;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import io.reactivex.Observable;
@@ -100,15 +103,18 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
                 .addOnFailureListener(e -> DLogUtil.e("error : " + e.toString()));
 
         // 가져온 리스트를 MinPriceAPI를 통해 최저가를 붙여준 후 모든아이템을 List로 반환해줌
-        return subject.flatMap(targetItem ->
+        return subject.zipWith(Observable.interval(200, TimeUnit.MILLISECONDS), (item, i) -> item).subscribeOn(Schedulers.io()).flatMap(targetItem ->
                 Observable.just(targetItem)
                         .observeOn(Schedulers.io())
                         .zipWith(MinPriceAPI.getInstance()
                                         .api
                                         .getMinPrice(targetItem.getName())
                                         .subscribeOn(Schedulers.io()),
-                                (item, minPriceResponse) -> {
+                                (item, response) -> {
+                                    MinPriceResponse minPriceResponse = response.body();
+                                    DLogUtil.d(item + "/" + minPriceResponse.toString());
                                     item.setMinPriceResponse(minPriceResponse);
+
                                     return item;
                                 }))
                 .toList();

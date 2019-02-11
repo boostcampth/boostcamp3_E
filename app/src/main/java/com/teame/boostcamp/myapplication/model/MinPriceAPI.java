@@ -5,6 +5,8 @@ import com.teame.boostcamp.myapplication.model.entitiy.MinPriceResponse;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -42,6 +44,6 @@ public class MinPriceAPI {
     public interface API {
         @GET("v1/search/shop.json?display=1&start=1&sort=asc")
         @Headers({"X-Naver-Client-Id:z9Z80PiumT1gVVUgqs6K", "X-Naver-Client-Secret:7TtoP9_U9U"})
-        Observable<MinPriceResponse> getMinPrice(@Query("query") String str);
+        Observable<Response<MinPriceResponse>> getMinPrice(@Query("query") String str);
     }
 }
