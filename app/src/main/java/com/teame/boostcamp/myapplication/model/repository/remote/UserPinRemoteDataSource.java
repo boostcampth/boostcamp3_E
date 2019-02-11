@@ -26,6 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
+import com.teame.boostcamp.myapplication.model.entitiy.MinPriceResponse;
 import com.teame.boostcamp.myapplication.model.entitiy.UserPinPreview;
 import com.teame.boostcamp.myapplication.model.repository.UserPinDataSource;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
@@ -102,7 +103,8 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
                                         .api
                                         .getMinPrice(targetItem.getName())
                                         .subscribeOn(Schedulers.io()),
-                                (item, minPriceResponse) -> {
+                                (item, response) -> {
+                                    MinPriceResponse minPriceResponse = response.body();
                                     item.setMinPriceResponse(minPriceResponse);
                                     return item;
                                 }))
