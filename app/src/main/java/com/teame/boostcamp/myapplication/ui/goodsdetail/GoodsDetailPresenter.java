@@ -3,6 +3,7 @@ package com.teame.boostcamp.myapplication.ui.goodsdetail;
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
+import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -25,9 +26,13 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
         disposable.add(repository.getReplyList(itemUid)
                 .subscribe(list -> {
                             adapter.initItems(list);
+                            view.finishLoad(list.size());
                             DLogUtil.d(list.toString());
                         },
-                        e -> DLogUtil.e(e.getMessage()))
+                        e -> {
+                            view.finishLoad(Constant.FAIL_LOAD);
+                            DLogUtil.e(e.getMessage());
+                        })
         );
     }
 

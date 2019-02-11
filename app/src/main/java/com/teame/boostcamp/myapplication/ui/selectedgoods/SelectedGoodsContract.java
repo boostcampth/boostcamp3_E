@@ -13,6 +13,8 @@ public interface SelectedGoodsContract {
         void saveCheckedList(List<Goods> list);
 
         void showDetailItem(Goods item);
+
+        void finishLoad(int size);
     }
 
     interface Presenter extends BasePresenter {
