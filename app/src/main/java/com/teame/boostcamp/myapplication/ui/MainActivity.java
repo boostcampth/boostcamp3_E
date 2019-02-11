@@ -32,7 +32,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         super.onCreate(savedInstanceState);
         binding.bnvMainNavigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
         setupViewPager();
-        showToast(FirebaseAuth.getInstance().getUid());
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
@@ -7,8 +7,8 @@
             name="post"
             type="com.teame.boostcamp.myapplication.model.entitiy.Post" />
         <variable
-            name="uid"
-            type="String"/>
+            name="auth"
+            type="com.google.firebase.auth.FirebaseAuth"/>
 
     </data>
     <com.google.android.material.card.MaterialCardView
@@ -26,46 +26,95 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_post_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="@{post.title}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/vp_post_images"
-                android:layout_width="0dp"
-                android:layout_height="350dp"
+                android:layout_width="match_parent"
+                android:layout_height="346dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:scaleType="centerCrop"
-                app:layout_constraintBottom_toTopOf="@+id/tv_post_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_post_email"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintTop_toBottomOf="@+id/tv_post_hashtags">
+
+
+            </androidx.viewpager.widget.ViewPager>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/vp_post_images">
+
+                <ImageView
+                    android:id="@+id/iv_post_like"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/colorWhite"
+                    android:src="@{post.likedUidList.contains(auth.getUid()) ? @drawable/btn_liked : @drawable/btn_like}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/btn_liked" />
+
+                <ImageView
+                    android:id="@+id/iv_post_reply"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_post_like"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/btn_post_reply" />
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tl_image_indicator"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+                    android:layout_marginStart="90dp"
+                    android:layout_marginLeft="90dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="90dp"
+                    android:layout_marginRight="90dp"
+                    android:layout_marginBottom="8dp"
                     android:visibility="@{post.imagePathList.size()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:tabBackground="@drawable/selector_tab"
                     app:tabGravity="center"
                     app:tabIndicatorHeight="0dp" />
 
-            </androidx.viewpager.widget.ViewPager>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/appCompatTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                android:text="@{@string/like + Integer.toString(post.like) + @string/like_number}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cl_buttons"
+                tools:text="좋아요 123개" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_post_content"
@@ -73,51 +122,51 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginBottom="16dp"
                 android:text="@{post.content}"
-                app:layout_constraintBottom_toTopOf="@+id/tv_post_hashtags"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatTextView"
+                tools:text="오랜만에 여행을 갔다 영행을 가서 너무 좋았다 사고싶은것도 막 샀다 너무 재밋었다 ㅎㅎ" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_post_hashtags"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:text="hashTags"
-                app:layout_constraintBottom_toTopOf="@+id/ib_post_like"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_post_email" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_post_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="@{post.userData.userEmail}"
+                android:text="@{auth.getCurrentUser().getEmail()}"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_post_title" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="aaa@aaa.com" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/ib_post_like"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/colorWhite"
-                android:src="@{post.likedUidList.contains(uid) ? @drawable/btn_liked : @drawable/btn_like}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tv_post_like_count" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_post_like_count"
@@ -128,7 +177,9 @@
                 android:layout_marginBottom="8dp"
                 android:text="@{Integer.toString(post.like)}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cl_buttons"
+                tools:text="123"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

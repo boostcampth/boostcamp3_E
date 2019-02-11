@@ -56,6 +56,8 @@
         <activity
             android:name=".ui.createlistinfo.CreateListInfo"
             android:label="@string/title_activity_create_list_info"></activity>
+
+        <activity android:name=".ui.postreply.PostReplyActivity"/>
     </application>
 
     <!-- 네이버 쇼핑 API

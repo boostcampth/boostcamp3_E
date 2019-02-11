@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemPostBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
+import com.teame.boostcamp.myapplication.ui.postreply.PostReplyActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +55,13 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
         holder.binding.setPost(postList.get(i));
-        holder.binding.setUid(FirebaseAuth.getInstance().getUid());
-        holder.binding.ibPostLike.setOnClickListener(__ -> {
+        holder.binding.setAuth(FirebaseAuth.getInstance());
+        holder.binding.ivPostReply.setOnClickListener(__ -> onReplyButtonClick(i));
+        holder.binding.ivPostLike.setOnClickListener(__ -> {
             onLikeButtonClick(i);
         });
         holder.binding.vpPostImages.setAdapter(new PostImagePagerAdapter(context, postList.get(i).getImagePathList()));
+        holder.binding.tlImageIndicator.setupWithViewPager(holder.binding.vpPostImages, true);
 
     }
     @Override
@@ -81,6 +84,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
     @Override
     public int getItemCount() {
         return postList.size();
+    }
+
+    @Override
+    public void onReplyButtonClick(int i) {
+        PostReplyActivity.startActivity(context, FirebaseAuth.getInstance().getUid()+postList.get(i).getCreatedDate());
     }
 
     @Override
