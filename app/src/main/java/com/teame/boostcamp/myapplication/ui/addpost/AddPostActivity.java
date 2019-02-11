@@ -92,14 +92,13 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     }
 
     private void onAddPostButtonClicked() {
-        String title = binding.tietPostTitle.getText().toString();
         String content = binding.tietPostContent.getText().toString();
 
-        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
-            presenter.addPost(title, content, adapter.getBitmapList());
+        if (!TextUtils.isEmpty(content)) {
+            presenter.addPost(content, adapter.getBitmapList());
         }
         else{
-            showToast("제목과 내용을 입력해 주세요");
+            showToast("내용을 입력해 주세요");
         }
     }
 

@@ -28,17 +28,19 @@ public class AddPostPresenter implements AddPostContract.Presenter {
 
 
     @Override
-    public void addPost(String title, String content, List<Bitmap> bitmapList) {
+    public void addPost(String content, List<Bitmap> bitmapList) {
         auth = FirebaseAuth.getInstance();
         ArrayList<String> storagePathList = new ArrayList<>();
+        Post post = new Post(content, FirebaseAuth.getInstance().getCurrentUser().getEmail(), storagePathList);
+
         for(int i=0; i<bitmapList.size(); i++){
-            mStorageRef = FirebaseStorage.getInstance().getReference().child("images/post/"+auth.getUid() + "/" + title + "/" + i + ".jpg");
-            storagePathList.add("images/post/"+auth.getUid() + "/" + title + "/" + i + ".jpg");
+            mStorageRef = FirebaseStorage.getInstance().getReference().child("images/post/"+auth.getUid() + "/" + post.getCreatedDate() + "/" + i + ".jpg");
+            post.getImagePathList().add("images/post/"+auth.getUid() + "/" + post.getCreatedDate() + "/" + i + ".jpg");
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmapList.get(i).compress(Bitmap.CompressFormat.JPEG, 100, baos);
             mStorageRef.putBytes(baos.toByteArray());
         }
-        Post post = new Post(title, content, storagePathList);
+
         db = FirebaseFirestore.getInstance();
         db.collection(POST_PATH)
                 .document(FirebaseAuth.getInstance().getUid()+post.getCreatedDate())

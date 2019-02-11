@@ -1,9 +1,12 @@
 package com.teame.boostcamp.myapplication.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;
@@ -17,6 +20,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_main;
+    }
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
     }
 
     @Override

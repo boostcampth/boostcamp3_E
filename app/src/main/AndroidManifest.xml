@@ -23,8 +23,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD9S-SgzzyU7zPnlQYTC_5KFEfwLwDF2eY" />
 
-        <activity android:name=".ui.MainActivity"
-            android:theme="@style/MainFragmentTheme"
+        <activity android:name=".ui.login.LoginActivity"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +33,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.example.ExampleActivity"/>
-        <activity android:name=".ui.login.LoginActivity" />
+
+        <activity android:name=".ui.MainActivity"
+            android:theme="@style/MainFragmentTheme"
+            android:windowSoftInputMode="adjustPan|adjustResize"/>
+
         <activity android:name=".ui.signup.SignUpActivity" />
         <activity android:name=".ui.addpost.AddPostActivity"/>
 
@@ -52,6 +56,8 @@
         <activity
             android:name=".ui.createlistinfo.CreateListInfo"
             android:label="@string/title_activity_create_list_info"></activity>
+
+        <activity android:name=".ui.postreply.PostReplyActivity"/>
     </application>
 
     <!-- 네이버 쇼핑 API

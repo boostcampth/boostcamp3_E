@@ -21,15 +21,7 @@
                 android:hint="제목"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-
-                    android:id="@+id/tiet_post_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_preview_image"
@@ -94,7 +86,7 @@
                 android:background="@color/colorWhite"
                 app:layout_constraintEnd_toStartOf="@+id/ib_take_picture"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_post_title"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/btn_image_add" />
 
             <androidx.appcompat.widget.AppCompatImageButton
@@ -107,7 +99,7 @@
                 android:background="@color/colorWhite"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ib_gallery_pick"
-                app:layout_constraintTop_toBottomOf="@+id/til_post_title"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/btn_camera" />
 
             <com.google.android.material.button.MaterialButton
