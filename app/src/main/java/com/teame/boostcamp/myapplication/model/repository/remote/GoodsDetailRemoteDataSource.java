@@ -13,7 +13,6 @@ import com.teame.boostcamp.myapplication.util.DLogUtil;
 import java.util.Date;
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 

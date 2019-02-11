@@ -4,16 +4,15 @@ import android.text.TextUtils;
 
 import com.teame.boostcamp.myapplication.adapter.CheckedGoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.SelectedGoodsRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import androidx.databinding.ObservableField;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class CreateListPresenter implements CreateListContract.Presenter {
@@ -24,6 +23,8 @@ public class CreateListPresenter implements CreateListContract.Presenter {
     private List<Goods> checkedList = new ArrayList<>();
     private GoodsListRecyclerAdapter adapter;
     private CheckedGoodsListRecyclerAdapter checkedAdapter;
+    private ObservableField<String> count = new ObservableField<>("0");
+
     CreateListPresenter(CreateListContract.View view, GoodsListRepository shoppingListRepository) {
         this.view = view;
         this.shoppingListRepository = shoppingListRepository;
@@ -79,10 +80,13 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         final Goods item = adapter.getItem(position);
         if (isCheck) {
             checkedAdapter.addItem(item);
+            addCount();
         } else {
             int targetPosition = searchItem(item);
-            if(targetPosition == -1)
+            if (targetPosition == -1)
                 return;
+
+            minusCount();
             checkedAdapter.removeItem(targetPosition);
         }
     }
@@ -96,6 +100,7 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         if (hitPosition == -1) {
             adapter.addItem(item);
             checkedAdapter.addItem(item);
+            addCount();
         }
 
         view.showAddedGoods(hitPosition);
@@ -117,9 +122,20 @@ public class CreateListPresenter implements CreateListContract.Presenter {
     public void deleteItem(int position) {
         Goods deleteGoods = checkedList.get(position);
         int listPosition = adapter.searchItem(deleteGoods);
-        view.notifyDeleteItem(listPosition,position);
+        view.notifyDeleteItem(listPosition, position);
     }
 
+    @Override
+    public void minusCount() {
+        String tmpString = count.get();
+        int tempCount = Integer.valueOf(tmpString);
+        count.set(String.valueOf(--tempCount));
+    }
+    private void addCount() {
+        String tmpString = count.get();
+        int tempCount = Integer.valueOf(tmpString);
+        count.set(String.valueOf(++tempCount));
+    }
 
     /**
      * ItemName을 기준으로 해당 아이템 position 반환
@@ -134,5 +150,9 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         }
         // 아이템이 없다면
         return -1;
+    }
+
+    public ObservableField<String> getCount() {
+        return count;
     }
 }
