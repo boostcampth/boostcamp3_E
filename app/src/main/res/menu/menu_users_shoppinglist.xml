@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:title="import"
-        android:icon="@drawable/btn_importbutton"
+        android:icon="@drawable/btn_add_item"
         android:id="@+id/backbutton"
         app:showAsAction="ifRoom"/>
 </menu>

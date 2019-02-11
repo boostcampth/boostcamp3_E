@@ -9,5 +9,12 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
     app:cardBackgroundColor="@color/colorWhite"
     app:cardCornerRadius="10dp">
 
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/mcv_period"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:mcv_showOtherDates="all"
+        app:mcv_selectionMode="range"/>
+
 </com.google.android.material.card.MaterialCardView>
 </layout>

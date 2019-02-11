@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.ui.search;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,14 +11,15 @@ import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ActivityUsersShoppinglistBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
+import com.teame.boostcamp.myapplication.util.RxUserShoppingListActivityResult;
 
 import java.util.ArrayList;
 
 public class UserShoppinglistActivity extends BaseMVPActivity<ActivityUsersShoppinglistBinding, UserShoppinglistContract.Presenter> {
 
     private static final String EXTRA_GOODSLIST="EXTRA_GOODSLIST";
-    private static final int REQUEST_CODE=111;
     private ArrayList<Goods> goodsArrayList;
+    private ArrayList<Goods> selectedList;
 
     @Override
     protected UserShoppinglistContract.Presenter getPresenter() {
@@ -48,6 +48,11 @@ public class UserShoppinglistActivity extends BaseMVPActivity<ActivityUsersShopp
         switch(item.getItemId()){
             case R.id.tb_back_import:
                 return true;
+            case android.R.id.home:
+                //Test
+                Intent result=new Intent();
+                RxUserShoppingListActivityResult.getInstance().register(result);
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -66,6 +71,6 @@ public class UserShoppinglistActivity extends BaseMVPActivity<ActivityUsersShopp
     public static void startActivity(Context context, ArrayList<Goods> goodslist){
         Intent intent=new Intent(context,UserShoppinglistActivity.class);
         intent.putParcelableArrayListExtra(EXTRA_GOODSLIST,goodslist);
-        ((Activity)context).startActivityForResult(intent,REQUEST_CODE);
+        context.startActivity(intent);
     }
 }

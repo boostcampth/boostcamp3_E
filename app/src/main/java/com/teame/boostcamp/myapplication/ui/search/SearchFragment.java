@@ -22,18 +22,21 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSearchBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.entitiy.UserPinPreview;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
+import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
+import com.teame.boostcamp.myapplication.util.RxUserShoppingListActivityResult;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,19 +48,23 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchContract.Presenter> implements OnMapReadyCallback, SearchContract.View {
 
+    private static final String EXTRA_GOODSLIST="EXTRA_GOODSLIST";
     private GoogleMap googleMap=null;
     private static final float ZOOM=16;
-    private Disposable disposable;
+    private CompositeDisposable disposable=new CompositeDisposable();
     private Marker userMarker=null;
     private boolean isShowUserPin=false;
     private String currentNation="";
     private String currentCity="";
     private Marker currentMarker;
     private static final int REQUEST_RESULT_CODE=111;
+    private boolean isSelectedGoods=false;
+    private ArrayList<Goods> selectedGoodsList;
+
     @Override
     protected int getLayoutResourceId() {
         return R.layout.fragment_search;
@@ -136,6 +143,18 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
         binding.includeUserShoppingPreview.cvUserShoppingPreview.setOnClickListener(__ -> {
             presenter.getUserPinGoodsList(currentMarker);
         });
+        binding.fabCreateChecklist.hide();
+        binding.fabCreateChecklist.setOnClickListener(v -> {
+            List<CalendarDay> selectedDates=binding.includePeriodSetting.mcvPeriod.getSelectedDates();
+            Date startDate= java.sql.Date.valueOf(selectedDates.get(0).getDate().toString());
+            Date endDate= java.sql.Date.valueOf(selectedDates.get(selectedDates.size()-1).getDate().toString());
+            DLogUtil.e(endDate.toString());
+            GoodsListHeader header=new GoodsListHeader(currentNation,currentCity,startDate,endDate);
+            if(isSelectedGoods)
+                CreateListActivity.startActivity(getContext(),header,selectedGoodsList);
+            else
+                CreateListActivity.startActivity(getContext(),header);
+        });
 
         //presenter setting
         presenter.setAdpaterView(adapter);
@@ -176,6 +195,16 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
 
     @Override
     public void showUserGoodsListActivity(List<Goods> list) {
+        disposable.add(RxUserShoppingListActivityResult.getInstance()
+                .getEvent()
+                .subscribe(object->{
+                    if(object instanceof Intent){
+                        isSelectedGoods=true;
+                        selectedGoodsList=((Intent)object).getParcelableArrayListExtra(EXTRA_GOODSLIST);
+                    }
+                },error->{
+                    DLogUtil.e(error.getMessage());
+                }));
         UserShoppinglistActivity.startActivity(getContext(),(ArrayList<Goods>)list);
     }
 
@@ -236,13 +265,16 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
 
     @Override
     public void showPeriodSetting() {
-
+        binding.includePeriodSetting.cvPeriodSetting.setVisibility(View.VISIBLE);
+        binding.includeVisited.cvVisited.setVisibility(View.GONE);
+        binding.fabCreateChecklist.show();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode==REQUEST_RESULT_CODE){
             //TODO: 만약 UserShoppinglistActivity에서 Import를 했다면 여기서 처리
+            DLogUtil.e("진입!");
         }
     }
 
@@ -275,6 +307,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     @Override
     public void onDetach() {
         presenter.onDetach();
+        disposable.dispose();
         super.onDetach();
     }
 
@@ -312,7 +345,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
             });
         }
         else{
-            disposable = TedPermissionUtil.requestPermission(getContext(),getString(R.string.permission_location_title),getString(R.string.permission_location_message),TedPermissionUtil.LOCATION)
+            disposable.add(TedPermissionUtil.requestPermission(getContext(),getString(R.string.permission_location_title),getString(R.string.permission_location_message),TedPermissionUtil.LOCATION)
                     .subscribe(tedPermissionResult -> {
                         if(tedPermissionResult.isGranted()) {
                             fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
@@ -325,7 +358,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
                                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt, ZOOM));
                             });
                         }
-                    });
+                    }));
         }
         googleMap.setOnMarkerClickListener(marker -> {
             presenter.getUserPinPreview(marker);

@@ -38,6 +38,7 @@ import io.reactivex.subjects.PublishSubject;
 public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBinding, CreateListContract.Presenter> implements CreateListContract.View {
 
     private static final String EXTRA_GOODS_LIST_HDAER = "EXTRA_GOODS_LIST_HDAER";
+    private static final String EXTRA_SELECTED_GOODS_LIST = "EXTRA_SELECTED_GOODS_LIST";
     CompositeDisposable disposable = new CompositeDisposable();
     ObservableField<String> countString = new ObservableField<>("0");
 
@@ -85,6 +86,12 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         context.startActivity(intent);
     }
 
+    public static void startActivity(Context context, GoodsListHeader header, ArrayList<Goods> goodslist) {
+        Intent intent = new Intent(context, CreateListActivity.class);
+        intent.putExtra(EXTRA_GOODS_LIST_HDAER, header);
+        intent.putParcelableArrayListExtra(EXTRA_SELECTED_GOODS_LIST,goodslist);
+        context.startActivity(intent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

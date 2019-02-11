@@ -24,6 +24,13 @@ public class GoodsListHeader implements Parcelable {
     public GoodsListHeader(){
     }
 
+    public GoodsListHeader(String nation, String city, Date startDate, Date endDate){
+        this.nation=nation;
+        this.city=city;
+        this.startDate=startDate;
+        this.endDate=endDate;
+    }
+
     protected GoodsListHeader(Parcel in) {
         key = in.readString();
         uid = in.readString();

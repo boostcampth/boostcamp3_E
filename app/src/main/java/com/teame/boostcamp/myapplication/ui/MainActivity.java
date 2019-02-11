@@ -1,6 +1,7 @@
 package com.teame.boostcamp.myapplication.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -10,6 +11,7 @@ import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;
 import com.teame.boostcamp.myapplication.ui.search.SearchFragment;
 import com.teame.boostcamp.myapplication.ui.base.BaseActivity;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
@@ -41,6 +43,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         }
         return false;
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupViewPager() {

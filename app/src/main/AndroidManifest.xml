@@ -36,7 +36,8 @@
         <activity android:name=".ui.login.LoginActivity" />
         <activity android:name=".ui.signup.SignUpActivity" />
         <activity android:name=".ui.addpost.AddPostActivity"/>
-
+        <activity android:name=".ui.search.UserShoppinglistActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.goodsdetail.GoodsDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>

@@ -42,8 +42,6 @@ public class SearchPresenter implements SearchContract.Presenter {
     private UserPinRepository remote;
     private CompositeDisposable disposable=new CompositeDisposable();
     private HashMap<LatLng,String> userPinMap=new HashMap<>();
-    private String currentNation="";
-    private String currentCity="";
 
 
     @Override
@@ -68,7 +66,6 @@ public class SearchPresenter implements SearchContract.Presenter {
         }else{
             exList=gson.fromJson(list,new TypeToken<ArrayList<String>>(){}.getType());
         }
-        remote.setLocation("jFmxvr9GuQzaPjLkVnNa",new LatLng(34.6937378,135.50216509999998));
         DLogUtil.e(exList.toString());
     }
 
@@ -119,9 +116,9 @@ public class SearchPresenter implements SearchContract.Presenter {
             List<Address> geoResult=geocoder.getFromLocationName(place,1);
             LatLng latlon=new LatLng(geoResult.get(0).getLatitude(),geoResult.get(0).getLongitude());
             DLogUtil.e(geoResult.toString());
-            currentNation=geoResult.get(0).getCountryCode();
-            currentCity=geoResult.get(0).getFeatureName();
-            view.showPositionInMap(latlon,currentNation,currentCity);
+            String nationCode=geoResult.get(0).getCountryCode();
+            String cityName=geoResult.get(0).getFeatureName().replace(" ","");
+            view.showPositionInMap(latlon,nationCode,cityName);
             view.hideExSearchView();
             disposable.add(remote.getUserVisitedLocation(latlon)
                                 .subscribe(pairlist -> {
