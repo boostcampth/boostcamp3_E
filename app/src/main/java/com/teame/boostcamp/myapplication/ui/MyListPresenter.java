@@ -4,6 +4,7 @@ package com.teame.boostcamp.myapplication.ui;
 import com.teame.boostcamp.myapplication.adapter.GoodsListHeaderRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
+import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -26,9 +27,13 @@ public class MyListPresenter implements MyListContract.Presenter {
         disposable.add(repository.getMyList()
                 .subscribe(list -> {
                             DLogUtil.d(list.toString());
+                            view.finishLoad(list.size());
                             adapter.initItems(list);
                         },
-                        e -> DLogUtil.e(e.getMessage()))
+                        e -> {
+                            view.finishLoad(Constant.FAIL_LOAD);
+                            DLogUtil.e(e.getMessage());
+                        })
         );
     }
 

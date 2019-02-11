@@ -8,6 +8,8 @@ interface MyListContract {
 
     interface View extends BaseView<Presenter> {
         void showMyListItems(String headerKey);
+
+        void finishLoad(int size);
     }
 
     interface Presenter extends BasePresenter {

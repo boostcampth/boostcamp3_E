@@ -8,6 +8,8 @@ public interface GoodsDetailContract {
 
     interface View extends BaseView<Presenter> {
         void successWriteItem();
+
+        void finishLoad(int size);
     }
 
     interface Presenter extends BasePresenter {

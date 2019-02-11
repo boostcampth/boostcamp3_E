@@ -74,10 +74,11 @@ public class GoodsDetailRemoteDataSource implements GoodsDetailDataSource {
         Date nowDate = new Date(now);
         reply.setWriteDate(nowDate);
         PublishSubject<Reply> subject = PublishSubject.create();
-        String key = replyRef.getId();
-        Task saveReply = replyRef.document(key)
+        String key = replyRef.document(itemUid).collection(QUERY_GOODS_REPLY).document().getId();
+        Task saveReply = replyRef.document(itemUid)
                 .collection(QUERY_GOODS_REPLY)
-                .add(reply)
+                .document(key)
+                .set(reply)
                 .addOnSuccessListener(aVoid -> {
                     reply.setKey(key);
                     subject.onNext(reply);

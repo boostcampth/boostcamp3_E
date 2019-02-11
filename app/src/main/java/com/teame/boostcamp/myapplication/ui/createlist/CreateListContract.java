@@ -21,6 +21,8 @@ public interface CreateListContract {
         void showDetailItem(Goods item);
 
         void notifyDeleteItem(int position,int oldPosition);
+
+        void finishLoad(int size);
     }
 
     interface Presenter extends BasePresenter {
