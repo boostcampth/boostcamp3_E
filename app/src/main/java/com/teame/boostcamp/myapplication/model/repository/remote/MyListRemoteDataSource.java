@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.model.repository.remote;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -9,7 +8,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
-import com.google.gson.Gson;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
@@ -20,7 +18,6 @@ import com.teame.boostcamp.myapplication.util.DLogUtil;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
@@ -30,6 +27,7 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
     private static final String QUERY_USER = "users";
     private static final String QUERY_MY_LIST = "mylist";
     private static final String QUERY_MY_GOODS = "items";
+    private static final String QUERT_LOCATION = "location";
     private static MyListRemoteDataSource INSTANCE;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -130,16 +128,25 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
         CollectionReference myListRef = userRef.document(uid).collection(QUERY_MY_LIST);
         String myListUid = myListRef.document().getId();
 
+        //마이리스트용
         DocumentReference myListDocRef = myListRef.document(myListUid);
         CollectionReference myListItemRef = myListDocRef.collection(QUERY_MY_GOODS);
+
+        //위치검색용
+        DocumentReference locationRef = db.collection(QUERT_LOCATION).document(myListUid);
+        CollectionReference locationItemRef = db.collection(QUERT_LOCATION).document(myListUid)
+                .collection(QUERY_MY_GOODS);
 
         // 선택된 각 아이템을 ID, Item 할당
         WriteBatch batch = db.batch();
         batch.set(myListDocRef, header);
+        batch.set(locationRef, header);
         for (Goods item : goodsList) {
             DocumentReference itemRef = myListItemRef.document(item.getKey());
             batch.set(itemRef, item);
+            batch.set(locationItemRef.document(item.getKey()), header);
         }
+
 
         batch.commit()
                 .addOnCompleteListener(task -> {
