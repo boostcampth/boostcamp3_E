@@ -49,5 +49,8 @@
     <string name="cancel_create_list">선택한 내용이 전부 사라질수 있습니다.\n 정말 뒤로가시겠 습니까?</string>
     <string name="confirm">확인</string>
     <string name="notice_reply_length">댓글은 5자 이상 입력해 주세요.</string>
+    <string name="post_replay_hint">댓글 달기...</string>
+    <string name="like">좋아요  </string>
+    <string name="like_number">개</string>
 
 </resources>
