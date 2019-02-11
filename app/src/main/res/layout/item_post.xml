@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="post"
+            type="com.teame.boostcamp.myapplication.model.entitiy.Post" />
+        <variable
+            name="uid"
+            type="String"/>
 
+    </data>
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_post"
         style="@style/Widget.MaterialComponents.CardView"
@@ -27,26 +35,26 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="title"
+                android:text="@{post.title}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_post_images"
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/vp_post_images"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginLeft="50dp"
+                android:layout_height="350dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="50dp"
-                android:layout_marginRight="50dp"
                 android:layout_marginBottom="8dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/tv_post_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_post_email" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_post_email">
+
+            </androidx.viewpager.widget.ViewPager>
+
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_post_content"
@@ -56,7 +64,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="contents"
+                android:text="@{post.content}"
                 app:layout_constraintBottom_toTopOf="@+id/tv_post_hashtags"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -83,7 +91,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="email(nickname)"
+                android:text="@{post.userData.userEmail}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_post_title" />
@@ -96,6 +104,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
                 android:background="@color/colorWhite"
+                android:src="@{post.likedUidList.contains(uid) ? @drawable/btn_liked : @drawable/btn_like}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tv_post_like_count" />
 
@@ -106,6 +115,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
+                android:text="@{Integer.toString(post.like)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
