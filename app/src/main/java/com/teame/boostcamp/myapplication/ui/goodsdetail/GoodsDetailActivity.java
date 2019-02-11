@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.ui.goodsdetail;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -8,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.airbnb.lottie.LottieDrawable;
@@ -19,7 +17,6 @@ import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.DividerItemDecorator;
 import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 
