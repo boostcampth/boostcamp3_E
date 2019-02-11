@@ -6,7 +6,6 @@ import android.view.View;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsListHeaderRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.OnItemAlaramListener;
 import com.teame.boostcamp.myapplication.databinding.FragmentMyListBinding;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
