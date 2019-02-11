@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class Post {
-    private String title;
     private String content;
     private User userData;
+    private String writer;
     private Object itemList;
     private int like;
     private String createdDate;
@@ -15,21 +15,14 @@ public class Post {
 
     public Post(){};
 
-    public Post(String title, String content, ArrayList<String> imagePathList){
-        this.title = title;
+    public Post(String content, String writer, ArrayList<String> imagePathList){
+
         this.content = content;
         this.imagePathList = imagePathList;
         this.like = 0;
+        this.writer = writer;
         this.likedUidList = new ArrayList<>();
         this.createdDate = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(System.currentTimeMillis());
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getContent() {
@@ -100,4 +93,11 @@ public class Post {
         this.like -=1;
     }
 
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
 }

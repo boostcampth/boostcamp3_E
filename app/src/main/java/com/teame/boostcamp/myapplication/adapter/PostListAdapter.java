@@ -55,7 +55,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
         holder.binding.setPost(postList.get(i));
-        holder.binding.setAuth(FirebaseAuth.getInstance());
+        holder.binding.setUid(FirebaseAuth.getInstance().getUid());
         holder.binding.ivPostReply.setOnClickListener(__ -> onReplyButtonClick(i));
         holder.binding.ivPostLike.setOnClickListener(__ -> {
             onLikeButtonClick(i);

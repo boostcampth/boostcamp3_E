@@ -7,8 +7,8 @@
             name="post"
             type="com.teame.boostcamp.myapplication.model.entitiy.Post" />
         <variable
-            name="auth"
-            type="com.google.firebase.auth.FirebaseAuth"/>
+            name="uid"
+            type= "String"/>
 
     </data>
     <com.google.android.material.card.MaterialCardView
@@ -33,7 +33,6 @@
                 android:layout_marginTop="8dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_post_hashtags">
 
@@ -60,7 +59,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:background="@color/colorWhite"
-                    android:src="@{post.likedUidList.contains(auth.getUid()) ? @drawable/btn_liked : @drawable/btn_like}"
+                    android:src="@{post.likedUidList.contains(uid) ? @drawable/btn_liked : @drawable/btn_like}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -91,10 +90,8 @@
                     android:visibility="@{post.imagePathList.size()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
                     app:tabBackground="@drawable/selector_tab"
                     app:tabGravity="center"
                     app:tabIndicatorHeight="0dp" />
@@ -129,7 +126,6 @@
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appCompatTextView"
                 tools:text="오랜만에 여행을 갔다 영행을 가서 너무 좋았다 사고싶은것도 막 샀다 너무 재밋었다 ㅎㅎ" />
@@ -158,27 +154,13 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="@{auth.getCurrentUser().getEmail()}"
+                android:text="@{post.writer}"
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="aaa@aaa.com" />
-
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_post_like_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@{Integer.toString(post.like)}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cl_buttons"
-                tools:text="123"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
