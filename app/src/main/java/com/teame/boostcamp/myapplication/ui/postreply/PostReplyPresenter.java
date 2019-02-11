@@ -24,7 +24,10 @@ public class PostReplyPresenter implements PostReplyContract.Presenter {
 
     @Override
     public void onDetach() {
-
+        this.view = null;
+        if(disposable!=null && !disposable.isDisposed()){
+            disposable.dispose();
+        }
     }
 
     @Override
