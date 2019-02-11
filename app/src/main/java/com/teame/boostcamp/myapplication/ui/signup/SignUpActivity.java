@@ -111,7 +111,7 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
             sex = "M";
         }
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(sex) && age > 1) {
-            User userData = new User(email, password, age, sex);
+            User userData = new User(email, age, sex);
             presenter.doSignUp(email, password, userData);
 
 

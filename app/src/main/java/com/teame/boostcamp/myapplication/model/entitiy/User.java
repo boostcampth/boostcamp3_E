@@ -3,16 +3,14 @@ package com.teame.boostcamp.myapplication.model.entitiy;
 public class User {
 
     private String userEmail;
-    private String userPassword;
     private int userAge;
     private String userSex;
 
     public User() {
     }
 
-    public User(String userEmail, String userPassword, int userAge, String userSex) {
+    public User(String userEmail, int userAge, String userSex) {
         this.userEmail = userEmail;
-        this.userPassword = userPassword;
         this.userAge = userAge;
         this.userSex = userSex;
     }
@@ -27,10 +25,6 @@ public class User {
 
     public String getUserSex() {
         return userSex;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
     }
 
 }
