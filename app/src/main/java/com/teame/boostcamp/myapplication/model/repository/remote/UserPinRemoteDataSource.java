@@ -7,11 +7,6 @@ import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,18 +17,14 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.entitiy.MinPriceResponse;
-import com.teame.boostcamp.myapplication.model.entitiy.UserPinPreview;
 import com.teame.boostcamp.myapplication.model.repository.UserPinDataSource;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import io.reactivex.Observable;
@@ -43,10 +34,6 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.SingleSubject;
 
 public class UserPinRemoteDataSource implements UserPinDataSource {
-    private static String QUERY_COLLECTION="testcountry";
-    private static String QUERY_NATION="JP";
-    private static String QUERY_CITY="오사카 시";
-    private static String QUERY_SHOPPINGLIST="shoppinglist";
     private static String QUERY_LOCATION="location";
     private static String QUERY_ITEMS="items";
     private static String FIREBASE_URL="https://boostcamp-1548575868471.firebaseio.com/_geofire";
@@ -112,19 +99,15 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
     }
 
     @Override
-    public Single<UserPinPreview> getUserPinPreview(String Key) {
+    public Single<GoodsListHeader> getUserPinPreview(String Key) {
         DocumentReference doc=firestore.collection(QUERY_LOCATION).document(Key);
-        SingleSubject<UserPinPreview> subject=SingleSubject.create();
+        SingleSubject<GoodsListHeader> subject=SingleSubject.create();
         doc.get().addOnCompleteListener(result -> {
                     if(result.isSuccessful()){
                         DocumentSnapshot snapshot=result.getResult();
                         GoodsListHeader header =snapshot.toObject(GoodsListHeader.class);
                         DLogUtil.e(header.toString());
-                        UserPinPreview preview=new UserPinPreview();
-                        preview.setCity(header.getCity());
-                        preview.setStart(header.getStartDate());
-                        preview.setEnd(header.getEndDate());
-                        subject.onSuccess(preview);
+                        subject.onSuccess(header);
                     }
                     else{
                         DLogUtil.e(result.getException().toString());

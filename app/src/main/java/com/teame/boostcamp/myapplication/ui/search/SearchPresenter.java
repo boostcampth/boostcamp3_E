@@ -6,15 +6,11 @@ import android.location.Geocoder;
 import android.preference.PreferenceManager;
 import android.util.Pair;
 
-import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapterContract;
-import com.teame.boostcamp.myapplication.model.entitiy.Goods;
-import com.teame.boostcamp.myapplication.model.entitiy.UserPinPreview;
 import com.teame.boostcamp.myapplication.model.repository.UserPinRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
@@ -25,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 
 public class SearchPresenter implements SearchContract.Presenter {
 

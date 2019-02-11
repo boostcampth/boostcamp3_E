@@ -102,17 +102,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View
-            android:id="@+id/view_fake"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorClear"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/et_review"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <include
             android:id="@+id/et_review"
             layout="@layout/layout_bottom_input"

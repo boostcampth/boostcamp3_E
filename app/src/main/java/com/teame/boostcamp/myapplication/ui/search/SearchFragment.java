@@ -28,7 +28,6 @@ import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSearchBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
-import com.teame.boostcamp.myapplication.model.entitiy.UserPinPreview;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
@@ -61,7 +60,6 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     private String currentNation="";
     private String currentCity="";
     private Marker currentMarker;
-    private static final int REQUEST_RESULT_CODE=111;
     private boolean isSelectedGoods=false;
     private ArrayList<Goods> selectedGoodsList;
 
@@ -259,10 +257,10 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     }
 
     @Override
-    public void showUserPinPreview(UserPinPreview preview) {
+    public void showUserPinPreview(GoodsListHeader header) {
         binding.includeUserShoppingPreview.cvUserShoppingPreview.setVisibility(View.VISIBLE);
         binding.includeVisited.cvVisited.setVisibility(View.GONE);
-        binding.includeUserShoppingPreview.setPreview(preview);
+        binding.includeUserShoppingPreview.setHeader(header);
     }
 
     @Override
@@ -294,14 +292,13 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     public void onDestroy() {
         super.onDestroy();
         binding.mvGooglemap.onDestroy();
-        if(disposable!=null)
-            disposable.dispose();
     }
 
     @Override
     public void onDetach() {
         presenter.onDetach();
-        disposable.dispose();
+        if(disposable!=null&&!disposable.isDisposed())
+            disposable.dispose();
         super.onDetach();
     }
 
@@ -329,13 +326,12 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
         FusedLocationProviderClient fusedLocationClient= LocationServices.getFusedLocationProviderClient(getContext());
         if(ActivityCompat.checkSelfPermission(getContext(), TedPermissionUtil.LOCATION)== PackageManager.PERMISSION_GRANTED){
             fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
-                LatLng latlnt=new LatLng(task.getResult().getLatitude(),task.getResult().getLongitude());
+                LatLng latlnt;
+                if(task.getResult()==null)
+                    latlnt = new LatLng(0,0);
+                else
+                    latlnt=new LatLng(task.getResult().getLatitude(),task.getResult().getLongitude());
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt,ZOOM));
-            })
-            .addOnFailureListener(exception->{
-                DLogUtil.e(exception.toString());
-                LatLng latlnt = new LatLng(0,0);
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt, ZOOM));
             });
         }
         else{
@@ -343,13 +339,12 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
                     .subscribe(tedPermissionResult -> {
                         if(tedPermissionResult.isGranted()) {
                             fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
-                                LatLng latlnt = new LatLng(task.getResult().getLatitude(), task.getResult().getLongitude());
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt, ZOOM));
-                            })
-                            .addOnFailureListener(exception->{
-                                DLogUtil.e(exception.toString());
-                                LatLng latlnt = new LatLng(0,0);
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt, ZOOM));
+                                LatLng latlnt;
+                                if(task.getResult()==null)
+                                    latlnt = new LatLng(0,0);
+                                else
+                                    latlnt=new LatLng(task.getResult().getLatitude(),task.getResult().getLongitude());
+                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt,ZOOM));
                             });
                         }
                     }));

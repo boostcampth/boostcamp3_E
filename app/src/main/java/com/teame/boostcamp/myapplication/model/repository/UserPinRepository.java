@@ -2,19 +2,13 @@ package com.teame.boostcamp.myapplication.model.repository;
 
 import android.util.Pair;
 
-import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
-import com.teame.boostcamp.myapplication.model.entitiy.UserPinPreview;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.remote.UserPinRemoteDataSource;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public class UserPinRepository implements UserPinDataSource {
@@ -43,7 +37,7 @@ public class UserPinRepository implements UserPinDataSource {
     }
 
     @Override
-    public Single<UserPinPreview> getUserPinPreview(String Key) {
+    public Single<GoodsListHeader> getUserPinPreview(String Key) {
         return shoppingListRemoteDataSource.getUserPinPreview(Key);
     }
 

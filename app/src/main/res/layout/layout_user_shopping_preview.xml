@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="preview"
-            type="com.teame.boostcamp.myapplication.model.entitiy.UserPinPreview"/>
+            name="header"
+            type="com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader"/>
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:text="@{preview.city}"
+                android:text="@{header.city}"
                 android:textSize="17sp" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -38,8 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                startDate="@{preview.start}"
-                endDate="@{preview.end}"
+                startDate="@{header.startDate}"
+                endDate="@{header.endDate}"
                 android:textSize="12sp" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -49,7 +49,7 @@
                 android:layout_marginLeft="8dp"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:text="@{preview.hashTag}"
+                android:text=""
                 android:textSize="17sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </com.google.android.material.card.MaterialCardView>
