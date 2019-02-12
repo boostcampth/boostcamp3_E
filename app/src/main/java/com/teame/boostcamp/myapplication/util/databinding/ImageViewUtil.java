@@ -23,14 +23,14 @@ public class ImageViewUtil {
         if (isTrue) {
             Glide.with(imageView)
                     .load(ContextCompat.getDrawable(imageView.getContext(),
-                            R.drawable.ic_item_ratio_full_star))
+                            R.drawable.ic_gray_star))
                     .into(imageView);
             return;
         }
 
         Glide.with(imageView)
                 .load(ContextCompat.getDrawable(imageView.getContext(),
-                        R.drawable.ic_item_ratio_empty_star))
+                        R.drawable.ic_filled_star))
                 .into(imageView);
 
     }

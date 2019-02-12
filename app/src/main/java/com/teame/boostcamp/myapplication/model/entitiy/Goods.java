@@ -4,9 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.firestore.Exclude;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
-
-import java.text.DecimalFormat;
+import com.teame.boostcamp.myapplication.util.DataStringUtil;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -20,9 +18,9 @@ public class Goods extends BaseObservable implements Parcelable {
     private String lprice;
     private String img;
     private String link;
-    private int count=0;
+    private int count = 0;
 
-    public Goods(){
+    public Goods() {
 
     }
 
@@ -55,9 +53,9 @@ public class Goods extends BaseObservable implements Parcelable {
 
     public void setMinPriceResponse(MinPriceResponse minPriceResponse) {
         MinPriceResponse.Item info;
-        try{
+        try {
             info = minPriceResponse.getItems().get(0);
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
             return;
         }
 
@@ -87,7 +85,7 @@ public class Goods extends BaseObservable implements Parcelable {
 
     @Bindable
     public Double getRatio() {
-        if(ratio == null)
+        if (ratio == null)
             return 0.0;
         return ratio;
     }
@@ -120,17 +118,11 @@ public class Goods extends BaseObservable implements Parcelable {
     @Exclude
     public String getLprice() {
 
-        if(lprice == null){
+        if (lprice == null) {
             return null;
         }
-        DecimalFormat decimalFormat = new DecimalFormat("#,##0");
-        try{
-            Double lpriceDouble = Double.valueOf(lprice);
-            return decimalFormat.format(lpriceDouble);
-        }catch (Exception e){
-            DLogUtil.e(e.getMessage());
-            return null;
-        }
+
+        return DataStringUtil.makeStringComma(lprice);
     }
 
     public void setLprice(String lprice) {
@@ -149,8 +141,8 @@ public class Goods extends BaseObservable implements Parcelable {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o instanceof Goods){
+    public boolean equals(Object o) {
+        if (o instanceof Goods) {
             Goods p = (Goods) o;
             return this.name.equals(p.getName());
         } else

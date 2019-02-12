@@ -27,11 +27,8 @@
     </style>
 
     <style name="RatioImageView">
-        <item name="android:layout_marginRight">1dp</item>
-        <item name="android:scaleX">0.8</item>
-        <item name="android:scaleY">0.8</item>
         <item name="android:layout_width">@dimen/space_s_large</item>
-        <item name="android:layout_height">@dimen/space_large</item>
+        <item name="android:layout_height">@dimen/space_s_large</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

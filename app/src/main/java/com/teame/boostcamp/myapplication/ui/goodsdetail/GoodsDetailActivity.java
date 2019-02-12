@@ -24,7 +24,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBinding, GoodsDetailContract.Presenter> implements GoodsDetailContract.View, View.OnClickListener {
+public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBinding, GoodsDetailContract.Presenter> implements GoodsDetailContract.View{
 
     // 테스트 Default값
     private final static String EXTRA_GOODS = "EXTRA_GOODS";
@@ -91,48 +91,10 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         binding.rvReplyList.addItemDecoration(dividerItemDecoration);
 
         presenter.loadReplyList(adapter, item.getKey());
-        //Defailt 5점
-        binding.etReview.setStarCount(5);
-        binding.etReview.includeSelectRation.ivStar1.setOnClickListener(this);
-        binding.etReview.includeSelectRation.ivStar2.setOnClickListener(this);
-        binding.etReview.includeSelectRation.ivStar3.setOnClickListener(this);
-        binding.etReview.includeSelectRation.ivStar4.setOnClickListener(this);
-        binding.etReview.includeSelectRation.ivStar5.setOnClickListener(this);
 
         binding.tvItemMinPrice.setOnClickListener(view -> {
             Intent LpriceIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getLink()));
             startActivity(LpriceIntent);
-        });
-
-        binding.etReview.tvWriteReply.setOnClickListener(view -> {
-            if (binding.etReview.tieWriteReview.getVisibility() == View.VISIBLE) {
-                String replyText = binding.etReview.tieWriteReview.getText().toString();
-
-                if (replyText.trim().length() >= 5) {
-                    int ratio = binding.etReview.getStarCount();
-                    String content = binding.etReview.tieWriteReview.getText().toString();
-                    binding.etReview.setIsExtend(false);
-                    InputKeyboardUtil.hideKeyboard(GoodsDetailActivity.this);
-
-                    // TODO : key값 조정
-                    presenter.writeReply(item.getKey(), content, ratio);
-                } else {
-                    showToast(getString(R.string.notice_reply_length));
-                }
-               }
-        });
-
-        binding.etReview.tvHintWrite.setOnTouchListener((view, motionEvent) -> {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                binding.etReview.setIsExtend(true);
-                binding.etReview.tieWriteReview.postDelayed(() ->{
-                    binding.etReview.tieWriteReview.requestFocus();
-                },50);
-                InputKeyboardUtil.showKeyboard(this);
-            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                view.performClick();
-            }
-            return false;
         });
     }
 
@@ -156,51 +118,5 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
     public void successWriteItem() {
         //TODO  스크롤 최상단으로
         binding.rvReplyList.smoothScrollToPosition(0);
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_star1:
-                binding.etReview.setStarCount(1);
-                break;
-            case R.id.iv_star2:
-                binding.etReview.setStarCount(2);
-                break;
-            case R.id.iv_star3:
-                binding.etReview.setStarCount(3);
-                break;
-            case R.id.iv_star4:
-                binding.etReview.setStarCount(4);
-                break;
-            case R.id.iv_star5:
-                binding.etReview.setStarCount(5);
-                break;
-
-        }
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        View view = getCurrentFocus();
-        boolean ret = super.dispatchTouchEvent(event);
-
-        if (view instanceof EditText) {
-
-            int scrcoords[] = new int[2];
-
-            binding.etReview.clEditLayout.getLocationOnScreen(scrcoords);
-            View w = binding.etReview.clEditLayout;
-            float x = event.getRawX() + w.getLeft() - scrcoords[0];
-            float y = event.getRawY() + w.getTop() - scrcoords[1];
-
-            if (event.getAction() == MotionEvent.ACTION_UP
-                    && (x < w.getLeft() || x >= w.getRight()
-                    || y < w.getTop() || y > w.getBottom())) {
-                InputKeyboardUtil.hideKeyboard(this);
-                binding.etReview.setIsExtend(false);
-            }
-        }
-        return ret;
     }
 }

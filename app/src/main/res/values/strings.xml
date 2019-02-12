@@ -65,5 +65,7 @@
     <string name="add_post">게시글 작성</string>
     <string name="reply">댓글</string>
     <string name="what_do_you_want">찾으시는 물품이 있나요!?</string>
+    <string name="add_goods">추가하기</string>
+    <string name="write_reply">의견쓰기</string>
 
 </resources>

@@ -50,7 +50,6 @@ public class GoodsDetailRecyclerAdapter extends BaseRecyclerAdatper<Reply, Goods
         } else {
             holder.binding.ivDelete.setVisibility(View.GONE);
         }
-        holder.binding.setStarCount(ratio);
         holder.binding.tvItemRatio.setText(String.valueOf(ratio));
     }
 

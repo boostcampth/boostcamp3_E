@@ -1,12 +1,16 @@
 package com.teame.boostcamp.myapplication.model.entitiy;
 
 import com.google.firebase.firestore.Exclude;
+import com.teame.boostcamp.myapplication.util.DataStringUtil;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Reply {
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+import androidx.databinding.library.baseAdapters.BR;
+
+public class Reply  extends BaseObservable {
 
     private String key;
     private String content;
@@ -32,14 +36,16 @@ public class Reply {
         this.content = content;
     }
 
+    @Bindable
     public Double getRatio() {
         return ratio;
     }
 
     public void setRatio(Double ratio) {
         this.ratio = ratio;
+        notifyPropertyChanged(BR.ratio);
     }
-
+    @Bindable
     public Date getWriteDate() {
         return writeDate;
     }
@@ -51,10 +57,12 @@ public class Reply {
     @Exclude
     public String getStringDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
-        return dateFormat.format(writeDate);
+        dateFormat.format(writeDate);
+        return DataStringUtil.CreateDataWithCheck(writeDate);
     }
 
     @Exclude
+    @Bindable
     public String getErrorMessage() {
         return errorMessage;
     }
@@ -63,7 +71,7 @@ public class Reply {
         this.errorMessage = errorMessage;
     }
 
-
+    @Bindable
     public String getWriter() {
         return writer;
     }

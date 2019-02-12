@@ -17,8 +17,8 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_star1"
             style="@style/RatioImageView"
-            setRatioStar="@{starCount >= 1}"
-            tools:srcCompat="@drawable/ic_item_ratio_full_star" />
+            setRatioStar="@{starCount >= 1 ? true : false}"
+            tools:srcCompat="@drawable/ic_filled_star" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_star2"
