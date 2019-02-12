@@ -14,13 +14,9 @@ public interface CreateListContract {
     interface View extends BaseView<Presenter> {
         void goNextStep(List<Goods> list);
 
-        void showAddedGoods(int position);
-
         void emptyCheckGoods();
 
         void showDetailItem(Goods item);
-
-        void notifyDeleteItem(int position,int oldPosition);
 
         void finishLoad(int size);
     }
@@ -29,18 +25,11 @@ public interface CreateListContract {
 
         void getDetailItemUid(int position);
 
-        void loadListData(GoodsListRecyclerAdapter adapter, CheckedGoodsListRecyclerAdapter checkedAdapter, String nation, String city);
+        void loadListData(GoodsListRecyclerAdapter adapter, String nation, String city);
 
         void checkedItem(int position, boolean isCheck);
 
-        void addItem(String itemName);
-
         void decideShoppingList();
-
-        void deleteItem(int position);
-
-        void minusCount();
-
     }
 
 }

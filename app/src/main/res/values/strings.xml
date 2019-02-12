@@ -31,9 +31,9 @@
 
 
     <string name="sns_my_post">내 게시물</string>
-    <string name="min_price">최저가 : %1$s</string>
+    <string name="min_price">최저 %1$s원</string>
     <string name="goods_count">수량 : %1$d</string>
-    <string name="none_min_price">최저가 정보가 없습니다</string>
+    <string name="none_min_price">정보없음</string>
     <string name="create_list_title">이거 사! 추천 리스트</string>
     <string name="list_goods_add_hint">찾는 아이템이 없으면 추가해보세요!</string>
     <string name="decide">decide</string>
@@ -64,7 +64,6 @@
     <string name="shopping_list_select">쇼핑리스트를 선택해 주세요!</string>
     <string name="add_post">게시글 작성</string>
     <string name="reply">댓글</string>
-
-
+    <string name="what_do_you_want">찾으시는 물품이 있나요!?</string>
 
 </resources>

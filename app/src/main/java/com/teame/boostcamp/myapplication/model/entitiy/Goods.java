@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.firestore.Exclude;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
+
+import java.text.DecimalFormat;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -116,7 +119,18 @@ public class Goods extends BaseObservable implements Parcelable {
     @Bindable
     @Exclude
     public String getLprice() {
-        return lprice;
+
+        if(lprice == null){
+            return null;
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0");
+        try{
+            Double lpriceDouble = Double.valueOf(lprice);
+            return decimalFormat.format(lpriceDouble);
+        }catch (Exception e){
+            DLogUtil.e(e.getMessage());
+            return null;
+        }
     }
 
     public void setLprice(String lprice) {
