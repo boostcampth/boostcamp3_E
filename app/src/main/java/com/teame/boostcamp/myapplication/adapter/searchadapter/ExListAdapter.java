@@ -65,6 +65,7 @@ public class ExListAdapter extends RecyclerView.Adapter<ExListAdapter.ExListView
         holder.itemView.setOnClickListener(v -> {
             clickListener.onItemClick(list.get(position));
         });
+
         if(position==getItemCount()-1){
             endlessListener.onLastPosition();
         }

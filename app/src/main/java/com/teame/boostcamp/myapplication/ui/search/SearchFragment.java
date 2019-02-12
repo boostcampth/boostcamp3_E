@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -45,7 +46,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -113,8 +113,6 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
 
         //RecyclerView setting
         LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
-        DividerItemDecoration divider=new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
-        binding.rvExList.addItemDecoration(divider);
         binding.rvExList.setLayoutManager(layoutManager);
         binding.rvExList.setAdapter(adapter);
         binding.rvExList.setOnTouchListener((__, event) -> {
@@ -227,6 +225,9 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
 
     public void showExSearchView() {
         binding.rvExList.setVisibility(View.VISIBLE);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
+            binding.toolbarSearch.setElevation(0);
+        binding.toolbarSearch.setBackground(getResources().getDrawable(R.drawable.shape_stroke_roundedbox));
         binding.viewBackground.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         presenter.initView();
     }
@@ -235,6 +236,9 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     public void hideExSearchView(){
         binding.svPlace.clearFocus();
         binding.svPlace.setIconified(true);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
+            binding.toolbarSearch.setElevation(4);
+        binding.toolbarSearch.setBackground(getResources().getDrawable(R.drawable.shape_roundedbox));
         binding.rvExList.setVisibility(View.GONE);
         binding.viewBackground.setBackgroundColor(getResources().getColor(R.color.colorClear));
     }

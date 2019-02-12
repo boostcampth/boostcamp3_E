@@ -32,7 +32,7 @@ public class SearchPresenter implements SearchContract.Presenter {
     private SharedPreferences prefExSearch;
     private ArrayList<String> exList;
     private static final String PREF_EX_SEARCH="PREF_EX_SEARCH";
-    private static final int STRING_CAPACITY=20;
+    private static final int STRING_CAPACITY=8;
     private Gson gson;
     private UserPinRepository remote;
     private CompositeDisposable disposable=new CompositeDisposable();

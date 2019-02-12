@@ -2,14 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:paddingTop="4dp"
+        android:paddingTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="1">
         <androidx.appcompat.widget.AppCompatImageView
             android:paddingTop="2dp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/img_ex_search"
             android:layout_weight="0.2"/>
@@ -19,14 +19,15 @@
             android:textSize="20sp"
             android:text="TEST"
             android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_search_date"
+            android:layout_weight="0.4"
             android:textSize="20sp"
             android:text="TEST"
             android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
