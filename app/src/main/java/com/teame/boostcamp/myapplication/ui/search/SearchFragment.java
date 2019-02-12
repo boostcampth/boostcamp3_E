@@ -46,7 +46,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -114,8 +113,6 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
 
         //RecyclerView setting
         LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
-        DividerItemDecoration divider=new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
-        binding.rvExList.addItemDecoration(divider);
         binding.rvExList.setLayoutManager(layoutManager);
         binding.rvExList.setAdapter(adapter);
         binding.rvExList.setOnTouchListener((__, event) -> {
