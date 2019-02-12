@@ -5,45 +5,29 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tl_sns"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp">
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/sv_search_post"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/ti_myPost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_people_outline_black_24dp"
-                android:text="@string/bottom_tab_sns" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/ti_sns"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_person_outline_black_24dp"
-                android:text="@string/sns_my_post" />
-
-        </com.google.android.material.tabs.TabLayout>
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/vp_snsFragment"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_sns"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:visibility="visible"
+            android:dividerHeight="100.0sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tl_sns"
-            app:layout_constraintVertical_bias="1.0" >
-        </androidx.viewpager.widget.ViewPager>
+            app:layout_constraintTop_toBottomOf="@+id/sv_search_post"
+            tools:listitem="@layout/item_post">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_post"
@@ -60,5 +44,4 @@
             app:srcCompat="@drawable/btn_add_item_white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

@@ -45,7 +45,14 @@ public class AddPostPresenter implements AddPostContract.Presenter {
         db.collection(POST_PATH)
                 .document(FirebaseAuth.getInstance().getUid()+post.getCreatedDate())
                 .set(post)
-                .addOnCompleteListener(__ -> view.succeedAddPost());
+                .addOnCompleteListener(__ -> {
+                    db.collection("users")
+                            .document(FirebaseAuth.getInstance().getUid())
+                            .collection("mypost")
+                            .document(FirebaseAuth.getInstance().getUid()+post.getCreatedDate())
+                            .set(post)
+                            .addOnSuccessListener( ___ -> view.succeedAddPost());
+                });
 
     }
 

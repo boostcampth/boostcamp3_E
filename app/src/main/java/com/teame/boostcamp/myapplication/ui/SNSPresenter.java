@@ -1,20 +1,24 @@
-package com.teame.boostcamp.myapplication.ui.tabsns;
+package com.teame.boostcamp.myapplication.ui;
+
+import android.app.Activity;
+import android.content.Context;
 
 import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
 import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
+import com.teame.boostcamp.myapplication.ui.addpost.AddPostActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class TabSNSPresenter implements TabSNSContract.Presenter {
-    private TabSNSContract.View view;
+public class SNSPresenter implements SNSContract.Presenter {
+    private SNSContract.View view;
     private PostListRepository postListRepository;
     private CompositeDisposable disposable;
     private PostListAdapter adapter;
 
-    public TabSNSPresenter(TabSNSContract.View view, PostListRepository postListRepository) {
+    public SNSPresenter(SNSContract.View view) {
         this.view = view;
-        this.postListRepository = postListRepository;
+        this.postListRepository = PostListRepository.getInstance();
         disposable = new CompositeDisposable();
     }
 
@@ -43,4 +47,5 @@ public class TabSNSPresenter implements TabSNSContract.Presenter {
                 )
         );
     }
+
 }
