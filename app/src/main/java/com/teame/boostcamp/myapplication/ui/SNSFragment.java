@@ -1,24 +1,22 @@
 package com.teame.boostcamp.myapplication.ui;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
-import com.google.android.material.tabs.TabLayout;
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
+import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSnsBinding;
 import com.teame.boostcamp.myapplication.ui.addpost.AddPostActivity;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
-import com.teame.boostcamp.myapplication.ui.tabmypost.TabMyPostFragment;
-import com.teame.boostcamp.myapplication.ui.tabsns.TabSNSFragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Presenter> {
-
+public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Presenter> implements SNSContract.View {
     @Override
     protected int getLayoutResourceId() {
         return R.layout.fragment_sns;
@@ -26,12 +24,24 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
 
     @Override
     protected SNSContract.Presenter getPresenter() {
-        return null;
+        return new SNSPresenter(this);
+    }
+
+    @Override
+    public void setPresenter(SNSContract.Presenter presenter) {
+        super.setPresenter(presenter);
     }
 
     @Deprecated
     public SNSFragment() {
         // 기본 생성자는 쓰지 말것 (new Instance 사용)
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setPresenter(new SNSPresenter(this));
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     public static SNSFragment newInstance() {
@@ -51,44 +61,20 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.fabAddPost.setOnClickListener(__ -> AddPostActivity.startActivity(getContext()));
-        binding.tlSns.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                binding.vpSnsFragment.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        setupViewPager();
+        initView();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    private void initView(){
+        PostListAdapter adapter = new PostListAdapter(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
+                RecyclerView.VERTICAL,
+                false);
 
+        binding.rvSns.setLayoutManager(linearLayoutManager);
+        binding.rvSns.setAdapter(adapter);
+        binding.fabAddPost.setOnClickListener( __ -> AddPostActivity.startActivity(getContext()));
+        presenter.loadPostData(adapter);
     }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void setupViewPager() {
-        //ViewPager remove swipe
-        binding.vpSnsFragment.setOnTouchListener((__, ___) -> true);
-        MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getFragmentManager());
-        Fragment fragmentTabSNS = TabSNSFragment.newInstance();
-        Fragment fragmentTabMyPost = TabMyPostFragment.newInstance();
-        mainViewPagerAdapter.addFragment(fragmentTabSNS);
-        mainViewPagerAdapter.addFragment(fragmentTabMyPost);
-        binding.vpSnsFragment.setAdapter(mainViewPagerAdapter);
-        binding.vpSnsFragment.setOffscreenPageLimit(mainViewPagerAdapter.getCount()-1);
-    }
-
 }
+
+
