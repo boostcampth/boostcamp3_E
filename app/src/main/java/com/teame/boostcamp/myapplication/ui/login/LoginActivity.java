@@ -3,6 +3,7 @@ package com.teame.boostcamp.myapplication.ui.login;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
@@ -37,7 +38,7 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
 
     private void initView() {
         binding.buttonLogin.setOnClickListener(__ -> onLogInButtonClicked());
-        binding.buttonRegister.setOnClickListener(__ -> SignUpActivity.startActivity(this));
+        binding.tvSignup.setOnClickListener(__ -> SignUpActivity.startActivity(this));
     }
 
     private void onLogInButtonClicked() {
