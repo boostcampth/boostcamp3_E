@@ -9,6 +9,7 @@ import com.teame.boostcamp.myapplication.adapter.PostReplyAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityPostReplyBinding;
 import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
+import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +38,7 @@ public class PostReplyActivity extends BaseMVPActivity<ActivityPostReplyBinding,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         postUid = getIntent().getStringExtra(EXTRA_POST_UID);
+        showToast(postUid);
         initView();
     }
 
@@ -57,6 +59,7 @@ public class PostReplyActivity extends BaseMVPActivity<ActivityPostReplyBinding,
         binding.rvPostReply.setAdapter(adapter);
         presenter.loadReply(postUid, adapter);
         binding.tvPostReplyInput.setOnClickListener(__ -> onInputClicked());
+        binding.ivReplyBack.setOnClickListener(__ -> finish());
     }
 
     private void onInputClicked(){
@@ -78,6 +81,7 @@ public class PostReplyActivity extends BaseMVPActivity<ActivityPostReplyBinding,
 
     @Override
     public void successWriteReply() {
-
+        binding.tietPostReplyInput.setText(null);
+        InputKeyboardUtil.hideKeyboard(this);
     }
 }

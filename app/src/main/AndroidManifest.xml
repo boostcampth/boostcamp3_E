@@ -39,7 +39,8 @@
             android:windowSoftInputMode="adjustPan|adjustResize"/>
 
         <activity android:name=".ui.signup.SignUpActivity" />
-        <activity android:name=".ui.addpost.AddPostActivity"/>
+        <activity android:name=".ui.addpost.AddPostActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.search.UserShoppinglistActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
@@ -58,7 +59,8 @@
             android:name=".ui.createlistinfo.CreateListInfo"
             android:label="@string/title_activity_create_list_info"></activity>
 
-        <activity android:name=".ui.postreply.PostReplyActivity"/>
+        <activity android:name=".ui.postreply.PostReplyActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
     <!-- 네이버 쇼핑 API

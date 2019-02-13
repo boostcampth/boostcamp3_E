@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/mtrl_card_spacing"
-        android:layout_marginTop="@dimen/mtrl_card_spacing"
+        android:layout_marginTop="16dp"
         android:layout_marginRight="@dimen/mtrl_card_spacing"
         android:minHeight="200dp">
 
@@ -50,7 +50,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/vp_post_images">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_post_like"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -65,7 +65,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@drawable/btn_liked" />
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_post_reply"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -78,9 +78,23 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/btn_post_reply" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_shopping_list"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/btn_shopping_list"
+                    tools:src='@drawable/btn_shopping_list' />
+
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tl_image_indicator"
-                    android:layout_width="0dp"
+                    android:layout_width="148dp"
                     android:layout_height="30dp"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="90dp"
@@ -135,8 +149,8 @@
                 android:id="@+id/tv_post_hashtags"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
@@ -150,8 +164,8 @@
                 android:id="@+id/tv_post_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"

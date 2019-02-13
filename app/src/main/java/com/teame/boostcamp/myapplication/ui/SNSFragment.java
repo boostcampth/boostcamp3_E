@@ -61,6 +61,7 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.srlSns.setRefreshing(true);
         initView();
     }
 
@@ -74,6 +75,23 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
         binding.rvSns.setAdapter(adapter);
         binding.fabAddPost.setOnClickListener( __ -> AddPostActivity.startActivity(getContext()));
         presenter.loadPostData(adapter);
+        binding.rvSns.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if(dy > 0){
+                    binding.fabAddPost.hide();
+                } else{
+                    binding.fabAddPost.show();
+                }
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+        binding.srlSns.setOnRefreshListener(() -> initView());
+    }
+
+    @Override
+    public void stopRefreshIcon() {
+        binding.srlSns.setRefreshing(false);
     }
 }
 
