@@ -2,15 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <variable
-            name="count"
-            type="int"/>
-        <variable
-            name="city"
-            type="String"/>
-    </data>
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_visited"
         style="@style/Widget.MaterialComponents.CardView"
@@ -29,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:text="@{city}"
+                android:text=""
                 android:textSize="17sp" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -37,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                count="@{count}"
+                android:text=""
                 android:textSize="17sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </com.google.android.material.card.MaterialCardView>

@@ -18,6 +18,8 @@
             android:layout_weight="0.4"
             android:textSize="20sp"
             android:text="TEST"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:layout_gravity="center_horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>

@@ -14,11 +14,12 @@ import java.util.List;
 public interface SearchContract {
 
     interface View extends BaseView<Presenter> {
-        void showPositionInMap(LatLng latlon, String nation, String city);
-        void showSearchResult(int count);
+        void showPositionInMap(LatLng latlon);
+        void showSearchResult(int count, String nation, String city);
         void showUserPinPreview(GoodsListHeader header);
         void showUserPin(LatLng latlng);
         void showPeriodSetting();
+        void hideUserPin();
         void hideExSearchView();
         void showFragmentToast(String text);
         void showUserGoodsListActivity(List<Goods> list);

@@ -30,9 +30,4 @@ public class TextViewUtil {
         String text=""+sdf.format(start)+"~"+sdf.format(end);
         textView.setText(text);
     }
-
-    @BindingAdapter({"count"})
-    public static void setVisitedText(TextView textView, int count){
-        textView.setText(count+"명이 이곳을 방문하였습니다.");
-    }
 }

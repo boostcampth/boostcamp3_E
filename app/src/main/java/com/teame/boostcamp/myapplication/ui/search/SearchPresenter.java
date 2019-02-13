@@ -87,7 +87,10 @@ public class SearchPresenter implements SearchContract.Presenter {
 
     @Override
     public void showUserPin() {
+        int onlyone=0;
         for(LatLng latlng:userPinMap.keySet()){
+            if(onlyone==0)
+                view.showPositionInMap(latlng);
             view.showUserPin(latlng);
         }
     }
@@ -113,12 +116,13 @@ public class SearchPresenter implements SearchContract.Presenter {
             DLogUtil.e(geoResult.toString());
             String nationCode=geoResult.get(0).getCountryCode();
             String cityName=geoResult.get(0).getFeatureName().replace(" ","");
-            view.showPositionInMap(latlon,nationCode,cityName);
+            view.showPositionInMap(latlon);
             view.hideExSearchView();
+            view.hideUserPin();
             disposable.add(remote.getUserVisitedLocation(latlon)
                                 .subscribe(pairlist -> {
                                     userPinMap.clear();
-                                    view.showSearchResult(pairlist.size());
+                                    view.showSearchResult(pairlist.size(),nationCode,cityName);
                                     for(Pair<LatLng,String> pair:pairlist){
                                         userPinMap.put(pair.first,pair.second);
                                     }

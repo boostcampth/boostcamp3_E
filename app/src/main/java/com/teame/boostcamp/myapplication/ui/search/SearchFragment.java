@@ -34,7 +34,6 @@ import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
-import com.teame.boostcamp.myapplication.util.RxUserShoppingListActivityResult;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 
 import java.util.ArrayList;
@@ -126,14 +125,10 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
         //view setting
         binding.ivUserpin.setOnClickListener(__ -> {
             if(isShowUserPin){
-                isShowUserPin=false;
                 hideUserPin();
-                binding.ivUserpin.setImageResource(R.drawable.btn_create_userpinview);
             }
             else{
-                isShowUserPin=true;
-                presenter.showUserPin();
-                binding.ivUserpin.setImageResource(R.drawable.btn_uncreate_userpinview);
+                showUserPin();
             }
         });
         binding.includeUserShoppingPreview.cvUserShoppingPreview.setOnClickListener(__ -> {
@@ -183,33 +178,33 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                //presenter.onTextChange(newText);
                 return true;
             }
         });
     }
 
-    @Override
-    public void showUserGoodsListActivity(List<Goods> list) {
-        disposable.add(RxUserShoppingListActivityResult.getInstance()
-                .getEvent()
-                .subscribe(object->{
-                    if(object instanceof Intent){
-                        isSelectedGoods=true;
-                        selectedGoodsList=((Intent)object).getParcelableArrayListExtra(EXTRA_GOODSLIST);
-                    }
-                },error->{
-                    DLogUtil.e(error.getMessage());
-                }));
-        UserShoppinglistActivity.startActivity(getContext(),(ArrayList<Goods>)list);
+    private void showUserPin(){
+        isShowUserPin=true;
+        presenter.showUserPin();
+        binding.ivUserpin.setImageResource(R.drawable.btn_uncreate_userpinview);
     }
 
     @Override
-    public void showPositionInMap(LatLng latlon, String currentNation, String currentCity) {
+    public void showUserGoodsListActivity(List<Goods> list) {
+        UserShoppinglistActivity.startActivity(this,(ArrayList<Goods>)list);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode==111){
+            selectedGoodsList=data.getParcelableArrayListExtra(EXTRA_GOODSLIST);
+        }
+    }
+
+    @Override
+    public void showPositionInMap(LatLng latlon) {
         binding.svPlace.clearFocus();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlon,ZOOM));
-        this.currentNation=currentNation;
-        this.currentCity=currentCity;
     }
 
     @Override
@@ -219,8 +214,11 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
                 .icon(vectorDescriptor(getContext(),R.drawable.btn_uncllick_marker)));
     }
 
+    @Override
     public void hideUserPin(){
         googleMap.clear();
+        isShowUserPin=false;
+        binding.ivUserpin.setImageResource(R.drawable.btn_create_userpinview);
     }
 
     public void showExSearchView() {
@@ -229,6 +227,10 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
             binding.toolbarSearch.setElevation(0);
         binding.toolbarSearch.setBackground(getResources().getDrawable(R.drawable.shape_stroke_roundedbox));
         binding.viewBackground.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+        if(binding.includePeriodSetting.cvPeriodSetting.getVisibility()==View.VISIBLE) {
+            binding.includePeriodSetting.cvPeriodSetting.setVisibility(View.GONE);
+            binding.fabCreateChecklist.hide();
+        }
         presenter.initView();
     }
 
@@ -250,11 +252,13 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     }
 
     @Override
-    public void showSearchResult(int count) {
+    public void showSearchResult(int count, String nation, String city) {
+        currentNation=nation;
+        currentCity=city;
         binding.ivUserpin.setVisibility(View.VISIBLE);
         binding.includeVisited.cvVisited.setVisibility(View.VISIBLE);
-        binding.includeVisited.setCity(currentCity);
-        binding.includeVisited.setCount(count);
+        binding.includeVisited.tvVisitedPlace.setText(currentCity);
+        binding.includeVisited.tvVisitedCount.setText(count+"명이 이곳을 방문하였습니다.");
         binding.rvExList.setVisibility(View.GONE);
         binding.includePeriodSetting.cvPeriodSetting.setVisibility(View.GONE);
         binding.includeUserShoppingPreview.cvUserShoppingPreview.setVisibility(View.GONE);
@@ -271,6 +275,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     public void showPeriodSetting() {
         binding.includePeriodSetting.cvPeriodSetting.setVisibility(View.VISIBLE);
         binding.includeVisited.cvVisited.setVisibility(View.GONE);
+        binding.includeUserShoppingPreview.cvUserShoppingPreview.setVisibility(View.GONE);
         binding.fabCreateChecklist.show();
     }
 
@@ -369,7 +374,10 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
             userMarker.showInfoWindow();
         });
         googleMap.setOnInfoWindowClickListener(marker -> {
-            showPeriodSetting();
+            if(currentNation.isEmpty()||currentCity.isEmpty())
+                showFragmentToast("지역을 선택해 주세요");
+            else
+                showPeriodSetting();
         });
     }
 
