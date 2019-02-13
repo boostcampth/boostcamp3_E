@@ -198,6 +198,10 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode==111){
             selectedGoodsList=data.getParcelableArrayListExtra(EXTRA_GOODSLIST);
+            if(selectedGoodsList==null)
+                isSelectedGoods=false;
+            else
+                isSelectedGoods=true;
         }
     }
 
