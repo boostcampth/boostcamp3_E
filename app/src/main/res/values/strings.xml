@@ -59,5 +59,12 @@
     <string name="post_replay_hint">댓글 달기...</string>
     <string name="like">좋아요  </string>
     <string name="like_number">개</string>
+    <string name="post_content_hint">자신의 여행 쇼핑리스트를 자랑해 보세요!</string>
+    <string name="select">선택하기</string>
+    <string name="shopping_list_select">쇼핑리스트를 선택해 주세요!</string>
+    <string name="add_post">게시글 작성</string>
+    <string name="reply">댓글</string>
+
+
 
 </resources>
