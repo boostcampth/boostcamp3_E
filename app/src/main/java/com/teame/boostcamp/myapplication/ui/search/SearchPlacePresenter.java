@@ -3,7 +3,6 @@ package com.teame.boostcamp.myapplication.ui.search;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapterContract;
-import com.teame.boostcamp.myapplication.adapter.searchadapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.model.repository.PlaceTextDataRepository;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.SharedPreferenceUtil;

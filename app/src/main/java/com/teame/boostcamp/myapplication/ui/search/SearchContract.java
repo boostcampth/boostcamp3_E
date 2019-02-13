@@ -8,6 +8,7 @@ import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -15,7 +16,7 @@ public interface SearchContract {
 
     interface View extends BaseView<Presenter> {
         void showPositionInMap(LatLng latlon);
-        void showSearchResult(int count, String nation, String city);
+        void showSearchResult(int count,String city);
         void showUserPinPreview(GoodsListHeader header);
         void showUserPin(LatLng latlng);
         void showPeriodSetting();
@@ -25,9 +26,14 @@ public interface SearchContract {
     }
 
     interface Presenter extends BasePresenter{
+        void showUserPinClicked();
+        void mapLongClicked(Marker user);
+        void infoWindowClicked();
         void onSearchSubmit(String place);
         void showUserPin();
-        void getUserPinPreview(Marker marker);
-        void getUserPinGoodsList(Marker currentMarker);
+        void markerClicked(Marker marker);
+        void userPreviewClicked();
+        void floatingButtonClicked(Date start, Date end);
+        void setSelectedList(List<Goods> goodslist);
     }
 }

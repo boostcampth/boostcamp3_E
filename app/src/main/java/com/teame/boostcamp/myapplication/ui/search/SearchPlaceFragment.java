@@ -1,35 +1,23 @@
 package com.teame.boostcamp.myapplication.ui.search;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapter;
-import com.teame.boostcamp.myapplication.databinding.FragmentSearchBinding;
 import com.teame.boostcamp.myapplication.databinding.FragmentSearchPlaceBinding;
-import com.teame.boostcamp.myapplication.ui.FragmentCallback;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
-import com.teame.boostcamp.myapplication.util.SharedPreferenceUtil;
-import com.teame.boostcamp.myapplication.util.VectorConverterUtil;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding, SearchPlaceContract.Presenter> implements SearchPlaceContract.View {
@@ -72,6 +60,12 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
     }
 
     @Override
+    public void onStart() {
+        presenter.createList();
+        super.onStart();
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setPresenter(new SearchPlacePresenter(this, new ResourceProvider(getContext())));
@@ -79,6 +73,8 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
         LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
         binding.rvExList.setLayoutManager(layoutManager);
         binding.rvExList.setAdapter(adapter);
+        binding.rvExList.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        binding.rvExList.addItemDecoration(new MarginDecorator(32));
         binding.toolbarSearch.setNavigationIcon(R.drawable.btn_back);
         binding.etSearchPlace.setOnEditorActionListener((v, actionId, __) -> {
             if(actionId== EditorInfo.IME_ACTION_SEARCH){
@@ -89,12 +85,11 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
         });
         presenter.setAdapterModel(adapter);
         presenter.setAdapterView(adapter);
-        presenter.createList();
     }
 
     @Override
-    public void onDestroyView() {
+    public void onPause() {
         presenter.saveToJson();
-        super.onDestroyView();
+        super.onPause();
     }
 }

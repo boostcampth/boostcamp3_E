@@ -47,17 +47,25 @@ public class UserShoppinglistActivity extends BaseMVPActivity<ActivityUsersShopp
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent result=new Intent();
+        result.putParcelableArrayListExtra(EXTRA_GOODSLIST,selectedList);
+        setResult(EXTRA_REQUEST_CODE,result);
         switch(item.getItemId()){
             case R.id.tb_back_import:
-                Intent result=new Intent();
-                result.putParcelableArrayListExtra(EXTRA_GOODSLIST,selectedList);
-                setResult(EXTRA_REQUEST_CODE,result);
                 return true;
             case android.R.id.home:
                 finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent result=new Intent();
+        result.putParcelableArrayListExtra(EXTRA_GOODSLIST,selectedList);
+        setResult(EXTRA_REQUEST_CODE,result);
+        super.onBackPressed();
     }
 
     @Override

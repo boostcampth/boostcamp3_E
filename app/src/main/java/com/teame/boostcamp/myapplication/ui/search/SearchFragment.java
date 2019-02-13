@@ -1,15 +1,9 @@
 package com.teame.boostcamp.myapplication.ui.search;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,22 +12,16 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSearchBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.FragmentCallback;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
-import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
-import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 import com.teame.boostcamp.myapplication.util.VectorConverterUtil;
@@ -44,12 +32,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchContract.Presenter> implements OnMapReadyCallback, SearchContract.View {
@@ -58,13 +41,6 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     private GoogleMap googleMap=null;
     private static final float ZOOM=16;
     private CompositeDisposable disposable=new CompositeDisposable();
-    private Marker userMarker=null;
-    private boolean isShowUserPin=false;
-    private String currentNation="";
-    private String currentCity="";
-    private Marker currentMarker;
-    private boolean isSelectedGoods=false;
-    private ArrayList<Goods> selectedGoodsList;
 
     @Override
     protected int getLayoutResourceId() {
@@ -110,27 +86,17 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     private void setUp(){
         //view setting
         binding.ivUserpin.setOnClickListener(__ -> {
-            if(isShowUserPin){
-                hideUserPin();
-            }
-            else{
-                showUserPin();
-            }
+            presenter.showUserPinClicked();
         });
         binding.includeUserShoppingPreview.cvUserShoppingPreview.setOnClickListener(__ -> {
-            presenter.getUserPinGoodsList(currentMarker);
+            presenter.userPreviewClicked();
         });
         binding.fabCreateChecklist.hide();
         binding.fabCreateChecklist.setOnClickListener(v -> {
             List<CalendarDay> selectedDates=binding.includePeriodSetting.mcvPeriod.getSelectedDates();
             Date startDate= java.sql.Date.valueOf(selectedDates.get(0).getDate().toString());
             Date endDate= java.sql.Date.valueOf(selectedDates.get(selectedDates.size()-1).getDate().toString());
-            DLogUtil.e(endDate.toString());
-            GoodsListHeader header=new GoodsListHeader(currentNation,currentCity,startDate,endDate);
-            if(isSelectedGoods)
-                CreateListActivity.startActivity(getContext(),header,selectedGoodsList);
-            else
-                CreateListActivity.startActivity(getContext(),header);
+            presenter.floatingButtonClicked(startDate,endDate);
         });
 
         //googlemap setting
@@ -144,9 +110,6 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
 
 
     private void showUserPin(){
-        isShowUserPin=true;
-        presenter.showUserPin();
-        binding.ivUserpin.setImageResource(R.drawable.btn_uncreate_userpinview);
     }
 
     @Override
@@ -157,17 +120,13 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode==111){
-            selectedGoodsList=data.getParcelableArrayListExtra(EXTRA_GOODSLIST);
-            if(selectedGoodsList==null)
-                isSelectedGoods=false;
-            else
-                isSelectedGoods=true;
+            ArrayList<Goods> list=data.getParcelableArrayListExtra(EXTRA_GOODSLIST);
+            presenter.setSelectedList(list);
         }
     }
 
     @Override
     public void showPositionInMap(LatLng latlon) {
-        binding.svPlace.clearFocus();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlon,ZOOM));
     }
 
@@ -176,12 +135,12 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
         googleMap.addMarker(new MarkerOptions()
                 .position(location)
                 .icon(VectorConverterUtil.convert(getContext(),R.drawable.btn_uncllick_marker)));
+        binding.ivUserpin.setImageResource(R.drawable.btn_uncreate_userpinview);
     }
 
     @Override
     public void hideUserPin(){
         googleMap.clear();
-        isShowUserPin=false;
         binding.ivUserpin.setImageResource(R.drawable.btn_create_userpinview);
     }
 
@@ -192,16 +151,15 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     }
 
     @Override
-    public void showSearchResult(int count, String nation, String city) {
-        currentNation=nation;
-        currentCity=city;
+    public void showSearchResult(int count,String city) {
         binding.ivUserpin.setVisibility(View.VISIBLE);
         binding.includeVisited.cvVisited.setVisibility(View.VISIBLE);
-        binding.includeVisited.tvVisitedPlace.setText(currentCity);
+        binding.includeVisited.tvVisitedPlace.setText(city);
         binding.includeVisited.tvVisitedCount.setText(count+"명이 이곳을 방문하였습니다.");
         binding.rvExList.setVisibility(View.GONE);
         binding.includePeriodSetting.cvPeriodSetting.setVisibility(View.GONE);
         binding.includeUserShoppingPreview.cvUserShoppingPreview.setVisibility(View.GONE);
+        binding.fabCreateChecklist.hide();
     }
 
     @Override
@@ -300,24 +258,19 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
         }
         googleMap.setOnMarkerClickListener(marker -> {
             marker.setIcon(VectorConverterUtil.convert(getContext(),R.drawable.btn_click_marker));
-            presenter.getUserPinPreview(marker);
-            currentMarker=marker;
+            presenter.markerClicked(marker);
             return true;
         });
         googleMap.setOnMapLongClickListener(latLng -> {
-            if(userMarker!=null)
-                userMarker.remove();
-            userMarker=googleMap.addMarker(new MarkerOptions()
+            Marker userMarker=googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
                     .icon(VectorConverterUtil.convert(getContext(),R.drawable.btn_location_marker))
                     .title("이 지역 선택"));
             userMarker.showInfoWindow();
+            presenter.mapLongClicked(userMarker);
         });
         googleMap.setOnInfoWindowClickListener(marker -> {
-            if(currentNation.isEmpty()||currentCity.isEmpty())
-                showFragmentToast("지역을 선택해 주세요");
-            else
-                showPeriodSetting();
+            presenter.infoWindowClicked();
         });
     }
 

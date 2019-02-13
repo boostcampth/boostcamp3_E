@@ -19,11 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ExListAdapter extends RecyclerView.Adapter<ExListAdapter.ExListView> implements ExListAdapterContract.Model, ExListAdapterContract.View {
     private ArrayList<String> list=new ArrayList<>();
     private OnItemClickListener clickListener;
-    private EndlessScrollListener endlessListener;
 
     public ExListAdapter(){
         clickListener= __ -> {};
-        endlessListener= () -> {};
     }
 
     @Override
@@ -31,12 +29,10 @@ public class ExListAdapter extends RecyclerView.Adapter<ExListAdapter.ExListView
         clickListener=listener;
     }
 
-    public void setEndlessScrollListener(EndlessScrollListener listener){
-        endlessListener=listener;
-    }
 
     @Override
     public void add(String text) {
+        list.add(text);
         notifyDataSetChanged();
     }
 
@@ -65,10 +61,9 @@ public class ExListAdapter extends RecyclerView.Adapter<ExListAdapter.ExListView
         holder.itemView.setOnClickListener(v -> {
             clickListener.onItemClick(list.get(position));
         });
-
-        if(position==getItemCount()-1){
-            endlessListener.onLastPosition();
-        }
+        holder.binding.ivRemove.setOnClickListener(v -> {
+            remove(position);
+        });
     }
 
     @Override
@@ -109,13 +104,6 @@ public class ExListAdapter extends RecyclerView.Adapter<ExListAdapter.ExListView
         }
         public void setText(String text){
             binding.tvExPlace.setText(text);
-            long now=System.currentTimeMillis();
-            Date date=new Date(now);
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-            binding.tvSearchDate.setText(sdf.format(date));
         }
-    }
-    public interface EndlessScrollListener{
-        void onLastPosition();
     }
 }

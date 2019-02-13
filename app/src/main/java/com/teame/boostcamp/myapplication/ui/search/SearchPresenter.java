@@ -1,28 +1,26 @@
 package com.teame.boostcamp.myapplication.ui.search;
 
-import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
-import android.preference.PreferenceManager;
 import android.util.Pair;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapterContract;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.PlaceTextDataRepository;
 import com.teame.boostcamp.myapplication.model.repository.UserPinRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 
 public class SearchPresenter implements SearchContract.Presenter {
 
@@ -33,6 +31,14 @@ public class SearchPresenter implements SearchContract.Presenter {
     private CompositeDisposable disposable=new CompositeDisposable();
     private HashMap<LatLng,String> userPinMap=new HashMap<>();
     private PlaceTextDataRepository placeRepository;
+    private boolean isSelected=false;
+    private boolean imageViewClick=false;
+    private ArrayList<Goods> selectedlist;
+    private String currentNation;
+    private String currentCity;
+    private LatLng currentPosition;
+    private Marker currentMarker;
+    private Marker userMarker;
 
 
     public SearchPresenter(SearchContract.View view, ResourceProvider provider){
@@ -49,15 +55,59 @@ public class SearchPresenter implements SearchContract.Presenter {
     }
 
     @Override
-    public void getUserPinGoodsList(Marker marker) {
-        disposable.add(remote.getUserPinGoodsList(userPinMap.get(marker.getPosition()))
-                            .subscribe(goodslist->{
-                                view.showUserGoodsListActivity(goodslist);
-                            }));
+    public void showUserPinClicked() {
+        if(imageViewClick) {
+            view.hideUserPin();
+            imageViewClick=false;
+        }
+        else {
+            for(LatLng latlng:userPinMap.keySet())
+                view.showUserPin(latlng);
+            imageViewClick=true;
+        }
     }
 
     @Override
-    public void getUserPinPreview(Marker marker) {
+    public void mapLongClicked(Marker user) {
+        if(userMarker!=null)
+            userMarker.remove();
+        userMarker=user;
+    }
+
+    @Override
+    public void infoWindowClicked() {
+        if(currentNation==null||currentCity==null)
+            view.showFragmentToast("장소를 선택해 주세요");
+        else
+            view.showPeriodSetting();
+    }
+
+    @Override
+    public void setSelectedList(List<Goods> goodslist) {
+        selectedlist=(ArrayList<Goods>)goodslist;
+    }
+
+    @Override
+    public void userPreviewClicked() {
+        if(currentPosition==null)
+            return;
+        disposable.add(remote.getUserPinGoodsList(userPinMap.get(currentPosition))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(goodslist->{
+                    view.showUserGoodsListActivity(goodslist);
+                }));
+
+    }
+
+    @Override
+    public void floatingButtonClicked(Date start, Date end) {
+        GoodsListHeader header=new GoodsListHeader(currentNation,currentCity,start,end);
+        //TODO:START ACTIVITY
+    }
+
+    @Override
+    public void markerClicked(Marker marker) {
+        currentMarker=marker;
         userPinMap.get(marker);
         String mapKey=userPinMap.get(marker.getPosition());
         DLogUtil.e(mapKey);
@@ -94,15 +144,16 @@ public class SearchPresenter implements SearchContract.Presenter {
         try{
             List<Address> geoResult=geocoder.getFromLocationName(place,1);
             LatLng latlon=new LatLng(geoResult.get(0).getLatitude(),geoResult.get(0).getLongitude());
+            currentPosition=latlon;
             DLogUtil.e(geoResult.toString());
-            String nationCode=geoResult.get(0).getCountryCode();
-            String cityName=geoResult.get(0).getFeatureName().replace(" ","");
+            currentNation=geoResult.get(0).getCountryCode();
+            currentCity=geoResult.get(0).getFeatureName().replace(" ","");
             view.showPositionInMap(latlon);
             view.hideUserPin();
             disposable.add(remote.getUserVisitedLocation(latlon)
                                 .subscribe(pairlist -> {
                                     userPinMap.clear();
-                                    view.showSearchResult(pairlist.size(),nationCode,cityName);
+                                    view.showSearchResult(pairlist.size(),currentCity);
                                     for(Pair<LatLng,String> pair:pairlist){
                                         userPinMap.put(pair.first,pair.second);
                                     }
