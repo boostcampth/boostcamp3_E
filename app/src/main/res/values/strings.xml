@@ -13,13 +13,14 @@
     <string name="email_validation">사용가능한 이메일 입니다.</string>
     <string name="email_duplication">중복된 이메일 입니다</string>
     <string name="email_format_error">잘못된 이메일 형식입니다</string>
-    <string name="email_hint">  Email</string>
+    <string name="email_hint">가입한 이메일</string>
     <string name="email_check">이메일 체크</string>
     <string name="password_confirm_true">비밀번호가 일치합니다</string>
     <string name="password_confirm_false">비밀번호가 일치하지 않습니다</string>
-    <string name="password_hint">  Password</string>
+    <string name="password_hint">비밀번호</string>
     <string name="login">로그인</string>
-    <string name="signup">회원가입</string>
+    <string name="signup">가입하기</string>
+    <string name="signup_hint">계정이 없으신가요?</string>
     <string name="password_confirm_hint">  Password Confirm</string>
     <string name="male">남성</string>
     <string name="female">여성</string>
