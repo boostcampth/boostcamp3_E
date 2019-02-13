@@ -12,11 +12,14 @@ import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;
 import com.teame.boostcamp.myapplication.ui.search.SearchFragment;
 import com.teame.boostcamp.myapplication.ui.base.BaseActivity;
+import com.teame.boostcamp.myapplication.ui.search.SearchPlaceFragment;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding> {
+public class MainActivity extends BaseActivity<ActivityMainBinding> implements FragmentCallback {
 
     @Override
     protected int getLayoutResourceId() {
@@ -66,4 +69,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         binding.vpFragment.setOffscreenPageLimit(mainViewPagerAdapter.getCount()-1);
     }
 
+    @Override
+    public void startNewFragment() {
+        FragmentManager manager=getSupportFragmentManager();
+        FragmentTransaction transaction=manager.beginTransaction();
+        transaction.replace(R.id.change, SearchPlaceFragment.newInstance());
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 }

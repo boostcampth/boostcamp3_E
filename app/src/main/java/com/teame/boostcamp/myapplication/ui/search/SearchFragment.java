@@ -29,6 +29,7 @@ import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSearchBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
+import com.teame.boostcamp.myapplication.ui.FragmentCallback;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
@@ -45,6 +46,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -156,18 +159,17 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
 
         //SearchBar setting
         binding.toolbarSearch.setOnClickListener(__ -> {
-            binding.svPlace.setIconified(false);
-            showExSearchView();
+            ((FragmentCallback)getActivity()).startNewFragment();
         });
         binding.svPlace.setMaxWidth(binding.toolbarSearch.getWidth());
         binding.svPlace.setOnQueryTextFocusChangeListener((__, hasFocus) -> {
-            if(hasFocus) {
+            /*if(hasFocus) {
                 if(binding.rvExList.getVisibility()==View.GONE)
                     showExSearchView();
             }
             else{
                 hideExSearchView();
-            }
+            }*/
         });
         binding.svPlace.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -182,6 +184,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
             }
         });
     }
+
 
     private void showUserPin(){
         isShowUserPin=true;
