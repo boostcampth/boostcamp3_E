@@ -20,7 +20,6 @@ public interface SearchContract {
         void showUserPin(LatLng latlng);
         void showPeriodSetting();
         void hideUserPin();
-        void hideExSearchView();
         void showFragmentToast(String text);
         void showUserGoodsListActivity(List<Goods> list);
     }
@@ -28,11 +27,7 @@ public interface SearchContract {
     interface Presenter extends BasePresenter{
         void onSearchSubmit(String place);
         void showUserPin();
-        void setAdpaterView(ExListAdapterContract.View adapter);
-        void setAdpaterModel(ExListAdapterContract.Model adapter);
-        void initView();
         void getUserPinPreview(Marker marker);
         void getUserPinGoodsList(Marker currentMarker);
-        void onTextChange(String text);
     }
 }

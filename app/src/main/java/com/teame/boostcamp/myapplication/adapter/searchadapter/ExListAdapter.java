@@ -72,6 +72,12 @@ public class ExListAdapter extends RecyclerView.Adapter<ExListAdapter.ExListView
     }
 
     @Override
+    public void remove(int position) {
+        list.remove(position);
+        notifyDataSetChanged();
+    }
+
+    @Override
     public boolean searchList(String text) {
         //배열 내에 특정 문자가 있는지 검사
         for(String str:list){

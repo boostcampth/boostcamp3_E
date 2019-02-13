@@ -11,6 +11,7 @@ public interface ExListAdapterContract {
         void add(String text);
         void setList(ArrayList<String> list);
         List<String> getList();
+        void remove(int position);
         boolean searchList(String text);
         void searchText(String text);
     }

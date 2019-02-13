@@ -36,6 +36,7 @@ import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
+import com.teame.boostcamp.myapplication.util.VectorConverterUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -107,24 +108,6 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     }
 
     private void setUp(){
-        //adapter setting
-        ExListAdapter adapter=new ExListAdapter();
-        adapter.setOnItemClickListener(text -> {
-            presenter.onSearchSubmit(text);
-        });
-
-        //RecyclerView setting
-        LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
-        binding.rvExList.setLayoutManager(layoutManager);
-        binding.rvExList.setAdapter(adapter);
-        binding.rvExList.setOnTouchListener((__, event) -> {
-            if(event.getAction()==MotionEvent.ACTION_DOWN){
-                InputKeyboardUtil.hideKeyboard(getActivity());
-                return true;
-            }
-            return false;
-        });
-
         //view setting
         binding.ivUserpin.setOnClickListener(__ -> {
             if(isShowUserPin){
@@ -150,38 +133,12 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
                 CreateListActivity.startActivity(getContext(),header);
         });
 
-        //presenter setting
-        presenter.setAdpaterView(adapter);
-        presenter.setAdpaterModel(adapter);
-
         //googlemap setting
         binding.mvGooglemap.getMapAsync(this);
 
         //SearchBar setting
         binding.toolbarSearch.setOnClickListener(__ -> {
             ((FragmentCallback)getActivity()).startNewFragment();
-        });
-        binding.svPlace.setMaxWidth(binding.toolbarSearch.getWidth());
-        binding.svPlace.setOnQueryTextFocusChangeListener((__, hasFocus) -> {
-            /*if(hasFocus) {
-                if(binding.rvExList.getVisibility()==View.GONE)
-                    showExSearchView();
-            }
-            else{
-                hideExSearchView();
-            }*/
-        });
-        binding.svPlace.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                presenter.onSearchSubmit(query);
-                InputKeyboardUtil.hideKeyboard(getActivity());
-                return true;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
         });
     }
 
@@ -218,7 +175,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     public void showUserPin(LatLng location) {
         googleMap.addMarker(new MarkerOptions()
                 .position(location)
-                .icon(vectorDescriptor(getContext(),R.drawable.btn_uncllick_marker)));
+                .icon(VectorConverterUtil.convert(getContext(),R.drawable.btn_uncllick_marker)));
     }
 
     @Override
@@ -226,30 +183,6 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
         googleMap.clear();
         isShowUserPin=false;
         binding.ivUserpin.setImageResource(R.drawable.btn_create_userpinview);
-    }
-
-    public void showExSearchView() {
-        binding.rvExList.setVisibility(View.VISIBLE);
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
-            binding.toolbarSearch.setElevation(0);
-        binding.toolbarSearch.setBackground(getResources().getDrawable(R.drawable.shape_stroke_roundedbox));
-        binding.viewBackground.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-        if(binding.includePeriodSetting.cvPeriodSetting.getVisibility()==View.VISIBLE) {
-            binding.includePeriodSetting.cvPeriodSetting.setVisibility(View.GONE);
-            binding.fabCreateChecklist.hide();
-        }
-        presenter.initView();
-    }
-
-    @Override
-    public void hideExSearchView(){
-        binding.svPlace.clearFocus();
-        binding.svPlace.setIconified(true);
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
-            binding.toolbarSearch.setElevation(4);
-        binding.toolbarSearch.setBackground(getResources().getDrawable(R.drawable.shape_roundedbox));
-        binding.rvExList.setVisibility(View.GONE);
-        binding.viewBackground.setBackgroundColor(getResources().getColor(R.color.colorClear));
     }
 
     @Override
@@ -366,7 +299,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
                     }));
         }
         googleMap.setOnMarkerClickListener(marker -> {
-            marker.setIcon(vectorDescriptor(getContext(),R.drawable.btn_click_marker));
+            marker.setIcon(VectorConverterUtil.convert(getContext(),R.drawable.btn_click_marker));
             presenter.getUserPinPreview(marker);
             currentMarker=marker;
             return true;
@@ -376,7 +309,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
                 userMarker.remove();
             userMarker=googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
-                    .icon(vectorDescriptor(getContext(),R.drawable.btn_location_marker))
+                    .icon(VectorConverterUtil.convert(getContext(),R.drawable.btn_location_marker))
                     .title("이 지역 선택"));
             userMarker.showInfoWindow();
         });
@@ -388,12 +321,4 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
         });
     }
 
-    private BitmapDescriptor vectorDescriptor(Context context, int vectorId){
-        Drawable background= ContextCompat.getDrawable(context,vectorId);
-        background.setBounds(0,0,background.getIntrinsicWidth(),background.getIntrinsicHeight());
-        Bitmap vectorImage=Bitmap.createBitmap(background.getIntrinsicWidth(),background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas=new Canvas(vectorImage);
-        background.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(vectorImage);
-    }
 }

@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapterContract;
+import com.teame.boostcamp.myapplication.model.repository.PlaceTextDataRepository;
 import com.teame.boostcamp.myapplication.model.repository.UserPinRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
@@ -21,47 +22,30 @@ import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 
 public class SearchPresenter implements SearchContract.Presenter {
 
     private SearchContract.View view;
     private Geocoder geocoder=null;
-    private ExListAdapterContract.Model adapterModel;
-    private ExListAdapterContract.View adapterView;
     private ResourceProvider provider;
-    private SharedPreferences prefExSearch;
-    private ArrayList<String> exList;
-    private static final String PREF_EX_SEARCH="PREF_EX_SEARCH";
-    private static final int STRING_CAPACITY=8;
-    private Gson gson;
     private UserPinRepository remote;
     private CompositeDisposable disposable=new CompositeDisposable();
     private HashMap<LatLng,String> userPinMap=new HashMap<>();
+    private PlaceTextDataRepository placeRepository;
 
-
-    @Override
-    public void setAdpaterView(ExListAdapterContract.View adapter) {
-        adapterView=adapter;
-    }
-
-    @Override
-    public void setAdpaterModel(ExListAdapterContract.Model adapter) {
-        adapterModel=adapter;
-    }
 
     public SearchPresenter(SearchContract.View view, ResourceProvider provider){
         this.view=view;
         this.provider=provider;
         remote= UserPinRepository.getInstance();
-        prefExSearch = PreferenceManager.getDefaultSharedPreferences(provider.getApplicationContext());
-        gson=new Gson();
-        String list=prefExSearch.getString(PREF_EX_SEARCH,"");
-        if(list.equals("")){
-            exList=new ArrayList<>();
-        }else{
-            exList=gson.fromJson(list,new TypeToken<ArrayList<String>>(){}.getType());
-        }
-        DLogUtil.e(exList.toString());
+        placeRepository=PlaceTextDataRepository.getInstance();
+        disposable.add(placeRepository.getText()
+                            .subscribe(s -> {
+                                onSearchSubmit(s);
+                            },e->{
+                                DLogUtil.e("Submit Error");
+                            }));
     }
 
     @Override
@@ -89,15 +73,12 @@ public class SearchPresenter implements SearchContract.Presenter {
     public void showUserPin() {
         int onlyone=0;
         for(LatLng latlng:userPinMap.keySet()){
-            if(onlyone==0)
+            if(onlyone==0) {
                 view.showPositionInMap(latlng);
+                onlyone++;
+            }
             view.showUserPin(latlng);
         }
-    }
-
-    @Override
-    public void onTextChange(String text) {
-        adapterModel.searchList(text);
     }
 
     @Override
@@ -117,7 +98,6 @@ public class SearchPresenter implements SearchContract.Presenter {
             String nationCode=geoResult.get(0).getCountryCode();
             String cityName=geoResult.get(0).getFeatureName().replace(" ","");
             view.showPositionInMap(latlon);
-            view.hideExSearchView();
             view.hideUserPin();
             disposable.add(remote.getUserVisitedLocation(latlon)
                                 .subscribe(pairlist -> {
@@ -130,32 +110,15 @@ public class SearchPresenter implements SearchContract.Presenter {
                                     DLogUtil.e(e.getMessage());
                                 }));
         }catch(Exception e){
-            view.hideExSearchView();
             view.showFragmentToast("검색 결과가 없습니다.");
             return;
         }
-        if(adapterModel.searchList(place)){
-            if(exList.size()>=STRING_CAPACITY){
-                exList.remove(0);
-            }
-            exList.add(place);
-            adapterModel.add(place);
-        }
-    }
-
-    @Override
-    public void initView() {
-        adapterModel.setList(exList);
     }
 
     @Override
     public void onDetach() {
         geocoder=null;
         view=null;
-        SharedPreferences.Editor editor=prefExSearch.edit();
-        String json=gson.toJson(exList);
-        editor.putString(PREF_EX_SEARCH,json);
-        editor.apply();
         disposable.dispose();
     }
 }
