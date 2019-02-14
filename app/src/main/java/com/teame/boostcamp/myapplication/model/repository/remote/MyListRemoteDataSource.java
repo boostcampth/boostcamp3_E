@@ -1,8 +1,12 @@
 package com.teame.boostcamp.myapplication.model.repository.remote;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -29,6 +33,9 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
     private static final String QUERY_MY_GOODS = "items";
     private static final String QUERT_LOCATION = "location";
     private static MyListRemoteDataSource INSTANCE;
+
+    private static String FIREBASE_URL="https://boostcamp-1548575868471.firebaseio.com/_geofire";
+    private DatabaseReference firebase= FirebaseDatabase.getInstance().getReferenceFromUrl(FIREBASE_URL);
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -127,7 +134,7 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
         header.setKey(uid);
         CollectionReference myListRef = userRef.document(uid).collection(QUERY_MY_LIST);
         String myListUid = myListRef.document().getId();
-
+        //TODO:location 기준으로 ID 잡기
         //마이리스트용
         DocumentReference myListDocRef = myListRef.document(myListUid);
         CollectionReference myListItemRef = myListDocRef.collection(QUERY_MY_GOODS);
@@ -147,15 +154,17 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
             batch.set(locationItemRef.document(item.getKey()), item);
         }
 
-
         batch.commit()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         subject.onNext(true);
+                        GeoFire fire=new GeoFire(firebase);
+                        fire.setLocation(myListUid, new GeoLocation(header.getLat(), header.getLng()), (key, error) -> {
+                            subject.onComplete();
+                        });
                     } else {
                         subject.onError(task.getException());
                     }
-                    subject.onComplete();
                 });
 
         return subject.subscribeOn(Schedulers.io()).flatMapSingle(Single::just)

@@ -94,7 +94,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toLeftOf="@id/iv_delete"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/btn_add_alarm" />
+                    app:srcCompat="@drawable/btn_alarm" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_delete"

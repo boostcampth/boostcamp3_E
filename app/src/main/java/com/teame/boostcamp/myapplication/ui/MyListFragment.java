@@ -1,6 +1,15 @@
 package com.teame.boostcamp.myapplication.ui;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -15,6 +24,7 @@ import com.teame.boostcamp.myapplication.util.Constant;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,6 +81,9 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
             // TODO: 알람 등록 리스너
             AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
             dialog.setMessage(position + "번째 리스트 알림설정")
+                    .setPositiveButton("확인", (dialog1, which) -> {
+                        presenter.alarmButtonClick(position);
+                    })
                     .show();
         });
         adapter.setOnItemDeleteListener((v, position) -> presenter.deleteMyList(position));

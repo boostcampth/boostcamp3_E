@@ -40,9 +40,4 @@ public class UserPinRepository implements UserPinDataSource {
     public Single<GoodsListHeader> getUserPinPreview(String Key) {
         return shoppingListRemoteDataSource.getUserPinPreview(Key);
     }
-
-    @Override
-    public void setLocation(String Key, LatLng location) {
-        shoppingListRemoteDataSource.setLocation(Key, location);
-    }
 }

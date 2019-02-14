@@ -13,6 +13,8 @@ interface MyListContract {
     }
 
     interface Presenter extends BasePresenter {
+        void alarmButtonClick(int position);
+
         void loadMyList(GoodsListHeaderRecyclerAdapter adapter);
 
         void getMyListUid(int position);

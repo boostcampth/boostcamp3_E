@@ -33,17 +33,6 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
         return presenter;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
-            case android.R.id.home:
-                getFragmentManager().beginTransaction().remove(this).commit();
-                return false;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     public static SearchPlaceFragment newInstance(){
         return new SearchPlaceFragment();
     }
@@ -76,6 +65,9 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
         binding.rvExList.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         binding.rvExList.addItemDecoration(new MarginDecorator(32));
         binding.toolbarSearch.setNavigationIcon(R.drawable.btn_back);
+        binding.toolbarSearch.setNavigationOnClickListener(__ -> {
+            getFragmentManager().beginTransaction().remove(this).commit();
+        });
         binding.etSearchPlace.setOnEditorActionListener((v, actionId, __) -> {
             if(actionId== EditorInfo.IME_ACTION_SEARCH){
                 presenter.search(v.getText().toString());

@@ -10,6 +10,7 @@ import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.PlaceTextDataRepository;
 import com.teame.boostcamp.myapplication.model.repository.UserPinRepository;
+import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
@@ -31,7 +32,6 @@ public class SearchPresenter implements SearchContract.Presenter {
     private CompositeDisposable disposable=new CompositeDisposable();
     private HashMap<LatLng,String> userPinMap=new HashMap<>();
     private PlaceTextDataRepository placeRepository;
-    private boolean isSelected=false;
     private boolean imageViewClick=false;
     private ArrayList<Goods> selectedlist;
     private String currentNation;
@@ -101,8 +101,13 @@ public class SearchPresenter implements SearchContract.Presenter {
 
     @Override
     public void floatingButtonClicked(Date start, Date end) {
-        GoodsListHeader header=new GoodsListHeader(currentNation,currentCity,start,end);
+        LatLng latlng=userMarker.getPosition();
+        GoodsListHeader header=new GoodsListHeader(currentNation,currentCity,start,end,latlng.latitude,latlng.longitude);
         //TODO:START ACTIVITY
+        if(selectedlist==null)
+            CreateListActivity.startActivity(provider.getApplicationContext(),header);
+        else
+            CreateListActivity.startActivity(provider.getApplicationContext(),header,selectedlist);
     }
 
     @Override
