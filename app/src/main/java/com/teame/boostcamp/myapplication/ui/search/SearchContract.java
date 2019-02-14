@@ -23,6 +23,9 @@ public interface SearchContract {
         void hideUserPin();
         void showFragmentToast(String text);
         void showUserGoodsListActivity(List<Goods> list);
+        void showmarkerInfoWindow(Marker marker);
+        void redPinShow(Marker marker);
+        void bluePinShow(Marker marker);
     }
 
     interface Presenter extends BasePresenter{
@@ -31,7 +34,7 @@ public interface SearchContract {
         void infoWindowClicked();
         void onSearchSubmit(String place);
         void showUserPin();
-        void markerClicked(Marker marker);
+        boolean markerClicked(Marker marker);
         void userPreviewClicked();
         void floatingButtonClicked(Date start, Date end);
         void setSelectedList(List<Goods> goodslist);

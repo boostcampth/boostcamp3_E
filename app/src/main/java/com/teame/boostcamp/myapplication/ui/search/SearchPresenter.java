@@ -103,16 +103,23 @@ public class SearchPresenter implements SearchContract.Presenter {
     public void floatingButtonClicked(Date start, Date end) {
         LatLng latlng=userMarker.getPosition();
         GoodsListHeader header=new GoodsListHeader(currentNation,currentCity,start,end,latlng.latitude,latlng.longitude);
-        //TODO:START ACTIVITY
         if(selectedlist==null)
             CreateListActivity.startActivity(provider.getApplicationContext(),header);
         else
             CreateListActivity.startActivity(provider.getApplicationContext(),header,selectedlist);
+        selectedlist=null;
     }
 
     @Override
-    public void markerClicked(Marker marker) {
+    public boolean markerClicked(Marker marker) {
+        view.redPinShow(currentMarker);
         currentMarker=marker;
+        boolean lat=userMarker.getPosition().latitude==marker.getPosition().latitude;
+        boolean lon=userMarker.getPosition().longitude==marker.getPosition().longitude;
+        if(lat||lon) {
+            view.showmarkerInfoWindow(marker);
+            return false;
+        }
         userPinMap.get(marker);
         String mapKey=userPinMap.get(marker.getPosition());
         DLogUtil.e(mapKey);
@@ -122,6 +129,7 @@ public class SearchPresenter implements SearchContract.Presenter {
                         },e->{
                             DLogUtil.e(e.getMessage());
                         }));
+        return true;
     }
 
     @Override
