@@ -21,14 +21,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsListRecyclerAdapter.ViewHolder> {
-    private List<Boolean> checkList = new ArrayList<>();
-    private OnCheckItemClickListener onItemClickListener;
     private OnItemClickListener onItemDetailListener;
-    private int animPosition = -1;
-
-    public void setAnimPosition(int position) {
-        animPosition = position;
-    }
 
     @NonNull
     @Override
@@ -37,33 +30,8 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
                 .inflate(R.layout.item_list_goods, parent, false);
         final ViewHolder holder = new ViewHolder(itemView);
 
-        holder.binding.npCount.setOnValueChangedListener((__, ___, newValue) -> {
-            int position = holder.getLayoutPosition();
-            Goods item = itemList.get(position);
-            item.setCount(newValue);
-        });
 
-        holder.binding.cvItemLayout.setOnClickListener(view -> {
-            if (onItemClickListener != null) {
-                int position = holder.getLayoutPosition();
-                DLogUtil.e("리스너 :" + holder.getAdapterPosition());
-                boolean oldBoolean = checkList.get(position);
-                checkList.set(position, !oldBoolean);
-                holder.setChecked(!oldBoolean);
-                if (!oldBoolean) {
-                    Goods item = itemList.get(position);
-                    item.setCount(1);
-                    holder.binding.npCount.setVisibility(View.VISIBLE);
-                    holder.binding.npCount.setValue(1);
-                } else {
-                    itemList.get(position).setCount(0);
-                    holder.binding.npCount.setVisibility(View.GONE);
-                }
-                onItemClickListener.onitemClick(view, position, !oldBoolean);
-            }
-        });
-
-        holder.binding.ivShowItemDetail.setOnClickListener(view -> {
+        holder.binding.getRoot().setOnClickListener(view -> {
             int position = holder.getLayoutPosition();
             DLogUtil.e("리스너 :" + holder.getAdapterPosition());
             if (onItemDetailListener != null) {
@@ -77,67 +45,12 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Goods item = itemList.get(position);
         holder.binding.setItem(item);
-        holder.binding.setStarCount(item.getRatio().intValue());
-        if (checkList.get(position)) {
-            if (item.getCount() == 0) {
-                item.setCount(1);
-                holder.binding.npCount.setValue(1);
-            }
-            holder.binding.lavCheckAnim.setProgress(1);
-            holder.binding.npCount.setVisibility(View.VISIBLE);
-            holder.binding.npCount.setValue(item.getCount());
-        } else {
-            holder.binding.lavCheckAnim.setProgress(0);
-            holder.binding.npCount.setVisibility(View.GONE);
-        }
-
-        if (position == animPosition) {
-            final Animation animShake
-                    = AnimationUtils.loadAnimation(holder.binding.getRoot().getContext(), R.anim.anim_shake);
-            holder.binding.cvItemLayout.startAnimation(animShake);
-            animPosition = -1;
-        }
 
         DLogUtil.d(itemList.get(position).toString());
     }
 
-    public void setOnItemClickListener(OnCheckItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
     public void setOnItemDetailListener(OnItemClickListener onItemDetailListener) {
         this.onItemDetailListener = onItemDetailListener;
-    }
-
-    /**
-     * 최초 아이템 init
-     */
-    public void initItems(List<Goods> itemList) {
-        this.itemList = itemList;
-        for (int i = 0; i < itemList.size(); i++) {
-            checkList.add(false);
-        }
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 아이템 추가 (단일)
-     */
-    public void addItem(Goods item) {
-        int position = this.itemList.size();
-        this.itemList.add(item);
-        this.checkList.add(true);
-        notifyItemInserted(position);
-    }
-
-    /**
-     * 해당 position 의 item 반환
-     */
-    public Goods getItem(int position) {
-        if (position < 0 || itemList.size() <= position) {
-            return null;
-        }
-        return this.itemList.get(position);
     }
 
     /**
@@ -155,56 +68,14 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
         return -1;
     }
 
-    public void unCheckItem(int position) {
-        if (position < 0 || itemList.size() <= position) {
-            return;
-        }
-        checkList.set(position, false);
-    }
 
-    /**
-     * 아이템 초기화
-     */
-    public void clear() {
-        itemList.clear();
-        checkList.clear();
-        notifyDataSetChanged();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements Checkable {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ItemListGoodsBinding binding;
-        private boolean isCheck = false;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
-        }
-
-        @Override
-        public void setChecked(boolean checked) {
-            isCheck = checked;
-            if (checked) {
-                binding.lavCheckAnim.setSpeed(1);
-                binding.lavCheckAnim.playAnimation();
-                DLogUtil.d("is check");
-            } else {
-                binding.lavCheckAnim.setSpeed(-1);
-                binding.lavCheckAnim.resumeAnimation();
-                DLogUtil.d("is not check");
-            }
-        }
-
-        @Override
-        public boolean isChecked() {
-            return isCheck;
-        }
-
-        @Override
-        @Deprecated
-        public void toggle() {
-            DLogUtil.e("This toggle does nothing.");
-            // toggle사용시 holder재사용으로 인한 버그발생
         }
 
     }

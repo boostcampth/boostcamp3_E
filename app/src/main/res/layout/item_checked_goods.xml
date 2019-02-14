@@ -61,23 +61,22 @@
                     android:id="@+id/tv_item_name"
                     style="@style/Widget.MyListItem.TextView"
                     android:layout_width="0dp"
-                    android:text="@{item.name}"
-                    android:maxLines="1"
                     android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@{item.name}"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/tv_item_ratio"
                     app:layout_constraintLeft_toRightOf="@id/iv_item_image"
-                    app:layout_constraintTop_toTopOf="@id/iv_item_image"
                     app:layout_constraintRight_toLeftOf="@id/iv_delete_item"
+                    app:layout_constraintTop_toTopOf="@id/iv_item_image"
                     app:layout_constraintVertical_chainStyle="spread_inside"
                     tools:text="이름" />
 
 
-                <include
+                <androidx.appcompat.widget.AppCompatRatingBar
                     android:id="@+id/include_rating"
-                    layout="@layout/layout_star_ratio"
-                    starCount="@{starCount}"
+                    style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"

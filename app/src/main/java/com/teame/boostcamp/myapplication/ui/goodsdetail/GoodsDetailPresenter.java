@@ -1,6 +1,9 @@
 package com.teame.boostcamp.myapplication.ui.goodsdetail;
 
+import android.app.Activity;
+
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.util.Constant;
@@ -26,27 +29,24 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
         disposable.add(repository.getReplyList(itemUid)
                 .subscribe(list -> {
                             adapter.initItems(list);
-                            view.finishLoad(list.size());
+                            float totalRatio = 0;
+                            for (Reply reply : list) {
+                                totalRatio += reply.getRatio();
+                            }
+                            view.finishLoad(totalRatio, list.size());
                             DLogUtil.d(list.toString());
                         },
                         e -> {
-                            view.finishLoad(Constant.FAIL_LOAD);
+                            view.finishLoad(0, Constant.FAIL_LOAD);
                             DLogUtil.e(e.getMessage());
                         })
         );
     }
 
     @Override
-    public void writeReply(String itemId, String content, int ratio) {
-        // TODO 댓글 쓰기 일정 시간 텀 주기
-        disposable.add(repository
-                .writeReply(itemId, content, ratio)
-                .subscribe(reply -> {
-                            adapter.addItem(0, reply);
-                            view.successWriteItem();
-                        },
-                        e -> DLogUtil.e(e.getMessage())
-                ));
+    public void writeReply(Reply item) {
+        adapter.addItem(0, item);
+        view.completeReloadReply();
     }
 
     @Override
@@ -55,6 +55,11 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
         disposable.add(repository.deleteReply(itemId, item.getKey())
                 .subscribe(b -> adapter.removeItem(position),
                         e -> DLogUtil.e(e.getMessage())));
+    }
+
+    @Override
+    public Reply getItem(int position) {
+        return adapter.getItem(position);
     }
 
 

@@ -16,25 +16,6 @@ import androidx.databinding.BindingAdapter;
 
 public class ImageViewUtil {
 
-
-    @BindingAdapter("setRatioStar")
-    public static void setRatioStar(ImageView imageView, Boolean isTrue) {
-        DLogUtil.e(isTrue+"");
-        if (isTrue) {
-            Glide.with(imageView)
-                    .load(ContextCompat.getDrawable(imageView.getContext(),
-                            R.drawable.ic_item_ratio_full_star))
-                    .into(imageView);
-            return;
-        }
-
-        Glide.with(imageView)
-                .load(ContextCompat.getDrawable(imageView.getContext(),
-                        R.drawable.ic_item_ratio_empty_star))
-                .into(imageView);
-
-    }
-
     @BindingAdapter({"imgUrl", "error"})
     public static void loadImage(ImageView imageView, String uri, Drawable error) {
         RequestOptions requestOptions = new RequestOptions().placeholder(error).error(error);

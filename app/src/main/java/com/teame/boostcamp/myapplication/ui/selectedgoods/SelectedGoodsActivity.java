@@ -98,9 +98,6 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
         binding.rvRecommendList.setAdapter(adapter);
         presenter.loadListData(adapter, headerUid);
 
-        adapter.setOnItemClickListener((__, position, isCheck) ->
-                presenter.selectItem(position, isCheck));
-
         adapter.setOnItemDetailListener((__, position) -> presenter.getDetailItemUid(position));
     }
 
