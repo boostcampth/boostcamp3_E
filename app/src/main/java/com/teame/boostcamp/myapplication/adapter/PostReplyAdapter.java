@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemPostReplyBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.BindingConversion;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +47,7 @@ public class PostReplyAdapter extends RecyclerView.Adapter<PostReplyAdapter.Item
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
         holder.binding.setReply(replyList.get(i));
+        holder.binding.setWriter(FirebaseAuth.getInstance().getCurrentUser().getEmail());
     }
 
     @Override
@@ -60,6 +63,11 @@ public class PostReplyAdapter extends RecyclerView.Adapter<PostReplyAdapter.Item
             binding = DataBindingUtil.bind(itemView);
         }
 
+    }
+
+    @BindingConversion
+    public static int showDeleteButton(boolean visible){
+        return visible ? View.VISIBLE : View.GONE;
     }
 }
 

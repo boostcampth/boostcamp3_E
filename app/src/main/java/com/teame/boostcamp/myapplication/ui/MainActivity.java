@@ -6,15 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;
-import com.teame.boostcamp.myapplication.ui.search.SearchFragment;
 import com.teame.boostcamp.myapplication.ui.base.BaseActivity;
+import com.teame.boostcamp.myapplication.ui.search.SearchFragment;
 import com.teame.boostcamp.myapplication.ui.search.SearchPlaceFragment;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;

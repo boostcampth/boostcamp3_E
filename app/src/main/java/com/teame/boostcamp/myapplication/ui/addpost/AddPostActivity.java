@@ -1,8 +1,10 @@
 package com.teame.boostcamp.myapplication.ui.addpost;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,15 +12,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.PreviewImageAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityAddPostBinding;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -61,13 +66,15 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
 
     private void initView() {
         adapter = new PreviewImageAdapter(getApplicationContext(), new ArrayList<>());
-        binding.ibGalleryPick.setOnClickListener(__ -> onAddImagesButtonClicked());
-        binding.ibTakePicture.setOnClickListener(__ -> onTakePictureButtonClicked());
+        binding.ivGalleryPick.setOnClickListener(__ -> onAddImagesButtonClicked());
+        binding.ivTakePicture.setOnClickListener(__ -> onTakePictureButtonClicked());
         binding.btAddPost.setOnClickListener(__ -> onAddPostButtonClicked());
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         binding.rvPreviewImage.setLayoutManager(layoutManager);
         binding.rvPreviewImage.setAdapter(adapter);
+        binding.ivAddPostBack.setOnClickListener( __ -> finish());
+        binding.tvListSelect.setOnClickListener( __ -> presenter.loadMyList());
     }
 
     private void onAddImagesButtonClicked() {
@@ -92,7 +99,7 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     }
 
     private void onAddPostButtonClicked() {
-        String content = binding.tietPostContent.getText().toString();
+        String content = binding.etPostContent.getText().toString();
 
         if (!TextUtils.isEmpty(content)) {
             presenter.addPost(content, adapter.getBitmapList());
@@ -161,6 +168,34 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
         }
     }
 
+    @Override
+    public void showListSelection(List<GoodsListHeader> goodsListHeaderList){
+        String[] selection = new String[goodsListHeaderList.size()];
+        for(int i=0; i<goodsListHeaderList.size(); i++){
+            selection[i] = goodsListHeaderList.get(i).getTitle();
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(selection, ( __ , which) -> {
+            presenter.setListSelection(goodsListHeaderList.get(which));
+            binding.tvListTitle.setText(goodsListHeaderList.get(which).getTitle());
+            binding.tvListTitle.setTextColor(getResources().getColor((R.color.colorAccent)));
+        });
+        builder.show();
+    }
+
+    @Override
+    public void failAddPost() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("쇼핑리스트를 선택해 주세요!");
+        builder.setMessage("쇼핑리스트를 선택하셔야지만 글을 게시할 수 있습니다!");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
 
 }
 

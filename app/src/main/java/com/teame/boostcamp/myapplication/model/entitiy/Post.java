@@ -7,7 +7,7 @@ public class Post {
     private String content;
     private User userData;
     private String writer;
-    private Object itemList;
+    private GoodsListHeader header;
     private int like;
     private String createdDate;
     private ArrayList<String> imagePathList;
@@ -15,7 +15,7 @@ public class Post {
 
     public Post(){};
 
-    public Post(String content, String writer, ArrayList<String> imagePathList){
+    public Post(String content, String writer, ArrayList<String> imagePathList, GoodsListHeader header){
 
         this.content = content;
         this.imagePathList = imagePathList;
@@ -23,6 +23,7 @@ public class Post {
         this.writer = writer;
         this.likedUidList = new ArrayList<>();
         this.createdDate = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(System.currentTimeMillis());
+        this.header = header;
     }
 
     public String getContent() {
@@ -41,12 +42,12 @@ public class Post {
         this.userData = userData;
     }
 
-    public Object getItemList() {
-        return itemList;
+    public GoodsListHeader getHeader() {
+        return header;
     }
 
-    public void setItemList(Object itemList) {
-        this.itemList = itemList;
+    public void setHeader(GoodsListHeader header) {
+        this.header = header;
     }
 
     public ArrayList<String> getImagePathList() {

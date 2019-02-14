@@ -57,9 +57,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
         holder.binding.setPost(postList.get(i));
         holder.binding.setUid(FirebaseAuth.getInstance().getUid());
         holder.binding.ivPostReply.setOnClickListener(__ -> onReplyButtonClick(i));
-        holder.binding.ivPostLike.setOnClickListener(__ -> {
-            onLikeButtonClick(i);
-        });
+        holder.binding.ivPostLike.setOnClickListener(__ -> onLikeButtonClick(i));
+        holder.binding.ivShoppingList.setOnClickListener(__ -> onListButtonClick(i));
         holder.binding.vpPostImages.setAdapter(new PostImagePagerAdapter(context, postList.get(i).getImagePathList()));
         holder.binding.tlImageIndicator.setupWithViewPager(holder.binding.vpPostImages, true);
 
@@ -110,6 +109,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
                     .set(post);
             notifyItemChanged(i, LIKE_UPDATE);
         }
+    }
+
+    @Override
+    public void onListButtonClick(int i) {
+
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {

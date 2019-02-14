@@ -8,31 +8,95 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_reply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/reply"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_reply_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/btn_back_black"
+                    tools:src="@drawable/btn_back_black" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:id="@+id/view_reply_toolbar_divide"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorDivide"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_reply"  />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_post_reply"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/cl_chat_box"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toTopOf="@+id/view_reply_divide"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_reply_toolbar_divide"
             tools:listitem="@layout/item_post_reply">
 
 
         </androidx.recyclerview.widget.RecyclerView>
 
+        <View
+            android:id="@+id/view_reply_divide"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorDivide"
+            app:layout_constraintBottom_toTopOf="@id/cl_reply_box"  />
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_chat_box"
+            android:id="@+id/cl_reply_box"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#ffffff"
-            android:minHeight="48dp"
+            android:layout_marginTop="7dp"
+            android:background="@color/colorWhite"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_post_reply_input"
@@ -75,8 +139,8 @@
                 android:clickable="true"
                 android:foregroundGravity="center"
                 android:gravity="center"
-                android:text="게시"
-                android:textColor="@color/colorDeepSkyBlue"
+                android:text="@string/write"
+                android:textColor="@color/colorAccent"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
