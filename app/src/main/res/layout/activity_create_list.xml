@@ -33,8 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fitsSystemWindows="true"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:title="@string/bottom_tab_my_list">
+                    app:layout_scrollFlags="scroll|enterAlways">
 
                     <androidx.appcompat.widget.Toolbar
                         android:id="@+id/toolbar_screen"
@@ -110,7 +109,6 @@
                 android:overScrollMode="never"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 tools:listitem="@layout/item_list_goods" />
-
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

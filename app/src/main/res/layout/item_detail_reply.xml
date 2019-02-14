@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="reply"
             type="com.teame.boostcamp.myapplication.model.entitiy.Reply" />
@@ -13,13 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include
-            android:id="@+id/include_rating"
-            layout="@layout/layout_star_ratio"
-            starCount="@{reply.ratio.intValue()}"
+        <androidx.appcompat.widget.AppCompatRatingBar
+            android:id="@+id/rb_reply"
+            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_median"
+            android:max="5"
+            android:stepSize="1.0"
             app:layout_constraintBottom_toTopOf="@+id/tv_review_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,9 +32,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:text=""
-            app:layout_constraintBottom_toBottomOf="@+id/include_rating"
-            app:layout_constraintLeft_toRightOf="@+id/include_rating"
-            app:layout_constraintTop_toTopOf="@+id/include_rating" />
+            app:layout_constraintBottom_toBottomOf="@id/rb_reply"
+            app:layout_constraintLeft_toRightOf="@id/rb_reply"
+            app:layout_constraintTop_toTopOf="@id/rb_reply" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_review_content"
@@ -43,16 +45,16 @@
             app:layout_constraintBottom_toTopOf="@+id/tv_review_date"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include_rating"
+            app:layout_constraintTop_toBottomOf="@id/rb_reply"
             tools:text="내용" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_review_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_median"
             android:text="@{reply.stringDate}"
             android:textSize="12sp"
-            android:layout_marginBottom="@dimen/space_median"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/tv_review_content"
             app:layout_constraintTop_toBottomOf="@+id/tv_review_content"
@@ -69,10 +71,17 @@
             app:layout_constraintTop_toBottomOf="@id/tv_review_content"
             app:srcCompat="@drawable/btn_more_horiz" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorDivide"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/pb_deleting"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="@dimen/space_x_large"
+            android:layout_height="@dimen/space_x_large"
+            android:layout_marginBottom="@dimen/space_median"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_review_content"
+            app:srcCompat="@drawable/btn_more_horiz" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,5 +1,8 @@
 package com.teame.boostcamp.myapplication.model.entitiy;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.firestore.Exclude;
 import com.teame.boostcamp.myapplication.util.DataStringUtil;
 
@@ -10,7 +13,7 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
-public class Reply  extends BaseObservable {
+public class Reply extends BaseObservable implements Parcelable {
 
     private String key;
     private String content;
@@ -18,6 +21,36 @@ public class Reply  extends BaseObservable {
     private Date writeDate;
     private String writer;
     private String errorMessage = null;
+
+    public Reply() {
+
+    }
+
+    protected Reply(Parcel in) {
+        key = in.readString();
+        content = in.readString();
+        if (in.readByte() == 0) {
+            ratio = null;
+        } else {
+            ratio = in.readDouble();
+        }
+        long tmpDate = in.readLong();
+        this.writeDate = tmpDate == -1 ? null : new Date(tmpDate);
+        writer = in.readString();
+        errorMessage = in.readString();
+    }
+
+    public static final Creator<Reply> CREATOR = new Creator<Reply>() {
+        @Override
+        public Reply createFromParcel(Parcel in) {
+            return new Reply(in);
+        }
+
+        @Override
+        public Reply[] newArray(int size) {
+            return new Reply[size];
+        }
+    };
 
     @Exclude
     public String getKey() {
@@ -38,6 +71,9 @@ public class Reply  extends BaseObservable {
 
     @Bindable
     public Double getRatio() {
+        if(ratio == null){
+            return 0.0;
+        }
         return ratio;
     }
 
@@ -45,6 +81,7 @@ public class Reply  extends BaseObservable {
         this.ratio = ratio;
         notifyPropertyChanged(BR.ratio);
     }
+
     @Bindable
     public Date getWriteDate() {
         return writeDate;
@@ -90,4 +127,23 @@ public class Reply  extends BaseObservable {
                 '}';
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(key);
+        parcel.writeString(content);
+        if (ratio == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(ratio);
+        }
+        parcel.writeLong(writeDate != null ? writeDate.getTime() : -1);
+        parcel.writeString(writer);
+        parcel.writeString(errorMessage);
+    }
 }

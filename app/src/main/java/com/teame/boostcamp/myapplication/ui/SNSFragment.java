@@ -74,7 +74,7 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
         binding.rvSns.setLayoutManager(linearLayoutManager);
         binding.rvSns.setAdapter(adapter);
         binding.fabAddPost.setOnClickListener( __ -> AddPostActivity.startActivity(getContext()));
-        presenter.loadPostData(adapter);
+        //presenter.loadPostData(adapter);
         binding.rvSns.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

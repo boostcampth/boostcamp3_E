@@ -131,7 +131,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.space_line);
         binding.rvRecommendList.addItemDecoration(new ListSpaceItemDecoration(spacingInPixels, 3));
-        //TODO API 21 이상 대응 필요
+        //TODO API 21 이하 대응 필요
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.rvRecommendList.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -145,7 +145,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
                     super.onScrolled(recyclerView, dx, dy);
 
                     if (binding.rvRecommendList.canScrollVertically(SCROLL_DIRECTION_UP)) {
-                        binding.ablTopControl.setElevation(4);
+                        binding.ablTopControl.setElevation(10);
                     } else {
                         binding.ablTopControl.setElevation(0);
                     }
