@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.ui.selectedgoods;
 
-import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.SelectedGoodsRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;

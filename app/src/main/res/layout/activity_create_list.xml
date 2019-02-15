@@ -47,16 +47,17 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_marginLeft="@dimen/space_x_small"
-                            app:srcCompat="@drawable/ic_logo_ejusa"
-                            />
+                            app:srcCompat="@drawable/ic_logo_ejusa" />
+
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_marginLeft="16dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:text="이거 사!"
                             android:textColor="@color/colorBlack"
-                            android:textSize="16sp"
-                            android:text="이거 사!"/>
+                            android:textSize="16sp" />
                     </androidx.appcompat.widget.Toolbar>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_search"
                         android:layout_width="match_parent"
@@ -71,11 +72,11 @@
                             android:id="@+id/iv_serach_image"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
-                            android:padding="4dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginLeft="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
+                            android:padding="4dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -103,9 +104,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_recommend_list"
-                android:background="@color/colorMyListAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/colorMyListAppBar"
                 android:overScrollMode="never"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 tools:listitem="@layout/item_list_goods" />

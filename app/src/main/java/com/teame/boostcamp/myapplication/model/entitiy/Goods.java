@@ -18,7 +18,9 @@ public class Goods extends BaseObservable implements Parcelable {
     private String lprice;
     private String img;
     private String link;
-    private int count = 0;
+    private boolean isCheck = false;
+    private String totalPrice;
+    private int count = 1;
 
     public Goods() {
 
@@ -53,6 +55,7 @@ public class Goods extends BaseObservable implements Parcelable {
 
     public void setMinPriceResponse(MinPriceResponse minPriceResponse) {
         MinPriceResponse.Item info;
+
         try {
             info = minPriceResponse.getItems().get(0);
         } catch (Exception ignored) {
@@ -121,13 +124,13 @@ public class Goods extends BaseObservable implements Parcelable {
         if (lprice == null) {
             return null;
         }
-
         return DataStringUtil.makeStringComma(lprice);
     }
 
     public void setLprice(String lprice) {
         this.lprice = lprice;
         notifyPropertyChanged(BR.lprice);
+        notifyPropertyChanged(BR.totalPrice);
     }
 
     @Bindable
@@ -138,6 +141,7 @@ public class Goods extends BaseObservable implements Parcelable {
     public void setCount(int count) {
         this.count = count;
         notifyPropertyChanged(BR.count);
+        notifyPropertyChanged(BR.totalPrice);
     }
 
     @Override
@@ -182,4 +186,48 @@ public class Goods extends BaseObservable implements Parcelable {
         parcel.writeString(link);
         parcel.writeInt(count);
     }
+
+    @Bindable
+    @Exclude
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+        notifyPropertyChanged(BR.check);
+    }
+
+
+    @Bindable
+    @Exclude
+    public String getTotalPrice() {
+
+        if (lprice == null) {
+            return null;
+        }
+
+        int tmpLprice = Integer.valueOf(lprice);
+        setTotalPrice(Integer.toString(tmpLprice * count));
+
+
+        return DataStringUtil.makeStringComma(totalPrice);
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
+        notifyPropertyChanged(BR.totalPrice);
+    }
+
+    // 전체가격 계산을 위한 메소드
+    @Exclude
+    public int totalPrice() {
+        if (lprice == null) {
+            return 0;
+        }
+        int tmpLprice = Integer.valueOf(lprice);
+        return tmpLprice * count;
+    }
+
+
 }

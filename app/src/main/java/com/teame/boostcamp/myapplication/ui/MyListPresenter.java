@@ -24,6 +24,7 @@ public class MyListPresenter implements MyListContract.Presenter {
     @Override
     public void loadMyList(GoodsListHeaderRecyclerAdapter adapter) {
         this.adapter = adapter;
+
         disposable.add(repository.getMyList()
                 .subscribe(list -> {
                             DLogUtil.d(list.toString());

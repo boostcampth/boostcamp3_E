@@ -3,6 +3,8 @@ package com.teame.boostcamp.myapplication.ui.createlistinfo;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
+import com.teame.boostcamp.myapplication.model.repository.preference.CartPreference;
+import com.teame.boostcamp.myapplication.model.repository.preference.CartPreferenceHelper;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
@@ -16,10 +18,12 @@ public class CreateListInfoPresenter implements CreateListInfoContract.Presenter
     private HashSet<String> hashTagSet = new HashSet<>();
     private CreateListInfoContract.View view;
     private MyListRepository repository;
+    private CartPreferenceHelper cartPreferenceHelper;
 
     public CreateListInfoPresenter(CreateListInfoContract.View view, MyListRepository repository) {
         this.view = view;
         this.repository = repository;
+        cartPreferenceHelper = new CartPreference();
     }
 
     @Override
@@ -50,13 +54,17 @@ public class CreateListInfoPresenter implements CreateListInfoContract.Presenter
     }
 
     @Override
-    public void saveMyList(List<Goods> goodsList, GoodsListHeader header) {
+    public void saveMyList(GoodsListHeader header) {
         List<String> list = new ArrayList<>(hashTagSet);
-        DLogUtil.d(goodsList.toString());
+        List<Goods> itemList = cartPreferenceHelper.getGoodsCartList();
+        DLogUtil.d(itemList.toString());
         DLogUtil.d(header.toString());
         DLogUtil.d(list.toString());
-        disposable.add(repository.saveMyList(goodsList, list, header)
-                .subscribe(b -> view.successSave(),
+        disposable.add(repository.saveMyList(itemList, list, header)
+                .subscribe(b -> {
+                            view.successSave();
+                            cartPreferenceHelper.clearPreferenceData();
+                        },
                         e -> DLogUtil.e(e.getMessage())));
     }
 }

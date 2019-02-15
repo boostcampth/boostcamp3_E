@@ -1,6 +1,7 @@
 package com.teame.boostcamp.myapplication.ui.goodsdetail;
 
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
@@ -11,6 +12,10 @@ public interface GoodsDetailContract {
         void finishLoad(float totalRatio,int size);
 
         void completeReloadReply();
+
+        void successAddCart();
+
+        void duplicationAddCart();
     }
 
     interface Presenter extends BasePresenter {
@@ -21,6 +26,8 @@ public interface GoodsDetailContract {
         void deleteReply(String itemId,int position);
 
         Reply getItem(int position);
+
+        void addCartGoods(Goods item);
     }
 
 }

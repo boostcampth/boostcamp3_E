@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/btn_shopping"
+        android:id="@+id/btn_show_cart"
         android:icon="@drawable/btn_shopping_cart"
         app:showAsAction="ifRoom"
         android:title="@string/decide" />
+
 </menu>

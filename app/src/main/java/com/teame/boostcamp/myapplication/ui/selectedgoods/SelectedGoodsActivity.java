@@ -43,7 +43,7 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_create_shoppinglist, menu);
+        inflater.inflate(R.menu.menu_cart, menu);
         return true;
     }
 
@@ -51,9 +51,6 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // action with ID action_refresh was selected
-            case R.id.btn_decide:
-                presenter.getCheckedList();
-                break;
             default:
                 break;
         }

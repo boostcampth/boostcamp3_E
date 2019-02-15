@@ -46,6 +46,7 @@
                     android:id="@+id/toolbar_screen"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:background="@color/colorBlurGray"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="pin"
                     app:navigationIcon="@drawable/btn_all_back"
@@ -145,7 +146,7 @@
                     style="@style/Widget.DetailItem.TextView"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                    android:text="@{String.format(@string/min_price(item.lprice))}"
+                    android:text="@{item.lprice != null ? String.format(@string/min_price(item.lprice)) : @string/none_min_price}"
                     android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintBottom_toTopOf="@+id/view_divide_header"
                     app:layout_constraintStart_toStartOf="parent"
@@ -231,85 +232,139 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/llc_Add_Bottom"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/shape_add_bottom_sheet"
+            android:layout_height="wrap_content"
+            android:background="@color/colorClear"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="end|center"
             android:orientation="vertical"
-            android:paddingTop="@dimen/activity_horizontal_margin"
-            android:clickable="true"
-            android:paddingBottom="@dimen/activity_horizontal_margin"
-            app:layout_behavior="@string/bottom_sheet_behavior"
-            android:focusable="true">
+            app:layout_behavior="@string/bottom_sheet_behavior">
+
+            <View
+                android:id="@+id/view_boarder"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@color/colorDivideShadow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_bottom_collaps"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/squre"
+                app:layout_constraintBottom_toTopOf="@id/view_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_bottom_collaps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_bottom_collaps"
+                app:layout_constraintLeft_toLeftOf="@id/tv_bottom_collaps"
+                app:layout_constraintRight_toRightOf="@id/tv_bottom_collaps"
+                app:layout_constraintTop_toTopOf="@id/tv_bottom_collaps"
+                app:srcCompat="@drawable/ic_bottom_sheet" />
+
+            <View
+                android:id="@+id/view_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/colorWhite"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingTop="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/view_boarder"
+                app:layout_constraintLeft_toLeftOf="@id/view_boarder"
+                app:layout_constraintRight_toRightOf="@id/view_boarder"
+                app:layout_constraintTop_toTopOf="@id/view_boarder" />
+
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/layout_accent_round_stroke">
-
-                    <TextView
-                        android:id="@+id/count_plus"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:gravity="center"
-                        android:text="-" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorAccent" />
-
-                    <TextView
-                        android:id="@+id/goods_num"
-                        android:layout_width="42dp"
-                        android:layout_height="28dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="1" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorAccent" />
-
-                    <TextView
-                        android:id="@+id/count_minus"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:gravity="center"
-                        android:text="+" />
-                </LinearLayout>
-
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/layout_accent_round_stroke"
+                app:layout_constraintRight_toRightOf="@id/tv_select_goods"
+                app:layout_constraintTop_toTopOf="@id/view_content">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_select_goods"
-                    android:layout_width="wrap_content"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:layout_height="42dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/space_median"
-                    android:background="@drawable/layout_accent_round_board"
+                    android:id="@+id/tv_count_plus"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:gravity="center"
-                    android:text="@string/add_goods"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tv_write_reply"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:text="-" />
 
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAccent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_goods_count"
+                    android:layout_width="42dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="1" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAccent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_count_minus"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:gravity="center"
+                    android:text="+" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_select_goods"
+                android:layout_width="150dp"
+                android:layout_height="42dp"
+                android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/space_median"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/layout_accent_round_board"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/add_goods"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="@id/view_content" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_sum_price_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="총 가격 : 10,000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/view_content"
+                app:layout_constraintRight_toLeftOf="@+id/tv_select_goods" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

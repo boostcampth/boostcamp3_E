@@ -14,13 +14,13 @@ import android.view.WindowManager;
 import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ActivityCreateListBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.createlistinfo.CreateListInfo;
+import com.teame.boostcamp.myapplication.ui.goodscart.GoodsCartActivity;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
@@ -54,26 +54,25 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_create_shoppinglist, menu);
+        inflater.inflate(R.menu.menu_cart, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // action with ID action_refresh was selected
-            case R.id.btn_decide:
-                // TODO: 결정화면으로 이동
-//                presenter.decideShoppingList();
-                break;
-            case R.id.btn_shopping:
+            case R.id.btn_show_cart:
+                GoodsCartActivity.startActivity(this);
                 // TODO : 쇼핑리스트로 이동
 //                presenter.decideShoppingList();
                 break;
             case android.R.id.home:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                 dialog.setMessage(getString(R.string.cancel_create_list))
-                        .setPositiveButton(getString(R.string.confirm), (__, ___) -> finish())
+                        .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
+                            presenter.removeCart();
+                            finish();
+                        })
                         .setCancelable(true)
                         .show();
                 break;
@@ -119,6 +118,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
             header.setLat(11.1);
             header.setLng(11.2);
         }
+        presenter.saveListHeader(header);
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_all_back);
@@ -181,7 +181,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         }
         DLogUtil.d(header.toString());
         DLogUtil.d(list.toString());
-        CreateListInfo.startActivity(this, header, (ArrayList<Goods>) list);
+        CreateListInfo.startActivity(this, header);
     }
 
 

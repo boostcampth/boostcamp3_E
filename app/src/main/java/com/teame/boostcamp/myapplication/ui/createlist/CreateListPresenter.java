@@ -4,7 +4,10 @@ import android.text.TextUtils;
 
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
+import com.teame.boostcamp.myapplication.model.repository.preference.CartPreference;
+import com.teame.boostcamp.myapplication.model.repository.preference.CartPreferenceHelper;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
@@ -21,11 +24,11 @@ public class CreateListPresenter implements CreateListContract.Presenter {
     private CompositeDisposable disposable;
     private List<Goods> checkedList = new ArrayList<>();
     private GoodsListRecyclerAdapter adapter;
-    private ObservableField<String> count = new ObservableField<>("0");
 
     CreateListPresenter(CreateListContract.View view, GoodsListRepository shoppingListRepository) {
         this.view = view;
         this.shoppingListRepository = shoppingListRepository;
+        cartPreferenceHelper = new CartPreference();
         disposable = new CompositeDisposable();
     }
 
@@ -39,6 +42,11 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         if (disposable.isDisposed()) {
             disposable.dispose();
         }
+    }
+
+    @Override
+    public void removeCart() {
+        cartPreferenceHelper.clearPreferenceData();
     }
 
     @Override
@@ -94,6 +102,13 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         }
     }
 
+    private CartPreferenceHelper cartPreferenceHelper;
+
+    @Override
+    public void saveListHeader(GoodsListHeader header) {
+        cartPreferenceHelper.saveListHeader(header);
+    }
+
     /**
      * ItemName을 기준으로 해당 아이템 position 반환
      */
@@ -107,9 +122,5 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         }
         // 아이템이 없다면
         return -1;
-    }
-
-    public ObservableField<String> getCount() {
-        return count;
     }
 }
