@@ -76,7 +76,7 @@ public class ModifyPostActivity extends BaseMVPActivity<ActivityModifyPostBindin
     private void initView() {
         Post post = getIntent().getParcelableExtra(EXTRA_POST);
         binding.setPost(post);
-        adapter = new PreviewImageAdapter(getApplicationContext(), post.getUriList());
+        //adapter = new PreviewImageAdapter(getApplicationContext(), post.getUriList());
 
 
 
