@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding, GoodsCartContract.Presenter> implements GoodsCartContract.View {
 
+    private boolean isChange = false;
+
     @Override
     protected GoodsCartContract.Presenter getPresenter() {
         return new GoodsCartPresenter(this);
@@ -32,15 +34,19 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                dialog.setMessage(R.string.would_you_save)
-                        .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
-                            presenter.saveCartList();
-                            showToast(getString(R.string.success_save));
-                            finish();
-                        })
-                        .setNegativeButton(R.string.cancle, (__, ___) -> finish())
-                        .show();
+                if (isChange) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                    dialog.setMessage(R.string.would_you_save)
+                            .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
+                                presenter.saveCartList();
+                                showToast(getString(R.string.success_save));
+                                finish();
+                            })
+                            .setNegativeButton(R.string.cancle, (__, ___) -> finish())
+                            .show();
+                } else {
+                    finish();
+                }
                 break;
             default:
                 break;
@@ -71,23 +77,30 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
                 false);
 
         presenter.loadData(adapter);
+        presenter.calculatorPrice();
         presenter.detectIsAllCheck();
         adapter.setOnItemDeleteListener((v, position) -> {
+            isChange = true;
             presenter.deleteItem(position);
             presenter.calculatorPrice();
         });
-        adapter.setOnItemSpinnerListener((v, position) -> presenter.calculatorPrice());
+        adapter.setOnItemSpinnerListener((v, position) -> {
+            isChange = true;
+            presenter.calculatorPrice();
+        });
         adapter.setOnItemCheckListener((v, position) -> {
+            isChange = true;
             presenter.calculatorPrice();
             presenter.detectIsAllCheck();
         });
-        binding.rvCartList.setLayoutManager(linearLayoutManager);
-        binding.rvCartList.setAdapter(adapter);
-
         binding.cbAll.setOnClickListener(view -> {
+            isChange = true;
             boolean check = binding.cbAll.isChecked();
             adapter.allCheck(check);
         });
+
+        binding.rvCartList.setLayoutManager(linearLayoutManager);
+        binding.rvCartList.setAdapter(adapter);
         binding.tvDicideCart.setOnClickListener(view -> presenter.getThrowData());
     }
 

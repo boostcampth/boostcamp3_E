@@ -143,7 +143,7 @@ public class GoodsListHeader implements Parcelable {
     }
 
     @Exclude
-    public String getStringStringDate() {
+    public String getStringDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
         return dateFormat.format(startDate);
     }
@@ -156,7 +156,7 @@ public class GoodsListHeader implements Parcelable {
 
     @Exclude
     public String getDefaultTitle(){
-        return this.nation+"-"+this.city+this.getStringStringDate();
+        return this.nation+"-"+this.city+this.getStringDate();
     }
     @Override
     public String toString() {
