@@ -8,6 +8,7 @@ public interface PostReplyContract {
 
     interface View extends BaseView {
         void successWriteReply();
+        void stopRefreshIcon();
     }
 
     interface Presenter extends BasePresenter {
