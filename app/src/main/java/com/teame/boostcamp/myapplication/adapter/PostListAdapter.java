@@ -1,17 +1,21 @@
 package com.teame.boostcamp.myapplication.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemPostBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
+import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
 import com.teame.boostcamp.myapplication.ui.postreply.PostReplyActivity;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +24,17 @@ import androidx.annotation.NonNull;
 import androidx.databinding.BindingConversion;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemViewHolder> implements OnPostClickListener {
     private List<Post> postList = new ArrayList<>();
     private Context context;
-    private static final String LIKE_UPDATE = "update Like";
+    private CompositeDisposable disposable = new CompositeDisposable();
+    private PostListRepository rep = PostListRepository.getInstance();
+
+    private static final String LIKE_UPDATE = "update_like";
+    private static final String SHOW_LIKE_LOADING = "show_loading";
+    private static final String END_LIKE_LOADING = "end_loading";
 
     public void add(Post post) {
         postList.add(post);
@@ -55,13 +65,13 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
         holder.binding.setPost(postList.get(i));
-        holder.binding.setUid(FirebaseAuth.getInstance().getUid());
+        holder.binding.setAuth(FirebaseAuth.getInstance());
         holder.binding.ivPostReply.setOnClickListener(__ -> onReplyButtonClick(i));
         holder.binding.ivPostLike.setOnClickListener(__ -> onLikeButtonClick(i));
         holder.binding.ivShoppingList.setOnClickListener(__ -> onListButtonClick(i));
         holder.binding.vpPostImages.setAdapter(new PostImagePagerAdapter(context, postList.get(i).getImagePathList()));
         holder.binding.tlImageIndicator.setupWithViewPager(holder.binding.vpPostImages, true);
-
+        holder.binding.ivPostMenu.setOnClickListener(v -> onMenuButtonClick(v, i));
     }
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position, @NonNull List<Object> payloads) {
@@ -73,6 +83,13 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
                     String type = (String) payload;
                     if(TextUtils.equals(type, LIKE_UPDATE) && holder instanceof ItemViewHolder){
                         holder.binding.setPost(postList.get(position));
+                        holder.binding.clpbPostLike.setVisibility(View.INVISIBLE);
+                        holder.binding.ivPostLike.setVisibility(View.VISIBLE);
+                    }else if(TextUtils.equals(type, SHOW_LIKE_LOADING) && holder instanceof ItemViewHolder){
+                        holder.binding.ivPostLike.setVisibility(View.INVISIBLE);
+                        holder.binding.clpbPostLike.setVisibility(View.VISIBLE);
+                    }else if(TextUtils.equals(type, END_LIKE_LOADING) && holder instanceof ItemViewHolder){
+
                     }
                 }
             }
@@ -87,33 +104,50 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
 
     @Override
     public void onReplyButtonClick(int i) {
-        PostReplyActivity.startActivity(context, FirebaseAuth.getInstance().getUid()+postList.get(i).getCreatedDate());
+        PostReplyActivity.startActivity(context, postList.get(i).getKey());
     }
 
     @Override
     public void onLikeButtonClick(int i) {
-        Post post = postList.get(i);
-        String uid = FirebaseAuth.getInstance().getUid();
-        if(post.getLikedUidList().contains(uid)){
-            post.decreaseLike();
-            post.getLikedUidList().remove(uid);
-            FirebaseFirestore.getInstance().collection("posts")
-                    .document(uid+post.getCreatedDate())
-                    .set(post);
-            notifyItemChanged(i, LIKE_UPDATE);
-        }else{
-            post.increaseLike();
-            post.getLikedUidList().add(uid);
-            FirebaseFirestore.getInstance().collection("posts")
-                    .document(uid+post.getCreatedDate())
-                    .set(post);
-            notifyItemChanged(i, LIKE_UPDATE);
-        }
+        notifyItemChanged(i, SHOW_LIKE_LOADING);
+        disposable.add(rep.adjustLike(postList.get(i).getKey())
+                .subscribe(post -> {
+                            postList.set(i, post);
+                            notifyItemChanged(i, LIKE_UPDATE);
+                            notifyItemChanged(i, END_LIKE_LOADING);
+                        },
+                        e -> {
+                            DLogUtil.e(e.getMessage());
+                        })
+        );
     }
 
     @Override
     public void onListButtonClick(int i) {
 
+    }
+
+    @Override
+    public void onMenuButtonClick(View view, int i) {
+        PopupMenu menu = new PopupMenu(context, view);
+        ((Activity) context).getMenuInflater().inflate(R.menu.menu_post, menu.getMenu());
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.toString().equals("수정")){
+                    DLogUtil.e("수정");
+                }else{
+                    disposable.add(rep.deletePost(postList.get(i).getKey(), postList.get(i).getImagePathList())
+                            .subscribe(b -> {
+                                        postList.remove(i);
+                                        notifyDataSetChanged();
+                                    },
+                                    e -> DLogUtil.e(e.getMessage())));
+                }
+                return false;
+            }
+        });
+        menu.show();
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {

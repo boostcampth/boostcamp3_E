@@ -1,5 +1,8 @@
 package com.teame.boostcamp.myapplication.model.repository;
 
+import android.net.Uri;
+
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.model.repository.remote.PostListRemoteDataSource;
@@ -32,7 +35,17 @@ public class PostListRepository implements PostListDataSource {
 
     @Override
     public Single<List<Post>> getPostList() {
-        return postListRemoteDataSource.getPostList().observeOn(AndroidSchedulers.mainThread());
+        return postListRemoteDataSource.getPostList()
+                .map(unsortedList -> {
+                    List<Post> sortedList = new ArrayList<>(unsortedList);
+                    Collections.sort(sortedList, new PostListRepository.PostAscToDateSort());
+                    return sortedList;
+                });
+    }
+
+    @Override
+    public Single<Post> writePost(String content, List<Uri> uriList, GoodsListHeader header) {
+        return postListRemoteDataSource.writePost(content, uriList, header);
     }
 
     @Override
@@ -45,13 +58,29 @@ public class PostListRepository implements PostListDataSource {
         return postListRemoteDataSource.loadPostReplyList(postUid)
                 .map(unsortedList -> {
                     List<Reply> sortedList = new ArrayList<>(unsortedList);
-                    Collections.sort(sortedList, new PostListRepository.ascToDateSort());
+                    Collections.sort(sortedList, new PostListRepository.ReplyAscToDateSort());
                     return sortedList;
                 });
     }
 
+    @Override
+    public Single<Boolean> deleteReply(String postUid,String replyUid) {
+        return postListRemoteDataSource.deleteReply(postUid,replyUid).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Single<Post> adjustLike(String postUid) {
+        return postListRemoteDataSource.adjustLike(postUid).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Single<Boolean> deletePost(String postUid, List<String> imagePathList) {
+        return postListRemoteDataSource.deletePost(postUid, imagePathList).observeOn(AndroidSchedulers.mainThread());
+    }
+
+
     // Reply데이터 오름차순 정렬 Comparator
-    class ascToDateSort implements Comparator<Reply> {
+    class ReplyAscToDateSort implements Comparator<Reply> {
         @Override
         public int compare(Reply r1, Reply r2) {
             Date r1Date = r1.getWriteDate();
@@ -61,6 +90,19 @@ public class PostListRepository implements PostListDataSource {
                 return -1;
             }
             return 1;
+        }
+    }
+
+    class PostAscToDateSort implements Comparator<Post> {
+        @Override
+        public int compare(Post p1, Post p2) {
+            Date r1Date = p1.getCreatedDate();
+            Date r2Date = p2.getCreatedDate();
+            int compare = r1Date.compareTo(r2Date);
+            if (compare < 0) {
+                return 1;
+            }
+            return -1;
         }
     }
 }

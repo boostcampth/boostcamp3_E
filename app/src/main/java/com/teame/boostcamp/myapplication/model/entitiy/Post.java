@@ -1,30 +1,57 @@
 package com.teame.boostcamp.myapplication.model.entitiy;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.firebase.firestore.Exclude;
+import com.teame.boostcamp.myapplication.util.DataStringUtil;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class Post {
+public class Post implements Parcelable {
+    private String key;
     private String content;
-    private User userData;
     private String writer;
     private GoodsListHeader header;
     private int like;
-    private String createdDate;
+    private Date createdDate;
     private ArrayList<String> imagePathList;
     private ArrayList<String> likedUidList;
 
     public Post(){};
 
-    public Post(String content, String writer, ArrayList<String> imagePathList, GoodsListHeader header){
-
+    public Post(String content, String writer, GoodsListHeader header){
         this.content = content;
-        this.imagePathList = imagePathList;
         this.like = 0;
         this.writer = writer;
+        this.imagePathList = new ArrayList<>();
         this.likedUidList = new ArrayList<>();
-        this.createdDate = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss").format(System.currentTimeMillis());
         this.header = header;
     }
+
+    protected Post(Parcel in) {
+        key = in.readString();
+        content = in.readString();
+        writer = in.readString();
+        header = in.readParcelable(GoodsListHeader.class.getClassLoader());
+        like = in.readInt();
+        imagePathList = in.createStringArrayList();
+        likedUidList = in.createStringArrayList();
+    }
+
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
 
     public String getContent() {
         return content;
@@ -32,14 +59,6 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public User getUserData() {
-        return userData;
-    }
-
-    public void setUserData(User userData) {
-        this.userData = userData;
     }
 
     public GoodsListHeader getHeader() {
@@ -54,13 +73,21 @@ public class Post {
         return imagePathList;
     }
 
-    public String getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(String createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
+
+    @Exclude
+    public String getStringDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        dateFormat.format(createdDate);
+        return DataStringUtil.CreateDataWithCheck(createdDate);
+    }
+
 
     public void setImagePathList(ArrayList<String> imagePathList) {
         this.imagePathList = imagePathList;
@@ -100,5 +127,30 @@ public class Post {
 
     public void setWriter(String writer) {
         this.writer = writer;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(key);
+        dest.writeString(content);
+        dest.writeString(writer);
+        dest.writeParcelable(header, flags);
+        dest.writeInt(like);
+        dest.writeStringList(imagePathList);
+        dest.writeStringList(likedUidList);
     }
 }
