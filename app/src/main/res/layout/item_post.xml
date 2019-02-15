@@ -7,8 +7,8 @@
             name="post"
             type="com.teame.boostcamp.myapplication.model.entitiy.Post" />
         <variable
-            name="uid"
-            type= "String"/>
+            name="auth"
+            type= "com.google.firebase.auth.FirebaseAuth"/>
 
     </data>
     <com.google.android.material.card.MaterialCardView
@@ -32,6 +32,7 @@
                 android:layout_height="346dp"
                 android:layout_marginTop="8dp"
                 android:scaleType="centerCrop"
+                android:overScrollMode="never"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_post_hashtags">
@@ -39,13 +40,13 @@
 
             </androidx.viewpager.widget.ViewPager>
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
+                android:elevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/vp_post_images">
@@ -59,11 +60,25 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:background="@color/colorWhite"
-                    android:src="@{post.likedUidList.contains(uid) ? @drawable/btn_liked : @drawable/btn_like}"
+                    android:src="@{post.likedUidList.contains(auth.getUid()) ? @drawable/btn_liked : @drawable/btn_like}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@drawable/btn_liked" />
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    android:id="@+id/clpb_post_like"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_post_reply"
@@ -113,6 +128,14 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <View
+            android:id="@+id/view_post_divide"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorDivide"
+
+            app:layout_constraintTop_toBottomOf="@+id/cl_buttons" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/appCompatTextView"
                 android:layout_width="wrap_content"
@@ -136,14 +159,26 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginBottom="16dp"
                 android:text="@{post.content}"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appCompatTextView"
                 tools:text="오랜만에 여행을 갔다 영행을 가서 너무 좋았다 사고싶은것도 막 샀다 너무 재밋었다 ㅎㅎ" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_created_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@{post.getStringDate()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_post_content"
+                tools:text="9시간전" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_post_hashtags"
@@ -176,6 +211,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="aaa@aaa.com" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_post_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:visibility="@{post.writer.equals(auth.getCurrentUser().getEmail())}"
+                app:srcCompat="@drawable/btn_post_menu"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/btn_post_menu" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

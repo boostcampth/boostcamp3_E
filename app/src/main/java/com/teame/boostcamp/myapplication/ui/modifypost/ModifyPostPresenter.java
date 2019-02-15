@@ -1,4 +1,5 @@
-package com.teame.boostcamp.myapplication.ui.addpost;
+package com.teame.boostcamp.myapplication.ui.modifypost;
+
 
 import android.app.ProgressDialog;
 import android.net.Uri;
@@ -6,21 +7,22 @@ import android.net.Uri;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
+import com.teame.boostcamp.myapplication.ui.addpost.AddPostContract;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class AddPostPresenter implements AddPostContract.Presenter {
-    private AddPostContract.View view;
+public class ModifyPostPresenter implements ModifyPostContract.Presenter {
+    private ModifyPostContract.View view;
     private CompositeDisposable disposable = new CompositeDisposable();
     private MyListRepository myListRep;
     private PostListRepository postListRep;
     private GoodsListHeader selectedListHeader = null;
     private ProgressDialog loading;
 
-    public AddPostPresenter(AddPostContract.View view) {
+    public ModifyPostPresenter(ModifyPostContract.View view) {
         this.view = view;
         this.myListRep = MyListRepository.getInstance();
         this.postListRep = PostListRepository.getInstance();
@@ -28,7 +30,6 @@ public class AddPostPresenter implements AddPostContract.Presenter {
 
     @Override
     public void loadMyList() {
-        view.showSelectionLoading();
         disposable.add(myListRep.getMyList()
                 .subscribe(list -> {
                             DLogUtil.d(list.toString());

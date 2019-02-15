@@ -23,20 +23,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_writer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="@{reply.writer}"
-            app:layout_constraintBottom_toTopOf="@+id/tv_post_reply_date"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="idd7403@naver.com" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_post_reply_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -45,11 +31,28 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
+            android:text="@{reply.writer}"
+            app:layout_constraintBottom_toTopOf="@+id/tv_post_reply_date"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="idd7403@naver.com" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_post_reply_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
             android:text="@{reply.content}"
             android:textColor="@color/colorBlack"
             app:layout_constraintBottom_toTopOf="@+id/tv_post_reply_date"
             app:layout_constraintEnd_toStartOf="@+id/ib_delete_reply"
-            app:layout_constraintStart_toEndOf="@+id/tv_writer"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="내용" />
 
@@ -66,6 +69,13 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:text="2019.3.03" />
 
+        <androidx.constraintlayout.widget.Guideline
+            app:layout_constraintGuide_percent="0.45"
+            android:id="@+id/guideline"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/ib_delete_reply"
             android:layout_width="30dp"
@@ -79,6 +89,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/btn_all_close" />
+
+        <View
+            android:id="@+id/view_reply_divide"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorDivide"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

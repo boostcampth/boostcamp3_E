@@ -17,6 +17,7 @@ public class PostReplyPresenter implements PostReplyContract.Presenter {
         this.postListRepository = postListRepository;
         disposable = new CompositeDisposable();
     }
+
     @Override
     public void onAttach() {
 
@@ -25,9 +26,10 @@ public class PostReplyPresenter implements PostReplyContract.Presenter {
     @Override
     public void onDetach() {
         this.view = null;
-        if(disposable!=null && !disposable.isDisposed()){
+        if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
         }
+        adapter.disposableDispose();
     }
 
     @Override
@@ -48,9 +50,13 @@ public class PostReplyPresenter implements PostReplyContract.Presenter {
         disposable.add(postListRepository.loadPostReplyList(postUid)
                 .subscribe(list -> {
                             adapter.initItems(list);
+                            view.stopRefreshIcon();
                             DLogUtil.d(list.toString());
                         },
-                        e -> DLogUtil.e(e.getMessage()))
+                        e -> {
+                            DLogUtil.e(e.getMessage());
+                            view.stopRefreshIcon();
+                        })
         );
     }
 }

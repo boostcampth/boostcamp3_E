@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.ui.addpost;
+package com.teame.boostcamp.myapplication.ui.modifypost;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,22 +7,20 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.PreviewImageAdapter;
-import com.teame.boostcamp.myapplication.databinding.ActivityAddPostBinding;
+import com.teame.boostcamp.myapplication.databinding.ActivityModifyPostBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
+import com.teame.boostcamp.myapplication.model.entitiy.Post;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
-import com.teame.boostcamp.myapplication.util.LocalImageUtil;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 
 import java.io.File;
@@ -38,22 +36,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import io.reactivex.disposables.Disposable;
 
 
-public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, AddPostContract.Presenter> implements AddPostContract.View {
+public class ModifyPostActivity extends BaseMVPActivity<ActivityModifyPostBinding, ModifyPostContract.Presenter> implements ModifyPostContract.View {
     private PreviewImageAdapter adapter;
     private static final int READ_REQUEST_CODE = 42;
     private static final int TAKE_PICTURE_REQUEST_CODE = 27;
+    private static final String EXTRA_POST = "post";
     private LinearLayoutManager layoutManager;
     private Disposable disposable;
     private String photoPath;
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.activity_add_post;
+        return R.layout.activity_modify_post;
     }
 
     @Override
-    protected AddPostContract.Presenter getPresenter() {
-        return new AddPostPresenter(this);
+    protected ModifyPostContract.Presenter getPresenter() {
+        return new ModifyPostPresenter(this);
     }
 
     @Override
@@ -68,22 +67,29 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     }
 
 
-    public static void startActivity(Context context) {
-        Intent intent = new Intent(context, AddPostActivity.class);
+    public static void startActivity(Context context, Post post) {
+        Intent intent = new Intent(context, com.teame.boostcamp.myapplication.ui.addpost.AddPostActivity.class);
+        intent.putExtra(EXTRA_POST, post);
         context.startActivity(intent);
     }
 
     private void initView() {
-        adapter = new PreviewImageAdapter(getApplicationContext(), new ArrayList<>());
+        Post post = getIntent().getParcelableExtra(EXTRA_POST);
+        binding.setPost(post);
+        //adapter = new PreviewImageAdapter(getApplicationContext(), post.getUriList());
+
+
+
+
         binding.ivGalleryPick.setOnClickListener(__ -> onAddImagesButtonClicked());
         binding.ivTakePicture.setOnClickListener(__ -> onTakePictureButtonClicked());
-        binding.btAddPost.setOnClickListener(__ -> onAddPostButtonClicked());
+        binding.btModifyPost.setOnClickListener(__ -> onAddPostButtonClicked());
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         binding.rvPreviewImage.setLayoutManager(layoutManager);
         binding.rvPreviewImage.setAdapter(adapter);
-        binding.ivAddPostBack.setOnClickListener( __ -> finish());
-        binding.tvListSelect.setOnClickListener( __ -> presenter.loadMyList());
+        binding.ivModifyPostBack.setOnClickListener(__ -> finish());
+        binding.tvListSelect.setOnClickListener(__ -> presenter.loadMyList());
     }
 
     private void onAddImagesButtonClicked() {
@@ -92,20 +98,21 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
         } else {
             disposable = TedPermissionUtil.requestPermission(this, "저장소 권한", "저장소 권한", TedPermissionUtil.READ_STORAGE)
                     .subscribe(tedPermissionResult -> {
-                        if(tedPermissionResult.isGranted()){
+                        if (tedPermissionResult.isGranted()) {
                             pickGalleryImages();
                         }
                     });
         }
     }
-    private void onTakePictureButtonClicked(){
+
+    private void onTakePictureButtonClicked() {
         if (ActivityCompat.checkSelfPermission(this, TedPermissionUtil.CAMERA) == PackageManager.PERMISSION_GRANTED
-        && ActivityCompat.checkSelfPermission(this, TedPermissionUtil.WRITE_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                && ActivityCompat.checkSelfPermission(this, TedPermissionUtil.WRITE_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             takePicture();
         } else {
             disposable = TedPermissionUtil.requestPermission(this, "카메라 권한", "카메라 권한", TedPermissionUtil.CAMERA, TedPermissionUtil.WRITE_STORAGE)
                     .subscribe(tedPermissionResult -> {
-                        if(tedPermissionResult.isGranted()){
+                        if (tedPermissionResult.isGranted()) {
                             takePicture();
                         }
                     });
@@ -131,8 +138,7 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
 
         if (!TextUtils.isEmpty(content)) {
             presenter.addPost(content, adapter.getUriList());
-        }
-        else{
+        } else {
             showToast("내용을 입력해 주세요");
         }
     }
@@ -141,7 +147,7 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     protected void onDestroy() {
         super.onDestroy();
         presenter.onDetach();
-        if(disposable != null && !disposable.isDisposed()){
+        if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
         }
     }
@@ -158,14 +164,14 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     @Override
     public void takePicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(takePictureIntent.resolveActivity(getPackageManager())!=null){
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
-            try{
+            try {
                 photoFile = createImageFile();
-            }catch (IOException ex){
+            } catch (IOException ex) {
                 //TODO-아이오 익셉션 핸들링
             }
-            if(photoFile != null){
+            if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this, "com.teame.boostcamp.myapplication.fileprovider", photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             }
@@ -199,21 +205,19 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
                 DLogUtil.d(e.toString());
             }
 
-        }else if(requestCode == TAKE_PICTURE_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+        } else if (requestCode == TAKE_PICTURE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             adapter.add(Uri.fromFile(new File(photoPath)));
         }
     }
 
     @Override
-    public void showListSelection(List<GoodsListHeader> goodsListHeaderList){
-        binding.clpbSelect.setVisibility(View.INVISIBLE);
-        binding.tvListSelect.setVisibility(View.VISIBLE);
+    public void showListSelection(List<GoodsListHeader> goodsListHeaderList) {
         String[] selection = new String[goodsListHeaderList.size()];
-        for(int i=0; i<goodsListHeaderList.size(); i++){
+        for (int i = 0; i < goodsListHeaderList.size(); i++) {
             selection[i] = goodsListHeaderList.get(i).getTitle();
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setItems(selection, ( __ , which) -> {
+        builder.setItems(selection, (__, which) -> {
             presenter.setListSelection(goodsListHeaderList.get(which));
             binding.tvListTitle.setText(goodsListHeaderList.get(which).getTitle());
             binding.tvListTitle.setTextColor(getResources().getColor((R.color.colorAccent)));
@@ -232,17 +236,8 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
 
     @Override
     public void occurServerError() {
-        binding.clpbSelect.setVisibility(View.INVISIBLE);
-        binding.tvListSelect.setVisibility(View.VISIBLE);
         showToast("서버에러입니다. 다시 시도해 주세요");
     }
-
-    @Override
-    public void showSelectionLoading() {
-        binding.tvListSelect.setVisibility(View.INVISIBLE);
-        binding.clpbSelect.setVisibility(View.VISIBLE);
-    }
-
 
     @Override
     public ProgressDialog showLoading() {

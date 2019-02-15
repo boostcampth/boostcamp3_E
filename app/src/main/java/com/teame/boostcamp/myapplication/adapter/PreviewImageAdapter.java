@@ -21,24 +21,21 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PreviewImageAdapter extends RecyclerView.Adapter<PreviewImageAdapter.ItemViewHolder> implements OnPreviewImageClickListener {
-    private List<Bitmap> bitmapList;
+    private List<Uri> uriList;
     Context context;
 
-    public List<Bitmap> getBitmapList(){
-        return bitmapList;
+    public List<Uri> getUriList() {
+        return uriList;
     }
+
     public void add(Uri uri) {
-        bitmapList.add(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(context, uri, 400), LocalImageUtil.getPath(context, uri)));
-        notifyDataSetChanged();
-    }
-    public void add(Bitmap bitmap){
-        bitmapList.add(bitmap);
+        uriList.add(uri);
         notifyDataSetChanged();
     }
 
-    public PreviewImageAdapter(Context context, ArrayList<Bitmap> bitmapList) {
+    public PreviewImageAdapter(Context context, ArrayList<Uri> uriList) {
         this.context = context;
-        this.bitmapList = bitmapList;
+        this.uriList = uriList;
     }
 
     @NonNull
@@ -49,25 +46,27 @@ public class PreviewImageAdapter extends RecyclerView.Adapter<PreviewImageAdapte
         holder.setPreviewImageClickListener(this);
         return holder;
     }
+
     @BindingAdapter({"loadImage"})
-    public static void setImageBitmap(ImageView imageView, Bitmap bitmap){
+    public static void setImageBitmap(ImageView imageView, Bitmap bitmap) {
         imageView.setImageBitmap(bitmap);
     }
+
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
-        holder.binding.setBitmap(bitmapList.get(i));
-        holder.binding.ibDeletePreviewImage.setOnClickListener(__->onDeleteButtonClick(i));
+        holder.binding.setBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(context, uriList.get(i), 400), LocalImageUtil.getPath(context, uriList.get(i))));
+        holder.binding.ibDeletePreviewImage.setOnClickListener(__ -> onDeleteButtonClick(i));
     }
 
     @Override
     public int getItemCount() {
-        return bitmapList.size();
+        return uriList.size();
     }
 
     @Override
     public void onDeleteButtonClick(int i) {
-        bitmapList.remove(i);
-        notifyItemChanged(i);
+        uriList.remove(i);
+        notifyDataSetChanged();
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {

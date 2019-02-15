@@ -65,19 +65,25 @@
             app:layout_constraintTop_toBottomOf="@+id/toolbar_reply"  />
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_post_reply"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srl_post_reply"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:overScrollMode="never"
             app:layout_constraintBottom_toTopOf="@+id/view_reply_divide"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_reply_toolbar_divide"
-            tools:listitem="@layout/item_post_reply">
+            app:layout_constraintTop_toBottomOf="@+id/view_reply_toolbar_divide">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_post_reply"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                tools:listitem="@layout/item_post_reply">
+            </androidx.recyclerview.widget.RecyclerView>
 
 
-        </androidx.recyclerview.widget.RecyclerView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <View
             android:id="@+id/view_reply_divide"

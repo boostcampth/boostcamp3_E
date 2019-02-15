@@ -9,6 +9,7 @@ import com.teame.boostcamp.myapplication.adapter.PostReplyAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityPostReplyBinding;
 import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
+import com.teame.boostcamp.myapplication.util.DividerItemDecorator;
 import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,7 +39,6 @@ public class PostReplyActivity extends BaseMVPActivity<ActivityPostReplyBinding,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         postUid = getIntent().getStringExtra(EXTRA_POST_UID);
-        showToast(postUid);
         initView();
     }
 
@@ -50,7 +50,8 @@ public class PostReplyActivity extends BaseMVPActivity<ActivityPostReplyBinding,
     }
 
     private void initView() {
-        PostReplyAdapter adapter = new PostReplyAdapter(getApplicationContext());
+        binding.srlPostReply.setRefreshing(true);
+        PostReplyAdapter adapter = new PostReplyAdapter(getApplicationContext(), postUid);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(),
                 RecyclerView.VERTICAL,
                 false);
@@ -60,6 +61,7 @@ public class PostReplyActivity extends BaseMVPActivity<ActivityPostReplyBinding,
         presenter.loadReply(postUid, adapter);
         binding.tvPostReplyInput.setOnClickListener(__ -> onInputClicked());
         binding.ivReplyBack.setOnClickListener(__ -> finish());
+        binding.srlPostReply.setOnRefreshListener(() -> initView());
     }
 
     private void onInputClicked(){
@@ -83,5 +85,10 @@ public class PostReplyActivity extends BaseMVPActivity<ActivityPostReplyBinding,
     public void successWriteReply() {
         binding.tietPostReplyInput.setText(null);
         InputKeyboardUtil.hideKeyboard(this);
+    }
+
+    @Override
+    public void stopRefreshIcon() {
+        binding.srlPostReply.setRefreshing(false);
     }
 }

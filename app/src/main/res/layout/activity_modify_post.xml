@@ -2,13 +2,20 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="post"
+            type="com.teame.boostcamp.myapplication.model.entitiy.Post"/>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/abl_add_post"
+            android:id="@+id/abl_modify_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorWhite"
@@ -32,7 +39,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="@string/add_post"
+                    android:text="@string/modify_post"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +47,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iv_add_post_back"
+                    android:id="@+id/iv_modify_post_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -63,7 +70,7 @@
             android:layout_height="1dp"
             android:background="@color/colorDivide"
 
-            app:layout_constraintTop_toBottomOf="@+id/abl_add_post" />
+            app:layout_constraintTop_toBottomOf="@+id/abl_modify_post" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_list_select"
@@ -82,12 +89,13 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="@string/shopping_list_select"
-                android:textColor="@color/colorBlack"
+                android:text="@{post.header.getTitle()}"
+                android:textColor="@color/colorAccent"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="수정될 이벤트"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_list_select"
@@ -103,27 +111,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.core.widget.ContentLoadingProgressBar
-                android:id="@+id/clpb_select"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/tv_list_select"
-                app:layout_constraintStart_toStartOf="@+id/tv_list_select"
-                app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_add_post_contents"
+            android:id="@+id/cl_modify_post_contents"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/bt_add_post"
+            app:layout_constraintBottom_toTopOf="@+id/bt_modify_post"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_list_select_divide">
@@ -141,6 +136,7 @@
                 android:background="@null"
                 android:gravity="top"
                 android:hint="@string/post_content_hint"
+                android:text ="@{post.content}"
                 android:paddingBottom="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/rv_preview_image"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -191,7 +187,7 @@
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/bt_add_post"
+            android:id="@+id/bt_modify_post"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -199,7 +195,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/write"
+            android:text="@string/modify"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

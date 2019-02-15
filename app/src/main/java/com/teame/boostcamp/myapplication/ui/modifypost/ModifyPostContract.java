@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.ui.addpost;
+package com.teame.boostcamp.myapplication.ui.modifypost;
 
 import android.app.ProgressDialog;
 import android.net.Uri;
@@ -9,7 +9,7 @@ import com.teame.boostcamp.myapplication.ui.base.BaseView;
 
 import java.util.List;
 
-public interface AddPostContract {
+public interface ModifyPostContract {
 
     interface View extends BaseView {
         void pickGalleryImages();
@@ -23,8 +23,6 @@ public interface AddPostContract {
         void failAddPost();
 
         void occurServerError();
-
-        void showSelectionLoading();
 
         ProgressDialog showLoading();
     }

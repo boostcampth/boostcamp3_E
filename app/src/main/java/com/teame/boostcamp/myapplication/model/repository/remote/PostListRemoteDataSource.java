@@ -1,11 +1,18 @@
 package com.teame.boostcamp.myapplication.model.repository.remote;
 
+import android.net.Uri;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.model.repository.PostListDataSource;
@@ -21,6 +28,8 @@ public class PostListRemoteDataSource implements PostListDataSource {
 
     private static final String QUERY_POST = "posts";
     private static final String QUERY_REPLY = "replies";
+    private static final String QUERY_USER = "users";
+    private static final String QUERY_MY_POST = "mypost";
 
     private static PostListRemoteDataSource INSTANCE;
 
@@ -28,6 +37,9 @@ public class PostListRemoteDataSource implements PostListDataSource {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference baseRef = db.collection(QUERY_POST);
+    private CollectionReference userRef = db.collection(QUERY_USER);
+
+    private StorageReference baseStorageRef = FirebaseStorage.getInstance().getReference();
 
     private PostListRemoteDataSource() {
     }
@@ -38,8 +50,6 @@ public class PostListRemoteDataSource implements PostListDataSource {
         }
         return INSTANCE;
     }
-
-
 
 
     /**
@@ -59,8 +69,8 @@ public class PostListRemoteDataSource implements PostListDataSource {
 
                         for (DocumentSnapshot document : documents) {
                             Post post = document.toObject(Post.class);
-                            //String key = document.getReference().getId();
-                            //item.setKey(key);
+                            String key = document.getReference().getId();
+                            post.setKey(key);
                             subject.onNext(post);
                         }
                     } else {
@@ -80,6 +90,82 @@ public class PostListRemoteDataSource implements PostListDataSource {
     }
 
     @Override
+    public Single<Post> writePost(String content, List<Uri> uriList, GoodsListHeader selectedListHeader) {
+        PublishSubject<Post> subject = PublishSubject.create();
+        Post post = new Post(content, FirebaseAuth.getInstance().getCurrentUser().getEmail(), selectedListHeader);
+        long now = System.currentTimeMillis();
+        Date nowDate = new Date(now);
+        post.setCreatedDate(nowDate);
+        for (int i = 0; i < uriList.size(); i++) {
+            post.getImagePathList().add("images/post/" + auth.getUid() + "/" + post.getCreatedDate() + "/" + i + ".jpg");
+        }
+        String postUid = baseRef.document().getId();
+
+        WriteBatch batch = db.batch();
+        batch.set(baseRef.document(postUid), post);
+        batch.set(userRef.document(auth.getUid()).collection(QUERY_MY_POST).document(postUid), post);
+
+        Task savePost = batch.commit()
+                .addOnSuccessListener(__ -> {
+                    post.setKey(postUid);
+                    subject.onNext(post);
+                }).addOnFailureListener(subject::onError);
+
+
+        Tasks.whenAll(savePost).addOnCompleteListener(__ -> {
+            for (int i = 0; i < uriList.size(); i++) {
+                StorageReference mStorageRef = baseStorageRef.child(post.getImagePathList().get(i));
+                mStorageRef.putFile(uriList.get(i));
+            }
+            subject.onComplete();
+        });
+
+        return subject.flatMapSingle(Single::just).single(post);
+    }
+
+    @Override
+    public Single<Boolean> deletePost(String postUid, List<String> imagePathList) {
+        PublishSubject<Boolean> subject = PublishSubject.create();
+        WriteBatch batch = db.batch();
+        batch.delete(baseRef.document(postUid));
+        batch.delete(userRef.document(auth.getUid()).collection(QUERY_MY_POST).document(postUid));
+        Task readPostReplyRef = baseRef.document(postUid).collection(QUERY_REPLY).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                batch.delete(snapshot.getReference());
+            }
+        });
+        Task readUserReplyRef = userRef.document(auth.getUid()).collection(QUERY_MY_POST).document(postUid).collection(QUERY_REPLY).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                batch.delete(snapshot.getReference());
+            }
+        });
+
+        //Task deletePost = batch.commit();
+
+        Tasks.whenAll(readPostReplyRef, readUserReplyRef).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Task batchTask = batch.commit().addOnSuccessListener(aVoid -> {
+                    subject.onNext(true);
+                    for (String path : imagePathList) {
+                        baseStorageRef.child(path).delete();
+                    }
+                });
+                Tasks.whenAll(batchTask).addOnCompleteListener(task2 -> {
+                    if (task2.isSuccessful()) {
+                        subject.onComplete();
+                    }
+                });
+
+            } else {
+                subject.onError(task.getException());
+            }
+        });
+
+        return subject.flatMapSingle(Single::just).single(true);
+    }
+
+
+    @Override
     public Single<List<Reply>> loadPostReplyList(String postUid) {
 
         PublishSubject<Reply> subject = PublishSubject.create();
@@ -91,6 +177,8 @@ public class PostListRemoteDataSource implements PostListDataSource {
 
                     for (DocumentSnapshot document : documents) {
                         Reply postReply = document.toObject(Reply.class);
+                        String key = document.getReference().getId();
+                        postReply.setKey(key);
                         DLogUtil.d(postReply.toString());
                         subject.onNext(postReply);
                     }
@@ -102,6 +190,7 @@ public class PostListRemoteDataSource implements PostListDataSource {
 
         return subject.toList();
     }
+
     @Override
     public Single<Reply> writePostReply(String postUid, String content) {
         Reply reply = new Reply();
@@ -111,19 +200,69 @@ public class PostListRemoteDataSource implements PostListDataSource {
         Date nowDate = new Date(now);
         reply.setWriteDate(nowDate);
         PublishSubject<Reply> subject = PublishSubject.create();
-        Task saveReply = baseRef.document(postUid)
-                .collection(QUERY_REPLY)
-                .add(reply)
-                .addOnSuccessListener(aVoid -> {
-                    reply.setKey(postUid);
-                    subject.onNext(reply);
-                })
-                .addOnFailureListener(subject::onError);
+        WriteBatch batch = db.batch();
+        String key = baseRef.document(postUid)
+                .collection(QUERY_REPLY).document().getId();
+        batch.set(baseRef.document(postUid)
+                .collection(QUERY_REPLY).document(key), reply);
+        batch.set(userRef.document(auth.getUid()).collection(QUERY_MY_POST).document(postUid).collection(QUERY_REPLY).document(key), reply);
+        Task saveReply = batch.commit().addOnSuccessListener(aVoid -> {
+            reply.setKey(key);
+            subject.onNext(reply);
+        }).addOnFailureListener(subject::onError);
         Tasks.whenAll(saveReply).addOnCompleteListener(task -> {
             subject.onComplete();
         });
 
         return subject.flatMapSingle(Single::just).single(reply);
+    }
+
+
+    @Override
+    public Single<Boolean> deleteReply(String postUid, String replyUid) {
+        PublishSubject<Boolean> subject = PublishSubject.create();
+
+        Task deleteReply = baseRef.document(postUid)
+                .collection(QUERY_REPLY)
+                .document(replyUid)
+                .delete();
+
+        Tasks.whenAll(deleteReply).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                subject.onNext(true);
+            } else {
+                subject.onError(task.getException());
+            }
+            subject.onComplete();
+        });
+        return subject.flatMapSingle(Single::just).single(true);
+    }
+
+    @Override
+    public Single<Post> adjustLike(String postUid) {
+        String uid = auth.getUid();
+        PublishSubject<Post> subject = PublishSubject.create();
+        DocumentReference postRefer = baseRef.document(postUid);
+        Task likeAdjust = db.runTransaction(transaction -> {
+            Post post = transaction.get(postRefer).toObject(Post.class);
+            if (!post.getLikedUidList().contains(uid)) {
+                post.getLikedUidList().add(uid);
+                post.increaseLike();
+                post.setKey(postUid);
+                transaction.set(postRefer, post);
+                transaction.set(userRef.document(uid).collection(QUERY_MY_POST).document(postUid), post);
+            } else {
+                post.getLikedUidList().remove(uid);
+                post.decreaseLike();
+                post.setKey(postUid);
+                transaction.set(postRefer, post);
+                transaction.set(userRef.document(uid).collection(QUERY_MY_POST).document(postUid), post);
+            }
+            return post;
+        }).addOnSuccessListener(post -> subject.onNext(post)).addOnFailureListener(subject::onError);
+        Tasks.whenAll(likeAdjust).addOnCompleteListener(task -> subject.onComplete());
+
+        return subject.flatMapSingle(Single::just).single(new Post());
     }
 }
 
