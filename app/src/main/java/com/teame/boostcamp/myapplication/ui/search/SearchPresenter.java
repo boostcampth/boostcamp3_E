@@ -108,17 +108,21 @@ public class SearchPresenter implements SearchContract.Presenter {
         else
             CreateListActivity.startActivity(provider.getApplicationContext(),header,selectedlist);
         selectedlist=null;
+
     }
 
     @Override
     public boolean markerClicked(Marker marker) {
-        view.redPinShow(currentMarker);
+        if(currentMarker!=null)
+            view.redPinShow(currentMarker);
         currentMarker=marker;
-        boolean lat=userMarker.getPosition().latitude==marker.getPosition().latitude;
-        boolean lon=userMarker.getPosition().longitude==marker.getPosition().longitude;
-        if(lat||lon) {
-            view.showmarkerInfoWindow(marker);
-            return false;
+        if(userMarker!=null) {
+            boolean lat = userMarker.getPosition().latitude == marker.getPosition().latitude;
+            boolean lon = userMarker.getPosition().longitude == marker.getPosition().longitude;
+            if(lat||lon) {
+                view.showmarkerInfoWindow(marker);
+                return false;
+            }
         }
         userPinMap.get(marker);
         String mapKey=userPinMap.get(marker.getPosition());

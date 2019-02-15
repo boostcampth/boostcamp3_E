@@ -48,7 +48,12 @@ public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsLis
                 onItemDeleteListener.onItemClick(view, position);
             }
         });
+        DLogUtil.w("create finish");
         return holder;
+    }
+
+    public void setAlarmStatus(int position, boolean status){
+
     }
 
     @Override

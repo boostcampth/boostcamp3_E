@@ -4,6 +4,7 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -17,11 +18,22 @@ import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.entitiy.MinPriceResponse;
 import com.teame.boostcamp.myapplication.model.repository.MyListDataSoruce;
+import com.teame.boostcamp.myapplication.util.CalendarUtil;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.workmanager.AlarmWork;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import androidx.work.Data;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
@@ -34,6 +46,7 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
     private static final String QUERT_LOCATION = "location";
     private static MyListRemoteDataSource INSTANCE;
 
+    private static String KEY_SELECTED="KEY_SELECTED";
     private static String FIREBASE_URL="https://boostcamp-1548575868471.firebaseio.com/_geofire";
     private DatabaseReference firebase= FirebaseDatabase.getInstance().getReferenceFromUrl(FIREBASE_URL);
 
@@ -66,6 +79,7 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
                             String key = document.getId();
                             GoodsListHeader listHeader = document.toObject(GoodsListHeader.class);
                             listHeader.setKey(key);
+                            DLogUtil.e(key);
                             subject.onNext(listHeader);
                         }
                     } else {
@@ -134,7 +148,7 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
         header.setKey(uid);
         CollectionReference myListRef = userRef.document(uid).collection(QUERY_MY_LIST);
         String myListUid = myListRef.document().getId();
-        //TODO:location 기준으로 ID 잡기
+
         //마이리스트용
         DocumentReference myListDocRef = myListRef.document(myListUid);
         CollectionReference myListItemRef = myListDocRef.collection(QUERY_MY_GOODS);
@@ -160,6 +174,23 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
                         subject.onNext(true);
                         GeoFire fire=new GeoFire(firebase);
                         fire.setLocation(myListUid, new GeoLocation(header.getLat(), header.getLng()), (key, error) -> {
+                            String[] goodsItems=new String[goodsList.size()];
+                            for(int i=0; i<goodsList.size(); i++){
+                                goodsItems[i]=goodsList.get(i).getName();
+                            }
+                            Calendar today=Calendar.getInstance();
+                            Calendar end=Calendar.getInstance();
+                            end.setTime(header.getEndDate());
+                            end.add(Calendar.DATE,-1);
+                            int days= CalendarUtil.daysBetween(today,end);
+
+                            WorkManager workManager=WorkManager.getInstance();
+                            OneTimeWorkRequest.Builder alarmBuilder=new OneTimeWorkRequest.Builder(AlarmWork.class);
+                            Data.Builder input=new Data.Builder();
+                            input.putStringArray(KEY_SELECTED,goodsItems);
+                            alarmBuilder.setInputData(input.build())
+                                    .setInitialDelay(days, TimeUnit.DAYS);
+                            workManager.enqueue(alarmBuilder.build());
                             subject.onComplete();
                         });
                     } else {

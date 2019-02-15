@@ -11,10 +11,8 @@ import android.os.Build;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.ui.MainActivity;
-import com.teame.boostcamp.myapplication.util.SharedPreferenceUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
