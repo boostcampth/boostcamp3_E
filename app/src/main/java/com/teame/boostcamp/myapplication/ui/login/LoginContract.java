@@ -1,5 +1,7 @@
 package com.teame.boostcamp.myapplication.ui.login;
 
+import android.app.ProgressDialog;
+
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
 
@@ -12,7 +14,9 @@ public interface LoginContract {
 
         void isLogIn(boolean logInCheck);
 
-        void showLogInLoading(boolean visibility);
+        ProgressDialog showLogInLoading();
+
+
     }
 
     interface Presenter extends BasePresenter {

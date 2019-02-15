@@ -1,5 +1,7 @@
 package com.teame.boostcamp.myapplication.ui.login;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -56,7 +58,6 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     // 로그인 성공 후 메인액티비티 이동 메서드
     @Override
     public void succeedLogIn() {
-        showToast(getString(R.string.login_success));
         MainActivity.startActivity(this);
         finish();
     }
@@ -76,12 +77,11 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     }
 
     @Override
-    public void showLogInLoading(boolean visibility) {
-        if (visibility) {
-            binding.pbLoginloading.setVisibility(View.VISIBLE);
-        } else {
-            binding.pbLoginloading.setVisibility(View.GONE);
-        }
+    public ProgressDialog showLogInLoading() {
+        ProgressDialog loading = new ProgressDialog(this);
+        loading.setMessage("잠시만 기다려 주세요");
+        loading.show();
+        return loading;
     }
 
     @Override
