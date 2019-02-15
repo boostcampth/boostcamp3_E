@@ -29,17 +29,15 @@
     <string name="permission_location_title">위치 권한 설정</string>
     <string name="permission_location_message">위치 권한을 설정하시겠습니까?</string>
 
-
     <string name="sns_my_post">내 게시물</string>
-    <string name="min_price">최저가 : %1$s</string>
+    <string name="min_price">최저 %1$s원</string>
     <string name="goods_count">수량 : %1$d</string>
-    <string name="none_min_price">최저가 정보가 없습니다</string>
+    <string name="none_min_price">정보없음</string>
     <string name="create_list_title">이거 사! 추천 리스트</string>
     <string name="list_goods_add_hint">찾는 아이템이 없으면 추가해보세요!</string>
     <string name="decide">decide</string>
     <string name="write">등록</string>
-    <string name="write_reply_hint">사용 후기를 입력해 주세요 :)</string>
-    <string name="write_reply_hint2">이용자들이 참고할수 있는 사항을 입력해주세요 :)</string>
+    <string name="write_reply_hint"><font size="12">이용자들이 참고할수 있는 사항을 입력해주세요 :)</font></string>
     <string name="from">~</string>
     <string name="title_activity_create_list_info">이거사! 리스트 결정</string>
     <string name="title">title</string>
@@ -47,9 +45,9 @@
     <string name="hashtag_hint">해쉬태그는 이용자들이 함께 공유할수 있도록 도와줍니다.</string>
     <string name="empty_goods">항목을 한개이상 선택해 주세요~!</string>
     <string name="already_tag">이미 선택한 태그입니다.</string>
-    <string name="cancel_create_list">선택한 내용이 전부 사라질수 있습니다.\n 정말 뒤로가시겠 습니까?</string>
+    <string name="cancel_create_list">선택한 내용이 전부 사라질수 있습니다.\n정말 뒤로가시겠습니까?</string>
     <string name="confirm">확인</string>
-    <string name="notice_reply_length">댓글은 5자 이상 입력해 주세요.</string>
+    <string name="notice_reply_length">댓글은 5자 이상 입력해 주세요 :)</string>
     <string name="none_item">추가로 보여드릴 %s 정보가 없네요 :(\n처음으로 작성해보세요!</string>
     <string name="toast_goods">꿀템 리스트</string>
     <string name="toast_reply">사용자 댓글</string>
@@ -64,7 +62,14 @@
     <string name="shopping_list_select">쇼핑리스트를 선택해 주세요!</string>
     <string name="add_post">게시글 작성</string>
     <string name="reply">댓글</string>
-
-
+    <string name="what_do_you_want">찾으시는 물품이 있나요!?</string>
+    <string name="add_goods">추가하기</string>
+    <string name="write_reply">의견쓰기</string>
+    <string name="title_activity_write_reply">WriteReplyActivity</string>
+    <string name="hint_select_star">점수를 선택해 주세요!</string>
+    <string name="save_reply">작성하기</string>
+    <string name="cancle_write_reply">작성한 의견이 모두 사라질 수 있습니다.\n뒤로가시겠습니까?</string>
+    <string name="delete_reply">삭제하기</string>
+    <string name="report_reply">신고하기</string>
 
 </resources>

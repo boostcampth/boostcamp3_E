@@ -3,19 +3,18 @@ package com.teame.boostcamp.myapplication.ui.createlist;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.CheckedGoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ActivityCreateListBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
@@ -25,12 +24,13 @@ import com.teame.boostcamp.myapplication.ui.createlistinfo.CreateListInfo;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.view.ListSpaceItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -38,6 +38,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
     private static final String EXTRA_GOODS_LIST_HDAER = "EXTRA_GOODS_LIST_HDAER";
     private static final String EXTRA_SELECTED_GOODS_LIST = "EXTRA_SELECTED_GOODS_LIST";
+    private static final int SCROLL_DIRECTION_UP = -1;
     CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
@@ -62,7 +63,12 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         switch (item.getItemId()) {
             // action with ID action_refresh was selected
             case R.id.btn_decide:
-                presenter.decideShoppingList();
+                // TODO: 결정화면으로 이동
+//                presenter.decideShoppingList();
+                break;
+            case R.id.btn_shopping:
+                // TODO : 쇼핑리스트로 이동
+//                presenter.decideShoppingList();
                 break;
             case android.R.id.home:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -87,9 +93,10 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     public static void startActivity(Context context, GoodsListHeader header, ArrayList<Goods> goodslist) {
         Intent intent = new Intent(context, CreateListActivity.class);
         intent.putExtra(EXTRA_GOODS_LIST_HDAER, header);
-        intent.putParcelableArrayListExtra(EXTRA_SELECTED_GOODS_LIST,goodslist);
+        intent.putParcelableArrayListExtra(EXTRA_SELECTED_GOODS_LIST, goodslist);
         context.startActivity(intent);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,39 +123,37 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_all_back);
         GoodsListRecyclerAdapter adapter = new GoodsListRecyclerAdapter();
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
-                RecyclerView.VERTICAL,
-                false);
-        binding.rvRecommendList.setLayoutManager(linearLayoutManager);
+        binding.rvRecommendList.setLayoutManager(new GridLayoutManager(this, 3));
+        adapter.setOnItemDetailListener((v, position) -> {
+            presenter.getDetailItemUid(position);
+        });
         binding.rvRecommendList.setAdapter(adapter);
 
-        CheckedGoodsListRecyclerAdapter checkedAdapter = new CheckedGoodsListRecyclerAdapter();
-        LinearLayoutManager selectedLinearLayoutManager = new LinearLayoutManager(this,
-                RecyclerView.VERTICAL,
-                false);
-        binding.rvSelected.setLayoutManager(selectedLinearLayoutManager);
-        binding.rvSelected.setAdapter(checkedAdapter);
-        presenter.loadListData(adapter, checkedAdapter, header.getNation(), header.getCity());
-        adapter.setOnItemDetailListener((__, position) -> presenter.getDetailItemUid(position));
-        adapter.setOnItemClickListener((view, position, isCheck) -> {
-                    presenter.checkedItem(position, isCheck);
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.space_line);
+        binding.rvRecommendList.addItemDecoration(new ListSpaceItemDecoration(spacingInPixels, 3));
+        //TODO API 21 이하 대응 필요
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            binding.rvRecommendList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
                 }
-        );
 
-        checkedAdapter.setOnItemDeleteListener((v, position) -> {
-            presenter.deleteItem(position);
-        });
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
 
-        binding.etAddItem.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                binding.ablTopControl.setExpanded(false);
-            }
-        });
+                    if (binding.rvRecommendList.canScrollVertically(SCROLL_DIRECTION_UP)) {
+                        binding.ablTopControl.setElevation(10);
+                    } else {
+                        binding.ablTopControl.setElevation(0);
+                    }
+                }
+            });
+        }
+        presenter.loadListData(adapter, header.getNation(), header.getCity());
 
-        binding.ibAddItem.setOnClickListener(v -> {
-            String itemName = binding.etAddItem.getText().toString();
-            presenter.addItem(itemName);
-        });
     }
 
     @Override
@@ -179,35 +184,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         CreateListInfo.startActivity(this, header, (ArrayList<Goods>) list);
     }
 
-    @Override
-    public void showAddedGoods(int position) {
-
-        GoodsListRecyclerAdapter adapter = (GoodsListRecyclerAdapter) binding.rvRecommendList.getAdapter();
-        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) binding.rvRecommendList.getLayoutManager();
-
-        if (position == -1) {
-            // 리스트에 아이템이 없으면
-            int lastPosition = adapter.getItemCount();
-            DLogUtil.e("lastPositin : " + lastPosition);
-            linearLayoutManager.scrollToPosition(lastPosition - 1);
-        } else {
-            // 아이템이 있으면
-            binding.rvRecommendList.smoothScrollToPosition(position);
-            // 현재 View에 있는 아이템은 shake Anim
-            View viewItem = binding.rvRecommendList.getLayoutManager().findViewByPosition(position);
-            if (viewItem != null) {
-                View layout = viewItem.findViewById(R.id.cv_item_layout);
-                final Animation animShake
-                        = AnimationUtils.loadAnimation(layout.getContext(), R.anim.anim_shake);
-                layout.startAnimation(animShake);
-            } else {
-                adapter.setAnimPosition(position);
-                linearLayoutManager.scrollToPosition(position);
-            }
-        }
-        DLogUtil.e("position : " + position);
-        binding.ablTopControl.setExpanded(false);
-    }
 
     @Override
     public void emptyCheckGoods() {
@@ -217,20 +193,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     @Override
     public void showDetailItem(Goods item) {
         GoodsDetailActivity.startActivity(this, item);
-    }
-
-    @Override
-    public void notifyDeleteItem(int position, int oldPosition) {
-
-        GoodsListRecyclerAdapter.ViewHolder holder = (GoodsListRecyclerAdapter.ViewHolder) binding.rvRecommendList.findViewHolderForAdapterPosition(position);
-        if (holder != null) {
-            holder.itemView.findViewById(R.id.cv_item_layout).performClick();
-        } else {
-            ((GoodsListRecyclerAdapter) binding.rvRecommendList.getAdapter()).unCheckItem(position);
-            binding.rvSelected.postDelayed(() ->
-                    ((CheckedGoodsListRecyclerAdapter)binding.rvSelected.getAdapter()).removeItem(oldPosition),1000);
-            presenter.minusCount();
-        }
     }
 
     @Override

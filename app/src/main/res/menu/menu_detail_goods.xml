@@ -6,10 +6,4 @@
         android:icon="@drawable/btn_shopping_cart"
         app:showAsAction="ifRoom"
         android:title="@string/decide" />
-
-    <item
-        android:id="@+id/btn_decide"
-        android:icon="@drawable/btn_all_confirm"
-        app:showAsAction="ifRoom"
-        android:title="@string/decide" />
 </menu>
