@@ -157,7 +157,6 @@ public class LocalImageUtil {       // 로컬에서 가져온 이미지를 리�
         BitmapFactory.Options options = new BitmapFactory.Options();
         try {
             BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri), null, options); // 1번
-
             int width = options.outWidth;
             int height = options.outHeight;
             int samplesize = 1;
