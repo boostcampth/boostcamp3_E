@@ -5,6 +5,7 @@
         android:id="@+id/btn_show_cart"
         android:icon="@drawable/btn_shopping_cart"
         app:showAsAction="ifRoom"
+        app:actionLayout="@layout/layout_menu_badge_cart"
         android:title="@string/decide" />
 
 </menu>

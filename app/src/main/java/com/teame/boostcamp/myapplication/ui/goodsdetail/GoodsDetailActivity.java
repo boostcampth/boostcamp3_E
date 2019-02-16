@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,6 +35,7 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,6 +47,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
     private final static int REQ_WRITE_REPLY = 1000;
     private final static String EXTRA_REPLY = "EXTRA_REPLY";
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private AppCompatTextView tvBadge;
 
     @Override
     protected GoodsDetailContract.Presenter getPresenter() {
@@ -67,8 +68,14 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_cart, menu);
+        DLogUtil.e("onCreateOptionMenu");
+        getMenuInflater().inflate(R.menu.menu_cart, menu);
+        final MenuItem menuItem = menu.findItem(R.id.btn_show_cart);
+        View actionView = menuItem.getActionView();
+        tvBadge = actionView.findViewById(R.id.cart_badge);
+        tvBadge.setVisibility(View.GONE);
+        presenter.getShoppingListCount();
+        actionView.setOnClickListener(v -> onOptionsItemSelected(menuItem));
         return true;
     }
 
@@ -98,8 +105,10 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
     @Override
     protected void onResume() {
         super.onResume();
+        if (tvBadge != null) {
+            presenter.getShoppingListCount();
+        }
     }
-
 
     @Override
     protected void onPause() {
@@ -220,27 +229,30 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         });
 
         binding.tvCountPlus.setOnClickListener(view -> {
-            int a = Integer.valueOf(binding.tvGoodsCount.getText().toString());
+            int count = Integer.valueOf(binding.tvGoodsCount.getText().toString());
 
-            if (a <= 1) {
+            if (count <= 1) {
                 binding.tvGoodsCount.setText("1");
                 return;
             }
-            binding.tvGoodsCount.setText(String.format(Locale.getDefault(), "%d", --a));
+            binding.tvGoodsCount.setText(String.format(Locale.getDefault(), "%d", --count));
+            item.setCount(count);
+        });
+
+        binding.tvCountMinus.setOnClickListener(view -> {
+            int count = Integer.valueOf(binding.tvGoodsCount.getText().toString());
+            if (count >= 99) {
+                binding.tvGoodsCount.setText("99");
+                return;
+            }
+            binding.tvGoodsCount.setText(String.format(Locale.getDefault(), "%d", ++count));
+            item.setCount(count);
         });
 
         binding.tvBottomCollaps.setOnClickListener(view ->
                 behavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
 
         binding.tvSelectGoods.setOnClickListener(__ -> {
-            String countString = binding.tvGoodsCount.getText().toString();
-            int count;
-            try {
-                count = Integer.valueOf(countString);
-            } catch (Exception e) {
-                count = 1;
-            }
-            item.setCount(count);
             item.setCheck(true);
             presenter.addCartGoods(item);
             behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -260,14 +272,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
                                             }
                                         }
         );
-        binding.tvCountMinus.setOnClickListener(view -> {
-            int a = Integer.valueOf(binding.tvGoodsCount.getText().toString());
-            if (a >= 99) {
-                binding.tvGoodsCount.setText("99");
-                return;
-            }
-            binding.tvGoodsCount.setText(String.format(Locale.getDefault(), "%d", ++a));
-        });
+
     }
 
     public void slideUp(View view) {
@@ -318,11 +323,26 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
     @Override
     public void successAddCart() {
         showToast(getString(R.string.goods_add_cart));
+        presenter.getShoppingListCount();
     }
 
     @Override
     public void duplicationAddCart() {
         showToast(getString(R.string.goods_add_cart));
+    }
+
+    @Override
+    public void setBadge(String count) {
+        if (count == null || Integer.valueOf(count) == 0) {
+            tvBadge.setVisibility(View.GONE);
+            return;
+        }
+        if (Integer.valueOf(count) >= 99) {
+            tvBadge.setText("99+");
+            tvBadge.setVisibility(View.VISIBLE);
+        }
+        tvBadge.setText(count);
+        tvBadge.setVisibility(View.VISIBLE);
     }
 
     @Override

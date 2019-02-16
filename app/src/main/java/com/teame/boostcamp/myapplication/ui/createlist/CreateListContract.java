@@ -18,11 +18,14 @@ public interface CreateListContract {
         void showDetailItem(Goods item);
 
         void finishLoad(int size);
+
+        void setBadge(String count);
     }
 
     interface Presenter extends BasePresenter {
 
         void removeCart();
+
         void getDetailItemUid(int position);
 
         void loadListData(GoodsListRecyclerAdapter adapter, String nation, String city);
@@ -32,6 +35,8 @@ public interface CreateListContract {
         void decideShoppingList();
 
         void saveListHeader(GoodsListHeader header);
+
+        void getShoppingListCount();
     }
 
 }

@@ -66,7 +66,7 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
     }
 
     @Override
-    public void getThrowData() {
+    public void getSaveData() {
         GoodsListHeader header = cartPreferenceHelper.getListHeader();
         cartPreferenceHelper.saveGoodsCartList(itemList);
         if (itemList.size() <= 0) {

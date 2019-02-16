@@ -14,7 +14,6 @@ import com.teame.boostcamp.myapplication.util.DLogUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.databinding.ObservableField;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class CreateListPresenter implements CreateListContract.Presenter {
@@ -107,6 +106,16 @@ public class CreateListPresenter implements CreateListContract.Presenter {
     @Override
     public void saveListHeader(GoodsListHeader header) {
         cartPreferenceHelper.saveListHeader(header);
+    }
+
+    @Override
+    public void getShoppingListCount() {
+        List<Goods> list = cartPreferenceHelper.getGoodsCartList();
+        if (list == null) {
+            view.setBadge(String.valueOf(0));
+        } else {
+            view.setBadge(String.valueOf(list.size()));
+        }
     }
 
     /**

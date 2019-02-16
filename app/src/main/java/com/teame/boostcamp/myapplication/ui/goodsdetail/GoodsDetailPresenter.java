@@ -71,7 +71,6 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
     @Override
     public void addCartGoods(Goods item) {
         List<Goods> list = cartPreferenceHelper.getGoodsCartList();
-
         int postion = -1;
         if (list.contains(item)) {
             for (int i = 0; i < list.size(); i++) {
@@ -84,9 +83,9 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
 
         if (postion != -1) {
             list.remove(postion);
-            view.duplicationAddCart();
         }
         list.add(item);
+
         cartPreferenceHelper.saveGoodsCartList(list);
 
         view.successAddCart();
@@ -103,4 +102,15 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
             disposable.dispose();
         }
     }
+
+    @Override
+    public void getShoppingListCount() {
+        List<Goods> list = cartPreferenceHelper.getGoodsCartList();
+        if (list == null) {
+            view.setBadge(String.valueOf(0));
+        } else {
+            view.setBadge(String.valueOf(list.size()));
+        }
+    }
+
 }

@@ -90,8 +90,8 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         });
         adapter.setOnItemCheckListener((v, position) -> {
             isChange = true;
-            presenter.calculatorPrice();
             presenter.detectIsAllCheck();
+            presenter.calculatorPrice();
         });
         binding.cbAll.setOnClickListener(view -> {
             isChange = true;
@@ -101,7 +101,7 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
 
         binding.rvCartList.setLayoutManager(linearLayoutManager);
         binding.rvCartList.setAdapter(adapter);
-        binding.tvDicideCart.setOnClickListener(view -> presenter.getThrowData());
+        binding.tvDicideCart.setOnClickListener(view -> presenter.getSaveData());
     }
 
     @Override

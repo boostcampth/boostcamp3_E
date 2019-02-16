@@ -359,10 +359,14 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="총 가격 : 10,000"
+                android:text="@{item.lprice != null ? String.format(@string/total_price(item.totalPrice)) : @string/none_min_price}"
+                android:textColor="@color/colorAccent"
+                android:textSize="14sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="@id/view_content"
-                app:layout_constraintRight_toLeftOf="@+id/tv_select_goods" />
+                app:layout_constraintRight_toLeftOf="@+id/tv_select_goods"
+                tools:text="예상가격" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

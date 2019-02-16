@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
@@ -39,6 +39,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     private static final String EXTRA_GOODS_LIST_HDAER = "EXTRA_GOODS_LIST_HDAER";
     private static final String EXTRA_SELECTED_GOODS_LIST = "EXTRA_SELECTED_GOODS_LIST";
     private static final int SCROLL_DIRECTION_UP = -1;
+    private AppCompatTextView tvBadge;
     CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
@@ -53,8 +54,13 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_cart, menu);
+        getMenuInflater().inflate(R.menu.menu_cart, menu);
+        final MenuItem menuItem = menu.findItem(R.id.btn_show_cart);
+        View actionView = menuItem.getActionView();
+        tvBadge = actionView.findViewById(R.id.cart_badge);
+        tvBadge.setVisibility(View.GONE);
+        presenter.getShoppingListCount();
+        actionView.setOnClickListener(v -> onOptionsItemSelected(menuItem));
         return true;
     }
 
@@ -102,6 +108,14 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         initView();
         binding.setPresenter((CreateListPresenter) presenter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (tvBadge != null) {
+            presenter.getShoppingListCount();
+        }
     }
 
     public void initView() {
@@ -204,6 +218,20 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         } else if (size == Constant.FAIL_LOAD) {
             showLongToast(getString(R.string.fail_load));
         }
+    }
+
+    @Override
+    public void setBadge(String count) {
+        if (count == null || Integer.valueOf(count) == 0) {
+            tvBadge.setVisibility(View.GONE);
+            return;
+        }
+        if (Integer.valueOf(count) >= 99) {
+            tvBadge.setText("99+");
+            tvBadge.setVisibility(View.VISIBLE);
+        }
+        tvBadge.setText(count);
+        tvBadge.setVisibility(View.VISIBLE);
     }
 
 }

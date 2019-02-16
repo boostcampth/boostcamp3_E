@@ -81,7 +81,6 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_review_content"
-            app:srcCompat="@drawable/btn_more_horiz" />
+            app:layout_constraintTop_toBottomOf="@id/tv_review_content" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

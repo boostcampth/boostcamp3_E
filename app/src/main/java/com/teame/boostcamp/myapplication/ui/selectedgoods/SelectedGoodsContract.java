@@ -1,31 +1,34 @@
 package com.teame.boostcamp.myapplication.ui.selectedgoods;
 
-import com.teame.boostcamp.myapplication.adapter.SelectedGoodsRecyclerAdapter;
-import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.adapter.GoodsMyListAdapter;
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
-
-import java.util.List;
 
 public interface SelectedGoodsContract {
 
     interface View extends BaseView<Presenter> {
-        void saveCheckedList(List<Goods> list);
-
-        void showDetailItem(Goods item);
-
         void finishLoad(int size);
+
+        void setResultPrice(String resultPrice);
+
+        void setAllorNoneCheck(boolean allCheck);
+
+        void setOfferDelete();
+
+        void deleteAdapterItem(int position);
     }
 
     interface Presenter extends BasePresenter {
 
-        void loadListData(SelectedGoodsRecyclerAdapter adapter, String headerUid);
+        void loadListData(GoodsMyListAdapter adapter, String headerUid);
 
-        void selectItem(int position, boolean isCheck);
+        void deleteList();
 
-        void getDetailItemUid(int position);
+        void deleteItem(int position);
 
-        void getCheckedList();
+        void detectIsAllCheck();
+
+        void calculatorPrice();
 
     }
 

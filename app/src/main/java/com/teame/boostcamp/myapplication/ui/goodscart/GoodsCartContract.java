@@ -22,7 +22,7 @@ interface GoodsCartContract {
 
         void deleteItem(int position);
 
-        void getThrowData();
+        void getSaveData();
 
         void saveCartList();
 

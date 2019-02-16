@@ -4,67 +4,177 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/cl_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <include android:id="@+id/include_loading"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            layout="@layout/layout_loading"/>
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/abl_top_control"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:elevation="0dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
-                app:expandedTitleGravity="bottom|right"
-                app:expandedTitleMarginTop="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
-
-                <ImageView
-                    android:id="@+id/iv_backdrop"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fitsSystemWindows="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/img_japen_test"
-                    app:layout_collapseMode="parallax" />
+                app:contentScrim="@color/colorMyListAppBar"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_screen"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:background="@color/colorBlurGray"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="pin"
-                    app:layout_scrollFlags="scroll|enterAlways|snap"
                     app:navigationIcon="@drawable/btn_all_back"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"
-                    app:title="일본오사카20191022"
-                    app:titleTextColor="@color/colorWhite" />
+                    app:popupTheme="@style/AppToolbar">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="@dimen/space_x_small"
+                        app:srcCompat="@drawable/ic_logo_ejusa" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:text="이거 사!"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp" />
+                </androidx.appcompat.widget.Toolbar>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_recommend_list"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsv_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="4dp"
-            android:windowSoftInputMode="adjustResize"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/item_list_goods" />
+            android:layout_marginBottom="60dp"
+            android:descendantFocusability="blocksDescendants"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/cb_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="16dp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="16dp"
+                        android:text="전체선택"
+                        android:textSize="16sp" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_cart_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorDivide"
+                    android:descendantFocusability="blocksDescendants"
+                    tools:listitem="@layout/item_my_check_goods" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_bottom_root"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:background="@color/colorBottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_save_my_list"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/layout_accent_round_board"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:singleLine="true"
+                android:text="@string/save_my_goods_status"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_total_price"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_offer_delete"
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/layout_accent_round_board"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:singleLine="true"
+                android:text="@string/delete_my_list"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_total_price"
+                app:layout_constraintTop_toTopOf="parent"  />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/layout_accent_round_stroke"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:singleLine="true"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/include_loading"
+            layout="@layout/layout_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>

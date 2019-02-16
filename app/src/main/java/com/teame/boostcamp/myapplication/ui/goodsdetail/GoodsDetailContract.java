@@ -16,6 +16,8 @@ public interface GoodsDetailContract {
         void successAddCart();
 
         void duplicationAddCart();
+
+        void setBadge(String count);
     }
 
     interface Presenter extends BasePresenter {
@@ -28,6 +30,8 @@ public interface GoodsDetailContract {
         Reply getItem(int position);
 
         void addCartGoods(Goods item);
+
+        void getShoppingListCount();
     }
 
 }
