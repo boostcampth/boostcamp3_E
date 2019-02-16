@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.teame.boostcamp.myapplication.model.entitiy.Goods" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="20dp"
+        app:cardBackgroundColor="@color/colorWhite"
+        app:cardCornerRadius="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.teame.boostcamp.myapplication.util.view.SquareImageView
+                android:id="@+id/iv_goods_img"
+                error="@{@drawable/ic_no_image}"
+                imgUrl="@{item.img}"
+                rounded="@{4}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/ic_image_border"
+                app:layout_constraintLeft_toRightOf="@id/cb_select"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_filled_star" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_goods_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:maxLines="1"
+                android:text="@{item.name}"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintBottom_toTopOf="@id/tv_min_price"
+                app:layout_constraintLeft_toRightOf="@id/iv_goods_img"
+                app:layout_constraintRight_toLeftOf="@id/tv_delete"
+                app:layout_constraintTop_toTopOf="@id/iv_goods_img"
+                app:layout_constraintVertical_chainStyle="spread_inside"
+                tools:text="타이틀틀틀틀틀" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_min_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:ellipsize="end"
+                android:text="@{item.lprice != null ? String.format(@string/min_price_num(item.lprice,item.count)) : String.format(@string/none_min_price_num(item.count))}"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_goods_img"
+                app:layout_constraintLeft_toRightOf="@id/iv_goods_img"
+                app:layout_constraintRight_toLeftOf="@id/tv_delete"
+                app:layout_constraintTop_toBottomOf="@id/tv_goods_title"
+                tools:text="최저가" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/tv_delete"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="16dp"
+                android:paddingLeft="5dp"
+                android:paddingBottom="5dp"
+                app:layout_constraintBottom_toTopOf="@id/spinner"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_goods_img"
+                app:layout_constraintVertical_chainStyle="spread_inside"
+                app:srcCompat="@drawable/btn_cancle" />
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/pb_deleting"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="@dimen/space_x_large"
+                android:layout_height="@dimen/space_x_large"
+                android:layout_marginRight="16dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/spinner"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_goods_img"
+                app:layout_constraintVertical_chainStyle="spread_inside" />
+
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawSelectorOnTop="true"
+                android:entries="@array/spinnerItems"
+                android:gravity="center"
+                android:spinnerMode="dialog"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/iv_goods_img"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_delete" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/cb_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:checked="@{item.check}"
+                app:layout_constraintBottom_toBottomOf="@id/tv_goods_title"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_goods_title" />
+
+            <View
+                android:id="@+id/view_divide"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/colorDivideShadow"
+                app:layout_constraintLeft_toLeftOf="@id/iv_goods_img"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_goods_img" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_total_price_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/predict_string"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_total_price"
+                app:layout_constraintLeft_toLeftOf="@id/view_divide"
+                app:layout_constraintTop_toBottomOf="@id/view_divide"
+                tools:text="예상금액" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@{item.lprice != null ? String.format(@string/total_price(item.totalPrice)) : @string/none_min_price}"
+                android:textColor="@color/design_default_color_primary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="@id/view_divide"
+                app:layout_constraintTop_toBottomOf="@id/view_divide"
+                tools:text="19,000" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

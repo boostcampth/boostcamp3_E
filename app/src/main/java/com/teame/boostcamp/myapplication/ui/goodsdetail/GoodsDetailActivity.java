@@ -1,7 +1,6 @@
 package com.teame.boostcamp.myapplication.ui.goodsdetail;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -11,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +25,7 @@ import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
+import com.teame.boostcamp.myapplication.ui.goodscart.GoodsCartActivity;
 import com.teame.boostcamp.myapplication.ui.writereply.WriteReplyActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
@@ -36,6 +35,7 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,6 +47,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
     private final static int REQ_WRITE_REPLY = 1000;
     private final static String EXTRA_REPLY = "EXTRA_REPLY";
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private AppCompatTextView tvBadge;
 
     @Override
     protected GoodsDetailContract.Presenter getPresenter() {
@@ -67,23 +68,25 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_detail_goods, menu);
+        DLogUtil.e("onCreateOptionMenu");
+        getMenuInflater().inflate(R.menu.menu_cart, menu);
+        final MenuItem menuItem = menu.findItem(R.id.btn_show_cart);
+        View actionView = menuItem.getActionView();
+        tvBadge = actionView.findViewById(R.id.cart_badge);
+        tvBadge.setVisibility(View.GONE);
+        presenter.getShoppingListCount();
+        actionView.setOnClickListener(v -> onOptionsItemSelected(menuItem));
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.btn_shopping:
-//                presenter.decideShoppingList();
+            case R.id.btn_show_cart:
+                GoodsCartActivity.startActivity(this);
                 break;
             case android.R.id.home:
-                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                dialog.setMessage(getString(R.string.cancel_create_list))
-                        .setPositiveButton(getString(R.string.confirm), (__, ___) -> finish())
-                        .setCancelable(true)
-                        .show();
+                finish();
                 break;
             default:
                 break;
@@ -102,8 +105,10 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
     @Override
     protected void onResume() {
         super.onResume();
+        if (tvBadge != null) {
+            presenter.getShoppingListCount();
+        }
     }
-
 
     @Override
     protected void onPause() {
@@ -162,7 +167,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         GoodsDetailRecyclerAdapter adapter = new GoodsDetailRecyclerAdapter();
         adapter.setOnItemDeleteListener((v, position) -> {
             Reply selectedReply = presenter.getItem(position);
-            boolean isMine = TextUtils.equals(auth.getUid(),selectedReply.getWriter());
+            boolean isMine = TextUtils.equals(auth.getUid(), selectedReply.getWriter());
             BottomReplyDialogFragment bottomSheetDialog = BottomReplyDialogFragment.newInstance(isMine);
 
             bottomSheetDialog.setOnDeleteClickListener(__ -> {
@@ -223,16 +228,35 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
             startActivity(LpriceIntent);
         });
 
-        binding.countPlus.setOnClickListener(view -> {
-            int a = Integer.valueOf(binding.goodsNum.getText().toString());
+        binding.tvCountPlus.setOnClickListener(view -> {
+            int count = Integer.valueOf(binding.tvGoodsCount.getText().toString());
 
-            if (a <= 1) {
-                binding.goodsNum.setText("1");
+            if (count <= 1) {
+                binding.tvGoodsCount.setText("1");
                 return;
             }
-            binding.goodsNum.setText(String.format(Locale.getDefault(), "%d", --a));
+            binding.tvGoodsCount.setText(String.format(Locale.getDefault(), "%d", --count));
+            item.setCount(count);
         });
 
+        binding.tvCountMinus.setOnClickListener(view -> {
+            int count = Integer.valueOf(binding.tvGoodsCount.getText().toString());
+            if (count >= 99) {
+                binding.tvGoodsCount.setText("99");
+                return;
+            }
+            binding.tvGoodsCount.setText(String.format(Locale.getDefault(), "%d", ++count));
+            item.setCount(count);
+        });
+
+        binding.tvBottomCollaps.setOnClickListener(view ->
+                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
+
+        binding.tvSelectGoods.setOnClickListener(__ -> {
+            item.setCheck(true);
+            presenter.addCartGoods(item);
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        });
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
                                             @Override
                                             public void onStateChanged(@NonNull View view, int i) {
@@ -241,23 +265,14 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
                                                 } else if (behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                                                     slideUp(binding.clBottomRoot);
                                                 }
-
                                             }
 
                                             @Override
                                             public void onSlide(@NonNull View view, float v) {
-
                                             }
                                         }
         );
-        binding.countMinus.setOnClickListener(view -> {
-            int a = Integer.valueOf(binding.goodsNum.getText().toString());
-            if (a >= 99) {
-                binding.goodsNum.setText("99");
-                return;
-            }
-            binding.goodsNum.setText(String.format(Locale.getDefault(), "%d", ++a));
-        });
+
     }
 
     public void slideUp(View view) {
@@ -303,6 +318,31 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
     @Override
     public void completeReloadReply() {
         binding.rvReplyList.smoothScrollToPosition(0);
+    }
+
+    @Override
+    public void successAddCart() {
+        showToast(getString(R.string.goods_add_cart));
+        presenter.getShoppingListCount();
+    }
+
+    @Override
+    public void duplicationAddCart() {
+        showToast(getString(R.string.goods_add_cart));
+    }
+
+    @Override
+    public void setBadge(String count) {
+        if (count == null || Integer.valueOf(count) == 0) {
+            tvBadge.setVisibility(View.GONE);
+            return;
+        }
+        if (Integer.valueOf(count) >= 99) {
+            tvBadge.setText("99+");
+            tvBadge.setVisibility(View.VISIBLE);
+        }
+        tvBadge.setText(count);
+        tvBadge.setVisibility(View.VISIBLE);
     }
 
     @Override

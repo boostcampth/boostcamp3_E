@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,13 +13,13 @@ import android.view.WindowManager;
 import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ActivityCreateListBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.createlistinfo.CreateListInfo;
+import com.teame.boostcamp.myapplication.ui.goodscart.GoodsCartActivity;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
@@ -30,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
@@ -39,6 +39,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     private static final String EXTRA_GOODS_LIST_HDAER = "EXTRA_GOODS_LIST_HDAER";
     private static final String EXTRA_SELECTED_GOODS_LIST = "EXTRA_SELECTED_GOODS_LIST";
     private static final int SCROLL_DIRECTION_UP = -1;
+    private AppCompatTextView tvBadge;
     CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
@@ -53,27 +54,31 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_create_shoppinglist, menu);
+        getMenuInflater().inflate(R.menu.menu_cart, menu);
+        final MenuItem menuItem = menu.findItem(R.id.btn_show_cart);
+        View actionView = menuItem.getActionView();
+        tvBadge = actionView.findViewById(R.id.cart_badge);
+        tvBadge.setVisibility(View.GONE);
+        presenter.getShoppingListCount();
+        actionView.setOnClickListener(v -> onOptionsItemSelected(menuItem));
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // action with ID action_refresh was selected
-            case R.id.btn_decide:
-                // TODO: 결정화면으로 이동
-//                presenter.decideShoppingList();
-                break;
-            case R.id.btn_shopping:
+            case R.id.btn_show_cart:
+                GoodsCartActivity.startActivity(this);
                 // TODO : 쇼핑리스트로 이동
 //                presenter.decideShoppingList();
                 break;
             case android.R.id.home:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
                 dialog.setMessage(getString(R.string.cancel_create_list))
-                        .setPositiveButton(getString(R.string.confirm), (__, ___) -> finish())
+                        .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
+                            presenter.removeCart();
+                            finish();
+                        })
                         .setCancelable(true)
                         .show();
                 break;
@@ -105,6 +110,14 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         binding.setPresenter((CreateListPresenter) presenter);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (tvBadge != null) {
+            presenter.getShoppingListCount();
+        }
+    }
+
     public void initView() {
         binding.includeLoading.lavLoading.playAnimation();
         binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
@@ -119,6 +132,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
             header.setLat(11.1);
             header.setLng(11.2);
         }
+        presenter.saveListHeader(header);
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_all_back);
@@ -181,7 +195,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         }
         DLogUtil.d(header.toString());
         DLogUtil.d(list.toString());
-        CreateListInfo.startActivity(this, header, (ArrayList<Goods>) list);
+        CreateListInfo.startActivity(this, header);
     }
 
 
@@ -204,6 +218,20 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         } else if (size == Constant.FAIL_LOAD) {
             showLongToast(getString(R.string.fail_load));
         }
+    }
+
+    @Override
+    public void setBadge(String count) {
+        if (count == null || Integer.valueOf(count) == 0) {
+            tvBadge.setVisibility(View.GONE);
+            return;
+        }
+        if (Integer.valueOf(count) >= 99) {
+            tvBadge.setText("99+");
+            tvBadge.setVisibility(View.VISIBLE);
+        }
+        tvBadge.setText(count);
+        tvBadge.setVisibility(View.VISIBLE);
     }
 
 }

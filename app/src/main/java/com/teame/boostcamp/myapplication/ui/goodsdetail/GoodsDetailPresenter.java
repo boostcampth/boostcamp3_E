@@ -1,13 +1,17 @@
 package com.teame.boostcamp.myapplication.ui.goodsdetail;
 
-import android.app.Activity;
+import android.text.TextUtils;
 
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
+import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreference;
+import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreferenceHelper;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+
+import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -17,10 +21,12 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
     private CompositeDisposable disposable = new CompositeDisposable();
     private GoodsDetailRecyclerAdapter adapter;
     private GoodsDetailContract.View view;
+    private CartPreferenceHelper cartPreferenceHelper;
 
     public GoodsDetailPresenter(GoodsDetailContract.View view, GoodsDetailRepository repository) {
         this.repository = repository;
         this.view = view;
+        cartPreferenceHelper = new CartPreference();
     }
 
     @Override
@@ -62,6 +68,29 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
         return adapter.getItem(position);
     }
 
+    @Override
+    public void addCartGoods(Goods item) {
+        List<Goods> list = cartPreferenceHelper.getGoodsCartList();
+        int postion = -1;
+        if (list.contains(item)) {
+            for (int i = 0; i < list.size(); i++) {
+                if (TextUtils.equals(list.get(i).getName(), item.getName())) {
+                    postion = i;
+                    break;
+                }
+            }
+        }
+
+        if (postion != -1) {
+            list.remove(postion);
+        }
+        list.add(item);
+
+        cartPreferenceHelper.saveGoodsCartList(list);
+
+        view.successAddCart();
+    }
+
 
     @Override
     public void onAttach() {
@@ -73,4 +102,15 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
             disposable.dispose();
         }
     }
+
+    @Override
+    public void getShoppingListCount() {
+        List<Goods> list = cartPreferenceHelper.getGoodsCartList();
+        if (list == null) {
+            view.setBadge(String.valueOf(0));
+        } else {
+            view.setBadge(String.valueOf(list.size()));
+        }
+    }
+
 }

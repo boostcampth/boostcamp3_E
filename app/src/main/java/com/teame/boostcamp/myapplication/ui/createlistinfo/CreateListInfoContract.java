@@ -18,7 +18,7 @@ interface CreateListInfoContract {
     interface Presenter extends BasePresenter {
         void addHashTag(String tag);
         void removeHashTag(String tag);
-        void saveMyList(List<Goods> goodsList, GoodsListHeader header);
+        void saveMyList(GoodsListHeader header);
     }
 
 }

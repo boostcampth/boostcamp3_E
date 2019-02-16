@@ -1,34 +1,27 @@
 package com.teame.boostcamp.myapplication.ui.selectedgoods;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.SelectedGoodsRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.GoodsMyListAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivitySelectedGoodsBinding;
-import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
-import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
-
-import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.disposables.CompositeDisposable;
 
 public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoodsBinding, SelectedGoodsContract.Presenter> implements SelectedGoodsContract.View {
 
     public static final String EXTRA_HEADER_UID = "EXTRA_HEADER_UID";
-    private CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
     protected SelectedGoodsContract.Presenter getPresenter() {
@@ -41,18 +34,10 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_create_shoppinglist, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // action with ID action_refresh was selected
-            case R.id.btn_decide:
-                presenter.getCheckedList();
+            case android.R.id.home:
+                finish();
                 break;
             default:
                 break;
@@ -79,7 +64,7 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
         final String headerUid;
         headerUid = intent.getStringExtra(EXTRA_HEADER_UID);
 
-        if(headerUid==null){
+        if (headerUid == null) {
             finish();
             return;
         }
@@ -90,15 +75,42 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
         binding.includeLoading.lavLoading.playAnimation();
         binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
 
-        SelectedGoodsRecyclerAdapter adapter = new SelectedGoodsRecyclerAdapter();
+        GoodsMyListAdapter adapter = new GoodsMyListAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
                 false);
-        binding.rvRecommendList.setLayoutManager(linearLayoutManager);
-        binding.rvRecommendList.setAdapter(adapter);
+        binding.rvCartList.setLayoutManager(linearLayoutManager);
+        binding.rvCartList.setAdapter(adapter);
         presenter.loadListData(adapter, headerUid);
+        presenter.detectIsAllCheck();
+        adapter.setOnItemDeleteListener((v, position) -> {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage(R.string.would_you_delete_goods)
+                    .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
+                        presenter.deleteItem(position);
+                    })
+                    .setCancelable(true)
+                    .show();
+        });
+        adapter.setOnItemCheckListener((v, position) -> {
+            presenter.detectIsAllCheck();
+            presenter.calculatorPrice();
+        });
+        binding.cbAll.setOnClickListener(view -> {
+            boolean check = binding.cbAll.isChecked();
+            adapter.allCheck(check);
+        });
 
-        adapter.setOnItemDetailListener((__, position) -> presenter.getDetailItemUid(position));
+        binding.rvCartList.setLayoutManager(linearLayoutManager);
+        binding.rvCartList.setAdapter(adapter);
+
+        binding.tvOfferDelete.setOnClickListener(view -> {
+            presenter.deleteList();
+        });
+        binding.tvSaveMyList.setOnClickListener(view -> {
+            // TODO: 저장 로직 추가
+//            presenter.getSaveData()
+        });
     }
 
     @Override
@@ -111,25 +123,44 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
         } else if (size == Constant.FAIL_LOAD) {
             showLongToast(getString(R.string.fail_load));
         }
+        presenter.calculatorPrice();
     }
+
+    @Override
+    public void setResultPrice(String resultPrice) {
+        binding.tvTotalPrice.setText(resultPrice);
+    }
+
+    @Override
+    public void setAllorNoneCheck(boolean allCheck) {
+        binding.cbAll.setChecked(allCheck);
+    }
+
+    @Override
+    public void setOfferDelete() {
+        binding.tvOfferDelete.setVisibility(View.VISIBLE);
+        binding.tvTotalPrice.setVisibility(View.GONE);
+        binding.tvSaveMyList.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void deleteAdapterItem(int position) {
+        GoodsMyListAdapter.ViewHolder holder =
+                (GoodsMyListAdapter.ViewHolder) binding.rvCartList
+                        .findViewHolderForAdapterPosition(position);
+
+        if (holder != null) {
+            holder.itemView.findViewById(R.id.pb_deleting).setVisibility(View.VISIBLE);
+            holder.itemView.findViewById(R.id.tv_delete).setVisibility(View.GONE);
+        }
+
+        presenter.calculatorPrice();
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
         presenter.onDetach();
-        if (disposable.isDisposed()) {
-            disposable.dispose();
-        }
-    }
-
-    @Override
-    public void saveCheckedList(List<Goods> list) {
-        // TODO : 저장된 아이템 해쉬테그, 제목 결정하는 곳으로 넘겨주기
-        showToast("NextStep");
-    }
-
-    @Override
-    public void showDetailItem(Goods item) {
-        GoodsDetailActivity.startActivity(this, item);
     }
 
 }

@@ -162,10 +162,19 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
         WriteBatch batch = db.batch();
         batch.set(myListDocRef, header);
         batch.set(locationRef, header);
+
+        if (goodsList.size() == 0 || header.getTitle() == null) {
+            subject.onError(new Throwable("정상적인 요청이 아닙니다."));
+            return subject.single(false);
+        }
+
         for (Goods item : goodsList) {
-            DocumentReference itemRef = myListItemRef.document(item.getKey());
-            batch.set(itemRef, item);
-            batch.set(locationItemRef.document(item.getKey()), item);
+            // 체크된 데이터만 저장하기
+            if (item.isCheck()) {
+                DocumentReference itemRef = myListItemRef.document(item.getKey());
+                batch.set(itemRef, item);
+                batch.set(locationItemRef.document(item.getKey()), item);
+            }
         }
 
         batch.commit()
