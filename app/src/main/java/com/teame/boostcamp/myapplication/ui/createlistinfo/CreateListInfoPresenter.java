@@ -3,8 +3,8 @@ package com.teame.boostcamp.myapplication.ui.createlistinfo;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
-import com.teame.boostcamp.myapplication.model.repository.preference.CartPreference;
-import com.teame.boostcamp.myapplication.model.repository.preference.CartPreferenceHelper;
+import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreference;
+import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreferenceHelper;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;

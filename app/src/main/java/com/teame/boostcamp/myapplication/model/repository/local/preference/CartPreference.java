@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.model.repository.preference;
+package com.teame.boostcamp.myapplication.model.repository.local.preference;
 
 import android.content.Context;
 import android.content.SharedPreferences;

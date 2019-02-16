@@ -6,8 +6,8 @@ import com.teame.boostcamp.myapplication.adapter.GoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
-import com.teame.boostcamp.myapplication.model.repository.preference.CartPreference;
-import com.teame.boostcamp.myapplication.model.repository.preference.CartPreferenceHelper;
+import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreference;
+import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreferenceHelper;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
