@@ -178,6 +178,21 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     }
 
     @Override
+    public void redPinShow(Marker marker) {
+        marker.setIcon(VectorConverterUtil.convert(getContext(),R.drawable.btn_uncllick_marker));
+    }
+
+    @Override
+    public void bluePinShow(Marker marker) {
+        marker.setIcon(VectorConverterUtil.convert(getContext(),R.drawable.btn_click_marker));
+    }
+
+    @Override
+    public void showmarkerInfoWindow(Marker marker) {
+        marker.showInfoWindow();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         binding.mvGooglemap.onPause();
@@ -257,8 +272,9 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
                     }));
         }
         googleMap.setOnMarkerClickListener(marker -> {
-            marker.setIcon(VectorConverterUtil.convert(getContext(),R.drawable.btn_click_marker));
-            presenter.markerClicked(marker);
+            if(presenter.markerClicked(marker)){
+                marker.setIcon(VectorConverterUtil.convert(getContext(),R.drawable.btn_click_marker));
+            }
             return true;
         });
         googleMap.setOnMapLongClickListener(latLng -> {

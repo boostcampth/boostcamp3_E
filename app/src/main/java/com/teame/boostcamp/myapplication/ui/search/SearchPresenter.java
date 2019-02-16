@@ -10,6 +10,7 @@ import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.PlaceTextDataRepository;
 import com.teame.boostcamp.myapplication.model.repository.UserPinRepository;
+import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
@@ -31,7 +32,6 @@ public class SearchPresenter implements SearchContract.Presenter {
     private CompositeDisposable disposable=new CompositeDisposable();
     private HashMap<LatLng,String> userPinMap=new HashMap<>();
     private PlaceTextDataRepository placeRepository;
-    private boolean isSelected=false;
     private boolean imageViewClick=false;
     private ArrayList<Goods> selectedlist;
     private String currentNation;
@@ -101,13 +101,29 @@ public class SearchPresenter implements SearchContract.Presenter {
 
     @Override
     public void floatingButtonClicked(Date start, Date end) {
-        GoodsListHeader header=new GoodsListHeader(currentNation,currentCity,start,end);
-        //TODO:START ACTIVITY
+        LatLng latlng=userMarker.getPosition();
+        GoodsListHeader header=new GoodsListHeader(currentNation,currentCity,start,end,latlng.latitude,latlng.longitude);
+        if(selectedlist==null)
+            CreateListActivity.startActivity(provider.getApplicationContext(),header);
+        else
+            CreateListActivity.startActivity(provider.getApplicationContext(),header,selectedlist);
+        selectedlist=null;
+
     }
 
     @Override
-    public void markerClicked(Marker marker) {
+    public boolean markerClicked(Marker marker) {
+        if(currentMarker!=null)
+            view.redPinShow(currentMarker);
         currentMarker=marker;
+        if(userMarker!=null) {
+            boolean lat = userMarker.getPosition().latitude == marker.getPosition().latitude;
+            boolean lon = userMarker.getPosition().longitude == marker.getPosition().longitude;
+            if(lat||lon) {
+                view.showmarkerInfoWindow(marker);
+                return false;
+            }
+        }
         userPinMap.get(marker);
         String mapKey=userPinMap.get(marker.getPosition());
         DLogUtil.e(mapKey);
@@ -117,6 +133,7 @@ public class SearchPresenter implements SearchContract.Presenter {
                         },e->{
                             DLogUtil.e(e.getMessage());
                         }));
+        return true;
     }
 
     @Override

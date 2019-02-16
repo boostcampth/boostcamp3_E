@@ -55,7 +55,7 @@ dependencies {
     //Firebase
     implementation 'com.google.firebase:firebase-core:16.0.6'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
-    implementation 'com.google.firebase:firebase-firestore:18.0.0'
+    implementation 'com.google.firebase:firebase-firestore:18.0.1'
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.firebaseui:firebase-ui-storage:4.1.0'
@@ -67,8 +67,8 @@ dependencies {
     implementation "androidx.room:room-rxjava2:2.1.0-alpha04"
 
     //WorkManager
-    implementation "android.arch.work:work-runtime:1.0.0-beta03"
-    implementation "android.arch.work:work-rxjava2:1.0.0-beta03"
+    implementation "android.arch.work:work-runtime:1.0.0-beta05"
+    implementation "android.arch.work:work-rxjava2:1.0.0-beta05"
 
     //TedPermission
     implementation 'gun0912.ted:tedpermission-rx2:2.2.2'
@@ -81,7 +81,6 @@ dependencies {
 
     //geofirestore
     implementation 'com.firebase:geofire-android:2.3.1'
-
     //ui
     implementation 'com.shawnlin:number-picker:2.4.7'
 

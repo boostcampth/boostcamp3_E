@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.ui;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 
@@ -65,17 +64,14 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
                 RecyclerView.VERTICAL,
                 false);
 
-        presenter.loadMyList(adapter);
         adapter.setOnItemClickListener((v, position) -> presenter.getMyListUid(position));
         adapter.setOnItemAlaramListener((v, position) -> {
             // TODO: 알람 등록 리스너
-            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-            dialog.setMessage(position + "번째 리스트 알림설정")
-                    .show();
         });
         adapter.setOnItemDeleteListener((v, position) -> presenter.deleteMyList(position));
         binding.rvMyList.setLayoutManager(linearLayoutManager);
         binding.rvMyList.setAdapter(adapter);
+        presenter.loadMyList(adapter);
     }
 
     @Override

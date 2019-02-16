@@ -6,7 +6,6 @@ import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
-
 import io.reactivex.disposables.CompositeDisposable;
 
 public class MyListPresenter implements MyListContract.Presenter {
@@ -20,6 +19,7 @@ public class MyListPresenter implements MyListContract.Presenter {
         this.view = view;
         this.repository = repository;
     }
+
 
     @Override
     public void loadMyList(GoodsListHeaderRecyclerAdapter adapter) {

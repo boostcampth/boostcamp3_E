@@ -36,12 +36,13 @@ import io.reactivex.subjects.SingleSubject;
 public class UserPinRemoteDataSource implements UserPinDataSource {
     private static String QUERY_LOCATION="location";
     private static String QUERY_ITEMS="items";
-    private static String FIREBASE_URL="https://boostcamp-1548575868471.firebaseio.com/_geofire";
-    private static final int QUERY_RADIUS=50;
-    private DatabaseReference firebase= FirebaseDatabase.getInstance().getReferenceFromUrl(FIREBASE_URL);
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore=FirebaseFirestore.getInstance();
     private static UserPinRemoteDataSource INSTANCE;
+
+    private static String FIREBASE_URL="https://boostcamp-1548575868471.firebaseio.com/_geofire";
+    private static final int QUERY_RADIUS=50;
+    private DatabaseReference firebase= FirebaseDatabase.getInstance().getReferenceFromUrl(FIREBASE_URL);
 
     private UserPinRemoteDataSource(){
     }
@@ -114,14 +115,6 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
                     }
                 });
         return subject;
-    }
-
-    @Override
-    public void setLocation(String Key, LatLng location) {
-        //반드시 쇼핑리스트 생성한 후 호출
-        GeoFire fire=new GeoFire(firebase);
-        //String KEY=""+location.latitude+","+location.longitude;
-        fire.setLocation(Key, new GeoLocation(location.latitude, location.longitude), (__, ___) -> {  });
     }
 
     @Override

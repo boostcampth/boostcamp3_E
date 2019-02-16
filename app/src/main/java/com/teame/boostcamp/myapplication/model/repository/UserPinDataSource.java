@@ -12,7 +12,6 @@ import io.reactivex.Single;
 
 public interface UserPinDataSource {
     Single<List<Pair<LatLng,String>>> getUserVisitedLocation(LatLng center);
-    void setLocation(String Key, LatLng location);
     Single<GoodsListHeader> getUserPinPreview(String Key);
     Single<List<Goods>> getUserPinGoodsList(String Key);
 }
