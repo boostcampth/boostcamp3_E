@@ -4,41 +4,43 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ActivityMapSearchBinding;
-import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
-import com.teame.boostcamp.myapplication.ui.search.SearchContract;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.ui.search.UserShoppinglistActivity;
+import com.teame.boostcamp.myapplication.ui.userpininfo.UserPinInfoFragment;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 import com.teame.boostcamp.myapplication.util.VectorConverterUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import io.reactivex.disposables.CompositeDisposable;
 
-public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,SearchMapContract.Presenter> implements OnMapReadyCallback,SearchMapContract.View {
+public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,SearchMapContract.Presenter> implements OnMapReadyCallback
+        ,SearchMapContract.View
+        ,UserPinFragmentCallback{
     private GoogleMap map;
     private CompositeDisposable disposable=new CompositeDisposable();
+    private static final LatLng SEOUL=new LatLng(37.566318, 126.977913);
     private static final int ZOOM=15;
     private static final String EXTRA_PLACE="EXTRA_PLACE";
 
@@ -75,6 +77,9 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
         binding.toolbarText.setNavigationOnClickListener(v -> {
             finish();
         });
+        binding.fabCurrent.setOnClickListener(__ -> {
+            setCurrentLocation();
+        });
         binding.mvGooglemap.getMapAsync(this);
         binding.mvGooglemap.onCreate(savedInstanceState);
     }
@@ -93,6 +98,21 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
         binding.tvSetStart.setVisibility(View.VISIBLE);
     }
 
+    private void setCurrentLocation(){
+        FusedLocationProviderClient fusedLocationClient= LocationServices.getFusedLocationProviderClient(getApplicationContext());
+        if(ActivityCompat.checkSelfPermission(getApplicationContext(), TedPermissionUtil.LOCATION)== PackageManager.PERMISSION_GRANTED){
+            fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
+                LatLng latlnt;
+                if(task.getResult()==null)
+                    latlnt = SEOUL;
+                else
+                    latlnt=new LatLng(task.getResult().getLatitude(),task.getResult().getLongitude());
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latlnt,ZOOM));
+            });
+        }
+
+    }
+
     @Override
     public void showSearchResult(String place) {
         showBottom();
@@ -100,13 +120,40 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
     }
 
     @Override
+    public void fragmentFinish() {
+        presenter.userPinMarkerFinish();
+    }
+
+    @Override
     public void moveCamera(LatLng latlng) {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,ZOOM));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,ZOOM));
+    }
+
+    @Override
+    public void setUserPinMarker(LatLng latlng) {
+        map.addMarker(new MarkerOptions()
+                .position(latlng)
+                .icon(VectorConverterUtil.convert(getApplicationContext(),R.drawable.btn_unclick_marker)));
+    }
+
+    @Override
+    public void setUserPinMarkerClick(Marker marker, boolean click) {
+        if(click){
+            marker.setIcon(VectorConverterUtil.convert(getApplicationContext(),R.drawable.btn_click_marker));
+        }
+        else{
+            marker.setIcon(VectorConverterUtil.convert(getApplicationContext(),R.drawable.btn_unclick_marker));
+        }
     }
 
     @Deprecated
     public SearchMapActivity() {
         // 기본 생성자는 쓰지 말것 (new Instance 사용)
+    }
+
+    @Override
+    public void userPinMarkerFinish(Marker marker) {
+        marker.setIcon(VectorConverterUtil.convert(getApplicationContext(),R.drawable.btn_unclick_marker));
     }
 
     @Override
@@ -158,9 +205,24 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
         googleMap.setOnCameraMoveListener(() -> {
             hideBottom();
         });
+
         googleMap.setOnCameraIdleListener(() -> {
             showBottom();
             presenter.searchMapFromLocation(googleMap.getCameraPosition().target);
+        });
+
+        googleMap.setOnMarkerClickListener(marker -> {
+            presenter.userMarkerClicked(marker);
+            presenter.getGoodsListHeader(marker)
+                    .subscribe(header -> {
+                        FragmentManager manager=getSupportFragmentManager();
+                        boolean isPop=manager.popBackStackImmediate();
+                        FragmentTransaction transaction=manager.beginTransaction();
+                        transaction.replace(R.id.view_userpininfo, UserPinInfoFragment.newInstance(header));
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    });
+            return true;
         });
 
         FusedLocationProviderClient fusedLocationClient= LocationServices.getFusedLocationProviderClient(getApplicationContext());

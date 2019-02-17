@@ -72,7 +72,7 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
         });
         binding.etSearchPlace.setOnEditorActionListener((v, actionId, __) -> {
             if(actionId== EditorInfo.IME_ACTION_SEARCH){
-                //TODO: 아이템 리스트 생성
+                SearchMapActivity.startActivity(getContext(),v.getText().toString());
                 presenter.search(v.getText().toString());
                 return true;
             }

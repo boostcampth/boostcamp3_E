@@ -134,7 +134,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     public void showUserPin(LatLng location) {
         googleMap.addMarker(new MarkerOptions()
                 .position(location)
-                .icon(VectorConverterUtil.convert(getContext(),R.drawable.btn_uncllick_marker)));
+                .icon(VectorConverterUtil.convert(getContext(),R.drawable.btn_unclick_marker)));
         binding.ivUserpin.setImageResource(R.drawable.btn_uncreate_userpinview);
     }
 
@@ -178,7 +178,7 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
 
     @Override
     public void redPinShow(Marker marker) {
-        marker.setIcon(VectorConverterUtil.convert(getContext(),R.drawable.btn_uncllick_marker));
+        marker.setIcon(VectorConverterUtil.convert(getContext(),R.drawable.btn_unclick_marker));
     }
 
     @Override
