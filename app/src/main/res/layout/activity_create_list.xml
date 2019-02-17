@@ -3,18 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="presenter"
-            type="com.teame.boostcamp.myapplication.ui.createlist.CreateListPresenter" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ml_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/cl_root"
@@ -42,62 +34,14 @@
                         android:fitsSystemWindows="true"
                         app:navigationIcon="@drawable/btn_all_back"
                         app:popupTheme="@style/AppToolbar">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginLeft="@dimen/space_x_small"
-                            app:srcCompat="@drawable/ic_logo_ejusa" />
-
                         <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/toolbar_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="16dp"
-                            android:text="이거 사!"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="16sp" />
+                            android:gravity="center"
+                            android:text="프랑스"
+                            android:textColor="@color/colorBlack" />
                     </androidx.appcompat.widget.Toolbar>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_search"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/space_median"
-                        android:layout_marginTop="?attr/actionBarSize"
-                        android:layout_marginRight="@dimen/space_median"
-                        android:layout_marginBottom="@dimen/space_x_small"
-                        android:background="@drawable/layout_white_round_board">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/iv_serach_image"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:padding="4dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/ic_search_view" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:text="@string/what_do_you_want"
-                            android:textColor="@color/colorBlack"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintLeft_toRightOf="@id/iv_serach_image"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             </com.google.android.material.appbar.AppBarLayout>

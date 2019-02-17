@@ -71,8 +71,13 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         DLogUtil.e("onCreateOptionMenu");
         getMenuInflater().inflate(R.menu.menu_cart, menu);
         final MenuItem menuItem = menu.findItem(R.id.btn_show_cart);
+        final MenuItem goodsSearchItem = menu.findItem(R.id.goods_search);
+
         View actionView = menuItem.getActionView();
+        View goodsSearchItemActionView = goodsSearchItem.getActionView();
         tvBadge = actionView.findViewById(R.id.cart_badge);
+        // 상세화면에서는 SearchView 제거
+        goodsSearchItemActionView.findViewById(R.id.goods_search).setVisibility(View.GONE);
         tvBadge.setVisibility(View.GONE);
         presenter.getShoppingListCount();
         actionView.setOnClickListener(v -> onOptionsItemSelected(menuItem));
@@ -131,16 +136,17 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
     }
 
     private void initView() {
+
         Intent intent = getIntent();
         final Goods item;
         item = intent.getParcelableExtra(EXTRA_GOODS);
         if (item == null) {
             return;
         }
+        binding.setItem(item);
 
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
-        binding.setItem(item);
 
         binding.tvWriteReply.setOnClickListener(view -> {
             Intent p = WriteReplyActivity.getIntent(this, item);
@@ -199,10 +205,6 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
                 false);
         binding.rvReplyList.setLayoutManager(linearLayoutManager);
         binding.rvReplyList.setAdapter(adapter);
-        RecyclerView.ItemDecoration dividerItemDecoration =
-                new DividerItemDecorator(ContextCompat.getDrawable(getBaseContext()
-                        , R.drawable.divider_decoration));
-        binding.rvReplyList.addItemDecoration(dividerItemDecoration);
 
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -309,6 +311,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
             showLongToast(getString(R.string.fail_load));
             return;
         }
+        binding.tvTotalReplyCount.setText(String.format(getString(R.string.ratio_count), size));
         float percentRatio = totalRatio / size;
         String stringRatio = String.format(Locale.getDefault(), "%.1f", percentRatio);
         binding.tvItemRatio.setText(stringRatio);

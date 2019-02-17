@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/goods_search"
+        android:icon="@drawable/btn_search"
+        android:title="@string/menu_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/btn_show_cart"
         android:icon="@drawable/btn_shopping_cart"
         app:showAsAction="ifRoom"
         app:actionLayout="@layout/layout_menu_badge_cart"
         android:title="@string/decide" />
-
 </menu>

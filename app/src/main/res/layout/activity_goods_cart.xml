@@ -56,14 +56,86 @@
             android:id="@+id/nsv_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:descendantFocusability="blocksDescendants"
             android:layout_marginBottom="60dp"
+            android:descendantFocusability="blocksDescendants"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context=".ui.createlistinfo.CreateListInfo">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:hint="@string/title"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="30"
+                        app:helperTextEnabled="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tie_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLength="30"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_tag"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:hint="@string/hashtag"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="15"
+                        app:helperText="@string/hashtag_hint"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/til_title">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tie_hashtag"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_hash"
+                            android:imeOptions="actionGo"
+                            android:maxLength="15"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/cg_hash_set"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/til_tag" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"

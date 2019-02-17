@@ -25,7 +25,7 @@
     <string name="male">남성</string>
     <string name="female">여성</string>
     <string name="age">나이</string>
-    <string name="menu_search">Search</string>
+    <string name="menu_search">search</string>
     <string name="permission_location_title">위치 권한 설정</string>
     <string name="permission_location_message">위치 권한을 설정하시겠습니까?</string>
 
@@ -87,5 +87,7 @@
     <string name="save_my_goods_status">저장하기</string>
     <string name="delete_my_list">리스트 삭제하기</string>
     <string name="would_you_delete_goods">아이템을 리스트에서 삭제하시겠습니까?</string>
+    <string name="detail_review_label">평가 및 리뷰</string>
+    <string name="ratio_count">%d개의 평가</string>
 
 </resources>
