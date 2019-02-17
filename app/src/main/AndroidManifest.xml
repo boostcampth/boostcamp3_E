@@ -58,7 +58,6 @@
 
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/MainFragmentTheme"
             android:windowSoftInputMode="adjustPan|adjustResize" />
         <activity android:name=".ui.signup.SignUpActivity" />
         <activity

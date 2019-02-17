@@ -20,7 +20,6 @@ public class MyListPresenter implements MyListContract.Presenter {
         this.repository = repository;
     }
 
-
     @Override
     public void loadMyList(GoodsListHeaderRecyclerAdapter adapter) {
         this.adapter = adapter;

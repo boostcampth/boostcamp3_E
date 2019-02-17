@@ -7,7 +7,10 @@ import android.text.TextUtils;
 import com.google.firebase.firestore.Exclude;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GoodsListHeader implements Parcelable {
@@ -21,7 +24,17 @@ public class GoodsListHeader implements Parcelable {
     private String city;
     private Double lat;
     private Double lng;
-    private Map<String, Boolean> hashTag;
+    private Map<String, Boolean> hashTag = new HashMap<>();
+
+    public List<String> getImages() {
+        return Images;
+    }
+
+    public void setImages(List<String> images) {
+        Images = images;
+    }
+
+    private List<String> Images = new ArrayList<>();
 
     public GoodsListHeader() {
     }
@@ -180,18 +193,6 @@ public class GoodsListHeader implements Parcelable {
     }
 
     @Override
-    public String toString() {
-        return "GoodsListHeader{" +
-                "title='" + title + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", key='" + key + '\'' +
-                ", lat=" + lat +
-                ", lng=" + lng +
-                '}';
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }
@@ -224,4 +225,21 @@ public class GoodsListHeader implements Parcelable {
             parcel.writeInt(entry.getValue() ? 1 : 0);
         }
     }
+    @Override
+    public String toString() {
+        return "GoodsListHeader{" +
+                "key='" + key + '\'' +
+                ", uid='" + uid + '\'' +
+                ", title='" + title + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", nation='" + nation + '\'' +
+                ", city='" + city + '\'' +
+                ", lat=" + lat +
+                ", lng=" + lng +
+                ", hashTag=" + hashTag +
+                ", Images=" + Images +
+                '}';
+    }
+
 }

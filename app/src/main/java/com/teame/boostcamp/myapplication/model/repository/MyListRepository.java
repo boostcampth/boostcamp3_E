@@ -29,7 +29,7 @@ public class MyListRepository implements MyListDataSoruce {
 
     @Override
     public Single<List<GoodsListHeader>> getMyList() {
-        return myListRemoteDataSource.getMyList();
+        return myListRemoteDataSource.getMyList().observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
