@@ -16,7 +16,6 @@ public class SearchPlacePresenter implements SearchPlaceContract.Presenter {
     private ResourceProvider provider;
     private ExListAdapterContract.View adapterView;
     private ExListAdapterContract.Model adapterModel;
-    private PlaceTextDataRepository repository;
     private ArrayList<String> exList;
     private int STRING_CAPACITY=20;
 
@@ -24,14 +23,12 @@ public class SearchPlacePresenter implements SearchPlaceContract.Presenter {
     public void setAdapterView(ExListAdapterContract.View view) {
         adapterView=view;
         adapterView.setOnItemClickListener(text -> {
-            repository.setText(text);
-            this.view.exitFragment();
+            //TODO: 아이템 생성 리스트 액티비티 생성
         });
     }
 
     @Override
     public void search(String text) {
-        repository.setText(text);
         if(adapterModel.searchList(text)){
             if(adapterModel.getList().size()>=STRING_CAPACITY){
                 exList.remove(0);
@@ -40,7 +37,6 @@ public class SearchPlacePresenter implements SearchPlaceContract.Presenter {
             exList.add(text);
             adapterModel.add(text);
         }
-        view.exitFragment();
     }
 
     @Override
@@ -63,7 +59,6 @@ public class SearchPlacePresenter implements SearchPlaceContract.Presenter {
     public SearchPlacePresenter(SearchPlaceContract.View view, ResourceProvider provider){
         this.view=view;
         this.provider=provider;
-        repository=PlaceTextDataRepository.getInstance();
     }
 
     @Override

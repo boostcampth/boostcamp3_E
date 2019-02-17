@@ -170,7 +170,7 @@ public class SearchPresenter implements SearchContract.Presenter {
             disposable.add(remote.getUserVisitedLocation(latlon)
                                 .subscribe(pairlist -> {
                                     userPinMap.clear();
-                                    view.showSearchResult(pairlist.size(),currentCity);
+                                    //view.showSearchResult(pairlist.size(),currentCity);
                                     for(Pair<LatLng,String> pair:pairlist){
                                         userPinMap.put(pair.first,pair.second);
                                     }

@@ -51,11 +51,11 @@ public static Intent getIntent(Context context, String brandId, String brandName
 [Best Practice to Instantiate Fragments with Arguments in Android](https://gunhansancar.com/best-practice-to-instantiate-fragments-with-arguments-in-android/)
 ```java
 public static UserFragment newInstance(User user) {
-	UserFragment fragment = new UserFragment();
+	UserFragment SearchMapActivity = new UserFragment();
 	Bundle args = new Bundle();
 	args.putParcelable(ARGUMENT_USER, user);
-	fragment.setArguments(args)
-	return fragment;
+	SearchMapActivity.setArguments(args)
+	return SearchMapActivity;
 }
 ```
 #### 기타

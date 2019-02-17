@@ -15,7 +15,7 @@
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_logo_ejusa"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -60,6 +60,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.example.ExampleActivity" />
+        <activity android:name=".ui.searchmap.SearchMapActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.MainActivity"
             android:windowSoftInputMode="adjustPan|adjustResize" />

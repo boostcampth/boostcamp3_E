@@ -11,6 +11,8 @@ import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSearchPlaceBinding;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
+import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
+import com.teame.boostcamp.myapplication.ui.searchmap.SearchMapActivity;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
 import java.util.ArrayList;
@@ -70,10 +72,18 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
         });
         binding.etSearchPlace.setOnEditorActionListener((v, actionId, __) -> {
             if(actionId== EditorInfo.IME_ACTION_SEARCH){
+                //TODO: 아이템 리스트 생성
                 presenter.search(v.getText().toString());
                 return true;
             }
             return false;
+        });
+        binding.buttonCurrentLocation.setOnClickListener(__->{
+            //TODO: 아이템 리스트 생성
+        });
+        binding.buttonGoMap.setOnClickListener(__->{
+            //TODO: SearchMapActivity 생성
+            SearchMapActivity.startActivity(getContext());
         });
         presenter.setAdapterModel(adapter);
         presenter.setAdapterView(adapter);
