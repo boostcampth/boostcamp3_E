@@ -8,6 +8,7 @@ import com.google.firebase.firestore.Exclude;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 public class GoodsListHeader implements Parcelable {
 
@@ -20,17 +21,18 @@ public class GoodsListHeader implements Parcelable {
     private String city;
     private Double lat;
     private Double lng;
+    private Map<String, Boolean> hashTag;
 
-    public GoodsListHeader(){
+    public GoodsListHeader() {
     }
 
-    public GoodsListHeader(String nation, String city, Date startDate, Date endDate, Double lat, Double lng){
-        this.nation=nation;
-        this.city=city;
-        this.startDate=startDate;
-        this.endDate=endDate;
-        this.lat=lat;
-        this.lng=lng;
+    public GoodsListHeader(String nation, String city, Date startDate, Date endDate, Double lat, Double lng) {
+        this.nation = nation;
+        this.city = city;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     protected GoodsListHeader(Parcel in) {
@@ -52,6 +54,13 @@ public class GoodsListHeader implements Parcelable {
             lng = null;
         } else {
             lng = in.readDouble();
+        }
+
+        int size = in.readInt();
+        for (int i = 0; i < size; i++) {
+            String key = in.readString();
+            Boolean value = in.readInt() == 1;
+            hashTag.put(key, value);
         }
     }
 
@@ -77,7 +86,7 @@ public class GoodsListHeader implements Parcelable {
     }
 
     public String getTitle() {
-        if(TextUtils.isEmpty(title)){
+        if (TextUtils.isEmpty(title)) {
             return getDefaultTitle();
         }
         return title;
@@ -157,9 +166,19 @@ public class GoodsListHeader implements Parcelable {
     }
 
     @Exclude
-    public String getDefaultTitle(){
-        return this.nation+"-"+this.city+this.getStringDate();
+    public String getDefaultTitle() {
+        return this.nation + "-" + this.city + this.getStringDate();
     }
+
+
+    public Map<String, Boolean> getHashTag() {
+        return hashTag;
+    }
+
+    public void setHashTag(Map<String, Boolean> hashTag) {
+        this.hashTag = hashTag;
+    }
+
     @Override
     public String toString() {
         return "GoodsListHeader{" +
@@ -197,6 +216,12 @@ public class GoodsListHeader implements Parcelable {
         } else {
             parcel.writeByte((byte) 1);
             parcel.writeDouble(lng);
+        }
+
+        parcel.writeInt(hashTag.size());
+        for (Map.Entry<String, Boolean> entry : hashTag.entrySet()) {
+            parcel.writeString(entry.getKey());
+            parcel.writeInt(entry.getValue() ? 1 : 0);
         }
     }
 }

@@ -78,10 +78,6 @@
             android:name=".ui.selectedgoods.SelectedGoodsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity
-            android:name=".ui.createlistinfo.CreateListInfo"
-            android:label="@string/title_activity_create_list_info"></activity>
-
         <activity android:name=".ui.postreply.PostReplyActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>

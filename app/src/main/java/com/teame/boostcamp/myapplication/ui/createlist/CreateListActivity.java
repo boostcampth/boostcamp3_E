@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
@@ -22,16 +21,13 @@ import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
-import com.teame.boostcamp.myapplication.ui.createlistinfo.CreateListInfo;
 import com.teame.boostcamp.myapplication.ui.goodscart.GoodsCartActivity;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.view.ListSpaceItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SearchView;
@@ -62,7 +58,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_cart, menu);
+        getMenuInflater().inflate(R.menu.menu_create_list, menu);
         final MenuItem showCartItem = menu.findItem(R.id.btn_show_cart);
         final MenuItem goodsSearchItem = menu.findItem(R.id.goods_search);
         View cartItemActionView = showCartItem.getActionView();
@@ -78,7 +74,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         EditText editText = svGoods.findViewById(androidx.appcompat.R.id.search_src_text);
         editText.setHintTextColor(ContextCompat.getColor(this,R.color.colorIphoneBlack));
         editText.setTextColor(Color.BLACK);
-        binding.toolbarTitle.setTextSize(editText.getTextSize());
         svGoods.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -110,8 +105,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         switch (item.getItemId()) {
             case R.id.btn_show_cart:
                 GoodsCartActivity.startActivity(this);
-                // TODO : 쇼핑리스트로 이동
-//                presenter.decideShoppingList();
                 break;
             case android.R.id.home:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -220,26 +213,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
             disposable.dispose();
         }
     }
-
-    @Override
-    public void goNextStep(List<Goods> list) {
-        // TODO : 저장된 아이템 해쉬테그, 제목 결정하는 곳으로 넘겨주기
-        GoodsListHeader header = getIntent().getParcelableExtra(EXTRA_GOODS_LIST_HDAER);
-        if (header == null) {
-            // 테스트 코드
-            header = new GoodsListHeader();
-            header.setNation("JP");
-            header.setCity("osaka");
-            header.setStartDate(Calendar.getInstance().getTime());
-            header.setEndDate(Calendar.getInstance().getTime());
-            header.setLat(11.1);
-            header.setLng(11.2);
-        }
-        DLogUtil.d(header.toString());
-        DLogUtil.d(list.toString());
-        CreateListInfo.startActivity(this, header);
-    }
-
 
     @Override
     public void emptyCheckGoods() {

@@ -5,13 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 
+import com.google.android.material.chip.Chip;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsCartAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityGoodsCartBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
-import com.teame.boostcamp.myapplication.ui.createlistinfo.CreateListInfo;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,6 +80,26 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         presenter.loadData(adapter);
         presenter.calculatorPrice();
         presenter.detectIsAllCheck();
+        GoodsListHeader header = presenter.getHeaderData();
+
+        binding.tieTitle.setOnFocusChangeListener((__, hasFocus) -> {
+            if (hasFocus) {
+                binding.tilTitle.setHint("title");
+            } else {
+                String title = binding.tieTitle.getText().toString();
+                if (title.length() <= 0) {
+                    binding.tilTitle.setHint(header.getDefaultTitle());
+                }
+            }
+        });
+
+        binding.tieHashtag.setOnEditorActionListener((__, actionId, ___) -> {
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                presenter.addHashTag(binding.tieHashtag.getText().toString());
+            }
+            return false;
+        });
+
         adapter.setOnItemDeleteListener((v, position) -> {
             isChange = true;
             presenter.deleteItem(position);
@@ -101,12 +122,30 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
 
         binding.rvCartList.setLayoutManager(linearLayoutManager);
         binding.rvCartList.setAdapter(adapter);
-        binding.tvDicideCart.setOnClickListener(view -> presenter.getSaveData());
+        binding.tvDicideCart.setOnClickListener(view -> {
+            presenter.saveMyList();
+        });
     }
 
     @Override
-    public void decide(GoodsListHeader header) {
-        CreateListInfo.startActivity(this, header);
+    public void addedHashTag(String tag) {
+        Chip chip = new Chip(this);
+        chip.setText(tag);
+        chip.setCloseIconEnabled(true); // 대체방법을 못찾음
+        chip.setClickable(false);
+        chip.setCheckable(false);
+        binding.cgHashSet.addView(chip);
+        chip.setOnCloseIconClickListener(view -> {
+            binding.cgHashSet.removeView(chip);
+            presenter.removeHashTag(chip.getText().toString());
+        });
+        binding.tieHashtag.setText("");
+    }
+
+
+    @Override
+    public void duplicationTag() {
+        showToast(getString(R.string.already_tag));
     }
 
     @Override
@@ -122,5 +161,11 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
     @Override
     public void noSelectGoods() {
         showToast(getString(R.string.no_select_item));
+    }
+
+
+    @Override
+    public void successSave() {
+        showToast("성공");
     }
 }

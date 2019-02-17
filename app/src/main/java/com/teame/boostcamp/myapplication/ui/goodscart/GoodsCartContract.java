@@ -8,26 +8,35 @@ import com.teame.boostcamp.myapplication.ui.base.BaseView;
 interface GoodsCartContract {
 
     interface View extends BaseView<Presenter> {
-        void decide(GoodsListHeader header);
+        void addedHashTag(String tag);
 
         void setResultPrice(String resultPrice);
 
         void setAllorNoneCheck(boolean allCheck);
 
+        void duplicationTag();
+
         void noSelectGoods();
+
+        void successSave();
     }
 
     interface Presenter extends BasePresenter {
+        void addHashTag(String tag);
+
         void loadData(GoodsCartAdapter adapter);
 
         void deleteItem(int position);
 
-        void getSaveData();
+        GoodsListHeader getHeaderData();
 
+        void removeHashTag(String tag);
         void saveCartList();
 
         void detectIsAllCheck();
 
         void calculatorPrice();
+
+        void saveMyList();
     }
 }

@@ -29,14 +29,12 @@ import com.teame.boostcamp.myapplication.ui.goodscart.GoodsCartActivity;
 import com.teame.boostcamp.myapplication.ui.writereply.WriteReplyActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
-import com.teame.boostcamp.myapplication.util.DividerItemDecorator;
 
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,15 +69,11 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         DLogUtil.e("onCreateOptionMenu");
         getMenuInflater().inflate(R.menu.menu_cart, menu);
         final MenuItem menuItem = menu.findItem(R.id.btn_show_cart);
-        final MenuItem goodsSearchItem = menu.findItem(R.id.goods_search);
-
         View actionView = menuItem.getActionView();
-        View goodsSearchItemActionView = goodsSearchItem.getActionView();
         tvBadge = actionView.findViewById(R.id.cart_badge);
-        // 상세화면에서는 SearchView 제거
-        goodsSearchItemActionView.findViewById(R.id.goods_search).setVisibility(View.GONE);
         tvBadge.setVisibility(View.GONE);
         presenter.getShoppingListCount();
+
         actionView.setOnClickListener(v -> onOptionsItemSelected(menuItem));
         return true;
     }
@@ -306,9 +300,11 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         binding.includeLoading.lavLoading.setVisibility(View.GONE);
         if (size == Constant.LOADING_NONE_ITEM) {
             showLongToast(String.format(getString(R.string.none_item), getString(R.string.toast_reply)));
+            binding.tvTotalReplyCount.setText(String.format(getString(R.string.ratio_count), size));
             return;
         } else if (size == Constant.FAIL_LOAD) {
             showLongToast(getString(R.string.fail_load));
+            binding.tvTotalReplyCount.setVisibility(View.GONE);
             return;
         }
         binding.tvTotalReplyCount.setText(String.format(getString(R.string.ratio_count), size));

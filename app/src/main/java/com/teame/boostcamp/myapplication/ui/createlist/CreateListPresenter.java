@@ -89,18 +89,6 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         }
     }
 
-    /**
-     * 선택한 리스트 아이템을 넘겨줌
-     */
-    @Override
-    public void decideShoppingList() {
-        if (checkedList.size() <= 0) {
-            view.emptyCheckGoods();
-        } else {
-            view.goNextStep(checkedList);
-        }
-    }
-
     private CartPreferenceHelper cartPreferenceHelper;
 
     @Override
