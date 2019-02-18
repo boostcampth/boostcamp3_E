@@ -36,7 +36,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/btn_bottom_sns" />
+                tools:src="@drawable/ic_no_image" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_item_name"

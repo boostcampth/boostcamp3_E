@@ -220,8 +220,10 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         presenter.loadReplyList(adapter, item.getKey());
 
         binding.tvItemMinPrice.setOnClickListener(view -> {
-            Intent LpriceIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getLink()));
-            startActivity(LpriceIntent);
+            if (item.getLink() != null) {
+                Intent LpriceIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getLink()));
+                startActivity(LpriceIntent);
+            }
         });
 
         binding.tvCountPlus.setOnClickListener(view -> {

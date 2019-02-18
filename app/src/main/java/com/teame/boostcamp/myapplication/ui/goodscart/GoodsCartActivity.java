@@ -14,6 +14,7 @@ import com.teame.boostcamp.myapplication.databinding.ActivityGoodsCartBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,15 +37,26 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (isChange) {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                    dialog.setMessage(R.string.would_you_save)
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(R.string.would_you_save)
                             .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
                                 presenter.saveCartList();
                                 showToast(getString(R.string.success_save));
                                 finish();
                             })
-                            .setNegativeButton(R.string.cancle, (__, ___) -> finish())
-                            .show();
+                            .setNegativeButton(R.string.cancle, (__, ___) -> finish());
+
+
+                    final AlertDialog dialog = builder.create();
+                    dialog.setOnShowListener(__ -> {
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+
+                    });
+
+                    dialog.show();
                 } else {
                     finish();
                 }

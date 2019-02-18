@@ -166,7 +166,6 @@ public class SearchFragment extends BaseFragment<FragmentSearchBinding, SearchCo
     public void showUserPinPreview(GoodsListHeader header) {
         binding.includeUserShoppingPreview.cvUserShoppingPreview.setVisibility(View.VISIBLE);
         binding.includeVisited.cvVisited.setVisibility(View.GONE);
-        binding.includeUserShoppingPreview.setHeader(header);
     }
 
     @Override

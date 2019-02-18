@@ -26,6 +26,7 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="fadfdafad"
                 android:fitsSystemWindows="true"
                 app:collapsedTitleTextAppearance="@style/TextAppearance.Detail.CollapsedAppBar"
                 app:contentScrim="@color/colorMyListAppBar"

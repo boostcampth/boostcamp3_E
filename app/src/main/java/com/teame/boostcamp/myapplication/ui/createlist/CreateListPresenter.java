@@ -10,25 +10,63 @@ import com.teame.boostcamp.myapplication.model.repository.local.preference.CartP
 import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreferenceHelper;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.SearchUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
+
 
 public class CreateListPresenter implements CreateListContract.Presenter {
 
     private CreateListContract.View view;
     private GoodsListRepository shoppingListRepository;
     private CompositeDisposable disposable;
-    private List<Goods> checkedList = new ArrayList<>();
     private GoodsListRecyclerAdapter adapter;
+    private List<Goods> originList = new ArrayList<>();
+    private List<Goods> itemList = new ArrayList<>();
+    private PublishSubject<String> subject = PublishSubject.create();
+    private String debounceQuery = null;
+    private CartPreferenceHelper cartPreferenceHelper;
 
     CreateListPresenter(CreateListContract.View view, GoodsListRepository shoppingListRepository) {
         this.view = view;
         this.shoppingListRepository = shoppingListRepository;
         cartPreferenceHelper = new CartPreference();
         disposable = new CompositeDisposable();
+
+        disposable.add(subject.debounce(200, TimeUnit.MILLISECONDS, Schedulers.computation())
+                .delay(200, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(text -> {
+                    if (TextUtils.isEmpty(debounceQuery)) {
+                        ArrayList<Goods> goods = new ArrayList<>();
+                        for (Goods target : originList) {
+                            goods.add(target.clone());
+                        }
+                        adapter.setData(goods);
+                        return text;
+                    } else {
+                        return text;
+                    }
+                })
+                .filter(query -> (!TextUtils.isEmpty(query) && query.equals(debounceQuery)))
+                .subscribe(result -> {
+                    ArrayList<Goods> goods = new ArrayList<>();
+                    for (Goods target : originList) {
+                        if (SearchUtil.matchString(target.getName(), result)) {
+                            goods.add(target.clone());
+                        }
+                    }
+                    view.resultSearchScreen(goods.size());
+                    adapter.setData(goods);
+                }));
+
     }
 
     @Override
@@ -41,6 +79,18 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         if (disposable.isDisposed()) {
             disposable.dispose();
         }
+    }
+
+    @Override
+    public void addGoods() {
+        view.goAddItem(debounceQuery);
+    }
+
+    @Override
+    public void diffSerchList(String query) {
+        subject.onNext(query);
+        debounceQuery = query;
+
     }
 
     @Override
@@ -63,6 +113,10 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         disposable.add(shoppingListRepository.getItemList(nation, city)
                 .subscribe(
                         list -> {
+                            itemList = list;
+                            for (Goods item : itemList) {
+                                originList.add(item.clone());
+                            }
                             adapter.initItems(list);
                             view.finishLoad(list.size());
                             DLogUtil.d(list.toString());
@@ -75,21 +129,14 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         );
     }
 
-    /**
-     * 선택한 아이템의 체크여부에 따라 HashMap에 추가하거나 제거함
-     */
     @Override
-    public void checkedItem(int position, boolean isCheck) {
-        final Goods item = adapter.getItem(position);
-        if (isCheck) {
-        } else {
-            int targetPosition = searchItem(item);
-            if (targetPosition == -1)
-                return;
+    public void setOriginList() {
+        ArrayList<Goods> goods = new ArrayList<>();
+        for (Goods target : originList) {
+            goods.add(target.clone());
         }
+        adapter.setData(goods);
     }
-
-    private CartPreferenceHelper cartPreferenceHelper;
 
     @Override
     public void saveListHeader(GoodsListHeader header) {
@@ -106,18 +153,14 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         }
     }
 
-    /**
-     * ItemName을 기준으로 해당 아이템 position 반환
-     */
-    public int searchItem(Goods target) {
-        if (checkedList.contains(target)) {
-            for (int i = 0; i < checkedList.size(); i++) {
-                if (TextUtils.equals(checkedList.get(i).getName(), target.getName())) {
-                    return i;
-                }
-            }
+    @Override
+    public void backCreateList() {
+        if (debounceQuery != null) {
+            debounceQuery = null;
+            setOriginList();
+        } else {
+            view.backActivity();
         }
-        // 아이템이 없다면
-        return -1;
+
     }
 }

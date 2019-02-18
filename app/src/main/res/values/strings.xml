@@ -90,5 +90,7 @@
     <string name="would_you_delete_goods">아이템을 리스트에서 삭제하시겠습니까?</string>
     <string name="detail_review_label">평가 및 리뷰</string>
     <string name="ratio_count">%d개의 평가</string>
+    <string name="no_search_result">검색 결과가 없습니다 :(</string>
+    <string name="title_activity_add_goods">AddGoodsActivity</string>
 
 </resources>

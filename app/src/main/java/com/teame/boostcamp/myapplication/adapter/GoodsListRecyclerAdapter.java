@@ -12,12 +12,14 @@ import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemListGoodsBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.GoodsDiffUtilCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsListRecyclerAdapter.ViewHolder> {
@@ -77,6 +79,13 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
         }
+    }
 
+    public void setData(ArrayList<Goods> newData) {
+
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new GoodsDiffUtilCallBack(newData, (ArrayList)itemList));
+        diffResult.dispatchUpdatesTo(this);
+        itemList.clear();
+        this.itemList.addAll(newData);
     }
 }
