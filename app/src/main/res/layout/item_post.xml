@@ -11,6 +11,7 @@
             type= "com.google.firebase.auth.FirebaseAuth"/>
 
     </data>
+    
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_post"
         style="@style/Widget.MaterialComponents.CardView"
@@ -127,14 +128,6 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-            android:id="@+id/view_post_divide"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorDivide"
-
-            app:layout_constraintTop_toBottomOf="@+id/cl_buttons" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/appCompatTextView"

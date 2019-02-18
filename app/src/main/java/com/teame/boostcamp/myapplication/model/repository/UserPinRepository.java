@@ -10,6 +10,7 @@ import com.teame.boostcamp.myapplication.model.repository.remote.UserPinRemoteDa
 import java.util.List;
 
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class UserPinRepository implements UserPinDataSource {
     private static UserPinRepository INSTANCE;
@@ -34,6 +35,11 @@ public class UserPinRepository implements UserPinDataSource {
     @Override
     public Single<List<Goods>> getUserPinGoodsList(String Key) {
         return shoppingListRemoteDataSource.getUserPinGoodsList(Key);
+    }
+
+    @Override
+    public Single<List<GoodsListHeader>> getUserHeaderList(List<String> keyList) {
+        return shoppingListRemoteDataSource.getUserHeaderList(keyList).observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override

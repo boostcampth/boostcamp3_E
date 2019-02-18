@@ -119,7 +119,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
             default:
                 break;
         }
-
         return true;
     }
 

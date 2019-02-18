@@ -35,12 +35,14 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        presenter.checkLogIn();
+
     }
 
     private void initView() {
+
         binding.buttonLogin.setOnClickListener(__ -> onLogInButtonClicked());
         binding.tvSignup.setOnClickListener(__ -> SignUpActivity.startActivity(this));
+        presenter.checkLogIn();
     }
 
     private void onLogInButtonClicked() {

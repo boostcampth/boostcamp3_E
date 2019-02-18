@@ -17,6 +17,7 @@ public class Post implements Parcelable {
     private GoodsListHeader header;
     private int like;
     private Date createdDate;
+    private Date modifiedDate;
     private ArrayList<String> imagePathList;
     private ArrayList<String> likedUidList;
 
@@ -137,6 +138,13 @@ public class Post implements Parcelable {
         this.key = key;
     }
 
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifyideDate) {
+        this.modifiedDate = modifyideDate;
+    }
 
     @Override
     public int describeContents() {

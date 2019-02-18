@@ -7,6 +7,9 @@ import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,9 +24,11 @@ import com.teame.boostcamp.myapplication.model.MinPriceAPI;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.entitiy.MinPriceResponse;
+import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.model.repository.UserPinDataSource;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -151,4 +156,27 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
         });
         return subject.toList();
     }
+
+    @Override
+    public Single<List<GoodsListHeader>> getUserHeaderList(List<String> keyList) {
+        PublishSubject<GoodsListHeader> subject = PublishSubject.create();
+        List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
+        for(String key: keyList){
+            Task<DocumentSnapshot> task = firestore.collection(QUERY_LOCATION).document(key)
+                    .get().addOnSuccessListener(documentSnapshot -> subject.onNext(documentSnapshot.toObject(GoodsListHeader.class)))
+                    .addOnFailureListener(e -> subject.onError(e));
+            tasks.add(task);
+        }
+        Tasks.whenAll(tasks).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                subject.onComplete();
+            }
+            else{
+                subject.onError(task.getException());
+            }
+        });
+
+        return subject.toList();
+    }
+
 }

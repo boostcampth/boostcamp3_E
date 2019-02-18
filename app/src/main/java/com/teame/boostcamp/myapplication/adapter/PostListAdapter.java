@@ -14,9 +14,11 @@ import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemPostBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
 import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
+import com.teame.boostcamp.myapplication.ui.modifypost.ModifyPostActivity;
 import com.teame.boostcamp.myapplication.ui.postreply.PostReplyActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +36,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
 
     private static final String LIKE_UPDATE = "update_like";
     private static final String SHOW_LIKE_LOADING = "show_loading";
-    private static final String END_LIKE_LOADING = "end_loading";
 
     public void add(Post post) {
         postList.add(post);
@@ -83,13 +84,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
                     String type = (String) payload;
                     if(TextUtils.equals(type, LIKE_UPDATE) && holder instanceof ItemViewHolder){
                         holder.binding.setPost(postList.get(position));
-                        holder.binding.clpbPostLike.setVisibility(View.INVISIBLE);
                         holder.binding.ivPostLike.setVisibility(View.VISIBLE);
+                        holder.binding.clpbPostLike.setVisibility(View.INVISIBLE);
                     }else if(TextUtils.equals(type, SHOW_LIKE_LOADING) && holder instanceof ItemViewHolder){
-                        holder.binding.ivPostLike.setVisibility(View.INVISIBLE);
                         holder.binding.clpbPostLike.setVisibility(View.VISIBLE);
-                    }else if(TextUtils.equals(type, END_LIKE_LOADING) && holder instanceof ItemViewHolder){
-
+                        holder.binding.ivPostLike.setVisibility(View.INVISIBLE);
                     }
                 }
             }
@@ -114,7 +113,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
                 .subscribe(post -> {
                             postList.set(i, post);
                             notifyItemChanged(i, LIKE_UPDATE);
-                            notifyItemChanged(i, END_LIKE_LOADING);
                         },
                         e -> {
                             DLogUtil.e(e.getMessage());
@@ -134,9 +132,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if(item.toString().equals("수정")){
-                    DLogUtil.e("수정");
-                }else{
+                if (item.toString().equals("수정")) {
+                    ModifyPostActivity.startActivity(context, postList.get(i));
+                } else {
                     disposable.add(rep.deletePost(postList.get(i).getKey(), postList.get(i).getImagePathList())
                             .subscribe(b -> {
                                         postList.remove(i);
