@@ -28,7 +28,7 @@
         android:textColor="@android:color/white"
         app:layout_constraintRight_toRightOf="@id/iv_cart_img"
         app:layout_constraintLeft_toRightOf="@id/iv_cart_img"
-        android:text="99"
+        android:text="0"
         android:gravity="center"
         android:textSize="8sp"/>
 

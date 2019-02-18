@@ -3,14 +3,14 @@ package com.teame.boostcamp.myapplication.model.entitiy;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.firestore.Exclude;
+import com.google.firebase.database.Exclude;
 import com.teame.boostcamp.myapplication.util.DataStringUtil;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
-public class Goods extends BaseObservable implements Parcelable {
+public class Goods extends BaseObservable implements Parcelable, Cloneable {
 
     private String key;
     private String name;
@@ -229,5 +229,18 @@ public class Goods extends BaseObservable implements Parcelable {
         return tmpLprice * count;
     }
 
+    @Override
+    public Goods clone() {
+
+        Goods clone;
+        try {
+            clone = (Goods) super.clone();
+
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e); //should not happen
+        }
+
+        return clone;
+    }
 
 }
