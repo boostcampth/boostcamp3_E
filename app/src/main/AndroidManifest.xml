@@ -79,6 +79,10 @@
 
         <activity android:name=".ui.postreply.PostReplyActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".ui.modifypost.ModifyPostActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
     <!-- 네이버 쇼핑 API

@@ -78,6 +78,16 @@ public class PostListRepository implements PostListDataSource {
         return postListRemoteDataSource.deletePost(postUid, imagePathList).observeOn(AndroidSchedulers.mainThread());
     }
 
+    @Override
+    public Single<List<Uri>> loadModifyImages(List<String> pathList) {
+        return postListRemoteDataSource.loadModifyImages(pathList).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Single<Post> modifyPost(Post oldPost, String content, List<Uri> uriList) {
+        return postListRemoteDataSource.modifyPost(oldPost, content, uriList).observeOn(AndroidSchedulers.mainThread());
+    }
+
 
     // Reply데이터 오름차순 정렬 Comparator
     class ReplyAscToDateSort implements Comparator<Reply> {

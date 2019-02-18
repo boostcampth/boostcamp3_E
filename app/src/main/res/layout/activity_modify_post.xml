@@ -73,47 +73,6 @@
             app:layout_constraintTop_toBottomOf="@+id/abl_modify_post" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_list_select"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_toolbar_divide">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_list_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="@{post.header.getTitle()}"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="수정될 이벤트"/>
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_list_select"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginRight="12dp"
-                android:gravity="center"
-                android:text="@string/select"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_modify_post_contents"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -121,7 +80,7 @@
             app:layout_constraintBottom_toTopOf="@+id/bt_modify_post"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_list_select_divide">
+            app:layout_constraintTop_toBottomOf="@+id/view_toolbar_divide">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_post_content"
@@ -136,8 +95,8 @@
                 android:background="@null"
                 android:gravity="top"
                 android:hint="@string/post_content_hint"
-                android:text ="@{post.content}"
                 android:paddingBottom="8dp"
+                android:text="@{post.content}"
                 app:layout_constraintBottom_toTopOf="@+id/rv_preview_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -155,8 +114,8 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                android:scaleType="centerCrop"
                 android:overScrollMode="never"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_take_picture"
@@ -199,15 +158,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <View
-            android:id="@+id/view_list_select_divide"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorDivide"
-
-            app:layout_constraintTop_toBottomOf="@+id/cl_list_select" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -24,4 +24,8 @@ public interface PostListDataSource {
     Single<Post> adjustLike(String postUid);
 
     Single<Boolean> deletePost(String postUid, List<String> imagePathList);
+
+    Single<List<Uri>> loadModifyImages(List<String> pathList);
+
+    Single<Post> modifyPost(Post oldPost, String content, List<Uri> uriList);
 }

@@ -2,6 +2,9 @@ package com.teame.boostcamp.myapplication.model.repository.remote;
 
 import android.net.Uri;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -10,17 +13,24 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.model.repository.PostListDataSource;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.LocalImageUtil;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 
@@ -164,6 +174,47 @@ public class PostListRemoteDataSource implements PostListDataSource {
         return subject.flatMapSingle(Single::just).single(true);
     }
 
+    @Override
+    public Single<Post> modifyPost(Post oldPost, String content, List<Uri> uriList) {
+        PublishSubject<Post> subject = PublishSubject.create();
+        String uid = auth.getUid();
+        DocumentReference postRefer = baseRef.document(oldPost.getKey());
+        List<String> oldImage = oldPost.getImagePathList();
+        ArrayList<String> newImage = new ArrayList<>();
+        long now = System.currentTimeMillis();
+        Date nowDate = new Date(now);
+        List<UploadTask> tasks = new ArrayList<>();
+        for (int i = 0; i < uriList.size(); i++) {
+            newImage.add("images/post/" + auth.getUid() + "/" + nowDate + "/" + i + ".jpg");
+            StorageReference mStorageRef = baseStorageRef.child(newImage.get(i));
+            UploadTask task = mStorageRef.putFile(uriList.get(i));
+            task.addOnFailureListener(e -> subject.onError(e));
+            tasks.add(task);
+        }
+
+        Tasks.whenAll(tasks).addOnSuccessListener(aVoid -> {
+            Task modifying = db.runTransaction(transaction -> {
+                Post post = transaction.get(postRefer).toObject(Post.class);
+                post.setImagePathList(newImage);
+                post.setContent(content);
+                post.setModifiedDate(nowDate);
+                transaction.set(baseRef.document(oldPost.getKey()), post);
+                transaction.set(userRef.document(uid).collection(QUERY_MY_POST).document(oldPost.getKey()), post);
+                post.setKey(oldPost.getKey());
+                return post;
+            }).addOnSuccessListener(post -> subject.onNext(post)).addOnFailureListener(subject::onError);
+            List<Task<Void>> deleteTasks = new ArrayList<>();
+            for (String path : oldImage) {
+                Task task = baseStorageRef.child(path).delete();
+                deleteTasks.add(task);
+            }
+            Tasks.whenAll(modifying).addOnCompleteListener(task ->
+                    subject.onComplete());
+        }).addOnFailureListener(e -> subject.onError(e));
+
+        return subject.flatMapSingle(Single::just).single(new Post());
+    }
+
 
     @Override
     public Single<List<Reply>> loadPostReplyList(String postUid) {
@@ -238,6 +289,8 @@ public class PostListRemoteDataSource implements PostListDataSource {
         return subject.flatMapSingle(Single::just).single(true);
     }
 
+
+
     @Override
     public Single<Post> adjustLike(String postUid) {
         String uid = auth.getUid();
@@ -263,6 +316,31 @@ public class PostListRemoteDataSource implements PostListDataSource {
         Tasks.whenAll(likeAdjust).addOnCompleteListener(task -> subject.onComplete());
 
         return subject.flatMapSingle(Single::just).single(new Post());
+    }
+
+    @Override
+    public Single<List<Uri>> loadModifyImages(List<String> pathList) {
+        PublishSubject<Uri> subject = PublishSubject.create();
+        List<FileDownloadTask> tasks = new ArrayList<>();
+        for(String path : pathList){
+            try{
+                File file = LocalImageUtil.createImageFile();
+                FileDownloadTask task = baseStorageRef.child(path).getFile(file);
+                task.addOnSuccessListener(__ -> {
+                    subject.onNext(Uri.fromFile(file));
+                    DLogUtil.e(Uri.fromFile(file).toString());
+                });
+                tasks.add(task);
+
+            }catch (IOException e){
+                subject.onError(e);
+            }
+        }
+
+        Tasks.whenAll(tasks).addOnSuccessListener(aVoid -> subject.onComplete())
+                .addOnFailureListener(e -> subject.onError(new Throwable(e.getMessage())));
+
+        return subject.toList();
     }
 }
 
