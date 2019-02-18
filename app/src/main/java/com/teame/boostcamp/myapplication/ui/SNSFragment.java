@@ -65,7 +65,7 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
         initView();
     }
 
-    private void initView(){
+    private void initView() {
         PostListAdapter adapter = new PostListAdapter(getContext());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
                 RecyclerView.VERTICAL,
@@ -73,14 +73,14 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
 
         binding.rvSns.setLayoutManager(linearLayoutManager);
         binding.rvSns.setAdapter(adapter);
-        binding.fabAddPost.setOnClickListener( __ -> AddPostActivity.startActivity(getContext()));
+        binding.fabAddPost.setOnClickListener(__ -> AddPostActivity.startActivity(getContext()));
         presenter.loadPostData(adapter);
         binding.rvSns.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if(dy > 0){
+                if (dy > 0) {
                     binding.fabAddPost.hide();
-                } else{
+                } else {
                     binding.fabAddPost.show();
                 }
                 super.onScrolled(recyclerView, dx, dy);

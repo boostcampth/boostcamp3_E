@@ -3,7 +3,9 @@ package com.teame.boostcamp.myapplication.ui.modifypost;
 import android.app.ProgressDialog;
 import android.net.Uri;
 
+import com.teame.boostcamp.myapplication.adapter.PreviewImageAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
+import com.teame.boostcamp.myapplication.model.entitiy.Post;
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
 
@@ -16,23 +18,20 @@ public interface ModifyPostContract {
 
         void takePicture();
 
-        void succeedAddPost();
-
-        void showListSelection(List<GoodsListHeader> goodsListHeaders);
-
-        void failAddPost();
+        void succeedModifyPost();
 
         void occurServerError();
 
         ProgressDialog showLoading();
+
     }
 
     interface Presenter extends BasePresenter {
-        void addPost(String content, List<Uri> bitmapList);
 
-        void loadMyList();
+        void loadModifyImage(List<String> imagePath, PreviewImageAdapter adapter);
 
-        void setListSelection(GoodsListHeader selected);
+        void modifyPost(Post oldPost, String content);
+
 
     }
 }

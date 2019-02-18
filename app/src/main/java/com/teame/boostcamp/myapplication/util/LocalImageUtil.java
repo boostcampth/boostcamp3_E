@@ -13,8 +13,14 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import com.teame.boostcamp.myapplication.MainApplication;
+import com.teame.boostcamp.myapplication.ui.MainActivity;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class LocalImageUtil {       // 로컬에서 가져온 이미지를 리사이즈, 로테이션 보정, 실제 파일 경로를 받아오는 유틸
 
@@ -179,4 +185,18 @@ public class LocalImageUtil {       // 로컬에서 가져온 이미지를 리�
         return resizeBitmap;
 
     }
+
+    public static File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = MainApplication.getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+        return image;
+    }
+
 }

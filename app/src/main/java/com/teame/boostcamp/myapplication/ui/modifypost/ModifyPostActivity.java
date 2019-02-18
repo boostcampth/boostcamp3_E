@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.View;
 
+import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.PreviewImageAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityModifyPostBinding;
@@ -68,7 +70,7 @@ public class ModifyPostActivity extends BaseMVPActivity<ActivityModifyPostBindin
 
 
     public static void startActivity(Context context, Post post) {
-        Intent intent = new Intent(context, com.teame.boostcamp.myapplication.ui.addpost.AddPostActivity.class);
+        Intent intent = new Intent(context, ModifyPostActivity.class);
         intent.putExtra(EXTRA_POST, post);
         context.startActivity(intent);
     }
@@ -76,20 +78,16 @@ public class ModifyPostActivity extends BaseMVPActivity<ActivityModifyPostBindin
     private void initView() {
         Post post = getIntent().getParcelableExtra(EXTRA_POST);
         binding.setPost(post);
-        //adapter = new PreviewImageAdapter(getApplicationContext(), post.getUriList());
-
-
-
-
+        adapter = new PreviewImageAdapter(getApplicationContext(), new ArrayList<>());
         binding.ivGalleryPick.setOnClickListener(__ -> onAddImagesButtonClicked());
         binding.ivTakePicture.setOnClickListener(__ -> onTakePictureButtonClicked());
-        binding.btModifyPost.setOnClickListener(__ -> onAddPostButtonClicked());
+        binding.btModifyPost.setOnClickListener(__ -> onModifyPostButtonClicked(post));
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         binding.rvPreviewImage.setLayoutManager(layoutManager);
         binding.rvPreviewImage.setAdapter(adapter);
+        presenter.loadModifyImage(post.getImagePathList(), adapter);
         binding.ivModifyPostBack.setOnClickListener(__ -> finish());
-        binding.tvListSelect.setOnClickListener(__ -> presenter.loadMyList());
     }
 
     private void onAddImagesButtonClicked() {
@@ -133,11 +131,11 @@ public class ModifyPostActivity extends BaseMVPActivity<ActivityModifyPostBindin
         return image;
     }
 
-    private void onAddPostButtonClicked() {
+    private void onModifyPostButtonClicked(Post post) {
         String content = binding.etPostContent.getText().toString();
 
         if (!TextUtils.isEmpty(content)) {
-            presenter.addPost(content, adapter.getUriList());
+            presenter.modifyPost(post, content);
         } else {
             showToast("내용을 입력해 주세요");
         }
@@ -180,7 +178,7 @@ public class ModifyPostActivity extends BaseMVPActivity<ActivityModifyPostBindin
     }
 
     @Override
-    public void succeedAddPost() {
+    public void succeedModifyPost() {
         finish();
     }
 
@@ -210,29 +208,6 @@ public class ModifyPostActivity extends BaseMVPActivity<ActivityModifyPostBindin
         }
     }
 
-    @Override
-    public void showListSelection(List<GoodsListHeader> goodsListHeaderList) {
-        String[] selection = new String[goodsListHeaderList.size()];
-        for (int i = 0; i < goodsListHeaderList.size(); i++) {
-            selection[i] = goodsListHeaderList.get(i).getTitle();
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setItems(selection, (__, which) -> {
-            presenter.setListSelection(goodsListHeaderList.get(which));
-            binding.tvListTitle.setText(goodsListHeaderList.get(which).getTitle());
-            binding.tvListTitle.setTextColor(getResources().getColor((R.color.colorAccent)));
-        });
-        builder.show();
-    }
-
-    @Override
-    public void failAddPost() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("쇼핑리스트를 선택해 주세요!");
-        builder.setMessage("쇼핑리스트를 선택하셔야지만 글을 게시할 수 있습니다!");
-        builder.setPositiveButton("OK", (dialog, __) -> dialog.cancel());
-        builder.show();
-    }
 
     @Override
     public void occurServerError() {
@@ -246,6 +221,7 @@ public class ModifyPostActivity extends BaseMVPActivity<ActivityModifyPostBindin
         loading.show();
         return loading;
     }
+
 
 }
 
