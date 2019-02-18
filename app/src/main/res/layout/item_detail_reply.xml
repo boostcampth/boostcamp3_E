@@ -19,10 +19,11 @@
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_median"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
             android:max="5"
             android:stepSize="1.0"
-            app:layout_constraintBottom_toTopOf="@+id/tv_review_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,50 +38,55 @@
             app:layout_constraintTop_toTopOf="@id/rb_reply" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_review_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@{reply.stringDate}"
+            android:textSize="12sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="어제"
+            android:layout_marginEnd="16dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_review_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:text="@{reply.content}"
             android:textColor="@color/colorBlack"
-            app:layout_constraintBottom_toTopOf="@+id/tv_review_date"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rb_reply"
             tools:text="내용" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_review_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_median"
-            android:text="@{reply.stringDate}"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="@+id/tv_review_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_review_content"
-            tools:text="어제" />
-
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_delete"
             android:layout_width="@dimen/space_x_large"
             android:layout_height="@dimen/space_x_large"
-            android:layout_marginBottom="@dimen/space_median"
+            android:layout_marginRight="16dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_review_content"
-            app:srcCompat="@drawable/btn_more_horiz" />
-
+            app:srcCompat="@drawable/btn_more_horiz"
+            android:layout_marginEnd="16dp" />
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/pb_deleting"
             style="?android:attr/progressBarStyleSmall"
             android:layout_width="@dimen/space_x_large"
             android:layout_height="@dimen/space_x_large"
-            android:layout_marginBottom="@dimen/space_median"
+            android:layout_marginRight="16dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_review_content" />
+            app:layout_constraintTop_toBottomOf="@id/tv_review_content"
+            android:layout_marginEnd="16dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

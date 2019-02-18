@@ -3,12 +3,15 @@ package com.teame.boostcamp.myapplication.ui.createlist;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
@@ -18,18 +21,17 @@ import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
-import com.teame.boostcamp.myapplication.ui.createlistinfo.CreateListInfo;
 import com.teame.boostcamp.myapplication.ui.goodscart.GoodsCartActivity;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.view.ListSpaceItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
@@ -40,6 +42,8 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     private static final String EXTRA_SELECTED_GOODS_LIST = "EXTRA_SELECTED_GOODS_LIST";
     private static final int SCROLL_DIRECTION_UP = -1;
     private AppCompatTextView tvBadge;
+
+    private SearchView svGoods;
     CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
@@ -54,13 +58,45 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_cart, menu);
-        final MenuItem menuItem = menu.findItem(R.id.btn_show_cart);
-        View actionView = menuItem.getActionView();
-        tvBadge = actionView.findViewById(R.id.cart_badge);
+        getMenuInflater().inflate(R.menu.menu_create_list, menu);
+        final MenuItem showCartItem = menu.findItem(R.id.btn_show_cart);
+        final MenuItem goodsSearchItem = menu.findItem(R.id.goods_search);
+        View cartItemActionView = showCartItem.getActionView();
+        View goodsSearchItemActionView = goodsSearchItem.getActionView();
+        tvBadge = cartItemActionView.findViewById(R.id.cart_badge);
         tvBadge.setVisibility(View.GONE);
+        svGoods = goodsSearchItemActionView.findViewById(R.id.goods_search);
+        ImageView icon = svGoods.findViewById(androidx.appcompat.R.id.search_button);
+        icon.setColorFilter(Color.BLACK);
+        ImageView iconClose = svGoods.findViewById(androidx.appcompat.R.id.search_close_btn);
+        iconClose.setColorFilter(Color.BLACK);
+
+        EditText editText = svGoods.findViewById(androidx.appcompat.R.id.search_src_text);
+        editText.setHintTextColor(ContextCompat.getColor(this,R.color.colorIphoneBlack));
+        editText.setTextColor(Color.BLACK);
+        svGoods.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Toast like print
+                showToast("SearchOnQueryTextSubmit: " + query);
+                if (!svGoods.isIconified()) {
+                    svGoods.setIconified(true);
+                }
+                svGoods.onActionViewCollapsed();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
+                return false;
+            }
+        });
+
         presenter.getShoppingListCount();
-        actionView.setOnClickListener(v -> onOptionsItemSelected(menuItem));
+
+        cartItemActionView.setOnClickListener(v -> onOptionsItemSelected(showCartItem));
+        goodsSearchItemActionView.setOnClickListener(v -> onOptionsItemSelected(showCartItem));
         return true;
     }
 
@@ -69,8 +105,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         switch (item.getItemId()) {
             case R.id.btn_show_cart:
                 GoodsCartActivity.startActivity(this);
-                // TODO : 쇼핑리스트로 이동
-//                presenter.decideShoppingList();
                 break;
             case android.R.id.home:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -107,7 +141,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         initView();
-        binding.setPresenter((CreateListPresenter) presenter);
     }
 
     @Override
@@ -135,7 +168,9 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         presenter.saveListHeader(header);
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_all_back);
+        binding.toolbarTitle.setText(header.getCity());
         GoodsListRecyclerAdapter adapter = new GoodsListRecyclerAdapter();
         binding.rvRecommendList.setLayoutManager(new GridLayoutManager(this, 3));
         adapter.setOnItemDetailListener((v, position) -> {
@@ -178,26 +213,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
             disposable.dispose();
         }
     }
-
-    @Override
-    public void goNextStep(List<Goods> list) {
-        // TODO : 저장된 아이템 해쉬테그, 제목 결정하는 곳으로 넘겨주기
-        GoodsListHeader header = getIntent().getParcelableExtra(EXTRA_GOODS_LIST_HDAER);
-        if (header == null) {
-            // 테스트 코드
-            header = new GoodsListHeader();
-            header.setNation("JP");
-            header.setCity("osaka");
-            header.setStartDate(Calendar.getInstance().getTime());
-            header.setEndDate(Calendar.getInstance().getTime());
-            header.setLat(11.1);
-            header.setLng(11.2);
-        }
-        DLogUtil.d(header.toString());
-        DLogUtil.d(list.toString());
-        CreateListInfo.startActivity(this, header);
-    }
-
 
     @Override
     public void emptyCheckGoods() {

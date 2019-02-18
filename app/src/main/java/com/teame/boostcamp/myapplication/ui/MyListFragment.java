@@ -12,6 +12,8 @@ import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.ui.selectedgoods.SelectedGoodsActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -65,9 +67,6 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
                 false);
 
         adapter.setOnItemClickListener((v, position) -> presenter.getMyListUid(position));
-        adapter.setOnItemAlaramListener((v, position) -> {
-            // TODO: 알람 등록 리스너
-        });
         adapter.setOnItemDeleteListener((v, position) -> presenter.deleteMyList(position));
         binding.rvMyList.setLayoutManager(linearLayoutManager);
         binding.rvMyList.setAdapter(adapter);

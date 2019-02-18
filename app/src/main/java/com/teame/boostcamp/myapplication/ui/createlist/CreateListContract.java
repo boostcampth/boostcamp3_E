@@ -11,8 +11,6 @@ import java.util.List;
 public interface CreateListContract {
 
     interface View extends BaseView<Presenter> {
-        void goNextStep(List<Goods> list);
-
         void emptyCheckGoods();
 
         void showDetailItem(Goods item);
@@ -31,8 +29,6 @@ public interface CreateListContract {
         void loadListData(GoodsListRecyclerAdapter adapter, String nation, String city);
 
         void checkedItem(int position, boolean isCheck);
-
-        void decideShoppingList();
 
         void saveListHeader(GoodsListHeader header);
 

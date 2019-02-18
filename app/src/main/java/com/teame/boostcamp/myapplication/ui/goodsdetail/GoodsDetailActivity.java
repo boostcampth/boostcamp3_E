@@ -29,14 +29,12 @@ import com.teame.boostcamp.myapplication.ui.goodscart.GoodsCartActivity;
 import com.teame.boostcamp.myapplication.ui.writereply.WriteReplyActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
-import com.teame.boostcamp.myapplication.util.DividerItemDecorator;
 
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -75,6 +73,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         tvBadge = actionView.findViewById(R.id.cart_badge);
         tvBadge.setVisibility(View.GONE);
         presenter.getShoppingListCount();
+
         actionView.setOnClickListener(v -> onOptionsItemSelected(menuItem));
         return true;
     }
@@ -131,16 +130,17 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
     }
 
     private void initView() {
+
         Intent intent = getIntent();
         final Goods item;
         item = intent.getParcelableExtra(EXTRA_GOODS);
         if (item == null) {
             return;
         }
+        binding.setItem(item);
 
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
-        binding.setItem(item);
 
         binding.tvWriteReply.setOnClickListener(view -> {
             Intent p = WriteReplyActivity.getIntent(this, item);
@@ -199,10 +199,6 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
                 false);
         binding.rvReplyList.setLayoutManager(linearLayoutManager);
         binding.rvReplyList.setAdapter(adapter);
-        RecyclerView.ItemDecoration dividerItemDecoration =
-                new DividerItemDecorator(ContextCompat.getDrawable(getBaseContext()
-                        , R.drawable.divider_decoration));
-        binding.rvReplyList.addItemDecoration(dividerItemDecoration);
 
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -304,11 +300,14 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         binding.includeLoading.lavLoading.setVisibility(View.GONE);
         if (size == Constant.LOADING_NONE_ITEM) {
             showLongToast(String.format(getString(R.string.none_item), getString(R.string.toast_reply)));
+            binding.tvTotalReplyCount.setText(String.format(getString(R.string.ratio_count), size));
             return;
         } else if (size == Constant.FAIL_LOAD) {
             showLongToast(getString(R.string.fail_load));
+            binding.tvTotalReplyCount.setVisibility(View.GONE);
             return;
         }
+        binding.tvTotalReplyCount.setText(String.format(getString(R.string.ratio_count), size));
         float percentRatio = totalRatio / size;
         String stringRatio = String.format(Locale.getDefault(), "%.1f", percentRatio);
         binding.tvItemRatio.setText(stringRatio);

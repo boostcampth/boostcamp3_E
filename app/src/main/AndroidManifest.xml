@@ -58,7 +58,6 @@
 
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/MainFragmentTheme"
             android:windowSoftInputMode="adjustPan|adjustResize" />
         <activity android:name=".ui.signup.SignUpActivity" />
         <activity
@@ -77,10 +76,6 @@
         <activity
             android:name=".ui.selectedgoods.SelectedGoodsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".ui.createlistinfo.CreateListInfo"
-            android:label="@string/title_activity_create_list_info"></activity>
 
         <activity android:name=".ui.postreply.PostReplyActivity"
             android:theme="@style/AppTheme.NoActionBar"/>

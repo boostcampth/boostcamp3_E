@@ -7,7 +7,11 @@ import android.text.TextUtils;
 import com.google.firebase.firestore.Exclude;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GoodsListHeader implements Parcelable {
 
@@ -20,17 +24,28 @@ public class GoodsListHeader implements Parcelable {
     private String city;
     private Double lat;
     private Double lng;
+    private Map<String, Boolean> hashTag = new HashMap<>();
 
-    public GoodsListHeader(){
+    public List<String> getImages() {
+        return Images;
     }
 
-    public GoodsListHeader(String nation, String city, Date startDate, Date endDate, Double lat, Double lng){
-        this.nation=nation;
-        this.city=city;
-        this.startDate=startDate;
-        this.endDate=endDate;
-        this.lat=lat;
-        this.lng=lng;
+    public void setImages(List<String> images) {
+        Images = images;
+    }
+
+    private List<String> Images = new ArrayList<>();
+
+    public GoodsListHeader() {
+    }
+
+    public GoodsListHeader(String nation, String city, Date startDate, Date endDate, Double lat, Double lng) {
+        this.nation = nation;
+        this.city = city;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     protected GoodsListHeader(Parcel in) {
@@ -52,6 +67,13 @@ public class GoodsListHeader implements Parcelable {
             lng = null;
         } else {
             lng = in.readDouble();
+        }
+
+        int size = in.readInt();
+        for (int i = 0; i < size; i++) {
+            String key = in.readString();
+            Boolean value = in.readInt() == 1;
+            hashTag.put(key, value);
         }
     }
 
@@ -77,7 +99,7 @@ public class GoodsListHeader implements Parcelable {
     }
 
     public String getTitle() {
-        if(TextUtils.isEmpty(title)){
+        if (TextUtils.isEmpty(title)) {
             return getDefaultTitle();
         }
         return title;
@@ -157,19 +179,17 @@ public class GoodsListHeader implements Parcelable {
     }
 
     @Exclude
-    public String getDefaultTitle(){
-        return this.nation+"-"+this.city+this.getStringDate();
+    public String getDefaultTitle() {
+        return this.nation + "-" + this.city + this.getStringDate();
     }
-    @Override
-    public String toString() {
-        return "GoodsListHeader{" +
-                "title='" + title + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", key='" + key + '\'' +
-                ", lat=" + lat +
-                ", lng=" + lng +
-                '}';
+
+
+    public Map<String, Boolean> getHashTag() {
+        return hashTag;
+    }
+
+    public void setHashTag(Map<String, Boolean> hashTag) {
+        this.hashTag = hashTag;
     }
 
     @Override
@@ -198,5 +218,28 @@ public class GoodsListHeader implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeDouble(lng);
         }
+
+        parcel.writeInt(hashTag.size());
+        for (Map.Entry<String, Boolean> entry : hashTag.entrySet()) {
+            parcel.writeString(entry.getKey());
+            parcel.writeInt(entry.getValue() ? 1 : 0);
+        }
     }
+    @Override
+    public String toString() {
+        return "GoodsListHeader{" +
+                "key='" + key + '\'' +
+                ", uid='" + uid + '\'' +
+                ", title='" + title + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", nation='" + nation + '\'' +
+                ", city='" + city + '\'' +
+                ", lat=" + lat +
+                ", lng=" + lng +
+                ", hashTag=" + hashTag +
+                ", Images=" + Images +
+                '}';
+    }
+
 }

@@ -54,8 +54,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements F
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupViewPager() {
-        //ViewPager remove swipe
-        binding.vpFragment.setOnTouchListener((__, ___) -> true);
         MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
         Fragment fragmentHome = SearchFragment.newInstance();
         Fragment fragmentWallet = MyListFragment.newInstance();

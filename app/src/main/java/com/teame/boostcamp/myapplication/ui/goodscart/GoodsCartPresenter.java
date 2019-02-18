@@ -5,23 +5,36 @@ import android.text.TextUtils;
 import com.teame.boostcamp.myapplication.adapter.GoodsCartAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
+import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreference;
 import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreferenceHelper;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.DataStringUtil;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 public class GoodsCartPresenter implements GoodsCartContract.Presenter {
 
+    private HashSet<String> hashTagSet = new HashSet<>();
     private GoodsCartAdapter adapter;
     private CartPreferenceHelper cartPreferenceHelper;
     private GoodsCartContract.View view;
     private List<Goods> itemList;
+    private CompositeDisposable disposable = new CompositeDisposable();
+    private MyListRepository repository;
+
 
     public GoodsCartPresenter(GoodsCartContract.View view) {
         this.view = view;
         cartPreferenceHelper = new CartPreference();
+        repository = MyListRepository.getInstance();
     }
 
     @Override
@@ -66,15 +79,9 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
     }
 
     @Override
-    public void getSaveData() {
+    public GoodsListHeader getHeaderData() {
         GoodsListHeader header = cartPreferenceHelper.getListHeader();
-        cartPreferenceHelper.saveGoodsCartList(itemList);
-        if (itemList.size() <= 0) {
-            view.noSelectGoods();
-        } else {
-            view.decide(header);
-        }
-
+        return header;
     }
 
     @Override
@@ -108,4 +115,48 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
         view.setResultPrice(formatedResult);
     }
 
+    @Override
+    public void removeHashTag(String tag) {
+        hashTagSet.remove(tag);
+    }
+
+    @Override
+    public void addHashTag(String tag) {
+        if (hashTagSet.contains(tag)) {
+            view.duplicationTag();
+        } else {
+            hashTagSet.add(tag);
+            view.addedHashTag(tag);
+        }
+    }
+
+    @Override
+    public void saveMyList() {
+        if (itemList.size() <= 0) {
+            view.noSelectGoods();
+            return;
+        }
+
+        List<String> list = new ArrayList<>(hashTagSet);
+        Map<String, Boolean> hashTag = new HashMap<>();
+
+        for (String tag : list) {
+            hashTag.put(tag, true);
+        }
+
+        List<Goods> itemList = cartPreferenceHelper.getGoodsCartList();
+        GoodsListHeader header = cartPreferenceHelper.getListHeader();
+        header.setHashTag(hashTag);
+        
+        DLogUtil.d(itemList.toString());
+        DLogUtil.d(header.toString());
+        DLogUtil.d(list.toString());
+
+        disposable.add(repository.saveMyList(itemList, list, header)
+                .subscribe(b -> {
+                            view.successSave();
+                            cartPreferenceHelper.clearPreferenceData();
+                        },
+                        e -> DLogUtil.e(e.getMessage())));
+    }
 }

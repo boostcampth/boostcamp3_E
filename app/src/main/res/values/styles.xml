@@ -26,6 +26,11 @@
         <item name="android:layout_marginLeft">8dp</item>
     </style>
 
+    <style name="TextAppearance.Detail.CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="RatioImageView">
         <item name="android:layout_width">@dimen/space_s_large</item>
         <item name="android:layout_height">@dimen/space_s_large</item>
@@ -39,12 +44,7 @@
     <style name="Widget.DetailItem.TextView" parent="Widget.AppCompat.TextView">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:textColor">@color/colorBlack</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:shadowColor">@color/colorWhite</item>
-        <item name="android:shadowRadius">4</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">0</item>
         <item name="android:textSize">14sp</item>
     </style>
 

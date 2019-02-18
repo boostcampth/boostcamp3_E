@@ -46,9 +46,9 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
     private static final String QUERT_LOCATION = "location";
     private static MyListRemoteDataSource INSTANCE;
 
-    private static String KEY_SELECTED="KEY_SELECTED";
-    private static String FIREBASE_URL="https://boostcamp-1548575868471.firebaseio.com/_geofire";
-    private DatabaseReference firebase= FirebaseDatabase.getInstance().getReferenceFromUrl(FIREBASE_URL);
+    private static String KEY_SELECTED = "KEY_SELECTED";
+    private static String FIREBASE_URL = "https://boostcamp-1548575868471.firebaseio.com/_geofire";
+    private DatabaseReference firebase = FirebaseDatabase.getInstance().getReferenceFromUrl(FIREBASE_URL);
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -160,6 +160,15 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
 
         // 선택된 각 아이템을 ID, Item 할당
         WriteBatch batch = db.batch();
+
+        // list Image 헤더에 넣기
+        int count = 0;
+        for (Goods goods : goodsList) {
+            header.getImages().add(goods.getImg());
+            if(++count >= 10){
+                break;
+            }
+        }
         batch.set(myListDocRef, header);
         batch.set(locationRef, header);
 
@@ -181,22 +190,22 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         subject.onNext(true);
-                        GeoFire fire=new GeoFire(firebase);
+                        GeoFire fire = new GeoFire(firebase);
                         fire.setLocation(myListUid, new GeoLocation(header.getLat(), header.getLng()), (key, error) -> {
-                            String[] goodsItems=new String[goodsList.size()];
-                            for(int i=0; i<goodsList.size(); i++){
-                                goodsItems[i]=goodsList.get(i).getName();
+                            String[] goodsItems = new String[goodsList.size()];
+                            for (int i = 0; i < goodsList.size(); i++) {
+                                goodsItems[i] = goodsList.get(i).getName();
                             }
-                            Calendar today=Calendar.getInstance();
-                            Calendar end=Calendar.getInstance();
+                            Calendar today = Calendar.getInstance();
+                            Calendar end = Calendar.getInstance();
                             end.setTime(header.getEndDate());
-                            end.add(Calendar.DATE,-1);
-                            int days= CalendarUtil.daysBetween(today,end);
+                            end.add(Calendar.DATE, -1);
+                            int days = CalendarUtil.daysBetween(today, end);
 
-                            WorkManager workManager=WorkManager.getInstance();
-                            OneTimeWorkRequest.Builder alarmBuilder=new OneTimeWorkRequest.Builder(AlarmWork.class);
-                            Data.Builder input=new Data.Builder();
-                            input.putStringArray(KEY_SELECTED,goodsItems);
+                            WorkManager workManager = WorkManager.getInstance();
+                            OneTimeWorkRequest.Builder alarmBuilder = new OneTimeWorkRequest.Builder(AlarmWork.class);
+                            Data.Builder input = new Data.Builder();
+                            input.putStringArray(KEY_SELECTED, goodsItems);
                             alarmBuilder.setInputData(input.build())
                                     .setInitialDelay(days, TimeUnit.DAYS);
                             workManager.enqueue(alarmBuilder.build());
