@@ -17,7 +17,7 @@ public interface NewMainContract {
     }
 
     interface Presenter extends BasePresenter {
-        void loadListData(LocationBaseGoodsListRecyclerAdapter goodsAdapter, PostListAdapter postAdapter, String nation, String city);
+        void loadListData(LocationBaseGoodsListRecyclerAdapter goodsAdapter, String nation, String city);
         void loadHeaderKeys(LatLng center, MainOtherListRecyclerAdapter listAdapter);
         void loadHeaders(List<String> keyList, MainOtherListRecyclerAdapter listAdapter);
     }

@@ -141,8 +141,10 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         binding.tlCountryIndicator.setupWithViewPager(binding.vpFamousPlace, true);
 
 
-        PostListAdapter postAdapter = new PostListAdapter(getContext());
-        presenter.loadListData(goodsAdapter, postAdapter, "JP", "osaka");
+
+
+        // TODO- 아래의 두 부분을 조건에 따라 실행시키고 위치정보가 바뀌었을떄 다시 실행시켜주어야 합니다
+        presenter.loadListData(goodsAdapter, "JP", "osaka");
         presenter.loadHeaderKeys(new LatLng(34.683036, 135.487775), listAdapter);
 
     }

@@ -3,9 +3,7 @@ package com.teame.boostcamp.myapplication.ui;
 import com.google.android.gms.maps.model.LatLng;
 import com.teame.boostcamp.myapplication.adapter.LocationBaseGoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.MainOtherListRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
-import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
 import com.teame.boostcamp.myapplication.model.repository.UserPinRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
@@ -18,15 +16,12 @@ public class NewMainPresenter implements NewMainContract.Presenter {
     private NewMainContract.View view;
     private CompositeDisposable disposable;
     private GoodsListRepository shoppingListRepository;
-    private PostListRepository postListRepository;
     private UserPinRepository userPinRepository;
     private LocationBaseGoodsListRecyclerAdapter goodsAdapter;
-    private PostListAdapter postAdapter;
 
     public NewMainPresenter(NewMainContract.View view) {
         this.view = view;
         this.shoppingListRepository = GoodsListRepository.getInstance();
-        this.postListRepository = PostListRepository.getInstance();
         this.userPinRepository = UserPinRepository.getInstance();
         disposable = new CompositeDisposable();
     }
@@ -45,9 +40,8 @@ public class NewMainPresenter implements NewMainContract.Presenter {
     }
 
     @Override
-    public void loadListData(LocationBaseGoodsListRecyclerAdapter goodsAdapter, PostListAdapter postAdpater, String nation, String city) {
+    public void loadListData(LocationBaseGoodsListRecyclerAdapter goodsAdapter, String nation, String city) {
         this.goodsAdapter = goodsAdapter;
-        this.postAdapter = postAdpater;
         disposable.add(shoppingListRepository.getItemList(nation, city)
                 .subscribe(
                         list -> {
@@ -79,15 +73,15 @@ public class NewMainPresenter implements NewMainContract.Presenter {
 
 
     @Override
-    public void loadHeaders(List<String> keyList, MainOtherListRecyclerAdapter listAdapter){
+    public void loadHeaders(List<String> keyList, MainOtherListRecyclerAdapter listAdapter) {
         disposable.add(userPinRepository.getUserHeaderList(keyList)
-        .subscribe(
-                list -> {
-                    DLogUtil.e(list.toString());
-                    listAdapter.initItems(list);
-                },
-                e -> DLogUtil.d(e.getMessage())
-        ));
+                .subscribe(
+                        list -> {
+                            DLogUtil.e(list.toString());
+                            listAdapter.initItems(list);
+                        },
+                        e -> DLogUtil.d(e.getMessage())
+                ));
     }
 
 }
