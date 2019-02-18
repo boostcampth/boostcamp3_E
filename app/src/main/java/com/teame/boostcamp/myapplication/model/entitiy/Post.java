@@ -9,6 +9,7 @@ import com.teame.boostcamp.myapplication.util.DataStringUtil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 public class Post implements Parcelable {
     private String key;
@@ -18,6 +19,7 @@ public class Post implements Parcelable {
     private int like;
     private Date createdDate;
     private Date modifiedDate;
+    private Map<String,Boolean> tags;
     private ArrayList<String> imagePathList;
     private ArrayList<String> likedUidList;
 
@@ -53,6 +55,14 @@ public class Post implements Parcelable {
             return new Post[size];
         }
     };
+
+    public Map<String, Boolean> getTags() {
+        return tags;
+    }
+
+    public void setTags(Map<String, Boolean> tags) {
+        this.tags = tags;
+    }
 
     public String getContent() {
         return content;

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
+import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemPostBinding;
@@ -18,11 +19,11 @@ import com.teame.boostcamp.myapplication.ui.modifypost.ModifyPostActivity;
 import com.teame.boostcamp.myapplication.ui.postreply.PostReplyActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.BindingConversion;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,8 +64,24 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
     public static int showIndicator(int size){
         return size > 1 ? View.VISIBLE : View.GONE;
     }
+
+
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
+        // 해쉬테그가 없으면 GONE
+        if (postList.get(i).getTags().size() == 0) {
+            holder.binding.cgHashTag.setVisibility(View.GONE);
+        } else {
+            holder.binding.cgHashTag.setVisibility(View.VISIBLE);
+            for (String tag : postList.get(i).getTags().keySet()) {
+                Chip chip = new Chip(holder.itemView.getContext());
+                chip.setText("#" + tag);
+                chip.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorIphoneBlack));
+                chip.setClickable(false);
+                chip.setCheckable(false);
+                holder.binding.cgHashTag.addView(chip);
+            }
+        }
         holder.binding.setPost(postList.get(i));
         holder.binding.setAuth(FirebaseAuth.getInstance());
         holder.binding.ivPostReply.setOnClickListener(__ -> onReplyButtonClick(i));
@@ -74,6 +91,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
         holder.binding.tlImageIndicator.setupWithViewPager(holder.binding.vpPostImages, true);
         holder.binding.ivPostMenu.setOnClickListener(v -> onMenuButtonClick(v, i));
     }
+
+
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position, @NonNull List<Object> payloads) {
         if(payloads.isEmpty()){
