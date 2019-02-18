@@ -6,11 +6,13 @@ import android.util.Pair;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.UserPinRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +29,7 @@ public class SearchMapPresenter implements SearchMapContract.Presenter {
     private Geocoder geocoder;
     private CompositeDisposable disposable=new CompositeDisposable();
     private Marker currentMarker;
+    private ArrayList<Goods> currentSelectedItem;
     private String currentNation;
     private String currentCity;
     private UserPinRepository remote;
@@ -39,6 +42,26 @@ public class SearchMapPresenter implements SearchMapContract.Presenter {
     }
 
     @Override
+    public ArrayList<Goods> getSelectedList() {
+        return currentSelectedItem;
+    }
+
+    @Override
+    public void addSelectedList(List<Goods> list) {
+        if(currentSelectedItem==null){
+            currentSelectedItem=new ArrayList<>();
+        }
+        currentSelectedItem.addAll(list);
+        DLogUtil.e(currentSelectedItem.toString());
+    }
+
+    @Override
+    public GoodsListHeader getGoodsListHeader() {
+        GoodsListHeader header=new GoodsListHeader(currentNation,currentCity);
+        return header;
+    }
+
+    @Override
     public void searchMapFromLocation(LatLng latlng) {
         if(geocoder==null){
             geocoder=new Geocoder(provider.getApplicationContext(), Locale.KOREA);
@@ -48,7 +71,7 @@ public class SearchMapPresenter implements SearchMapContract.Presenter {
             LatLng latlon=new LatLng(geoResult.get(0).getLatitude(),geoResult.get(0).getLongitude());
             DLogUtil.e(geoResult.toString());
             currentNation=geoResult.get(0).getCountryCode();
-            currentCity=geoResult.get(0).getFeatureName().replace(" ","");
+            currentCity=geoResult.get(0).getLocality().replace(" ","");
             view.showSearchResult(geoResult.get(0).getAddressLine(0));
         }catch(Exception e){
             DLogUtil.e(e.toString());
@@ -57,7 +80,7 @@ public class SearchMapPresenter implements SearchMapContract.Presenter {
     }
 
     @Override
-    public Single<GoodsListHeader> getGoodsListHeader(Marker marker) {
+    public Single<GoodsListHeader> getGoodsListHeaderFromMarker(Marker marker) {
         String key=userPinMap.get(marker.getPosition());
         SingleSubject<GoodsListHeader> subject=SingleSubject.create();
         disposable.add(remote.getUserPinPreview(key)
@@ -85,7 +108,7 @@ public class SearchMapPresenter implements SearchMapContract.Presenter {
             LatLng latlon=new LatLng(geoResult.get(0).getLatitude(),geoResult.get(0).getLongitude());
             DLogUtil.e(geoResult.toString());
             currentNation=geoResult.get(0).getCountryCode();
-            currentCity=geoResult.get(0).getFeatureName().replace(" ","");
+            currentCity=geoResult.get(0).getLocality().replace(" ","");
             view.showSearchResult(geoResult.get(0).getAddressLine(0));
             view.moveCamera(latlon);
             disposable.add(remote.getUserVisitedLocation(latlon)

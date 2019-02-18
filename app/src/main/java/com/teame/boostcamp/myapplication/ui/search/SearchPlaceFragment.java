@@ -1,5 +1,7 @@
 package com.teame.boostcamp.myapplication.ui.search;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -7,24 +9,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSearchPlaceBinding;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.ui.searchmap.SearchMapActivity;
+import com.teame.boostcamp.myapplication.util.LastKnownLocationUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding, SearchPlaceContract.Presenter> implements SearchPlaceContract.View {
 
-
+    private CompositeDisposable disposable=new CompositeDisposable();
     @Override
     protected int getLayoutResourceId() {
         return R.layout.fragment_search_place;
@@ -57,6 +66,13 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(disposable.isDisposed())
+            disposable.dispose();
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setPresenter(new SearchPlacePresenter(this, new ResourceProvider(getContext())));
@@ -80,6 +96,16 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
         });
         binding.buttonCurrentLocation.setOnClickListener(__->{
             //TODO: 아이템 리스트 생성
+            disposable=new CompositeDisposable();
+            disposable.add(LastKnownLocationUtil.getLastPosition(getContext())
+                    .subscribe(latLng -> {
+                        Geocoder geocoder=new Geocoder(getContext(), Locale.KOREA);
+                        List<Address> result=geocoder.getFromLocation(latLng.latitude,latLng.longitude,1);
+                        String currentNation=result.get(0).getCountryCode();
+                        String currentCity=result.get(0).getLocality().replace(" ","");
+                        GoodsListHeader header=new GoodsListHeader(currentNation,currentCity, latLng.latitude,latLng.longitude);
+                        CreateListActivity.startActivity(getContext(),header);
+                    }));
         });
         binding.buttonGoMap.setOnClickListener(__->{
             //TODO: SearchMapActivity 생성

@@ -34,7 +34,6 @@
                 android:id="@+id/tv_userpininfo_period"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TEST"
                 startDate="@{header.startDate}"
                 endDate="@{header.endDate}"
                 android:textColor="@color/colorBlack"
@@ -46,7 +45,9 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_userpininfo_hashtag"
                 android:layout_marginBottom="@dimen/space_x_small"
-                android:text="TEST"
+                hashtags="@{header.hashTag}"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorBlack"

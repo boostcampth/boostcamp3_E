@@ -64,7 +64,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.MainActivity"
-            android:windowSoftInputMode="adjustPan|adjustResize" />
+            android:windowSoftInputMode="adjustPan|adjustResize"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.signup.SignUpActivity" />
         <activity
             android:name=".ui.addpost.AddPostActivity"

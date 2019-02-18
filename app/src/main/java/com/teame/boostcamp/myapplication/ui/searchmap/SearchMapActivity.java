@@ -19,8 +19,11 @@ import com.teame.boostcamp.myapplication.databinding.ActivityMapSearchBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
+import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.ui.search.UserShoppinglistActivity;
 import com.teame.boostcamp.myapplication.ui.userpininfo.UserPinInfoFragment;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.LastKnownLocationUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 import com.teame.boostcamp.myapplication.util.VectorConverterUtil;
@@ -43,6 +46,7 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
     private static final LatLng SEOUL=new LatLng(37.566318, 126.977913);
     private static final int ZOOM=15;
     private static final String EXTRA_PLACE="EXTRA_PLACE";
+    private static final String EXTRA_GOODSLIST="EXTRA_GOODSLIST";
 
 
     @Override
@@ -79,6 +83,15 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
         });
         binding.fabCurrent.setOnClickListener(__ -> {
             setCurrentLocation();
+        });
+        binding.fabSetStart.setOnClickListener(__->{
+            GoodsListHeader header=presenter.getGoodsListHeader();
+            header.setLat(map.getCameraPosition().target.latitude);
+            header.setLng(map.getCameraPosition().target.longitude);
+            if(presenter.getSelectedList()==null)
+                CreateListActivity.startActivity(getApplicationContext(),header);
+            else
+                CreateListActivity.startActivity(getApplicationContext(),header,presenter.getSelectedList());
         });
         binding.mvGooglemap.getMapAsync(this);
         binding.mvGooglemap.onCreate(savedInstanceState);
@@ -126,7 +139,7 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
 
     @Override
     public void moveCamera(LatLng latlng) {
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,ZOOM));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,ZOOM));
     }
 
     @Override
@@ -149,6 +162,19 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
     @Deprecated
     public SearchMapActivity() {
         // 기본 생성자는 쓰지 말것 (new Instance 사용)
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode==111){
+            List<Goods> list=data.getParcelableArrayListExtra(EXTRA_GOODSLIST);
+            DLogUtil.e(list.toString());
+            if(list.size()==0){
+                DLogUtil.e("List is Empty");
+            }
+            else
+                presenter.addSelectedList(list);
+        }
     }
 
     @Override
@@ -213,7 +239,7 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
 
         googleMap.setOnMarkerClickListener(marker -> {
             presenter.userMarkerClicked(marker);
-            presenter.getGoodsListHeader(marker)
+            presenter.getGoodsListHeaderFromMarker(marker)
                     .subscribe(header -> {
                         FragmentManager manager=getSupportFragmentManager();
                         boolean isPop=manager.popBackStackImmediate();
@@ -224,45 +250,15 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
                     });
             return true;
         });
-
-        FusedLocationProviderClient fusedLocationClient= LocationServices.getFusedLocationProviderClient(getApplicationContext());
-        if(ActivityCompat.checkSelfPermission(getApplicationContext(), TedPermissionUtil.LOCATION)== PackageManager.PERMISSION_GRANTED){
-            Intent intent=getIntent();
-            String place=intent.getStringExtra(EXTRA_PLACE);
-            if(place!=null){
-                presenter.searchMapFromName(place);
-                return;
-            }
-            fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
-                LatLng latlnt;
-                if(task.getResult()==null)
-                    latlnt = new LatLng(0,0);
-                else
-                    latlnt=new LatLng(task.getResult().getLatitude(),task.getResult().getLongitude());
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt,ZOOM));
-            });
+        Intent intent=getIntent();
+        String place=intent.getStringExtra(EXTRA_PLACE);
+        if(place!=null){
+            presenter.searchMapFromName(place);
+            return;
         }
-        else{
-            disposable.add(TedPermissionUtil.requestPermission(getApplicationContext(),getString(R.string.permission_location_title),getString(R.string.permission_location_message),TedPermissionUtil.LOCATION)
-                    .subscribe(tedPermissionResult -> {
-                        if(tedPermissionResult.isGranted()) {
-                            Intent intent=getIntent();
-                            String place=intent.getStringExtra(EXTRA_PLACE);
-                            if(place!=null){
-                                presenter.searchMapFromName(place);
-                                return;
-                            }
-                            fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
-                                LatLng latlnt;
-                                if(task.getResult()==null)
-                                    latlnt = new LatLng(0,0);
-                                else
-                                    latlnt=new LatLng(task.getResult().getLatitude(),task.getResult().getLongitude());
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlnt,ZOOM));
-                            });
-                        }
-                    }));
-        }
-
+        disposable.add(LastKnownLocationUtil.getLastPosition(getApplicationContext())
+                .subscribe(latLng -> {
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,ZOOM));
+                }));
     }
 }

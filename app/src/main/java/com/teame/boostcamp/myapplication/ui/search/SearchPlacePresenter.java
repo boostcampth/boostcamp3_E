@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapterContract;
 import com.teame.boostcamp.myapplication.model.repository.PlaceTextDataRepository;
+import com.teame.boostcamp.myapplication.ui.searchmap.SearchMapActivity;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.SharedPreferenceUtil;
 
@@ -23,7 +24,7 @@ public class SearchPlacePresenter implements SearchPlaceContract.Presenter {
     public void setAdapterView(ExListAdapterContract.View view) {
         adapterView=view;
         adapterView.setOnItemClickListener(text -> {
-            //TODO: 아이템 생성 리스트 액티비티 생성
+            SearchMapActivity.startActivity(provider.getApplicationContext(),text);
         });
     }
 

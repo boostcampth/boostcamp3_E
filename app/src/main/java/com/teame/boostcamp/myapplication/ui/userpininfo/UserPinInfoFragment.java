@@ -1,5 +1,6 @@
 package com.teame.boostcamp.myapplication.ui.userpininfo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -36,7 +37,7 @@ public class UserPinInfoFragment extends BaseFragment<FragmentUserpininfoBinding
 
     @Override
     public void showUserShoppinglistActivitiy(List<Goods> list) {
-        UserShoppinglistActivity.startActivity(getContext(),(ArrayList<Goods>)list);
+        UserShoppinglistActivity.startActivity(getContext(),presenter.getGoodsListHeader(),(ArrayList<Goods>)list);
     }
 
     public static UserPinInfoFragment newInstance(GoodsListHeader header){

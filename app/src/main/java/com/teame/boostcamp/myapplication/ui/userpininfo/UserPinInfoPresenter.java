@@ -21,6 +21,12 @@ public class UserPinInfoPresenter implements UserPinInfoContract.Presenter {
         remote=UserPinRepository.getInstance();
         this.header=header;
     }
+
+    @Override
+    public GoodsListHeader getGoodsListHeader() {
+        return header;
+    }
+
     @Override
     public void onAttach() {
 

@@ -1,6 +1,7 @@
 package com.teame.boostcamp.myapplication.ui.userpininfo;
 
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
 
@@ -13,5 +14,6 @@ public interface UserPinInfoContract {
 
     interface Presenter extends BasePresenter {
         void getGoodsList();
+        GoodsListHeader getGoodsListHeader();
     }
 }

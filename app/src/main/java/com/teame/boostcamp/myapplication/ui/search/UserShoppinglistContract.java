@@ -1,15 +1,24 @@
 package com.teame.boostcamp.myapplication.ui.search;
 
+import com.teame.boostcamp.myapplication.adapter.usershoppinglist.UserShoppingListAdapter;
+import com.teame.boostcamp.myapplication.adapter.usershoppinglist.UserShoppingListAdapterContract;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
+
+import java.util.ArrayList;
 
 public interface UserShoppinglistContract {
 
     interface View extends BaseView<Presenter> {
-
+        void setSelectAllState(boolean state);
     }
 
     interface Presenter extends BasePresenter {
-
+        boolean getExit();
+        void setExit(boolean state);
+        void selectAll(boolean state);
+        ArrayList<Goods> getSelectedList();
+        void setAdapter(UserShoppingListAdapterContract.View adpaterView, UserShoppingListAdapterContract.Model adapterModel);
     }
 }
