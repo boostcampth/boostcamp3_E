@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements F
     @SuppressLint("ClickableViewAccessibility")
     private void setupViewPager() {
         MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
-        Fragment fragmentHome = SearchFragment.newInstance();
+        Fragment fragmentHome = NewMainFragment.newInstance();
         Fragment fragmentWallet = MyListFragment.newInstance();
         Fragment fragmentNavigationDrawer = SNSFragment.newInstance();
         mainViewPagerAdapter.addFragment(fragmentHome);

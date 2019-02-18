@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="banner"
+            type="com.teame.boostcamp.myapplication.model.entitiy.Banner"/>
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/abl_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:fitsSystemWindows="true">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|enterAlways">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_loaction_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/btn_search" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:orientation="vertical" android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/vp_famous_place"
+                    android:layout_width="wrap_content"
+                    android:layout_height="280dp"
+                    android:overScrollMode="never"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </androidx.viewpager.widget.ViewPager>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_country_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:text="@{banner.detail}"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/tl_country_indicator"
+                    app:layout_constraintStart_toStartOf="@id/vp_famous_place" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_country_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@{banner.country}"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_country_detail"
+                    app:layout_constraintStart_toStartOf="@id/vp_famous_place" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_banner_country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="12dp"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:text="@{banner.country}"
+                    app:layout_constraintBottom_toBottomOf="@+id/vp_famous_place"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_banner_create"
+                    tools:text="일본"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_banner_create"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/make_list"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/vp_famous_place"
+                    app:layout_constraintEnd_toEndOf="@id/vp_famous_place" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl_country_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="@+id/vp_famous_place"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:tabBackground="@drawable/selector_banner_tab"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="8dp"
+                    android:text="현재위치:"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/vp_famous_place" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_current_loaction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/colorAccent"
+                    android:text="일본 오사카"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/tv_location"
+                    app:layout_constraintTop_toBottomOf="@+id/vp_famous_place" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_location_honey_items"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="8dp"
+                    android:text="이 지역에서 사야할 꿀템들!"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_location" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_set_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/vp_famous_place"
+                    app:srcCompat="@drawable/btn_location" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_show_whole"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/make_list"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/include_loading" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_location_base_items"
+                    android:layout_width="0dp"
+                    android:layout_height="230dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_location_honey_items">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <include
+                    android:id="@+id/include_loading"
+                    layout="@layout/layout_loading"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/rv_location_base_items"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/rv_location_base_items" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_hot_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="8dp"
+                    android:text="이 지역의 다른사람들의 쇼핑리스트 정보에요!"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_show_whole" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_other_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_hot_post">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        </ScrollView>
+
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>
