@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ActivityAddGoodsBinding;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.LocalImageUtil;
@@ -33,8 +34,10 @@ public class AddGoodsActivity extends BaseMVPActivity<ActivityAddGoodsBinding, A
     private static final String EXTRA_GOODS_NAME = "EXTRA_GOODS_NAME";
     private static final int READ_REQUEST_CODE = 42;
     private static final int TAKE_PICTURE_REQUEST_CODE = 27;
-    private String photoPath;
+    private static final String EXTRA_ADD_GOODS = "EXTRA_ADD_GOODS";
+    private Goods resultGoods = new Goods();
     private CompositeDisposable disposable = new CompositeDisposable();
+    private String photoPath;
 
     @Override
     protected AddGoodsContract.Presenter getPresenter() {
@@ -46,11 +49,10 @@ public class AddGoodsActivity extends BaseMVPActivity<ActivityAddGoodsBinding, A
         return R.layout.activity_add_goods;
     }
 
-
-    public static void startActivity(Context context, String goodsName) {
+    public static Intent getIntent(Context context, String goodsName) {
         Intent intent = new Intent(context, AddGoodsActivity.class);
         intent.putExtra(EXTRA_GOODS_NAME, goodsName);
-        context.startActivity(intent);
+        return intent;
     }
 
     @Override
@@ -63,6 +65,16 @@ public class AddGoodsActivity extends BaseMVPActivity<ActivityAddGoodsBinding, A
         String goodsName = getIntent().getStringExtra(EXTRA_GOODS_NAME);
         binding.tieTitle.setText(goodsName);
 
+        binding.tvAddGoods.setOnClickListener(view -> {
+            Intent resultIntent = new Intent();
+            // Default set
+            resultGoods.setName(binding.tieTitle.getText().toString());
+            resultGoods.setCount(1);
+            resultGoods.setCheck(true);
+            resultIntent.putExtra(EXTRA_ADD_GOODS, resultGoods);
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        });
         binding.ivGalleryPick.setOnClickListener(__ -> onAddImagesButtonClicked());
         binding.ivTakePicture.setOnClickListener(__ -> onTakePictureButtonClicked());
     }
@@ -139,14 +151,16 @@ public class AddGoodsActivity extends BaseMVPActivity<ActivityAddGoodsBinding, A
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             try {
                 if (resultData.getData() != null) {
-                    binding.ivItemImage.setImageBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(this,resultData.getData() , 400), LocalImageUtil.getPath(this, resultData.getData())));
+                    binding.ivItemImage.setImageBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(this, resultData.getData(), 400), LocalImageUtil.getPath(this, resultData.getData())));
+                    resultGoods.setUserCustomUri(resultData.getData().toString());
                 }
             } catch (Exception e) {
                 DLogUtil.d(e.toString());
             }
 
-        }else if(requestCode == TAKE_PICTURE_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            binding.ivItemImage.setImageBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(this,Uri.fromFile(new File(photoPath)) , 400), LocalImageUtil.getPath(this, Uri.fromFile(new File(photoPath)))));
+        } else if (requestCode == TAKE_PICTURE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            binding.ivItemImage.setImageBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(this, Uri.fromFile(new File(photoPath)), 400), LocalImageUtil.getPath(this, Uri.fromFile(new File(photoPath)))));
+            resultGoods.setUserCustomUri(resultData.getData().toString());
         }
     }
 }

@@ -3,10 +3,13 @@ package com.teame.boostcamp.myapplication.ui.selectedgoods;
 import com.teame.boostcamp.myapplication.adapter.GoodsMyListAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
+import com.teame.boostcamp.myapplication.model.repository.local.preference.CheckListPreferences;
+import com.teame.boostcamp.myapplication.model.repository.local.preference.CheckListPreferencesHelper;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.DataStringUtil;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,6 +22,7 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
     private CompositeDisposable disposable;
     private GoodsMyListAdapter adapter;
     private List<Goods> itemList;
+    private CheckListPreferencesHelper preferences;
 
     SelectedGoodsPresenter(SelectedGoodsContract.View view, MyListRepository myListRepository) {
         this.view = view;
@@ -47,6 +51,15 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
         disposable.add(myListRepository.getMyListItems(headerUid)
                 .subscribe(
                         list -> {
+                            HashMap<String, Boolean> checkMap = preferences.getMyListCheck();
+                            for (Goods item : list) {
+                                if (checkMap.get(item.getKey()) == null) {
+                                    item.setCheck(false);
+                                } else {
+                                    item.setCheck(checkMap.get(item.getKey()));
+                                }
+
+                            }
                             adapter.initItems(list);
                             itemList = list;
                             view.finishLoad(list.size());
@@ -66,13 +79,6 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
     }
 
     @Override
-    public void deleteItem(int position) {
-        view.deleteAdapterItem(position);
-        adapter.removeItem(position);
-        // TODO 저장기능
-    }
-
-    @Override
     public void detectIsAllCheck() {
         boolean allCheck = true;
 
@@ -82,10 +88,11 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
         for (Goods item : itemList) {
             allCheck = allCheck && item.isCheck();
             if (!allCheck) {
-                view.setAllorNoneCheck(false);
+//                view.setAllorNoneCheck(false);
             }
         }
-        view.setAllorNoneCheck(allCheck);
+        // 아이템이 모두 체크되면
+        // view.setAllorNoneCheck(allCheck);
     }
 
     @Override
@@ -126,6 +133,21 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
         }
 
         view.setResultPrice(formatedResult);
+    }
+
+    @Override
+    public void setMyListId(String uid) {
+        preferences = new CheckListPreferences(uid);
+    }
+
+    @Override
+    public void saveCheckStatus(int position) {
+        Goods item = itemList.get(position);
+
+        HashMap<String,Boolean> map = preferences.getMyListCheck();
+        map.put(item.getKey(),item.isCheck());
+
+        preferences.saveMyListCheck(map);
     }
 
 }

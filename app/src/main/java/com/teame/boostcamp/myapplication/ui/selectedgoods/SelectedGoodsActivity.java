@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.ui.selectedgoods;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -68,6 +67,7 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
             finish();
             return;
         }
+        presenter.setMyListId(headerUid);
 
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
@@ -83,22 +83,10 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
         binding.rvCartList.setAdapter(adapter);
         presenter.loadListData(adapter, headerUid);
         presenter.detectIsAllCheck();
-        adapter.setOnItemDeleteListener((v, position) -> {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setMessage(R.string.would_you_delete_goods)
-                    .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
-                        presenter.deleteItem(position);
-                    })
-                    .setCancelable(true)
-                    .show();
-        });
         adapter.setOnItemCheckListener((v, position) -> {
             presenter.detectIsAllCheck();
             presenter.calculatorPrice();
-        });
-        binding.cbAll.setOnClickListener(view -> {
-            boolean check = binding.cbAll.isChecked();
-            adapter.allCheck(check);
+            presenter.saveCheckStatus(position);
         });
 
         binding.rvCartList.setLayoutManager(linearLayoutManager);
@@ -132,29 +120,10 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
     }
 
     @Override
-    public void setAllorNoneCheck(boolean allCheck) {
-        binding.cbAll.setChecked(allCheck);
-    }
-
-    @Override
     public void setOfferDelete() {
         binding.tvOfferDelete.setVisibility(View.VISIBLE);
         binding.tvTotalPrice.setVisibility(View.GONE);
         binding.tvSaveMyList.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void deleteAdapterItem(int position) {
-        GoodsMyListAdapter.ViewHolder holder =
-                (GoodsMyListAdapter.ViewHolder) binding.rvCartList
-                        .findViewHolderForAdapterPosition(position);
-
-        if (holder != null) {
-            holder.itemView.findViewById(R.id.pb_deleting).setVisibility(View.VISIBLE);
-            holder.itemView.findViewById(R.id.tv_delete).setVisibility(View.GONE);
-        }
-
-        presenter.calculatorPrice();
     }
 
     @Override

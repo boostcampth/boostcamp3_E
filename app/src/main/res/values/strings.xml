@@ -92,5 +92,6 @@
     <string name="ratio_count">%d개의 평가</string>
     <string name="no_search_result">검색 결과가 없습니다 :(</string>
     <string name="title_activity_add_goods">AddGoodsActivity</string>
+    <string name="none_click_goods">클릭 불가능한 아이템입니다.</string>
 
 </resources>

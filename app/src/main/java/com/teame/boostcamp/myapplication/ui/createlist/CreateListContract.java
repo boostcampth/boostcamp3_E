@@ -21,11 +21,14 @@ public interface CreateListContract {
         void resultSearchScreen(int size);
 
         void goAddItem(String goodsName);
+
+        void successAddCart();
     }
 
     interface Presenter extends BasePresenter {
 
         void addGoods();
+
         void diffSerchList(String query);
 
         void removeCart();
@@ -41,6 +44,8 @@ public interface CreateListContract {
         void getShoppingListCount();
 
         void backCreateList();
+
+        void addCartGoods(Goods item);
     }
 
 }

@@ -11,11 +11,7 @@ public interface SelectedGoodsContract {
 
         void setResultPrice(String resultPrice);
 
-        void setAllorNoneCheck(boolean allCheck);
-
         void setOfferDelete();
-
-        void deleteAdapterItem(int position);
     }
 
     interface Presenter extends BasePresenter {
@@ -24,12 +20,13 @@ public interface SelectedGoodsContract {
 
         void deleteList();
 
-        void deleteItem(int position);
-
         void detectIsAllCheck();
 
         void calculatorPrice();
 
+        void setMyListId(String uid);
+
+        void saveCheckStatus(int position);
     }
 
 }
