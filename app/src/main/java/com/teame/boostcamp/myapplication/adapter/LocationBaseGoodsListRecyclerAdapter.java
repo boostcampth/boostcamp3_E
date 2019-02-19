@@ -23,13 +23,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class LocationBaseGoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, LocationBaseGoodsListRecyclerAdapter.ViewHolder> {
 
+    private OnItemClickListener listener;
+
+    public void setOnClickListener(OnItemClickListener listener){
+        this.listener=listener;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_location_base_list_goods, parent, false);
         final ViewHolder holder = new ViewHolder(itemView);
-
+        holder.itemView.setOnClickListener(v -> {
+            listener.onItemClick(v,holder.getAdapterPosition());
+        });
         return holder;
     }
 

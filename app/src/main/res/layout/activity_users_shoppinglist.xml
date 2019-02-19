@@ -29,6 +29,7 @@
             android:layout_marginRight="@dimen/space_median"
             android:id="@+id/hsv_chip_scroll"
             android:layout_width="0dp"
+            android:scrollbars="none"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/toolbar_back_import"
             app:layout_constraintLeft_toLeftOf="parent"

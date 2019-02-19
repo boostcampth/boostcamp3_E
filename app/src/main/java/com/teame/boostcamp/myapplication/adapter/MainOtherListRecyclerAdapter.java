@@ -1,5 +1,6 @@
 package com.teame.boostcamp.myapplication.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,31 +11,51 @@ import com.teame.boostcamp.myapplication.databinding.ItemMainOtherListBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
 
-public class MainOtherListRecyclerAdapter extends BaseRecyclerAdatper<GoodsListHeader, MainOtherListRecyclerAdapter.ViewHolder> {
+public class MainOtherListRecyclerAdapter extends PagerAdapter {
 
     private OnItemClickListener onShowDetailClickListener;
+    private List<GoodsListHeader> headerlist=new ArrayList<>();
+
+    public MainOtherListRecyclerAdapter(List<GoodsListHeader> headerlist) {
+        this.headerlist = headerlist;
+    }
+
+    public void setOnClickListener(OnItemClickListener listener){
+        onShowDetailClickListener=listener;
+    }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_other_list, parent, false);
-        final ViewHolder holder = new ViewHolder(itemView);
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        ItemMainOtherListBinding binding;
+        binding=DataBindingUtil.inflate(LayoutInflater.from(container.getContext()),R.layout.item_main_other_list,container,false);
+        binding.setItem(headerlist.get(position));
+        binding.
+        return super.instantiateItem(container, position);
+    }
 
-        holder.binding.buttonDetail.setOnClickListener(view -> {
-            if (onShowDetailClickListener != null) {
-                DLogUtil.d("position :" + holder.getLayoutPosition());
-                int position = holder.getLayoutPosition();
-                onShowDetailClickListener.onItemClick(view, position);
-            }
-        });
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        super.destroyItem(container, position, object);
+    }
 
-        DLogUtil.w("create finish");
-        return holder;
+    @Override
+    public int getCount() {
+        return 0;
+    }
+
+    @Override
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+        return view == ((View) object);
     }
 
     @Override

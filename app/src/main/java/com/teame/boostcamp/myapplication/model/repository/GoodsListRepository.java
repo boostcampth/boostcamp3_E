@@ -5,6 +5,7 @@ import com.teame.boostcamp.myapplication.model.repository.remote.GoodsListRemote
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -18,6 +19,11 @@ public class GoodsListRepository implements GoodsListDataSource {
             INSTANCE = new GoodsListRepository();
         }
         return INSTANCE;
+    }
+
+    @Override
+    public Observable<Goods> getItemListToObservable(String nation, String city) {
+        return shoppingListRemoteDataSource.getItemListToObservable(nation,city).observeOn(AndroidSchedulers.mainThread());
     }
 
     private GoodsListRepository() {

@@ -4,16 +4,18 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.appbar.AppBarLayout;
 import com.teame.boostcamp.myapplication.MainApplication;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.FamousPlaceAdapter;
@@ -22,9 +24,13 @@ import com.teame.boostcamp.myapplication.adapter.MainOtherListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentMainBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Banner;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
+import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
+import com.teame.boostcamp.myapplication.ui.searchmap.SearchMapActivity;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 
 import java.util.ArrayList;
@@ -75,10 +81,44 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+    }
+
+    @Override
+    public void showGoodsDetail(Goods goods) {
+        GoodsDetailActivity.startActivity(getContext(),goods);
+    }
+
+    @Override
+    public void setGoodsMoreView(boolean state) {
+        if(state)
+            binding.tvItemMore.setVisibility(View.VISIBLE);
+        else
+            binding.tvItemMore.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setVisitedMoreView(boolean state) {
+
+    }
+
+    @Override
+    public void showGoodsEmptyView() {
+
+    }
+
+    @Override
+    public void showVisitedEmptyView() {
+
     }
 
     @Override
@@ -96,8 +136,9 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         List<Banner> banner = new ArrayList<>();
         banner.add(new Banner("오사카", "쇼핑의 천국 일본! 환율이 떨어진 만큼 부담없는 쇼핑!", "JP"));
         banner.add(new Banner("태국", "저렴한 물가, 맛있는 음식! 태국에서 꼭 사야할 꿀템들!", "TH"));
-        binding.setBanner(banner.get(0));
-        binding.tvBannerCreate.setOnClickListener(__ -> bannerCreateList(banner.get(0).getCountryCode()));
+        FamousPlaceAdapter famousAdapter=new FamousPlaceAdapter(getContext(),drawableId,banner);
+        presenter.setViewPagerAdapter(famousAdapter);
+        binding.vpFamousplace.setAdapter(famousAdapter);
 
         binding.ivSearchPlace.setOnClickListener(__->{
             onSearchButtonClick();
@@ -110,34 +151,22 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
                 binding.ivSearchPlace.setImageResource(R.drawable.btn_search_white);
             }
         });
-        binding.vpFamousplace.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                binding.setBanner(banner.get(position));
-                binding.tvBannerCreate.setOnClickListener(__ -> bannerCreateList(banner.get(position).getCountryCode()));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         // 리사이클러뷰 초기화
         LocationBaseGoodsListRecyclerAdapter goodsAdapter = new LocationBaseGoodsListRecyclerAdapter();
         LinearLayoutManager bannerLayoutManager = new LinearLayoutManager(getContext());
         bannerLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
+        presenter.setLocationAdapter(goodsAdapter);
         binding.ivSetLocation.setOnClickListener(__ -> onSetLocationClick());
-
+        binding.tvItemMore.setOnClickListener(__->{
+            CreateListActivity.startActivity(getContext(),new GoodsListHeader("JP","osaka",34.683036, 135.487775));
+        });
+        binding.tvVisitedMore.setOnClickListener(__->{
+            SearchMapActivity.startActivity(getContext(),"osaka");
+        });
         binding.rvLocationBaseItems.setLayoutManager(bannerLayoutManager);
         binding.rvLocationBaseItems.setAdapter(goodsAdapter);
-
         MainOtherListRecyclerAdapter listAdapter = new MainOtherListRecyclerAdapter();
         LinearLayoutManager listLayoutManager = new LinearLayoutManager(getContext());
         listLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -147,8 +176,9 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         binding.rvOtherList.setLayoutManager(listLayoutManager);
         binding.rvOtherList.setAdapter(listAdapter);
 
-        binding.vpFamousplace.setAdapter(new FamousPlaceAdapter(getContext(), drawableId));
-        //binding.tlCountryIndicator.setupWithViewPager(binding.vpFamousplace, true);
+        binding.rvLocationBaseItems.setNestedScrollingEnabled(false);
+        //binding.rvOtherList.setNestedScrollingEnabled(false);
+
 
 
 
@@ -156,6 +186,11 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         presenter.loadListData(goodsAdapter, "JP", "osaka");
         presenter.loadHeaderKeys(new LatLng(34.683036, 135.487775), listAdapter);
 
+    }
+
+    @Override
+    public void showViewPage(int position) {
+        binding.vpFamousplace.setCurrentItem(position);
     }
 
     private void onSearchButtonClick(){
@@ -167,18 +202,24 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         // TODO - 위치 버튼 클릭 -> 지도 검색 후 위치 선택 -> 메인으로 돌아와서 위치 set 및 recycler view 갱신
     }
 
-    private void bannerCreateList(String countryCode){
+    @Override
+    public void bannerClick(String country) {
         //Country Code 는 국가 코드 ex) JP, TH, 국가의 꿀템 리스트를 보여주는 액티비티로 전환 되어야 함.
-        switch(countryCode){
+        switch(country){
             case "JP" :
-                CreateListActivity.startActivity(getContext(), new GoodsListHeader(countryCode, "oskaka", Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), 34.683036, 135.487775));
+                CreateListActivity.startActivity(getContext(), new GoodsListHeader(country, "oskaka", Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), 34.683036, 135.487775));
                 break;
             case "TH" :
-                CreateListActivity.startActivity(getContext(), new GoodsListHeader(countryCode, countryCode, Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), 13.7522, 100.5267));
+                CreateListActivity.startActivity(getContext(), new GoodsListHeader(country, "bangkok", Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), 13.7522, 100.5267));
                 break;
         }
     }
 
+    @Override
+    public void onDetach() {
+        presenter.onDetach();
+        super.onDetach();
+    }
 }
 
 

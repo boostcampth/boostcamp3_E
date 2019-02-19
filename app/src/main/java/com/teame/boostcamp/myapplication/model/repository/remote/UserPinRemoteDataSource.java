@@ -37,6 +37,7 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.SingleSubject;
+import io.reactivex.subjects.Subject;
 
 public class UserPinRemoteDataSource implements UserPinDataSource {
     private static String QUERY_LOCATION="location";
@@ -120,6 +121,41 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
                         DLogUtil.e(result.getException().toString());
                     }
                 });
+        return subject;
+    }
+
+    @Override
+    public Subject<Pair<LatLng, String>> getUserVisitedLocationToSubject(LatLng center) {
+        PublishSubject<Pair<LatLng,String>> subject=PublishSubject.create();
+        GeoFire geoFire=new GeoFire(firebase);
+        GeoQuery query=geoFire.queryAtLocation(new GeoLocation(center.latitude,center.longitude),QUERY_RADIUS);
+        query.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+                LatLng latlng=new LatLng(location.latitude,location.longitude);
+                subject.onNext(new Pair<LatLng,String>(latlng,key));
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+                DLogUtil.d("Exit");
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+                DLogUtil.d("Move");
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+                subject.onComplete();
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+                DLogUtil.d(error.toString());
+            }
+        });
         return subject;
     }
 

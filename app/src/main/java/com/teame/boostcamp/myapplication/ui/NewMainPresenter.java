@@ -1,29 +1,57 @@
 package com.teame.boostcamp.myapplication.ui;
 
+import android.view.View;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.teame.boostcamp.myapplication.adapter.FamousPlaceAdapter;
 import com.teame.boostcamp.myapplication.adapter.LocationBaseGoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.MainOtherListRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.model.repository.UserPinRepository;
+import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
-public class NewMainPresenter implements NewMainContract.Presenter {
+public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickListener {
     private NewMainContract.View view;
     private CompositeDisposable disposable;
     private GoodsListRepository shoppingListRepository;
     private UserPinRepository userPinRepository;
     private LocationBaseGoodsListRecyclerAdapter goodsAdapter;
+    private static final int MAX=5;
+    private static final int PERIOD=2;
+    private FamousPlaceAdapter viewPagerAdapter;
 
     public NewMainPresenter(NewMainContract.View view) {
         this.view = view;
         this.shoppingListRepository = GoodsListRepository.getInstance();
         this.userPinRepository = UserPinRepository.getInstance();
         disposable = new CompositeDisposable();
+    }
+
+    @Override
+    public void onItemClick(View v, int position) {
+        view.bannerClick(viewPagerAdapter.getItem(position).getCountryCode());
+    }
+
+    @Override
+    public void setLocationAdapter(LocationBaseGoodsListRecyclerAdapter adapter) {
+        goodsAdapter=adapter;
+        goodsAdapter.setOnClickListener((v, position) -> {
+            Goods goods=goodsAdapter.getItem(position);
+            view.showGoodsDetail(goods);
+        });
     }
 
     @Override
@@ -42,33 +70,64 @@ public class NewMainPresenter implements NewMainContract.Presenter {
     @Override
     public void loadListData(LocationBaseGoodsListRecyclerAdapter goodsAdapter, String nation, String city) {
         this.goodsAdapter = goodsAdapter;
-        disposable.add(shoppingListRepository.getItemList(nation, city)
+        List<Goods> list=new ArrayList<>();
+        disposable.add(shoppingListRepository.getItemListToObservable(nation, city)
+                .take(MAX+1)
                 .subscribe(
-                        list -> {
-                            goodsAdapter.initItems(list);
+                        goods -> {
+                            list.add(goods);
                             DLogUtil.d(list.toString());
                         },
                         e -> {
                             DLogUtil.d(e.getMessage());
+                        },
+                        ()->{
+                            if(list.size()<=MAX)
+                                view.setGoodsMoreView(false);
+                            else if(list.size()== Constant.LOADING_NONE_ITEM)
+                                view.showGoodsEmptyView();
+                            list.remove(list.size()-1);
+                            goodsAdapter.initItems(list);
                         }
                 )
         );
     }
 
     @Override
-    public void loadHeaderKeys(LatLng center, MainOtherListRecyclerAdapter listAdapter) {
-        disposable.add(userPinRepository.getUserVisitedLocation(center).subscribe(
-                list -> {
-                    List<String> keyList = new ArrayList<>();
-                    for (int i = 0; i < list.size(); i++) {
-                        keyList.add(list.get(i).second);
-                    }
-                    loadHeaders(keyList, listAdapter);
-                },
-                e -> DLogUtil.d(e.getMessage())
-        ));
+    public void setViewPagerAdapter(FamousPlaceAdapter adapter) {
+        this.viewPagerAdapter=adapter;
+        viewPagerAdapter.setOnClickListener(this);
+        disposable.add(Observable.interval(PERIOD, TimeUnit.SECONDS)
+                .map(Long::intValue)
+                .map(value->value%viewPagerAdapter.getCount())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item->{
+                    DLogUtil.e(item.toString());
+                    view.showViewPage(item);
+                },e->{
+                    DLogUtil.e(e.toString());
+                }));
     }
 
+    @Override
+    public void loadHeaderKeys(LatLng center, MainOtherListRecyclerAdapter listAdapter) {
+        List<String> keyList=new ArrayList<>();
+        disposable.add(userPinRepository.getUserVisitedLocationToSubject(center)
+                .take(MAX+1)
+                .subscribe(pair -> {
+                    keyList.add(pair.second);
+                },
+                e -> DLogUtil.d(e.getMessage())
+                ,()->{
+                    if(keyList.size()== Constant.LOADING_NONE_ITEM)
+                        view.showGoodsEmptyView();
+                    else if(keyList.size()<=MAX)
+                        view.setVisitedMoreView(false);
+                    keyList.remove(keyList.size()-1);
+                    loadHeaders(keyList, listAdapter);
+                }));
+    }
 
     @Override
     public void loadHeaders(List<String> keyList, MainOtherListRecyclerAdapter listAdapter) {
