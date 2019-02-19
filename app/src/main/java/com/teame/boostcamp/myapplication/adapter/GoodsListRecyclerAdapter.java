@@ -91,7 +91,6 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
     }
 
     public void setData(ArrayList<Goods> newData) {
-
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new GoodsDiffUtilCallBack(newData, (ArrayList) itemList));
         diffResult.dispatchUpdatesTo(this);
         itemList.clear();

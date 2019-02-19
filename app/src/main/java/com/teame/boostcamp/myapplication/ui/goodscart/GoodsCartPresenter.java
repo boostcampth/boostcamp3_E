@@ -48,11 +48,12 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
     }
 
     @Override
-    public void loadData(GoodsCartAdapter adapter) {
+    public int loadData(GoodsCartAdapter adapter) {
         this.adapter = adapter;
         List<Goods> list = cartPreferenceHelper.getGoodsCartList();
         itemList = list;
         adapter.initItems(list);
+        return list.size();
     }
 
     @Override
@@ -96,7 +97,7 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
         for (Goods item : itemList) {
             allCheck = allCheck && item.isCheck();
             if (!allCheck) {
-                view.setAllorNoneCheck(allCheck);
+                view.setAllorNoneCheck(false);
             }
         }
         view.setAllorNoneCheck(allCheck);
@@ -113,6 +114,9 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
         String result = DataStringUtil.makeStringComma(Integer.toString(total));
         String formatedResult = String.format(Locale.getDefault(), "예상금액 : %s원", result);
         view.setResultPrice(formatedResult);
+        if(itemList.size() == 0){
+            view.emptyList();
+        }
     }
 
     @Override

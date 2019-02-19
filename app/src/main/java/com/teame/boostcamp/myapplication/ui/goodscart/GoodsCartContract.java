@@ -19,12 +19,14 @@ interface GoodsCartContract {
         void noSelectGoods();
 
         void successSave();
+
+        void emptyList();
     }
 
     interface Presenter extends BasePresenter {
         void addHashTag(String tag);
 
-        void loadData(GoodsCartAdapter adapter);
+        int loadData(GoodsCartAdapter adapter);
 
         void deleteItem(int position);
 

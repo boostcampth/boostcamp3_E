@@ -16,7 +16,7 @@ public interface CreateListContract {
 
         void setBadge(String count);
 
-        void backActivity();
+        void backActivity(int size);
 
         void resultSearchScreen(int size);
 
@@ -36,8 +36,6 @@ public interface CreateListContract {
         void getDetailItemUid(int position);
 
         void loadListData(GoodsListRecyclerAdapter adapter, String nation, String city);
-
-        void setOriginList();
 
         void saveListHeader(GoodsListHeader header);
 

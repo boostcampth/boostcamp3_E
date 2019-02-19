@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 
 import com.google.android.material.chip.Chip;
@@ -68,7 +69,6 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         return true;
     }
 
-
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, GoodsCartActivity.class);
         context.startActivity(intent);
@@ -89,7 +89,7 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
                 RecyclerView.VERTICAL,
                 false);
 
-        presenter.loadData(adapter);
+        int size = presenter.loadData(adapter);
         presenter.calculatorPrice();
         presenter.detectIsAllCheck();
         GoodsListHeader header = presenter.getHeaderData();
@@ -137,6 +137,10 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         binding.tvDicideCart.setOnClickListener(view -> {
             presenter.saveMyList();
         });
+
+        if (size <= 0) {
+            emptyList();
+        }
     }
 
     @Override
@@ -168,6 +172,15 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
     @Override
     public void setAllorNoneCheck(boolean allCheck) {
         binding.cbAll.setChecked(allCheck);
+        if (allCheck) {
+            binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
+            binding.tvDicideCart.setClickable(true);
+            binding.tvTotalPrice.setVisibility(View.VISIBLE);
+        } else {
+            binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIphoneBlack));
+            binding.tvDicideCart.setClickable(false);
+            binding.tvTotalPrice.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -177,7 +190,43 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
 
 
     @Override
+    public void onBackPressed() {
+        if (isChange) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.would_you_save)
+                    .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
+                        presenter.saveCartList();
+                        showToast(getString(R.string.success_save));
+                        finish();
+                    })
+                    .setNegativeButton(R.string.cancle, (__, ___) -> finish());
+
+            final AlertDialog dialog = builder.create();
+            dialog.setOnShowListener(__ -> {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+
+            });
+            dialog.show();
+        } else {
+            finish();
+        }
+    }
+
+    @Override
     public void successSave() {
         showToast("성공");
     }
+
+    @Override
+    public void emptyList() {
+        binding.llcNoAddItem.setVisibility(View.VISIBLE);
+        binding.llcAllCheckRoot.setVisibility(View.GONE);
+        binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIphoneBlack));
+        binding.tvDicideCart.setOnClickListener(null);
+        binding.tvTotalPrice.setVisibility(View.GONE);
+    }
+
 }

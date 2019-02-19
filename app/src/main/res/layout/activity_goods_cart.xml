@@ -63,6 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -103,6 +104,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/til_title">
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/til_tag"
                             android:layout_width="match_parent"
@@ -127,6 +129,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llc_all_check_root"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -146,8 +149,37 @@
                         android:textSize="16sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llc_no_add_item"
+                    android:paddingTop="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_empty_result_search"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/no_add_items" />
+
+                    <TextView
+                        android:layout_marginLeft="16dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/empty_add_item"
+                        android:textColor="@color/colorIphoneBlack"
+                        android:textSize="16sp" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_cart_list"
+                    tools:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/colorDivide"

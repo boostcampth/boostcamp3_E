@@ -3,10 +3,13 @@ package com.teame.boostcamp.myapplication.ui.writereply;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RatingBar;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
@@ -29,7 +32,6 @@ public class WriteReplyActivity extends BaseMVPActivity<ActivityWriteReplyBindin
 
     private final static String EXTRA_GOODS = "EXTRA_GOODS";
     private final static String EXTRA_REPLY = "EXTRA_REPLY";
-    List<Integer> imageViewList = new ArrayList<>();
 
     @Override
     protected int getLayoutResourceId() {
@@ -47,11 +49,22 @@ public class WriteReplyActivity extends BaseMVPActivity<ActivityWriteReplyBindin
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                dialog.setMessage(R.string.cancle_write_reply)
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+                dialogBuilder.setMessage(R.string.cancle_write_reply)
                         .setPositiveButton(getString(R.string.confirm), (__, ___) -> finish())
-                        .setCancelable(true)
-                        .show();
+                        .setNegativeButton(getString(R.string.cancle), (dialogInterface, i) -> {
+                        })
+                        .setCancelable(true);
+
+                final AlertDialog dialog = dialogBuilder.create();
+                dialog.setOnShowListener(__ -> {
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+                });
+
+                dialog.show();
                 break;
             default:
                 break;
@@ -80,7 +93,22 @@ public class WriteReplyActivity extends BaseMVPActivity<ActivityWriteReplyBindin
         if (binding.includeLoading.clLoadingBackground.getVisibility() == View.VISIBLE) {
             return;
         } else {
-            super.onBackPressed();
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setMessage(R.string.cancle_write_reply)
+                    .setPositiveButton(getString(R.string.confirm), (__, ___) -> finish())
+                    .setNegativeButton(getString(R.string.cancle), (dialogInterface, i) -> {
+                    })
+                    .setCancelable(true);
+
+            final AlertDialog dialog = dialogBuilder.create();
+            dialog.setOnShowListener(__ -> {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+            });
+
+            dialog.show();
         }
     }
 
@@ -94,14 +122,47 @@ public class WriteReplyActivity extends BaseMVPActivity<ActivityWriteReplyBindin
             return;
         }
 
-        binding.rbReply.setRating(5f);
         binding.rbReply.setOnRatingBarChangeListener((ratingBar, rating, b) -> {
             DLogUtil.d(rating + "");
         });
         binding.includeLoading.clLoadingBackground.setVisibility(View.GONE);
+        binding.llcSelectScore.setOnClickListener(view -> {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            builder.setTitle("점수를 선택해 주세요!");
+            View dialogLayout = inflater.inflate(R.layout.layout_dialog_rating, null);
+            final RatingBar ratingBar = dialogLayout.findViewById(R.id.ratingBar);
+            builder.setView(dialogLayout)
+                    .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
+                        binding.rbReply.setRating(ratingBar.getRating());
+                        if(ratingBar.getRating() < 0.5f){
+                            binding.rbReply.setRating(0.5f);
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.cancle), (dialogInterface, i) -> {
+
+                    })
+                    .setCancelable(true);
+
+            final AlertDialog dialog = builder.create();
+            dialog.setOnShowListener(__ -> {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+
+            });
+
+            dialog.show();
+        });
         binding.tvWriteReply.setOnClickListener(view -> {
             if (binding.etReplyContent.getText().toString().length() < 5) {
                 showToast(getString(R.string.notice_reply_length));
+                return;
+            }
+            if(binding.rbReply.getRating() <0.5f){
+                showToast(getString(R.string.wolud_you_select_score));
                 return;
             }
             InputKeyboardUtil.hideKeyboard(this);

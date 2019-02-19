@@ -132,7 +132,6 @@ public class CreateListPresenter implements CreateListContract.Presenter {
     /**
      * 선택한 아이템의 체크여부에 따라 HashMap에 추가하거나 제거함
      */
-    @Override
     public void setOriginList() {
         ArrayList<Goods> goods = new ArrayList<>();
         for (Goods target : originList) {
@@ -162,7 +161,7 @@ public class CreateListPresenter implements CreateListContract.Presenter {
             debounceQuery = null;
             setOriginList();
         } else {
-            view.backActivity();
+            view.backActivity(originList.size());
         }
     }
 

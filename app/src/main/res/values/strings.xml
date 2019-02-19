@@ -93,6 +93,8 @@
     <string name="no_search_result">검색 결과가 없습니다 :(</string>
     <string name="title_activity_add_goods">AddGoodsActivity</string>
     <string name="none_click_goods">클릭 불가능한 아이템입니다.</string>
+    <string name="empty_add_item">선택한 아이템이 없어요 :(</string>
+    <string name="wolud_you_select_score">점수를 선택해주세요 :)</string>
     <string name="email_honey_list">의 꿀템리스트!</string>
     <string name="email">이메일</string>
 

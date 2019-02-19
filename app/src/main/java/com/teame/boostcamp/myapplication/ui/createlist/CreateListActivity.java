@@ -2,6 +2,7 @@ package com.teame.boostcamp.myapplication.ui.createlist;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -53,6 +54,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     private AppCompatImageView cartImage;
     private SearchView svGoods;
     private CompositeDisposable disposable = new CompositeDisposable();
+    private boolean isFinish = false;
 
     @Override
     protected CreateListContract.Presenter getPresenter() {
@@ -262,7 +264,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     @Override
     public void showDetailItem(Goods item) {
 
-        if(item.getUserCustomUri() !=null && item.getKey()== null){
+        if (item.getUserCustomUri() != null && item.getKey() == null) {
             showToast(getString(R.string.none_click_goods));
             return;
         }
@@ -271,9 +273,12 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
     @Override
     public void finishLoad(int size) {
+        isFinish = true;
         binding.includeLoading.lavLoading.cancelAnimation();
         binding.includeLoading.lavLoading.setVisibility(View.GONE);
         if (size == Constant.LOADING_NONE_ITEM) {
+            binding.llcAddGoods.setVisibility(View.VISIBLE);
+            binding.llcNoSearchResult.setVisibility(View.VISIBLE);
             showLongToast(String.format(getString(R.string.none_item), getString(R.string.toast_goods)));
         } else if (size == Constant.FAIL_LOAD) {
             showLongToast(getString(R.string.fail_load));
@@ -301,12 +306,22 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
 
     @Override
-    public void backActivity() {
+    public void backActivity(int size) {
+        if (isFinish) {
+            if (size == 0) {
+                binding.llcAddGoods.setVisibility(View.VISIBLE);
+                binding.llcNoSearchResult.setVisibility(View.VISIBLE);
+            }
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.cancel_create_list))
                 .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
                     presenter.removeCart();
                     finish();
+                })
+                .setNegativeButton(getString(R.string.cancle), (dialogInterface, i) -> {
+
                 })
                 .setCancelable(true);
 
@@ -336,7 +351,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     @Override
     public void goAddItem(String goodsName) {
         Intent intent = AddGoodsActivity.getIntent(this, goodsName);
-        startActivityForResult(intent,REQ_ADD_ITEM);
+        startActivityForResult(intent, REQ_ADD_ITEM);
     }
 
     @Override
@@ -351,8 +366,8 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQ_ADD_ITEM){
-            if(resultCode == RESULT_OK){
+        if (requestCode == REQ_ADD_ITEM) {
+            if (resultCode == RESULT_OK) {
                 Goods item = data.getParcelableExtra(EXTRA_ADD_GOODS);
                 presenter.addCartGoods(item);
                 DLogUtil.d(item.toString());
