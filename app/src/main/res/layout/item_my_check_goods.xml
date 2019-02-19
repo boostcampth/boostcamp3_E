@@ -73,19 +73,6 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_goods_title"
                 tools:text="최저가" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/tv_delete"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginRight="16dp"
-                android:paddingLeft="5dp"
-                android:paddingBottom="5dp"
-                app:layout_constraintBottom_toTopOf="@id/spinner"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/iv_goods_img"
-                app:layout_constraintVertical_chainStyle="spread_inside"
-                app:srcCompat="@drawable/btn_cancle" />
-
             <androidx.core.widget.ContentLoadingProgressBar
                 android:id="@+id/pb_deleting"
                 style="?android:attr/progressBarStyleSmall"
@@ -97,20 +84,6 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@id/iv_goods_img"
                 app:layout_constraintVertical_chainStyle="spread_inside" />
-
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawSelectorOnTop="true"
-                android:entries="@array/spinnerItems"
-                android:gravity="center"
-                android:spinnerMode="dialog"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@id/iv_goods_img"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_delete" />
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/cb_select"

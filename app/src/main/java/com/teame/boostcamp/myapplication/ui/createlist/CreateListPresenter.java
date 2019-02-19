@@ -129,6 +129,9 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         );
     }
 
+    /**
+     * 선택한 아이템의 체크여부에 따라 HashMap에 추가하거나 제거함
+     */
     @Override
     public void setOriginList() {
         ArrayList<Goods> goods = new ArrayList<>();
@@ -161,6 +164,30 @@ public class CreateListPresenter implements CreateListContract.Presenter {
         } else {
             view.backActivity();
         }
-
     }
+
+    @Override
+    public void addCartGoods(Goods item) {
+        List<Goods> list = cartPreferenceHelper.getGoodsCartList();
+        int postion = -1;
+        if (list.contains(item)) {
+            for (int i = 0; i < list.size(); i++) {
+                if (TextUtils.equals(list.get(i).getName(), item.getName())) {
+                    postion = i;
+                    break;
+                }
+            }
+        }
+
+        if (postion != -1) {
+            list.remove(postion);
+        }
+        list.add(item);
+        cartPreferenceHelper.saveGoodsCartList(list);
+        originList.add(item);
+        itemList.add(item);
+        view.successAddCart();
+    }
+
+
 }

@@ -21,6 +21,7 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
     private boolean isCheck = false;
     private String totalPrice;
     private int count = 1;
+    private String userCustomUri;
 
     public Goods() {
 
@@ -38,7 +39,9 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
         lprice = in.readString();
         img = in.readString();
         link = in.readString();
+        isCheck= in.readInt() == 1;
         count = in.readInt();
+        userCustomUri = in.readString();
     }
 
     public static final Creator<Goods> CREATOR = new Creator<Goods>() {
@@ -99,7 +102,6 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
         notifyPropertyChanged(BR.ratio);
     }
 
-    @Exclude
     public String getImg() {
         return img;
     }
@@ -108,7 +110,6 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
         this.img = img;
     }
 
-    @Exclude
     public String getLink() {
         return link;
     }
@@ -118,7 +119,6 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
     }
 
     @Bindable
-    @Exclude
     public String getLprice() {
 
         if (lprice == null) {
@@ -154,19 +154,6 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
     }
 
     @Override
-    public String toString() {
-        return "Goods{" +
-                "key='" + key + '\'' +
-                ", name='" + name + '\'' +
-                ", ratio=" + ratio +
-                ", lprice='" + lprice + '\'' +
-                ", img='" + img + '\'' +
-                ", link='" + link + '\'' +
-                ", count=" + count +
-                '}';
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }
@@ -184,7 +171,9 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
         parcel.writeString(lprice);
         parcel.writeString(img);
         parcel.writeString(link);
+        parcel.writeInt(isCheck ? 1 : 0);
         parcel.writeInt(count);
+        parcel.writeString(userCustomUri);
     }
 
     @Bindable
@@ -197,7 +186,6 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
         isCheck = check;
         notifyPropertyChanged(BR.check);
     }
-
 
     @Bindable
     @Exclude
@@ -218,6 +206,18 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
         this.totalPrice = totalPrice;
         notifyPropertyChanged(BR.totalPrice);
     }
+
+    @Bindable
+    @Exclude
+    public String getUserCustomUri() {
+        return userCustomUri;
+    }
+
+    public void setUserCustomUri(String userCustomUri) {
+        this.userCustomUri = userCustomUri;
+        notifyPropertyChanged(BR.userCustomUri);
+    }
+
 
     // 전체가격 계산을 위한 메소드
     @Exclude
@@ -241,6 +241,22 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
         }
 
         return clone;
+    }
+
+    @Override
+    public String toString() {
+        return "Goods{" +
+                "key='" + key + '\'' +
+                ", name='" + name + '\'' +
+                ", ratio=" + ratio +
+                ", lprice='" + lprice + '\'' +
+                ", img='" + img + '\'' +
+                ", link='" + link + '\'' +
+                ", isCheck=" + isCheck +
+                ", totalPrice='" + totalPrice + '\'' +
+                ", count=" + count +
+                ", userCustomUri=" + userCustomUri +
+                '}';
     }
 
 }

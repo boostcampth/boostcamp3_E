@@ -1,10 +1,11 @@
 package com.teame.boostcamp.myapplication.model.repository.remote;
 
+import android.net.Uri;
+
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -13,28 +14,23 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
-import com.teame.boostcamp.myapplication.model.MinPriceAPI;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
-import com.teame.boostcamp.myapplication.model.entitiy.MinPriceResponse;
 import com.teame.boostcamp.myapplication.model.repository.MyListDataSoruce;
 import com.teame.boostcamp.myapplication.util.CalendarUtil;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.workmanager.AlarmWork;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import androidx.work.Data;
-import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
@@ -49,6 +45,7 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
     private static String KEY_SELECTED = "KEY_SELECTED";
     private static String FIREBASE_URL = "https://boostcamp-1548575868471.firebaseio.com/_geofire";
     private DatabaseReference firebase = FirebaseDatabase.getInstance().getReferenceFromUrl(FIREBASE_URL);
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -122,20 +119,8 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
                 .addOnFailureListener(e -> DLogUtil.e("error : " + e.toString()));
 
         // 가져온 리스트를 MinPriceAPI를 통해 최저가를 붙여준 후 모든아이템을 List로 반환해줌
-        return subject.zipWith(Observable.interval(200, TimeUnit.MILLISECONDS), (item, i) -> item).subscribeOn(Schedulers.io()).flatMap(targetItem ->
-                Observable.just(targetItem)
-                        .observeOn(Schedulers.io())
-                        .zipWith(MinPriceAPI.getInstance()
-                                        .api
-                                        .getMinPrice(targetItem.getName())
-                                        .subscribeOn(Schedulers.io()),
-                                (item, response) -> {
-                                    MinPriceResponse minPriceResponse = response.body();
-                                    DLogUtil.d(item + "/" + minPriceResponse.toString());
-                                    item.setMinPriceResponse(minPriceResponse);
-
-                                    return item;
-                                }))
+        return subject
+                .subscribeOn(Schedulers.io())
                 .toList();
     }
 
@@ -164,8 +149,10 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
         // list Image 헤더에 넣기
         int count = 0;
         for (Goods goods : goodsList) {
-            header.getImages().add(goods.getImg());
-            if(++count >= 10){
+            if (goods.getImg() != null) {
+                header.getImages().add(goods.getImg());
+            }
+            if (++count >= 10) {
                 break;
             }
         }
@@ -180,11 +167,34 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
         for (Goods item : goodsList) {
             // 체크된 데이터만 저장하기
             if (item.isCheck()) {
+                item.setCheck(false);
+                if (item.getKey() == null) {
+                    item.setKey(db.collection(QUERY_MY_GOODS).document().getId());
+                }
                 DocumentReference itemRef = myListItemRef.document(item.getKey());
+
+                if (item.getUserCustomUri() != null) {
+                    StorageReference imageRef = storageRef.child("images/items/+" + item.getKey() + ".jpg");
+                    UploadTask uploadTask = imageRef.putFile(Uri.parse(item.getUserCustomUri()));
+                    uploadTask.continueWithTask(task -> {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        return imageRef.getDownloadUrl();
+                    }).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Uri downloadUri = task.getResult();
+                            itemRef.update("img", downloadUri.toString()).addOnCompleteListener(task1 -> {
+                            });
+                        } else {
+                        }
+                    });
+                }
                 batch.set(itemRef, item);
                 batch.set(locationItemRef.document(item.getKey()), item);
             }
         }
+
 
         batch.commit()
                 .addOnCompleteListener(task -> {
@@ -207,7 +217,7 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
                             Data.Builder input = new Data.Builder();
                             input.putStringArray(KEY_SELECTED, goodsItems);
                             alarmBuilder.setInputData(input.build())
-                                    .setInitialDelay(days, TimeUnit.DAYS);
+                                    .setInitialDelay(days, TimeUnit.SECONDS);
                             workManager.enqueue(alarmBuilder.build());
                             subject.onComplete();
                         });

@@ -32,6 +32,7 @@ import com.teame.boostcamp.myapplication.util.view.ListSpaceItemDecoration;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SearchView;
@@ -43,8 +44,10 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBinding, CreateListContract.Presenter> implements CreateListContract.View {
 
+    private final static int REQ_ADD_ITEM = 5324;
     private static final String EXTRA_GOODS_LIST_HDAER = "EXTRA_GOODS_LIST_HDAER";
     private static final String EXTRA_SELECTED_GOODS_LIST = "EXTRA_SELECTED_GOODS_LIST";
+    private static final String EXTRA_ADD_GOODS = "EXTRA_ADD_GOODS";
     private static final int SCROLL_DIRECTION_UP = -1;
     private AppCompatTextView tvBadge;
     private AppCompatImageView cartImage;
@@ -128,9 +131,9 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
     public void initToolbar() {
 
-        if(TextUtils.isEmpty(tvBadge.getText().toString()) ||TextUtils.equals(tvBadge.getText().toString(),"0")){
+        if (TextUtils.isEmpty(tvBadge.getText().toString()) || TextUtils.equals(tvBadge.getText().toString(), "0")) {
             tvBadge.setVisibility(View.GONE);
-        }else{
+        } else {
             tvBadge.setVisibility(View.VISIBLE);
         }
         cartImage.setVisibility(View.VISIBLE);
@@ -168,8 +171,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     public static void startActivity(Context context, GoodsListHeader header, ArrayList<Goods> goodslist) {
         Intent intent = new Intent(context, CreateListActivity.class);
         intent.putExtra(EXTRA_GOODS_LIST_HDAER, header);
-
-        DLogUtil.e(goodslist.toString());
         intent.putParcelableArrayListExtra(EXTRA_SELECTED_GOODS_LIST, goodslist);
         context.startActivity(intent);
     }
@@ -260,6 +261,11 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
     @Override
     public void showDetailItem(Goods item) {
+
+        if(item.getUserCustomUri() !=null && item.getKey()== null){
+            showToast(getString(R.string.none_click_goods));
+            return;
+        }
         GoodsDetailActivity.startActivity(this, item);
     }
 
@@ -329,8 +335,29 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
     @Override
     public void goAddItem(String goodsName) {
-        AddGoodsActivity.startActivity(this,goodsName);
+        Intent intent = AddGoodsActivity.getIntent(this, goodsName);
+        startActivityForResult(intent,REQ_ADD_ITEM);
     }
 
+    @Override
+    public void successAddCart() {
+        showToast(getString(R.string.goods_add_cart));
+        presenter.getShoppingListCount();
+        initToolbar();
+        int position = binding.rvRecommendList.getAdapter().getItemCount();
+        binding.rvRecommendList.smoothScrollToPosition(position);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQ_ADD_ITEM){
+            if(resultCode == RESULT_OK){
+                Goods item = data.getParcelableExtra(EXTRA_ADD_GOODS);
+                presenter.addCartGoods(item);
+                DLogUtil.d(item.toString());
+            }
+        }
+    }
 }
 

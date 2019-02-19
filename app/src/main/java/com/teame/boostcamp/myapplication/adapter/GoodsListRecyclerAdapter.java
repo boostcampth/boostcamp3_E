@@ -1,21 +1,20 @@
 package com.teame.boostcamp.myapplication.adapter;
 
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Checkable;
 
+import com.bumptech.glide.Glide;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemListGoodsBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.GoodsDiffUtilCallBack;
+import com.teame.boostcamp.myapplication.util.LocalImageUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -47,7 +46,17 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Goods item = itemList.get(position);
         holder.binding.setItem(item);
-
+        if (item.getUserCustomUri() != null) {
+            Glide.with(holder.binding.ivItemImage)
+                    .load(LocalImageUtil
+                            .getRotatedBitmap(LocalImageUtil
+                                            .getResizedBitmap(holder.itemView.getContext()
+                                                    , Uri.parse(item.getUserCustomUri())
+                                                    , 400)
+                                    , LocalImageUtil.getPath(holder.itemView.getContext()
+                                            , Uri.parse(item.getUserCustomUri()))))
+                    .into(holder.binding.ivItemImage);
+        }
         DLogUtil.d(itemList.get(position).toString());
     }
 
@@ -83,7 +92,7 @@ public class GoodsListRecyclerAdapter extends BaseRecyclerAdatper<Goods, GoodsLi
 
     public void setData(ArrayList<Goods> newData) {
 
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new GoodsDiffUtilCallBack(newData, (ArrayList)itemList));
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new GoodsDiffUtilCallBack(newData, (ArrayList) itemList));
         diffResult.dispatchUpdatesTo(this);
         itemList.clear();
         this.itemList.addAll(newData);

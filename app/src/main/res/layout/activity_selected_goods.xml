@@ -65,26 +65,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp">
-
-                    <androidx.appcompat.widget.AppCompatCheckBox
-                        android:id="@+id/cb_all"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="16dp" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="16dp"
-                        android:text="전체선택"
-                        android:textSize="16sp" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_cart_list"
                     android:layout_width="match_parent"
