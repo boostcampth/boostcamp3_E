@@ -39,7 +39,7 @@ public class ExListAdapter extends RecyclerView.Adapter<ExListAdapter.ExListView
     @Override
     public void setList(ArrayList<String> list) {
         this.list.clear();
-        this.list.addAll(list);
+        this.list=list;
         notifyDataSetChanged();
     }
 

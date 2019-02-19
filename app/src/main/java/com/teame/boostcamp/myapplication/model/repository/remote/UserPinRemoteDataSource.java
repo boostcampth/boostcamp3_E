@@ -112,6 +112,7 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
                     if(result.isSuccessful()){
                         DocumentSnapshot snapshot=result.getResult();
                         GoodsListHeader header =snapshot.toObject(GoodsListHeader.class);
+                        header.setKey(Key);
                         DLogUtil.e(header.toString());
                         subject.onSuccess(header);
                     }

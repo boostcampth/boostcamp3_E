@@ -45,7 +45,7 @@
     <string name="title_activity_create_list_info">이거사! 리스트 결정</string>
     <string name="title">title</string>
     <string name="hashtag">hashTag</string>
-    <string name="hashtag_hint">해쉬태그는 이용자들이 함께 공유할수 있도록 도와줍니다.</string>
+    <string name="hashtag_hint">이번 여행의 포인트는!? #먹방</string>
     <string name="empty_goods">항목을 한개이상 선택해 주세요~!</string>
     <string name="already_tag">이미 선택한 태그입니다.</string>
     <string name="cancel_create_list">선택한 내용이 전부 사라질수 있습니다.\n정말 뒤로가시겠습니까?</string>

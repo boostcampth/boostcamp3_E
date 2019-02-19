@@ -25,6 +25,7 @@ import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -151,6 +152,7 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
 
     private void onSearchButtonClick(){
         // TODO- 상단툴바의 검색버튼(서치뷰)가 클릭되었을때의 이벤트 작성 --> 지도 검색 기능 -> 체크리스트 생성
+        ((FragmentCallback)getActivity()).startNewFragment();
     }
 
     private void onSetLocationClick(){
@@ -161,10 +163,10 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         //Country Code 는 국가 코드 ex) JP, TH, 국가의 꿀템 리스트를 보여주는 액티비티로 전환 되어야 함.
         switch(countryCode){
             case "JP" :
-                CreateListActivity.startActivity(getContext(), new GoodsListHeader(countryCode, "oskaka", null, null, 34.683036, 135.487775));
+                CreateListActivity.startActivity(getContext(), new GoodsListHeader(countryCode, "oskaka", Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), 34.683036, 135.487775));
                 break;
             case "TH" :
-                CreateListActivity.startActivity(getContext(), new GoodsListHeader(countryCode, countryCode, null, null, 13.7522, 100.5267));
+                CreateListActivity.startActivity(getContext(), new GoodsListHeader(countryCode, countryCode, Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), 13.7522, 100.5267));
                 break;
         }
     }

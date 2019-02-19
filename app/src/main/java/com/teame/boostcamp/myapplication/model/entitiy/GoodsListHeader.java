@@ -39,11 +39,23 @@ public class GoodsListHeader implements Parcelable {
     public GoodsListHeader() {
     }
 
-    public GoodsListHeader(String nation, String city, Date startDate, Date endDate, Double lat, Double lng) {
+    public GoodsListHeader(String nation, String city){
         this.nation = nation;
         this.city = city;
-        this.startDate = startDate;
-        this.endDate = endDate;
+    }
+
+    public GoodsListHeader(String nation, String city,Date start, Date end, Double lat, Double lng) {
+        this.nation = nation;
+        this.city = city;
+        startDate=start;
+        endDate=end;
+        this.lat = lat;
+        this.lng = lng;
+    }
+
+    public GoodsListHeader(String nation, String city, Double lat, Double lng) {
+        this.nation = nation;
+        this.city = city;
         this.lat = lat;
         this.lng = lng;
     }

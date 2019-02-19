@@ -4,6 +4,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.BindingConversion;
@@ -23,11 +24,19 @@ public class TextViewUtil {
     }
 
     @BindingAdapter({"startDate","endDate"})
-    public static void setPreviewText(TextView textView, Date start, Date end){
+    public static void setPreviewDate(TextView textView, Date start, Date end){
         if(start==null||end==null)
             return;
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         String text=""+sdf.format(start)+"~"+sdf.format(end);
+        textView.setText(text);
+    }
+    @BindingAdapter({"hashtags"})
+    public static void setPreviewHashTag(TextView textView, Map<String,Boolean>hashtags){
+        String text="";
+        for(String str:hashtags.keySet()){
+            text+="#"+str+" ";
+        }
         textView.setText(text);
     }
 }

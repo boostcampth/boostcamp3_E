@@ -26,6 +26,7 @@ import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.goodscart.GoodsCartActivity;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.view.ListSpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -167,6 +168,8 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     public static void startActivity(Context context, GoodsListHeader header, ArrayList<Goods> goodslist) {
         Intent intent = new Intent(context, CreateListActivity.class);
         intent.putExtra(EXTRA_GOODS_LIST_HDAER, header);
+
+        DLogUtil.e(goodslist.toString());
         intent.putParcelableArrayListExtra(EXTRA_SELECTED_GOODS_LIST, goodslist);
         context.startActivity(intent);
     }

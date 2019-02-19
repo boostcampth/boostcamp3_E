@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="header"
+            type="com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_marginTop="@dimen/space_x_small"
+            android:layout_marginLeft="@dimen/space_median"
+            android:id="@+id/tv_userpininfo_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{header.title}"
+            android:textColor="@color/colorBlack"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_userpininfo_period"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_userpininfo_period"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            startDate="@{header.startDate}"
+            endDate="@{header.endDate}"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_userpininfo_hashtag"
+            app:layout_constraintTop_toBottomOf="@id/tv_userpininfo_title"
+            app:layout_constraintLeft_toLeftOf="@id/tv_userpininfo_title"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_userpininfo_hashtag"
+            android:layout_marginBottom="@dimen/space_x_small"
+            hashtags="@{header.hashTag}"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack"
+            app:layout_constraintTop_toBottomOf="@id/tv_userpininfo_period"
+            app:layout_constraintLeft_toLeftOf="@id/tv_userpininfo_period"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
