@@ -71,7 +71,7 @@
             android:name=".ui.addpost.AddPostActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.search.UserShoppinglistActivity"
+            android:name=".ui.usershoppinglist.UserShoppinglistActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.goodsdetail.GoodsDetailActivity"

@@ -68,10 +68,12 @@ public class SearchMapPresenter implements SearchMapContract.Presenter {
         }
         try{
             List<Address> geoResult=geocoder.getFromLocation(latlng.latitude,latlng.longitude,1);
-            LatLng latlon=new LatLng(geoResult.get(0).getLatitude(),geoResult.get(0).getLongitude());
             DLogUtil.e(geoResult.toString());
             currentNation=geoResult.get(0).getCountryCode();
-            currentCity=geoResult.get(0).getLocality().replace(" ","");
+            if(geoResult.get(0).getLocality()==null)
+                currentCity=geoResult.get(0).getFeatureName().replace(" ","");
+            else
+                currentCity=geoResult.get(0).getLocality().replace(" ","");
             view.showSearchResult(geoResult.get(0).getAddressLine(0));
         }catch(Exception e){
             DLogUtil.e(e.toString());
@@ -108,7 +110,10 @@ public class SearchMapPresenter implements SearchMapContract.Presenter {
             LatLng latlon=new LatLng(geoResult.get(0).getLatitude(),geoResult.get(0).getLongitude());
             DLogUtil.e(geoResult.toString());
             currentNation=geoResult.get(0).getCountryCode();
-            currentCity=geoResult.get(0).getLocality().replace(" ","");
+            if(geoResult.get(0).getLocality()==null)
+                currentCity=geoResult.get(0).getFeatureName().replace(" ","");
+            else
+                currentCity=geoResult.get(0).getLocality().replace(" ","");
             view.showSearchResult(geoResult.get(0).getAddressLine(0));
             view.moveCamera(latlon);
             disposable.add(remote.getUserVisitedLocation(latlon)

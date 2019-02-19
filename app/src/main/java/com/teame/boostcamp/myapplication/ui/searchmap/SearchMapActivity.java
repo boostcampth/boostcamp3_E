@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -20,7 +23,6 @@ import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
-import com.teame.boostcamp.myapplication.ui.search.UserShoppinglistActivity;
 import com.teame.boostcamp.myapplication.ui.userpininfo.UserPinInfoFragment;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.LastKnownLocationUtil;
@@ -28,7 +30,6 @@ import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 import com.teame.boostcamp.myapplication.util.VectorConverterUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -43,7 +44,6 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
         ,UserPinFragmentCallback{
     private GoogleMap map;
     private CompositeDisposable disposable=new CompositeDisposable();
-    private static final LatLng SEOUL=new LatLng(37.566318, 126.977913);
     private static final int ZOOM=15;
     private static final String EXTRA_PLACE="EXTRA_PLACE";
     private static final String EXTRA_GOODSLIST="EXTRA_GOODSLIST";
@@ -71,6 +71,32 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.menu_search_toolbar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.place_confirm:
+                GoodsListHeader header=presenter.getGoodsListHeader();
+                header.setLat(map.getCameraPosition().target.latitude);
+                header.setLng(map.getCameraPosition().target.longitude);
+                if(presenter.getSelectedList()==null)
+                    CreateListActivity.startActivity(getApplicationContext(),header);
+                else
+                    CreateListActivity.startActivity(getApplicationContext(),header,presenter.getSelectedList());
+                return true;
+            case android.R.id.home:
+                finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setPresenter(new SearchMapPresenter(this,new ResourceProvider(getApplicationContext())));
@@ -84,15 +110,6 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
         binding.fabCurrent.setOnClickListener(__ -> {
             setCurrentLocation();
         });
-        binding.fabSetStart.setOnClickListener(__->{
-            GoodsListHeader header=presenter.getGoodsListHeader();
-            header.setLat(map.getCameraPosition().target.latitude);
-            header.setLng(map.getCameraPosition().target.longitude);
-            if(presenter.getSelectedList()==null)
-                CreateListActivity.startActivity(getApplicationContext(),header);
-            else
-                CreateListActivity.startActivity(getApplicationContext(),header,presenter.getSelectedList());
-        });
         binding.mvGooglemap.getMapAsync(this);
         binding.mvGooglemap.onCreate(savedInstanceState);
     }
@@ -100,30 +117,20 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
     public void hideBottom(){
         binding.pbSearchloading.setVisibility(View.VISIBLE);
         binding.tvCurrentPlace.setVisibility(View.GONE);
-        binding.fabSetStart.hide();
-        binding.tvSetStart.setVisibility(View.GONE);
+        binding.fabCurrent.hide();
     }
 
     public void showBottom(){
         binding.pbSearchloading.setVisibility(View.GONE);
         binding.tvCurrentPlace.setVisibility(View.VISIBLE);
-        binding.fabSetStart.show();
-        binding.tvSetStart.setVisibility(View.VISIBLE);
+        binding.fabCurrent.show();
     }
 
     private void setCurrentLocation(){
-        FusedLocationProviderClient fusedLocationClient= LocationServices.getFusedLocationProviderClient(getApplicationContext());
-        if(ActivityCompat.checkSelfPermission(getApplicationContext(), TedPermissionUtil.LOCATION)== PackageManager.PERMISSION_GRANTED){
-            fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
-                LatLng latlnt;
-                if(task.getResult()==null)
-                    latlnt = SEOUL;
-                else
-                    latlnt=new LatLng(task.getResult().getLatitude(),task.getResult().getLongitude());
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latlnt,ZOOM));
-            });
-        }
-
+        disposable.add(LastKnownLocationUtil.getLastPosition(this)
+                .subscribe(latLng -> {
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,ZOOM));
+                }));
     }
 
     @Override
@@ -239,6 +246,7 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
 
         googleMap.setOnMarkerClickListener(marker -> {
             presenter.userMarkerClicked(marker);
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),ZOOM));
             presenter.getGoodsListHeaderFromMarker(marker)
                     .subscribe(header -> {
                         FragmentManager manager=getSupportFragmentManager();
@@ -259,6 +267,8 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
         disposable.add(LastKnownLocationUtil.getLastPosition(getApplicationContext())
                 .subscribe(latLng -> {
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,ZOOM));
+                },e->{
+                    DLogUtil.e(e.toString());
                 }));
     }
 }

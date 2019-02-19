@@ -13,11 +13,13 @@ import java.util.List;
 public interface SearchPlaceContract {
 
     interface View extends BaseView<SearchPlaceContract.Presenter> {
-        void exitFragment();
+        void showCreateList(GoodsListHeader header);
     }
 
     interface Presenter extends BasePresenter {
         void saveToJson();
+        void onStop();
+        void currentButtonClick();
         void createList();
         void setAdapterView(ExListAdapterContract.View view);
         void setAdapterModel(ExListAdapterContract.Model model);

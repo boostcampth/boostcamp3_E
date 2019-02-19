@@ -32,8 +32,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding, SearchPlaceContract.Presenter> implements SearchPlaceContract.View {
-
-    private CompositeDisposable disposable=new CompositeDisposable();
     @Override
     protected int getLayoutResourceId() {
         return R.layout.fragment_search_place;
@@ -46,11 +44,6 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
 
     public static SearchPlaceFragment newInstance(){
         return new SearchPlaceFragment();
-    }
-
-    @Override
-    public void exitFragment() {
-        getFragmentManager().beginTransaction().remove(this).commit();
     }
 
     @Nullable
@@ -66,10 +59,14 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(disposable.isDisposed())
-            disposable.dispose();
+    public void onStop() {
+        super.onStop();
+        presenter.onStop();
+    }
+
+    @Override
+    public void showCreateList(GoodsListHeader header) {
+        CreateListActivity.startActivity(getContext(),header);
     }
 
     @Override
@@ -96,16 +93,7 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
         });
         binding.buttonCurrentLocation.setOnClickListener(__->{
             //TODO: 아이템 리스트 생성
-            disposable=new CompositeDisposable();
-            disposable.add(LastKnownLocationUtil.getLastPosition(getContext())
-                    .subscribe(latLng -> {
-                        Geocoder geocoder=new Geocoder(getContext(), Locale.KOREA);
-                        List<Address> result=geocoder.getFromLocation(latLng.latitude,latLng.longitude,1);
-                        String currentNation=result.get(0).getCountryCode();
-                        String currentCity=result.get(0).getLocality().replace(" ","");
-                        GoodsListHeader header=new GoodsListHeader(currentNation,currentCity, latLng.latitude,latLng.longitude);
-                        CreateListActivity.startActivity(getContext(),header);
-                    }));
+            presenter.currentButtonClick();
         });
         binding.buttonGoMap.setOnClickListener(__->{
             //TODO: SearchMapActivity 생성

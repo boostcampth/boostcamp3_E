@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.ui.search;
+package com.teame.boostcamp.myapplication.ui.usershoppinglist;
 
 import com.teame.boostcamp.myapplication.adapter.usershoppinglist.UserShoppingListAdapter;
 import com.teame.boostcamp.myapplication.adapter.usershoppinglist.UserShoppingListAdapterContract;

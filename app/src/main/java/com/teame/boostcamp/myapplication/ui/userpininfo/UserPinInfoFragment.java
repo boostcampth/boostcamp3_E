@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.ui.userpininfo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -10,8 +9,7 @@ import com.teame.boostcamp.myapplication.databinding.FragmentUserpininfoBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
-import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
-import com.teame.boostcamp.myapplication.ui.search.UserShoppinglistActivity;
+import com.teame.boostcamp.myapplication.ui.usershoppinglist.UserShoppinglistActivity;
 import com.teame.boostcamp.myapplication.ui.searchmap.UserPinFragmentCallback;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
@@ -56,7 +54,7 @@ public class UserPinInfoFragment extends BaseFragment<FragmentUserpininfoBinding
         DLogUtil.e(header.toString());
         setPresenter(new UserPinInfoPresenter(this,new ResourceProvider(getContext()),header));
         binding.setHeader(header);
-        binding.cvUserpininfo.setOnClickListener(__ -> {
+        binding.clContainer.setOnClickListener(__ -> {
             presenter.getGoodsList();
         });
         getView().setFocusableInTouchMode(true);
