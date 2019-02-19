@@ -6,11 +6,14 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.appbar.AppBarLayout;
 import com.teame.boostcamp.myapplication.MainApplication;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.FamousPlaceAdapter;
@@ -85,8 +88,6 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
     }
 
     private void initView() {
-
-
         // TODO - 초기 위치정보를 받아와야 합니다. 위치정보가 없을 시 default 값으로 설정해 주어야 합니다.
         // 초기의 상단 배너 리소스와 텍스트 초기화 - 하드코딩
         List<Integer> drawableId = new ArrayList<>();
@@ -97,10 +98,19 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         banner.add(new Banner("태국", "저렴한 물가, 맛있는 음식! 태국에서 꼭 사야할 꿀템들!", "TH"));
         binding.setBanner(banner.get(0));
         binding.tvBannerCreate.setOnClickListener(__ -> bannerCreateList(banner.get(0).getCountryCode()));
-        binding.includeLoading.lavLoading.playAnimation();
-        binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
 
-        binding.vpFamousPlace.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        binding.ivSearchPlace.setOnClickListener(__->{
+            onSearchButtonClick();
+        });
+        binding.ablMain.addOnOffsetChangedListener((appBarLayout, i) -> {
+            if(Math.abs(i)>=appBarLayout.getTotalScrollRange()){
+                binding.ivSearchPlace.setImageResource(R.drawable.btn_search);
+            }
+            else if(i==0){
+                binding.ivSearchPlace.setImageResource(R.drawable.btn_search_white);
+            }
+        });
+        binding.vpFamousplace.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -123,7 +133,6 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         LinearLayoutManager bannerLayoutManager = new LinearLayoutManager(getContext());
         bannerLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        binding.ivLoactionSearch.setOnClickListener(__ -> onSearchButtonClick());
         binding.ivSetLocation.setOnClickListener(__ -> onSetLocationClick());
 
         binding.rvLocationBaseItems.setLayoutManager(bannerLayoutManager);
@@ -138,9 +147,8 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         binding.rvOtherList.setLayoutManager(listLayoutManager);
         binding.rvOtherList.setAdapter(listAdapter);
 
-        binding.vpFamousPlace.setAdapter(new FamousPlaceAdapter(getContext(), drawableId));
-        binding.tlCountryIndicator.setupWithViewPager(binding.vpFamousPlace, true);
-
+        binding.vpFamousplace.setAdapter(new FamousPlaceAdapter(getContext(), drawableId));
+        //binding.tlCountryIndicator.setupWithViewPager(binding.vpFamousplace, true);
 
 
 
@@ -169,13 +177,6 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
                 CreateListActivity.startActivity(getContext(), new GoodsListHeader(countryCode, countryCode, Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), 13.7522, 100.5267));
                 break;
         }
-    }
-
-    @Override
-    public void finishLoad() {
-        binding.tvShowWhole.setVisibility(View.VISIBLE);
-        binding.includeLoading.lavLoading.cancelAnimation();
-        binding.includeLoading.lavLoading.setVisibility(View.GONE);
     }
 
 }

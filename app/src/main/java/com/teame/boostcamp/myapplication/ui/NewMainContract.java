@@ -12,8 +12,6 @@ import java.util.List;
 
 public interface NewMainContract {
     interface View extends BaseView<Presenter> {
-        void finishLoad();
-
     }
 
     interface Presenter extends BasePresenter {

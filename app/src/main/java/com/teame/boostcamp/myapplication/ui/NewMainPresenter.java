@@ -46,12 +46,10 @@ public class NewMainPresenter implements NewMainContract.Presenter {
                 .subscribe(
                         list -> {
                             goodsAdapter.initItems(list);
-                            view.finishLoad();
                             DLogUtil.d(list.toString());
                         },
                         e -> {
                             DLogUtil.d(e.getMessage());
-                            //view.finishLoad(Constant.FAIL_LOAD);
                         }
                 )
         );

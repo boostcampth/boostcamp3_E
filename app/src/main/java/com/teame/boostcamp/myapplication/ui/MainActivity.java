@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements F
     public void startNewFragment() {
         FragmentManager manager=getSupportFragmentManager();
         FragmentTransaction transaction=manager.beginTransaction();
-        transaction.replace(R.id.change, SearchPlaceFragment.newInstance());
+        transaction.replace(R.id.fl_change, SearchPlaceFragment.newInstance());
         transaction.addToBackStack(null);
         transaction.commit();
     }
