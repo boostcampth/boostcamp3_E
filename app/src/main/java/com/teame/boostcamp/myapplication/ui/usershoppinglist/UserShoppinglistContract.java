@@ -7,6 +7,7 @@ import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface UserShoppinglistContract {
 
@@ -16,6 +17,7 @@ public interface UserShoppinglistContract {
 
     interface Presenter extends BasePresenter {
         boolean getExit();
+        void addCartGoods(List<Goods> item);
         void setExit(boolean state);
         void selectAll(boolean state);
         ArrayList<Goods> getSelectedList();

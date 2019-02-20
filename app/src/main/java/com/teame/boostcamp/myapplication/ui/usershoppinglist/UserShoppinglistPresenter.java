@@ -1,13 +1,18 @@
 package com.teame.boostcamp.myapplication.ui.usershoppinglist;
 
 
+import android.text.TextUtils;
+
 import com.teame.boostcamp.myapplication.adapter.usershoppinglist.OnUserShoppingItemClick;
 import com.teame.boostcamp.myapplication.adapter.usershoppinglist.UserShoppingListAdapterContract;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
+import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreference;
+import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreferenceHelper;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserShoppinglistPresenter implements UserShoppinglistContract.Presenter, OnUserShoppingItemClick {
 
@@ -18,6 +23,30 @@ public class UserShoppinglistPresenter implements UserShoppinglistContract.Prese
     private ArrayList<Goods> selectedList=new ArrayList<>();
     private UserShoppingListAdapterContract.View adapterView;
     private UserShoppingListAdapterContract.Model adapterModel;
+    private CartPreferenceHelper cartPreferenceHelper;
+    @Override
+    public void addCartGoods(List<Goods> goodsList) {
+        List<Goods> list = cartPreferenceHelper.getGoodsCartList();
+
+        for(Goods item : goodsList){
+            int postion = -1;
+            if (list.contains(item)) {
+                for (int i = 0; i < list.size(); i++) {
+                    if (TextUtils.equals(list.get(i).getName(), item.getName())) {
+                        postion = i;
+                        break;
+                    }
+                }
+            }
+
+            if (postion != -1) {
+                list.remove(postion);
+            }
+            list.add(item);
+        }
+        cartPreferenceHelper.saveGoodsCartList(list);
+    }
+
     @Override
     public void OnItemClick(boolean isCheck, int position) {
         if(isCheck)
@@ -76,6 +105,7 @@ public class UserShoppinglistPresenter implements UserShoppinglistContract.Prese
         this.view=view;
         this.header=header;
         this.goodslist=goodslist;
+        cartPreferenceHelper = new CartPreference();
     }
 
     @Override
