@@ -1,5 +1,7 @@
 package com.teame.boostcamp.myapplication.ui.signup;
 
+import android.app.ProgressDialog;
+
 import com.teame.boostcamp.myapplication.model.entitiy.User;
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
@@ -18,7 +20,7 @@ public interface SignUpContract {
 
         void occurSignUpError();
 
-        void showSignUpLoading(boolean visibility);
+        ProgressDialog showSignUpLoading();
 
     }
 

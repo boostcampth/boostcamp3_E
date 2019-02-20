@@ -101,7 +101,7 @@ public class GoodsListHeader implements Parcelable {
         }
     };
 
-    @Exclude
+
     public String getKey() {
         return key;
     }

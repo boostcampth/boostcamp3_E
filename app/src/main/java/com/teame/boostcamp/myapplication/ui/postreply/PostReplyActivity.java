@@ -3,6 +3,7 @@ package com.teame.boostcamp.myapplication.ui.postreply;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.PostReplyAdapter;
@@ -67,6 +68,8 @@ public class PostReplyActivity extends BaseMVPActivity<ActivityPostReplyBinding,
     private void onInputClicked(){
         if(binding.tietPostReplyInput.getText().toString().length()>=5){
             presenter.writePostReply(postUid, binding.tietPostReplyInput.getText().toString());
+            binding.clpbRegister.setVisibility(View.VISIBLE);
+            binding.tvPostReplyInput.setVisibility(View.INVISIBLE);
         }
         else{
             showToast(getString(R.string.notice_reply_length));
@@ -85,6 +88,8 @@ public class PostReplyActivity extends BaseMVPActivity<ActivityPostReplyBinding,
     public void successWriteReply() {
         binding.tietPostReplyInput.setText(null);
         InputKeyboardUtil.hideKeyboard(this);
+        binding.tvPostReplyInput.setVisibility(View.VISIBLE);
+        binding.clpbRegister.setVisibility(View.INVISIBLE);
     }
 
     @Override

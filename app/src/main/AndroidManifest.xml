@@ -66,7 +66,8 @@
             android:name=".ui.MainActivity"
             android:windowSoftInputMode="adjustPan|adjustResize"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.signup.SignUpActivity" />
+        <activity android:name=".ui.signup.SignUpActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.addpost.AddPostActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -94,6 +95,14 @@
 
         <activity
             android:name=".ui.modifypost.ModifyPostActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.othershoppinglist.OtherShoppingListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.snsgoodsdetail.SnsGoodsDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

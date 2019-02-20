@@ -88,6 +88,11 @@ public class PostListRepository implements PostListDataSource {
         return postListRemoteDataSource.modifyPost(oldPost, content, uriList).observeOn(AndroidSchedulers.mainThread());
     }
 
+    @Override
+    public Single<List<Post>> searchPostList(String tag) {
+        return postListRemoteDataSource.searchPostList(tag);
+    }
+
 
     // Reply데이터 오름차순 정렬 Comparator
     class ReplyAscToDateSort implements Comparator<Reply> {

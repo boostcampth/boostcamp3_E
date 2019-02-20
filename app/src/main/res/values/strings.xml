@@ -21,7 +21,7 @@
     <string name="login">로그인</string>
     <string name="signup">가입하기</string>
     <string name="signup_hint">계정이 없으신가요?</string>
-    <string name="password_confirm_hint">  Password Confirm</string>
+    <string name="password_confirm_hint">비밀번호 확인</string>
     <string name="male">남성</string>
     <string name="female">여성</string>
     <string name="age">나이</string>
@@ -57,7 +57,7 @@
     <string name="fail_load"><![CDATA[정보를 가져오는데 실패했습니다 :<]]></string>
     <string name="toast_mylist">내 리스트</string>
     <string name="toast_my_items">내 아이템</string>
-    <string name="post_replay_hint">댓글 달기...</string>
+    <string name="post_replay_hint">댓글 달기</string>
     <string name="like">좋아요  </string>
     <string name="like_number">개</string>
     <string name="post_content_hint">자신의 여행 쇼핑리스트를 자랑해 보세요!</string>
@@ -93,5 +93,7 @@
     <string name="no_search_result">검색 결과가 없습니다 :(</string>
     <string name="title_activity_add_goods">AddGoodsActivity</string>
     <string name="none_click_goods">클릭 불가능한 아이템입니다.</string>
+    <string name="email_honey_list">의 꿀템리스트!</string>
+    <string name="email">이메일</string>
 
 </resources>

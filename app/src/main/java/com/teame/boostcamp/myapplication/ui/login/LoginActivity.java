@@ -39,10 +39,9 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     }
 
     private void initView() {
-
+        presenter.checkLogIn();
         binding.buttonLogin.setOnClickListener(__ -> onLogInButtonClicked());
         binding.tvSignup.setOnClickListener(__ -> SignUpActivity.startActivity(this));
-        presenter.checkLogIn();
     }
 
     private void onLogInButtonClicked() {
