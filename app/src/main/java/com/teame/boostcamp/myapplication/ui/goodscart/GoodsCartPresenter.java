@@ -12,6 +12,7 @@ import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.DataStringUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -170,6 +171,11 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
         }
         header.setTitle(title);
 
+        //TODO: TEST 코드 입니다.
+        if(header.getStartDate()==null||header.getEndDate()==null){
+            header.setStartDate(Calendar.getInstance().getTime());
+            header.setEndDate(Calendar.getInstance().getTime());
+        }
 
         DLogUtil.d(itemList.toString());
         DLogUtil.d(header.toString());

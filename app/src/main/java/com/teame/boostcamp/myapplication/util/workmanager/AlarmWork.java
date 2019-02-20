@@ -63,7 +63,7 @@ public class AlarmWork extends Worker {
                 .setContentTitle("이거 사셨나요?")
                 .setContentIntent(intent)
                 .setStyle(style)
-                .setSmallIcon(R.mipmap.ic_launcher);
+                .setSmallIcon(R.drawable.ic_logo_ejusa);
 
         manager.notify(11,notiBuilder.build());
 
