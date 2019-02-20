@@ -7,12 +7,15 @@ import android.view.ViewGroup;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
+import com.teame.boostcamp.myapplication.adapter.SnsSearchRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSnsBinding;
 import com.teame.boostcamp.myapplication.ui.addpost.AddPostActivity;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
+import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +27,7 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
 
     @Override
     protected SNSContract.Presenter getPresenter() {
-        return new SNSPresenter(this);
+        return new SNSPresenter(this, new ResourceProvider(getContext()));
     }
 
     @Override
@@ -40,7 +43,6 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setPresenter(new SNSPresenter(this));
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -71,8 +73,76 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
                 RecyclerView.VERTICAL,
                 false);
 
+        SnsSearchRecyclerAdapter exAdapter = new SnsSearchRecyclerAdapter();
+        exAdapter.setOnItemClickListener((v, position) -> binding.svSns.setQuery(exAdapter.itemList.get(position), true));
+        exAdapter.setOnDeleteListener((v, position) -> {
+            exAdapter.removeItem(position);
+        });
+        binding.rvSnsSearch.setLayoutManager(new LinearLayoutManager(getContext(),
+                RecyclerView.VERTICAL,
+                false));
+
+        binding.rvSnsSearch.setAdapter(exAdapter);
+        presenter.createList(exAdapter);
+
+        // 서치뷰 활성화(클릭되었을떄)
+        binding.svSns.setOnSearchClickListener(v -> {
+            binding.ivSnsBack.setVisibility(View.VISIBLE); // 뒤로가기버튼 보여줌
+            binding.rvSnsSearch.setVisibility(View.VISIBLE); // 최근 검색 뷰 보여줌
+        });
+        // 시처뷰 클로즈 되었을떄
+        binding.svSns.setOnCloseListener((() -> {
+            binding.ivSnsBack.setVisibility(View.INVISIBLE);    // 다 안보여줌
+            binding.rvSnsSearch.setVisibility(View.INVISIBLE);
+            binding.rvSnsSearchPost.setVisibility(View.INVISIBLE);
+            binding.clNoSearch.setVisibility(View.INVISIBLE);
+
+            return false;
+        }));
+        // 뒤로가기 버튼 눌렸을떄
+        binding.ivSnsBack.setOnClickListener(v -> {
+            binding.svSns.onActionViewCollapsed(); // 서치뷰 비활성화 및 onClose 호출
+        });
+
+        // 백 프레스드 위한 메서드
+        binding.svSns.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                binding.svSns.setIconified(true);
+            }
+            else{
+                binding.rvSnsSearchPost.setVisibility(View.INVISIBLE);
+                binding.clNoSearch.setVisibility(View.INVISIBLE);
+                binding.rvSnsSearch.setVisibility(View.VISIBLE);
+            }
+        });
+
+        binding.svSns.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                presenter.loadSearchPost(new PostListAdapter(getContext()), query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (binding.rvSnsSearch.getVisibility() != View.VISIBLE) {
+                    binding.rvSnsSearchPost.setVisibility(View.INVISIBLE);
+                    binding.clNoSearch.setVisibility(View.INVISIBLE);
+                    binding.rvSnsSearch.setVisibility(View.VISIBLE);
+                }
+                return false;
+            }
+        });
+
+        binding.svSns.setQueryHint("해시태그를 이용해 검색해보세요!");
         binding.rvSns.setLayoutManager(linearLayoutManager);
         binding.rvSns.setAdapter(adapter);
+        binding.rvSnsSearch.setLayoutManager(new LinearLayoutManager(getContext(),
+                RecyclerView.VERTICAL,
+                false));
+        binding.rvSnsSearchPost.setLayoutManager(new LinearLayoutManager(getContext(),
+                RecyclerView.VERTICAL,
+                false));
         binding.fabAddPost.setOnClickListener(__ -> AddPostActivity.startActivity(getContext()));
         presenter.loadPostData(adapter);
         binding.rvSns.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -92,6 +162,24 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
     @Override
     public void stopRefreshIcon() {
         binding.srlSns.setRefreshing(false);
+    }
+
+    @Override
+    public void onPause() {
+        presenter.saveToJson();
+        super.onPause();
+    }
+
+    @Override
+    public void succeedSearch(PostListAdapter searchAdapter) {
+        if(searchAdapter.postList.size()==0){
+            binding.clNoSearch.setVisibility(View.VISIBLE);
+        }else{
+            binding.clNoSearch.setVisibility(View.INVISIBLE);
+        }
+        binding.rvSnsSearchPost.setAdapter(searchAdapter);
+        binding.rvSnsSearch.setVisibility(View.INVISIBLE);
+        binding.rvSnsSearchPost.setVisibility(View.VISIBLE);
     }
 }
 

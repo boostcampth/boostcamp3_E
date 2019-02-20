@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;

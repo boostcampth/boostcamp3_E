@@ -27,14 +27,24 @@
                     android:layout_height="match_parent">
                 </androidx.appcompat.widget.SearchView>
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_sns_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/btn_back"/>
+
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
+
+
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_sns"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clickable="false"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -42,9 +52,77 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:overScrollMode="never"
+                android:clickable="false"
                 tools:listitem="@layout/item_post">
             </androidx.recyclerview.widget.RecyclerView>
+
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_sns_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:background="@color/colorWhite"
+            android:clickable="false"
+            android:overScrollMode="never"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/item_sns_search"
+            >
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_sns_search_post"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FAFAFA"
+            android:visibility="invisible"
+            android:overScrollMode="never"
+            android:clickable="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_no_search"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/appCompatImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_no_result_search" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/no_search_result"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatImageView" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_post"

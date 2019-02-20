@@ -91,11 +91,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        app:srcCompat="@drawable/btn_heart"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -105,7 +100,7 @@
                     android:layout_height="?attr/actionBarSize"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/btn_all_back"
+                    app:navigationIcon="@drawable/btn_back"
                     app:popupTheme="@style/AppToolbar" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -200,27 +195,14 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_add_list"
-                android:layout_width="0dp"
-                android:layout_height="42dp"
-                android:layout_margin="8dp"
-                android:background="@drawable/layout_accent_round_board"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="@string/add_goods"
-                android:textColor="@color/colorWhite"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_write_reply"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_write_reply"
                 android:layout_width="0dp"
                 android:layout_height="42dp"
                 android:layout_margin="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/layout_accent_round_stroke"
                 android:gravity="center"
                 android:padding="10dp"
@@ -228,7 +210,7 @@
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tv_add_list"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -99,10 +99,42 @@ public class PostListRemoteDataSource implements PostListDataSource {
         return subject.toList();
     }
 
+
+    public Single<List<Post>> searchPostList(String tag) {
+        DLogUtil.d(":: 진입");
+        PublishSubject<Post> subject = PublishSubject.create();
+        // 해시태그를 걸어 검색함
+        Task search = baseRef.whereEqualTo("tags."+tag, true).
+                get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
+
+                        for (DocumentSnapshot document : documents) {
+                            Post post = document.toObject(Post.class);
+                            String key = document.getReference().getId();
+                            post.setKey(key);
+                            subject.onNext(post);
+                        }
+                    } else {
+                        DLogUtil.d("No such document");
+                    }
+                })
+                .addOnFailureListener(Throwable::getMessage);
+
+        Tasks.whenAll(search).addOnCompleteListener(task -> {
+            subject.onComplete();
+        }).addOnFailureListener(e -> DLogUtil.e("error : " + e.toString()));
+
+
+        return subject.toList();
+    }
+
     @Override
     public Single<Post> writePost(String content, List<Uri> uriList, GoodsListHeader selectedListHeader) {
         PublishSubject<Post> subject = PublishSubject.create();
         Post post = new Post(content, FirebaseAuth.getInstance().getCurrentUser().getEmail(), selectedListHeader);
+        post.setTags(selectedListHeader.getHashTag());
         long now = System.currentTimeMillis();
         Date nowDate = new Date(now);
         post.setCreatedDate(nowDate);
@@ -272,19 +304,21 @@ public class PostListRemoteDataSource implements PostListDataSource {
     @Override
     public Single<Boolean> deleteReply(String postUid, String replyUid) {
         PublishSubject<Boolean> subject = PublishSubject.create();
-
-        Task deleteReply = baseRef.document(postUid)
+        WriteBatch batch = db.batch();
+        batch.delete(baseRef.document(postUid)
                 .collection(QUERY_REPLY)
-                .document(replyUid)
-                .delete();
+                .document(replyUid));
+        batch.delete(userRef.document(auth.getUid()).collection(QUERY_MY_POST).document(postUid).collection(QUERY_REPLY).document(replyUid));
+
+        Task deleteReply = batch.commit();
 
         Tasks.whenAll(deleteReply).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 subject.onNext(true);
+                subject.onComplete();
             } else {
                 subject.onError(task.getException());
             }
-            subject.onComplete();
         });
         return subject.flatMapSingle(Single::just).single(true);
     }

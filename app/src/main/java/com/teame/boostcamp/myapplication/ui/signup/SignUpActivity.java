@@ -1,5 +1,6 @@
 package com.teame.boostcamp.myapplication.ui.signup;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -54,6 +55,7 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
                 showToast(getString(R.string.empty_email));
             }
         });
+        binding.ivSignUpBack.setOnClickListener(v -> finish());
         binding.buttonRegister.setOnClickListener(__ -> onSignUpButtonClicked());
         binding.tietPasswordconfirm.addTextChangedListener(new TextWatcher() {
             @Override
@@ -67,13 +69,13 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
                 String passwordConfirm = binding.tietPasswordconfirm.getText().toString();
 
                 if (password.equals(passwordConfirm) && !TextUtils.isEmpty(passwordConfirm)) {
-                    binding.tvPasswordCheck.setText(getString(R.string.password_confirm_true));
-                    binding.tvPasswordCheck.setTextColor(Color.GREEN);
+                    binding.tvPasswordConfirm.setText(getString(R.string.password_confirm_true));
+                    binding.tvPasswordConfirm.setTextColor(Color.GREEN);
                 } else if (TextUtils.isEmpty(password)) {
-                    binding.tvPasswordCheck.setText("");
+                    binding.tvPasswordConfirm.setText("");
                 } else {
-                    binding.tvPasswordCheck.setText(R.string.password_confirm_false);
-                    binding.tvPasswordCheck.setTextColor(Color.RED);
+                    binding.tvPasswordConfirm.setText(R.string.password_confirm_false);
+                    binding.tvPasswordConfirm.setTextColor(Color.RED);
                 }
             }
 
@@ -150,12 +152,11 @@ public class SignUpActivity extends BaseMVPActivity<ActivitySignupBinding, SignU
     }
 
     @Override
-    public void showSignUpLoading(boolean visibility) {
-        if (visibility) {
-            binding.pbSinguploading.setVisibility(View.VISIBLE);
-        } else {
-            binding.pbSinguploading.setVisibility(View.GONE);
-        }
+    public ProgressDialog showSignUpLoading() {
+        ProgressDialog loading = new ProgressDialog(this);
+        loading.setMessage("잠시만 기다려 주세요");
+        loading.show();
+        return loading;
     }
 
     @Override

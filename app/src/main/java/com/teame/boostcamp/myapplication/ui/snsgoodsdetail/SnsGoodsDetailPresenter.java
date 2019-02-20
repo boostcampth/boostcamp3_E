@@ -1,13 +1,9 @@
-package com.teame.boostcamp.myapplication.ui.goodsdetail;
-
-import android.text.TextUtils;
+package com.teame.boostcamp.myapplication.ui.snsgoodsdetail;
 
 import com.teame.boostcamp.myapplication.adapter.GoodsDetailRecyclerAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.model.repository.GoodsDetailRepository;
-import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreference;
-import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreferenceHelper;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
@@ -15,18 +11,16 @@ import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
+public class SnsGoodsDetailPresenter implements SnsGoodsDetailContract.Presenter {
 
     private GoodsDetailRepository repository;
     private CompositeDisposable disposable = new CompositeDisposable();
     private GoodsDetailRecyclerAdapter adapter;
-    private GoodsDetailContract.View view;
-    private CartPreferenceHelper cartPreferenceHelper;
+    private SnsGoodsDetailContract.View view;
 
-    public GoodsDetailPresenter(GoodsDetailContract.View view, GoodsDetailRepository repository) {
-        this.repository = repository;
+    public SnsGoodsDetailPresenter(SnsGoodsDetailContract.View view) {
+        this.repository = GoodsDetailRepository.getInstance();
         this.view = view;
-        cartPreferenceHelper = new CartPreference();
     }
 
     @Override
@@ -61,36 +55,12 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
         disposable.add(repository.deleteReply(itemId, item.getKey())
                 .subscribe(b -> adapter.removeItem(position),
                         e -> DLogUtil.e(e.getMessage())));
-                }
-
-                @Override
-                public Reply getItem(int position) {
-                    return adapter.getItem(position);
-                }
-
-                @Override
-                public void addCartGoods(Goods item) {
-                    List<Goods> list = cartPreferenceHelper.getGoodsCartList();
-                    int postion = -1;
-                    if (list.contains(item)) {
-                        for (int i = 0; i < list.size(); i++) {
-                            if (TextUtils.equals(list.get(i).getName(), item.getName())) {
-                                postion = i;
-                    break;
-                }
-            }
-        }
-
-        if (postion != -1) {
-            list.remove(postion);
-        }
-        list.add(item);
-
-        cartPreferenceHelper.saveGoodsCartList(list);
-
-        view.successAddCart();
     }
 
+    @Override
+    public Reply getItem(int position) {
+        return adapter.getItem(position);
+    }
 
     @Override
     public void onAttach() {
@@ -102,15 +72,4 @@ public class GoodsDetailPresenter implements GoodsDetailContract.Presenter {
             disposable.dispose();
         }
     }
-
-    @Override
-    public void getShoppingListCount() {
-        List<Goods> list = cartPreferenceHelper.getGoodsCartList();
-        if (list == null) {
-            view.setBadge(String.valueOf(0));
-        } else {
-            view.setBadge(String.valueOf(list.size()));
-        }
-    }
-
 }

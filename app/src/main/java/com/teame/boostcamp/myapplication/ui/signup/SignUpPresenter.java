@@ -2,6 +2,7 @@ package com.teame.boostcamp.myapplication.ui.signup;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,10 +24,10 @@ public class SignUpPresenter implements SignUpContract.Presenter {
 
     @Override
     public void checkEmailValidation(String email) {
-        view.showSignUpLoading(true);
+        ProgressDialog loading = view.showSignUpLoading();
         auth.fetchSignInMethodsForEmail(email)
                 .addOnCompleteListener(task -> {
-                    view.showSignUpLoading(false);
+                    loading.dismiss();
                     if (task.isSuccessful()) {
                         SignInMethodQueryResult result = task.getResult();
                         List<String> signInMethods = result.getSignInMethods();
@@ -43,11 +44,11 @@ public class SignUpPresenter implements SignUpContract.Presenter {
 
     @Override
     public void doSignUp(String email, String password, User userData) {
-        view.showSignUpLoading(true);
+        ProgressDialog loading = view.showSignUpLoading();
         db = FirebaseFirestore.getInstance();
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener((Activity) view, task -> {
-                    view.showSignUpLoading(false);
+                    loading.dismiss();
                     if (task.isSuccessful()) {
                         db.collection("users").document(auth.getUid()).set(userData);
                         view.succeedSignUp();

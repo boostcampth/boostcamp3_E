@@ -49,8 +49,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/btn_back_black"
-                    tools:src="@drawable/btn_back_black" />
+                    app:srcCompat="@drawable/btn_back"
+                    tools:src="@drawable/btn_back" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -137,20 +137,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginBottom="8dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:foregroundGravity="center"
                 android:gravity="center"
+                android:padding="15dp"
                 android:text="@string/write"
                 android:textColor="@color/colorAccent"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/clpb_register"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="2dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_post_reply_input"
+                app:layout_constraintEnd_toEndOf="@+id/tv_post_reply_input"
+                app:layout_constraintStart_toStartOf="@+id/tv_post_reply_input"
+                app:layout_constraintTop_toTopOf="@+id/tv_post_reply_input" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

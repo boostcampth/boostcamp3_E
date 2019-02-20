@@ -9,27 +9,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
+import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemPostBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
 import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
 import com.teame.boostcamp.myapplication.ui.modifypost.ModifyPostActivity;
+import com.teame.boostcamp.myapplication.ui.othershoppinglist.OtherShoppingListActivity;
 import com.teame.boostcamp.myapplication.ui.postreply.PostReplyActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.BindingConversion;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemViewHolder> implements OnPostClickListener {
-    private List<Post> postList = new ArrayList<>();
+    public List<Post> postList = new ArrayList<>();
     private Context context;
     private CompositeDisposable disposable = new CompositeDisposable();
     private PostListRepository rep = PostListRepository.getInstance();
@@ -54,6 +56,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_post, viewGroup, false);
         PostListAdapter.ItemViewHolder holder = new PostListAdapter.ItemViewHolder(view);
         holder.setPostClickListener(this);
@@ -63,17 +66,37 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
     public static int showIndicator(int size){
         return size > 1 ? View.VISIBLE : View.GONE;
     }
+
+
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
+
+        // 해쉬테그가 없으면 GONE
+        if (postList.get(i).getHeader().getHashTag().size() == 0) {
+            holder.binding.cgHashTag.setVisibility(View.GONE);
+        } else {
+            holder.binding.cgHashTag.setVisibility(View.VISIBLE);
+            for (String tag : postList.get(i).getTags().keySet()) {
+                Chip chip = new Chip(holder.itemView.getContext());
+                chip.setText("#" + tag);
+                chip.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorIphoneBlack));
+                chip.setClickable(false);
+                chip.setCheckable(false);
+                holder.binding.cgHashTag.addView(chip);
+            }
+        }
         holder.binding.setPost(postList.get(i));
         holder.binding.setAuth(FirebaseAuth.getInstance());
         holder.binding.ivPostReply.setOnClickListener(__ -> onReplyButtonClick(i));
         holder.binding.ivPostLike.setOnClickListener(__ -> onLikeButtonClick(i));
         holder.binding.ivShoppingList.setOnClickListener(__ -> onListButtonClick(i));
-        holder.binding.vpPostImages.setAdapter(new PostImagePagerAdapter(context, postList.get(i).getImagePathList()));
+        holder.binding.vpPostImages.setAdapter(new PostImagePagerAdapter(postList.get(i).getImagePathList()));
         holder.binding.tlImageIndicator.setupWithViewPager(holder.binding.vpPostImages, true);
         holder.binding.ivPostMenu.setOnClickListener(v -> onMenuButtonClick(v, i));
+
     }
+
+
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position, @NonNull List<Object> payloads) {
         if(payloads.isEmpty()){
@@ -122,28 +145,25 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
 
     @Override
     public void onListButtonClick(int i) {
-
+        OtherShoppingListActivity.startActivity(context, postList.get(i).getHeader().getKey(), postList.get(i).getWriter());
     }
 
     @Override
     public void onMenuButtonClick(View view, int i) {
         PopupMenu menu = new PopupMenu(context, view);
         ((Activity) context).getMenuInflater().inflate(R.menu.menu_post, menu.getMenu());
-        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.toString().equals("수정")) {
-                    ModifyPostActivity.startActivity(context, postList.get(i));
-                } else {
-                    disposable.add(rep.deletePost(postList.get(i).getKey(), postList.get(i).getImagePathList())
-                            .subscribe(b -> {
-                                        postList.remove(i);
-                                        notifyDataSetChanged();
-                                    },
-                                    e -> DLogUtil.e(e.getMessage())));
-                }
-                return false;
+        menu.setOnMenuItemClickListener(item -> {
+            if (item.toString().equals("수정")) {
+                ModifyPostActivity.startActivity(context, postList.get(i));
+            } else {
+                disposable.add(rep.deletePost(postList.get(i).getKey(), postList.get(i).getImagePathList())
+                        .subscribe(b -> {
+                                    postList.remove(i);
+                                    notifyDataSetChanged();
+                                },
+                                e -> DLogUtil.e(e.getMessage())));
             }
+            return false;
         });
         menu.show();
     }
@@ -161,4 +181,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
             mListener = onClick;
         }
     }
+
+
 }

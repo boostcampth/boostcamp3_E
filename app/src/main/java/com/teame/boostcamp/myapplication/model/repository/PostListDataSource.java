@@ -28,4 +28,6 @@ public interface PostListDataSource {
     Single<List<Uri>> loadModifyImages(List<String> pathList);
 
     Single<Post> modifyPost(Post oldPost, String content, List<Uri> uriList);
+
+    Single<List<Post>> searchPostList(String tag);
 }
