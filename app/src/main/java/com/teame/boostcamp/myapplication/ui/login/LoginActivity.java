@@ -90,4 +90,16 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
         super.onDestroy();
         presenter.onDetach();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.checkLogIn();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.checkLogIn();
+    }
 }
