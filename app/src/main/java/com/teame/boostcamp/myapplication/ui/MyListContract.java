@@ -18,7 +18,11 @@ interface MyListContract {
     interface Presenter extends BasePresenter {
         void loadMyList(GoodsListHeaderRecyclerAdapter adapter);
 
+        void diffSerchList(String query);
+
+        void setOriginList();
         void reLoadMyList();
+
         void getMyListUid(int position);
 
         void deleteMyList(int position);

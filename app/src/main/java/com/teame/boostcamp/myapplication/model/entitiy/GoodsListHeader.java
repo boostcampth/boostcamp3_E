@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GoodsListHeader implements Parcelable {
+public class GoodsListHeader implements Parcelable ,Cloneable{
 
     private String key;
     private String uid;
@@ -245,5 +245,20 @@ public class GoodsListHeader implements Parcelable {
                 ", Images=" + Images +
                 '}';
     }
+
+    @Override
+    public GoodsListHeader clone() {
+
+        GoodsListHeader clone;
+        try {
+            clone = (GoodsListHeader) super.clone();
+
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e); //should not happen
+        }
+
+        return clone;
+    }
+
 
 }

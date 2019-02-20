@@ -7,12 +7,18 @@ import android.view.ViewGroup;
 import com.google.android.material.chip.Chip;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemMyListHeaderBinding;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.GoodsDiffUtilCallBack;
+import com.teame.boostcamp.myapplication.util.GoodsListHeaderDiffUtilCallBack;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,8 +60,10 @@ public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsLis
         // 해쉬테그가 없으면 GONE
         if (goodsListHeader.getHashTag().size() == 0) {
             holder.binding.cgHashTag.setVisibility(View.GONE);
+            holder.binding.cgHashTag.removeAllViews();
         } else {
             holder.binding.cgHashTag.setVisibility(View.VISIBLE);
+            holder.binding.cgHashTag.removeAllViews();
             for (String tag : goodsListHeader.getHashTag().keySet()) {
                 Chip chip = new Chip(holder.itemView.getContext());
                 chip.setText("#" + tag);
@@ -69,6 +77,7 @@ public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsLis
         if (itemList.get(position).getImages().size() == 0) {
             holder.binding.rvImages.setVisibility(View.GONE);
         } else {
+            holder.binding.rvImages.setVisibility(View.VISIBLE);
             ((GoodsListHeaderImagesAdapter) holder.binding.rvImages.getAdapter()).initItems(itemList.get(position).getImages());
         }
     }
@@ -94,5 +103,12 @@ public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsLis
             GoodsListHeaderImagesAdapter imagesAdapter = new GoodsListHeaderImagesAdapter();
             binding.rvImages.setAdapter(imagesAdapter);
         }
+    }
+
+    public void setData(ArrayList<GoodsListHeader> newData) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new GoodsListHeaderDiffUtilCallBack(newData, (ArrayList) itemList));
+        diffResult.dispatchUpdatesTo(this);
+        itemList.clear();
+        this.itemList.addAll(newData);
     }
 }
