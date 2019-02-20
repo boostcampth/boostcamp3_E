@@ -29,7 +29,7 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
     private List<Goods> itemList;
     private CompositeDisposable disposable = new CompositeDisposable();
     private MyListRepository repository;
-
+    GoodsListHeader header ;
 
     public GoodsCartPresenter(GoodsCartContract.View view) {
         this.view = view;
@@ -52,7 +52,12 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
         this.adapter = adapter;
         List<Goods> list = cartPreferenceHelper.getGoodsCartList();
         itemList = list;
+        header = cartPreferenceHelper.getListHeader();
+        for(String hash : header.getHashTag().keySet()){
+            hashTagSet.add(hash);
+        }
         adapter.initItems(list);
+        view.setLoadData(header);
         return list.size();
     }
 
@@ -86,7 +91,16 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
     }
 
     @Override
-    public void saveCartList() {
+    public void saveCartList(String title) {
+        List<String> hashList = new ArrayList<>(hashTagSet);
+        Map<String, Boolean> hashTag = new HashMap<>();
+
+        for (String tag : hashList) {
+            hashTag.put(tag, true);
+        }
+        header.setTitle(title);
+        header.setHashTag(hashTag);
+        cartPreferenceHelper.saveListHeader(header);
         cartPreferenceHelper.saveGoodsCartList(itemList);
 
     }
@@ -135,12 +149,12 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
     }
 
     @Override
-    public void saveMyList() {
+    public void saveMyList(String title) {
+
         if (itemList.size() <= 0) {
-            view.noSelectGoods();
+            view.errorSaveGoods(0);
             return;
         }
-
         List<String> list = new ArrayList<>(hashTagSet);
         Map<String, Boolean> hashTag = new HashMap<>();
 
@@ -148,9 +162,14 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
             hashTag.put(tag, true);
         }
 
-        List<Goods> itemList = cartPreferenceHelper.getGoodsCartList();
-        GoodsListHeader header = cartPreferenceHelper.getListHeader();
         header.setHashTag(hashTag);
+
+        if (TextUtils.isEmpty(title)) {
+            view.errorSaveGoods(1);
+            return;
+        }
+        header.setTitle(title);
+
         
         DLogUtil.d(itemList.toString());
         DLogUtil.d(header.toString());

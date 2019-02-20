@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
 import com.airbnb.lottie.LottieDrawable;
@@ -16,6 +17,9 @@ import com.teame.boostcamp.myapplication.databinding.ActivityGoodsCartBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 
+import java.util.Map;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,7 +46,7 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage(R.string.would_you_save)
                             .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
-                                presenter.saveCartList();
+                                presenter.saveCartList(binding.etTitle.getText().toString());
                                 showToast(getString(R.string.success_save));
                                 finish();
                             })
@@ -96,9 +100,9 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         binding.includeLoading.clLoadingBackground.setVisibility(View.GONE);
         GoodsListHeader header = presenter.getHeaderData();
 
-        binding.tieHashtag.setOnEditorActionListener((__, actionId, ___) -> {
-            if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                presenter.addHashTag(binding.tieHashtag.getText().toString());
+        binding.etTag.setOnEditorActionListener((__, actionId, ___) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                presenter.addHashTag(binding.etTag.getText().toString());
             }
             return false;
         });
@@ -129,7 +133,7 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
             binding.includeLoading.lavLoading.playAnimation();
             binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
             binding.includeLoading.clLoadingBackground.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.colorBlurGray));
-            presenter.saveMyList();
+            presenter.saveMyList(binding.etTitle.getText().toString());
         });
 
         if (size <= 0) {
@@ -144,22 +148,20 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         chip.setCloseIconEnabled(true); // 대체방법을 못찾음
         chip.setClickable(false);
         chip.setCheckable(false);
-        binding.cgHashSet.addView(chip);
+
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(4, 4, 4, 4);
+        chip.setLayoutParams(params);
+
+        binding.cgHashSet.addView(chip,binding.cgHashSet.getChildCount() - 1);
         chip.setOnCloseIconClickListener(view -> {
             binding.cgHashSet.removeView(chip);
             presenter.removeHashTag(chip.getText().toString());
         });
-        binding.tieHashtag.setText("");
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        if (binding.includeLoading.clLoadingBackground.getVisibility() == View.VISIBLE) {
-            return;
-        } else {
-            super.onBackPressed();
-        }
+        binding.etTag.setText("");
     }
 
     @Override
@@ -187,18 +189,31 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
     }
 
     @Override
-    public void noSelectGoods() {
-        showToast(getString(R.string.no_select_item));
-    }
+    public void errorSaveGoods(int flag) {
+        if(flag == 0 ){
+            showToast(getString(R.string.no_select_item));
+        }else if(flag == 1){
+            showToast(getString(R.string.would_you_set_title));
+        }
 
+
+        binding.includeLoading.clLoadingBackground.setVisibility(View.GONE);
+        binding.includeLoading.clLoadingBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+        binding.includeLoading.lavLoading.cancelAnimation();
+        binding.includeLoading.lavLoading.setVisibility(View.GONE);
+    }
 
     @Override
     public void onBackPressed() {
+        if (binding.includeLoading.clLoadingBackground.getVisibility() == View.VISIBLE) {
+            return;
+        }
+
         if (isChange) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(R.string.would_you_save)
                     .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
-                        presenter.saveCartList();
+                        presenter.saveCartList(binding.etTitle.getText().toString());
                         showToast(getString(R.string.success_save));
                         finish();
                     })
@@ -235,6 +250,35 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIphoneBlack));
         binding.tvDicideCart.setOnClickListener(null);
         binding.tvTotalPrice.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setLoadData(GoodsListHeader header) {
+        binding.etTitle.setText(header.getTitle());
+        Map<String,Boolean> hashTag = header.getHashTag();
+
+        for(String tag : hashTag.keySet()){
+
+            Chip chip = new Chip(this);
+            chip.setText(tag);
+            chip.setCloseIconEnabled(true); // 대체방법을 못찾음
+            chip.setClickable(false);
+            chip.setCheckable(false);
+
+            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(4, 4, 4, 4);
+            chip.setLayoutParams(params);
+
+            binding.cgHashSet.addView(chip,binding.cgHashSet.getChildCount() - 1);
+            chip.setOnCloseIconClickListener(view -> {
+                binding.cgHashSet.removeView(chip);
+                presenter.removeHashTag(chip.getText().toString());
+            });
+            binding.etTag.setText("");
+        }
     }
 
 }

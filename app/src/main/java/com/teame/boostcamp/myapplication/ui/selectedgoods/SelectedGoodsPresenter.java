@@ -55,7 +55,8 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
                                 if (checkMap.get(item.getKey()) == null) {
                                     item.setCheck(false);
                                 } else {
-                                    item.setCheck(checkMap.get(item.getKey()) == null ? false : checkMap.get(item.getKey()));
+                                    boolean isCheck = checkMap.get(item.getKey());
+                                    item.setCheck(isCheck);
                                 }
 
                             }

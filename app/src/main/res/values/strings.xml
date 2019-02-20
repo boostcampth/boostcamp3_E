@@ -98,5 +98,6 @@
     <string name="email_honey_list">의 꿀템리스트!</string>
     <string name="email">이메일</string>
     <string name="complete_but_goods">입력하신 모든 꿀템을 구입했어요!\n즐거운 여행 되세요 ^^\n(완료된 리스트는 수정이 불가능합니다.)</string>
+    <string name="would_you_set_title">제목을 입력해 주세요 :)</string>
 
 </resources>

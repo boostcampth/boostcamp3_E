@@ -21,7 +21,7 @@ public class CheckListPreferences implements CheckListPreferencesHelper {
 
     private void setUp(String myListKey) {
         checkListPreferences = MainApplication.getApplication()
-                .getSharedPreferences(PREF_CHECK_LIST, Context.MODE_PRIVATE);
+                .getSharedPreferences(myListKey, Context.MODE_PRIVATE);
     }
 
 
