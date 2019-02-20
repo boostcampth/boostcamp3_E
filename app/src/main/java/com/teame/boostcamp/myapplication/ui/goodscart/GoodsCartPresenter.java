@@ -170,7 +170,7 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
         }
         header.setTitle(title);
 
-        
+
         DLogUtil.d(itemList.toString());
         DLogUtil.d(header.toString());
         DLogUtil.d(list.toString());
