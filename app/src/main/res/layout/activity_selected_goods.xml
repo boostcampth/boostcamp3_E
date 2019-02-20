@@ -28,6 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="@color/colorBlurGray"
+                    android:elevation="10dp"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="pin"
                     app:navigationIcon="@drawable/btn_all_back"
@@ -56,14 +57,150 @@
             android:id="@+id/nsv_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="60dp"
             android:descendantFocusability="blocksDescendants"
+            android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="8dp">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="전체 소비 예상금액 "
+                        android:textColor="@color/colorIphoneSubBlack" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_total_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tools:text="10,000 + a" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_total_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:textColor="@color/colorBlack"
+                        tools:text=" 원" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="소비 된 예상금액 "
+                        android:textColor="@color/colorIphoneSubBlack" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+
+                        android:id="@+id/tv_buy_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        tools:text="10,000 + a" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_buy_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:textColor="@color/colorBlack"
+                        tools:text=" 원" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/colorIphoneSubBlack" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="남은 소비 예상금액 "
+                        android:textColor="@color/colorIphoneBlack"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_result_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:text="10,000" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_result_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        tools:text=" 원" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_cart_list"
@@ -71,77 +208,31 @@
                     android:layout_height="match_parent"
                     android:background="@color/colorDivide"
                     android:descendantFocusability="blocksDescendants"
+                    android:overScrollMode="never"
                     tools:listitem="@layout/item_my_check_goods" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.core.widget.NestedScrollView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_bottom_root"
+            android:id="@+id/cl_Done"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom"
-            android:background="@color/colorBottom"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-
+            android:layout_height="match_parent"
+            android:background="@color/colorBlurBlack"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_save_my_list"
-                android:layout_width="0dp"
-                android:layout_height="42dp"
-                android:layout_margin="8dp"
-                android:background="@drawable/layout_accent_round_board"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:singleLine="true"
-                android:text="@string/save_my_goods_status"
-                android:textColor="@color/colorWhite"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_total_price"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_offer_delete"
-                android:visibility="gone"
-                android:layout_width="0dp"
-                android:layout_height="42dp"
-                android:layout_margin="8dp"
-                android:background="@drawable/layout_accent_round_board"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:singleLine="true"
-                android:text="@string/delete_my_list"
-                android:textColor="@color/colorWhite"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_total_price"
-                app:layout_constraintTop_toTopOf="parent"  />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_total_price"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
-                android:layout_margin="8dp"
-                android:background="@drawable/layout_accent_round_stroke"
-                android:ellipsize="end"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:maxLines="1"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:singleLine="true"
-                android:textColor="@color/colorAccent"
+                android:text="@string/complete_but_goods"
+                android:textColor="@color/colorWhite"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 
+import com.airbnb.lottie.LottieDrawable;
 import com.google.android.material.chip.Chip;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsCartAdapter;
@@ -92,18 +93,8 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         int size = presenter.loadData(adapter);
         presenter.calculatorPrice();
         presenter.detectIsAllCheck();
+        binding.includeLoading.clLoadingBackground.setVisibility(View.GONE);
         GoodsListHeader header = presenter.getHeaderData();
-
-        binding.tieTitle.setOnFocusChangeListener((__, hasFocus) -> {
-            if (hasFocus) {
-                binding.tilTitle.setHint("title");
-            } else {
-                String title = binding.tieTitle.getText().toString();
-                if (title.length() <= 0) {
-                    binding.tilTitle.setHint(header.getDefaultTitle());
-                }
-            }
-        });
 
         binding.tieHashtag.setOnEditorActionListener((__, actionId, ___) -> {
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
@@ -131,10 +122,13 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
             boolean check = binding.cbAll.isChecked();
             adapter.allCheck(check);
         });
-
         binding.rvCartList.setLayoutManager(linearLayoutManager);
         binding.rvCartList.setAdapter(adapter);
         binding.tvDicideCart.setOnClickListener(view -> {
+            binding.includeLoading.clLoadingBackground.setVisibility(View.VISIBLE);
+            binding.includeLoading.lavLoading.playAnimation();
+            binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
+            binding.includeLoading.clLoadingBackground.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.colorBlurGray));
             presenter.saveMyList();
         });
 
@@ -158,6 +152,15 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         binding.tieHashtag.setText("");
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (binding.includeLoading.clLoadingBackground.getVisibility() == View.VISIBLE) {
+            return;
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public void duplicationTag() {
@@ -218,6 +221,11 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
     @Override
     public void successSave() {
         showToast("성공");
+        binding.includeLoading.clLoadingBackground.setVisibility(View.GONE);
+        binding.includeLoading.clLoadingBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+        binding.includeLoading.lavLoading.cancelAnimation();
+        binding.includeLoading.lavLoading.setVisibility(View.GONE);
+        finish();
     }
 
     @Override

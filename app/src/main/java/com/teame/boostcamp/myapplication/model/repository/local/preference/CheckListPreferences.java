@@ -13,7 +13,6 @@ public class CheckListPreferences implements CheckListPreferencesHelper {
 
     private static final String PREF_CHECK_LIST = "PREF_CHECK_LIST";
     private Gson gson = new Gson();
-    ;
     private SharedPreferences checkListPreferences;
 
     public CheckListPreferences(String myListKey) {

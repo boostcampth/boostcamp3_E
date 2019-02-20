@@ -9,18 +9,14 @@ public interface SelectedGoodsContract {
     interface View extends BaseView<Presenter> {
         void finishLoad(int size);
 
-        void setResultPrice(String resultPrice);
+        void setResultPrice(String totalPrice, String buyPrice, String resultPrice);
 
-        void setOfferDelete();
+        void completeMyList();
     }
 
     interface Presenter extends BasePresenter {
 
         void loadListData(GoodsMyListAdapter adapter, String headerUid);
-
-        void deleteList();
-
-        void detectIsAllCheck();
 
         void calculatorPrice();
 

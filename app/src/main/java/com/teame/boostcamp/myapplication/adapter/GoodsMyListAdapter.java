@@ -1,16 +1,16 @@
 package com.teame.boostcamp.myapplication.adapter;
 
+import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.databinding.ItemCartBinding;
 import com.teame.boostcamp.myapplication.databinding.ItemMyCheckGoodsBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,13 +26,51 @@ public class GoodsMyListAdapter extends BaseRecyclerAdatper<Goods, GoodsMyListAd
         final GoodsMyListAdapter.ViewHolder holder = new GoodsMyListAdapter.ViewHolder(itemView);
 
 
+        holder.binding.cbSelect.setClickable(false);
+        holder.binding.cbSelect.setOnTouchListener(null);
+
+        holder.binding.getRoot().setOnClickListener(view -> {
+            int position = holder.getLayoutPosition();
+            boolean currentCheck = itemList.get(position).isCheck();
+
+            if (currentCheck) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
+                builder.setMessage("이미 구입한 항목입니다. \n취소하시겠습니까?")
+                        .setPositiveButton(parent.getContext().getString(R.string.confirm), (__, ___) -> {
+                            itemList.get(position).setCheck(false);
+                            holder.binding.cbSelect.setChecked(false);
+                            if (onItemCheckListener != null) {
+                                onItemCheckListener.onItemClick(view, position);
+                            }
+                        })
+                        .setNegativeButton(R.string.cancle, (dialogInterface, i) -> {
+
+                        })
+                        .setCancelable(true);
+
+                final AlertDialog dialog = builder.create();
+                dialog.setOnShowListener(__ -> {
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(parent.getContext(), R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(parent.getContext(), R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(parent.getContext(), R.color.colorClear));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(parent.getContext(), R.color.colorClear));
+
+                });
+
+                dialog.show();
+            } else {
+                itemList.get(position).setCheck(true);
+                holder.binding.cbSelect.setChecked(true);
+                if (onItemCheckListener != null) {
+                    onItemCheckListener.onItemClick(view, position);
+                }
+            }
+
+
+        });
         holder.binding.cbSelect.setOnCheckedChangeListener((buttonView, isCheck) -> {
 
-            int position = holder.getLayoutPosition();
-            itemList.get(position).setCheck(isCheck);
-            if (onItemCheckListener != null) {
-                onItemCheckListener.onItemClick(buttonView, position);
-            }
+
         });
 
         return holder;
@@ -42,7 +80,8 @@ public class GoodsMyListAdapter extends BaseRecyclerAdatper<Goods, GoodsMyListAd
     public void onBindViewHolder(@NonNull GoodsMyListAdapter.ViewHolder holder, int position) {
         Goods item = itemList.get(position);
         holder.binding.setItem(item);
-        holder.binding.cbSelect.setChecked(item.isCheck());    }
+        holder.binding.cbSelect.setChecked(item.isCheck());
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemMyCheckGoodsBinding binding;

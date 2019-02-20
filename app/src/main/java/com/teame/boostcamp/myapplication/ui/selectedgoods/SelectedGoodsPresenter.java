@@ -11,7 +11,6 @@ import com.teame.boostcamp.myapplication.util.DataStringUtil;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -56,7 +55,7 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
                                 if (checkMap.get(item.getKey()) == null) {
                                     item.setCheck(false);
                                 } else {
-                                    item.setCheck(checkMap.get(item.getKey()));
+                                    item.setCheck(checkMap.get(item.getKey()) == null ? false : checkMap.get(item.getKey()));
                                 }
 
                             }
@@ -74,44 +73,33 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
     }
 
     @Override
-    public void deleteList() {
-
-    }
-
-    @Override
-    public void detectIsAllCheck() {
-        boolean allCheck = true;
-
-        if (itemList == null)
-            return;
-
-        for (Goods item : itemList) {
-            allCheck = allCheck && item.isCheck();
-            if (!allCheck) {
-//                view.setAllorNoneCheck(false);
-            }
-        }
-        // 아이템이 모두 체크되면
-        // view.setAllorNoneCheck(allCheck);
-    }
-
-    @Override
     public void calculatorPrice() {
-        int total = 0;
+        int resultPrice = 0;
         int remainCount = 0;
+        int totalPrice = 0;
+        boolean isTotalAlpha = false;
         boolean isAlpha = false;
+        boolean buyAlpha = false;
 
         String formatedResult;
 
         if (itemList == null) {
             formatedResult = "통신에 장애가 있어요 :<";
-            view.setResultPrice(formatedResult);
+            view.setResultPrice(formatedResult, formatedResult, formatedResult);
             return;
         }
 
         for (Goods item : itemList) {
+            totalPrice += item.totalPrice();
+            if (item.getLprice() == null) {
+                isTotalAlpha = true;
+            }
+
+            if (item.isCheck() && item.getLprice() == null) {
+                buyAlpha = true;
+            }
             if (!item.isCheck()) {
-                total += item.totalPrice();
+                resultPrice += item.totalPrice();
                 remainCount++;
                 if (item.getLprice() == null) {
                     isAlpha = true;
@@ -119,20 +107,28 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
             }
         }
 
-        String result = DataStringUtil.makeStringComma(Integer.toString(total));
-
-        if (itemList.size() == 0) {
-            view.setOfferDelete();
-            return;
-        } else if (remainCount == 0) {
-            formatedResult = String.format(Locale.getDefault(), "모든 물품을 구입했어요!", result, remainCount);
-        } else if (isAlpha) {
-            formatedResult = String.format(Locale.getDefault(), "예상금액 : %s원 + α / %d개", result, remainCount);
-        } else {
-            formatedResult = String.format(Locale.getDefault(), "예상금액 : %s원 / %d개", result, remainCount);
+        String total = DataStringUtil.makeStringComma(Integer.toString(totalPrice)) + "원";
+        if (isTotalAlpha) {
+            total += " + α";
         }
 
-        view.setResultPrice(formatedResult);
+        String buy = DataStringUtil.makeStringComma(Integer.toString(totalPrice - resultPrice)) + "원";
+        if (buyAlpha) {
+            buy += " + α";
+        }
+
+        String remain = DataStringUtil.makeStringComma(Integer.toString(resultPrice)) + "원";
+        if (isAlpha) {
+            remain += " + α";
+        }
+
+        view.setResultPrice(total, buy, remain);
+
+        if (itemList.size() == 0 || remainCount == 0) {
+            view.completeMyList();
+            return;
+        }
+
     }
 
     @Override
@@ -144,8 +140,8 @@ public class SelectedGoodsPresenter implements SelectedGoodsContract.Presenter {
     public void saveCheckStatus(int position) {
         Goods item = itemList.get(position);
 
-        HashMap<String,Boolean> map = preferences.getMyListCheck();
-        map.put(item.getKey(),item.isCheck());
+        HashMap<String, Boolean> map = preferences.getMyListCheck();
+        map.put(item.getKey(), item.isCheck());
 
         preferences.saveMyListCheck(map);
     }

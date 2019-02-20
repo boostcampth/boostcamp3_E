@@ -184,6 +184,22 @@
                     android:layout_height="match_parent"
                     android:background="@color/colorDivide"
                     tools:listitem="@layout/item_cart" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_total_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_margin="8dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.core.widget.NestedScrollView>
@@ -198,7 +214,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/tv_dicide_cart"
                 android:layout_width="0dp"
                 android:layout_height="42dp"
@@ -214,28 +230,20 @@
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_total_price"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_total_price"
-                android:layout_width="wrap_content"
-                android:layout_height="42dp"
-                android:layout_margin="8dp"
-                android:background="@drawable/layout_accent_round_stroke"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="1"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:singleLine="true"
-                android:textColor="@color/colorAccent"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <include
+            android:id="@+id/include_loading"
+            layout="@layout/layout_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -194,6 +194,7 @@ public class WriteReplyActivity extends BaseMVPActivity<ActivityWriteReplyBindin
     }
 
     public void finishLoad(int flag) {
+        binding.includeLoading.clLoadingBackground.setVisibility(View.GONE);
         binding.includeLoading.clLoadingBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
         binding.includeLoading.lavLoading.cancelAnimation();
         binding.includeLoading.lavLoading.setVisibility(View.GONE);
