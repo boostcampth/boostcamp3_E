@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +29,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -40,6 +42,8 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
     private static final String QUERY_MY_LIST = "mylist";
     private static final String QUERY_MY_GOODS = "items";
     private static final String QUERT_LOCATION = "location";
+    private static final String QUERY_COUNTRY = "country";
+
     private static MyListRemoteDataSource INSTANCE;
 
     private static String KEY_SELECTED = "KEY_SELECTED";
@@ -184,6 +188,12 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
                     }).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Uri downloadUri = task.getResult();
+
+                            db.collection(QUERY_COUNTRY)
+                                    .document(header.getNation())
+                                    .collection(header.getCity())
+                                    .document(item.getKey())
+                                    .set(item).addOnCompleteListener(task12 -> { });
                             itemRef.update("img", downloadUri.toString()).addOnCompleteListener(task1 -> {
                             });
                         } else {

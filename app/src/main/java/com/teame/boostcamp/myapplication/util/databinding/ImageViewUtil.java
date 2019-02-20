@@ -40,6 +40,33 @@ public class ImageViewUtil {
                 .into(imageView);
     }
 
+
+    @BindingAdapter({"imgUrl","imgCustomUrl", "error", "rounded"})
+    public static void loadImage(ImageView imageView,
+                                 String uri,
+                                 String url,
+                                 Drawable error,
+                                 int rounded) {
+        RequestOptions requestOptions = new RequestOptions().placeholder(error).error(error);
+
+
+        if(uri != null){
+            Glide.with(imageView)
+                    .load(uri)
+                    .apply(requestOptions)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(rounded)))
+                    .into(imageView);
+        }else{
+            Glide.with(imageView)
+                    .load(url)
+                    .apply(requestOptions)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(rounded)))
+                    .into(imageView);
+        }
+
+    }
+
+
     @BindingAdapter({"imgUrl", "placeHolder", "error"})
     public static void loadImage(ImageView imageView,
                                  String uri,

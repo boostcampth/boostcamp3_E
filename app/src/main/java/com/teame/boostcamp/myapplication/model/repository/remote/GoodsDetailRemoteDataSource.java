@@ -69,23 +69,21 @@ public class GoodsDetailRemoteDataSource implements GoodsDetailDataSource {
         reply.setContent(content);
         reply.setRatio((double) ratio);
         reply.setWriter(auth.getUid());
+        final  String uid = auth.getUid();
         long now = System.currentTimeMillis();
         Date nowDate = new Date(now);
         reply.setWriteDate(nowDate);
         PublishSubject<Reply> subject = PublishSubject.create();
-        String key = replyRef.document(itemUid).collection(QUERY_GOODS_REPLY).document().getId();
         Task saveReply = replyRef.document(itemUid)
                 .collection(QUERY_GOODS_REPLY)
-                .document(key)
+                .document(uid)
                 .set(reply)
                 .addOnSuccessListener(aVoid -> {
-                    reply.setKey(key);
+                    reply.setKey(uid);
                     subject.onNext(reply);
                 })
                 .addOnFailureListener(subject::onError);
-        Tasks.whenAll(saveReply).addOnCompleteListener(task -> {
-            subject.onComplete();
-        });
+        Tasks.whenAll(saveReply).addOnCompleteListener(task -> subject.onComplete());
 
         return subject.flatMapSingle(Single::just).single(reply);
     }

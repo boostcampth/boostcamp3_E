@@ -74,6 +74,12 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        presenter.reLoadMyList();
+    }
+
+    @Override
     public void finishLoad(int size) {
         binding.includeLoading.lavLoading.cancelAnimation();
         binding.includeLoading.lavLoading.setVisibility(View.GONE);

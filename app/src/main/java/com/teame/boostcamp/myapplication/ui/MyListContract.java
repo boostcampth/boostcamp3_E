@@ -18,6 +18,7 @@ interface MyListContract {
     interface Presenter extends BasePresenter {
         void loadMyList(GoodsListHeaderRecyclerAdapter adapter);
 
+        void reLoadMyList();
         void getMyListUid(int position);
 
         void deleteMyList(int position);

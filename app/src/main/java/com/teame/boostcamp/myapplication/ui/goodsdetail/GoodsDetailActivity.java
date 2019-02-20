@@ -104,6 +104,14 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
     @Override
     protected void onResume() {
         super.onResume();
+        Intent intent = getIntent();
+        final Goods item;
+        item = intent.getParcelableExtra(EXTRA_GOODS);
+        if (item == null) {
+            return;
+        }
+
+        presenter.reLoadReplyList(item.getKey());
         if (tvBadge != null) {
             presenter.getShoppingListCount();
         }

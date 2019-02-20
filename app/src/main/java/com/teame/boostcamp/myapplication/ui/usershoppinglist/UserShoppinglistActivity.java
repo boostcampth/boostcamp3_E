@@ -53,6 +53,7 @@ public class UserShoppinglistActivity extends BaseMVPActivity<ActivityUsersShopp
     }
     private void setIntent(boolean isok){
         ArrayList<Goods> list=presenter.getSelectedList();
+        presenter.addCartGoods(list);
         Intent result = new Intent();
         if(isok)
             result.putParcelableArrayListExtra(EXTRA_GOODSLIST, list);

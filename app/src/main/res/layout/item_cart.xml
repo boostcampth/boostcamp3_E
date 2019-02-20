@@ -30,6 +30,7 @@
                 error="@{@drawable/ic_no_image}"
                 imgUrl="@{item.img}"
                 rounded="@{4}"
+                imgCustomUrl="@{item.userCustomUri}"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginLeft="8dp"

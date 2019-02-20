@@ -28,6 +28,7 @@
                 android:id="@+id/iv_item_image"
                 error="@{@drawable/ic_no_image}"
                 imgUrl="@{item.img}"
+                imgCustomUrl="@{item.userCustomUri}"
                 rounded="@{4}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
