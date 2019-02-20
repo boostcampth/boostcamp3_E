@@ -19,6 +19,7 @@ import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
+import com.teame.boostcamp.myapplication.ui.nocheckusershoppinglist.NoCheckUserShoppinglistActivity;
 import com.teame.boostcamp.myapplication.ui.searchmap.SearchMapActivity;
 import com.teame.boostcamp.myapplication.ui.usershoppinglist.UserShoppinglistActivity;
 
@@ -172,7 +173,7 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
 
     @Override
     public void showUserShoppingActivity(List<Goods> list, GoodsListHeader header) {
-        UserShoppinglistActivity.startActivity(getContext(),header,(ArrayList<Goods>)list);
+        NoCheckUserShoppinglistActivity.startActivity(getContext(),header,(ArrayList<Goods>)list);
     }
 
     @Override

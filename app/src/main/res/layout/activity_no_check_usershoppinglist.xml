@@ -7,7 +7,7 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_back_import"
+            android:id="@+id/toolbar_no_check_back_import"
             android:background="@color/colorWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
             app:layout_constraintRight_toRightOf="parent">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_userlist_title"
+                android:id="@+id/tv_no_check_userlist_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorBlack"
@@ -27,28 +27,28 @@
         <HorizontalScrollView
             android:layout_marginLeft="@dimen/space_median"
             android:layout_marginRight="@dimen/space_median"
-            android:id="@+id/hsv_chip_scroll"
+            android:id="@+id/hsv_no_check_chip_scroll"
             android:layout_width="0dp"
             android:scrollbars="none"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_back_import"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_no_check_back_import"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/ll_all_select">
+            app:layout_constraintBottom_toTopOf="@id/rv_no_check_user_shoppinglist">
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_user_hashtag"
+                android:id="@+id/cg_no_check_user_hashtag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         </HorizontalScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_user_shoppinglist"
+            android:id="@+id/rv_no_check_user_shoppinglist"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            tools:listitem="@layout/item_usershoppinglist"
-            app:layout_constraintTop_toBottomOf="@id/hsv_chip_scroll"
+            tools:listitem="@layout/item_no_check_shoppinglist"
+            app:layout_constraintTop_toBottomOf="@id/hsv_no_check_chip_scroll"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">

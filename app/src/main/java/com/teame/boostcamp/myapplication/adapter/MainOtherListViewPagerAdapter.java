@@ -52,11 +52,9 @@ public class MainOtherListViewPagerAdapter extends PagerAdapter {
         binding.mcvUserHeader.setOnClickListener(v->{
             onShowDetailClickListener.onItemClick(v,position);
         });
-
         // 해쉬테그가 없으면 GONE
-        if (headerlist.get(position).getHashTag().size() == 0) {
-            binding.cgHashTag.setVisibility(View.GONE);
-        } else {
+        if (headerlist.get(position).getHashTag().size() > 0) {
+            binding.llEmptyView.setVisibility(View.GONE);
             binding.cgHashTag.setVisibility(View.VISIBLE);
             for (String tag : headerlist.get(position).getHashTag().keySet()) {
                 Chip chip = new Chip(container.getContext());

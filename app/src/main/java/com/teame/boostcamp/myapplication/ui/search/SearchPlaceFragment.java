@@ -65,6 +65,12 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
     }
 
     @Override
+    public void onDetach() {
+        presenter.onDetach();
+        super.onDetach();
+    }
+
+    @Override
     public void showCreateList(GoodsListHeader header) {
         CreateListActivity.startActivity(getContext(),header);
     }

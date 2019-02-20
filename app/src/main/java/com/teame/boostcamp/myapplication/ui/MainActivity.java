@@ -3,6 +3,7 @@ package com.teame.boostcamp.myapplication.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -11,12 +12,19 @@ import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;
 import com.teame.boostcamp.myapplication.ui.base.BaseActivity;
 import com.teame.boostcamp.myapplication.ui.search.SearchPlaceFragment;
+import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 
+import java.util.ArrayList;
+
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> implements FragmentCallback {
+
+    private CompositeDisposable disposable=new CompositeDisposable();
 
     @Override
     protected int getLayoutResourceId() {
@@ -32,7 +40,25 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements F
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding.bnvMainNavigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
-        setupViewPager();
+        disposable.add(TedPermissionUtil.requestPermission(getApplicationContext(),
+                        "권한설정",
+                        "권한설정이 필요합니다 권한을 설정하시겠습니까?",
+                        TedPermissionUtil.LOCATION,TedPermissionUtil.WRITE_STORAGE,TedPermissionUtil.READ_STORAGE,TedPermissionUtil.CAMERA)
+                        .subscribe(result->{
+                            if(result.isGranted())
+                                setupViewPager();
+                            else
+                                finish();
+                        },e->{
+                            finish();
+                        }));
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(disposable!=null&&!disposable.isDisposed())
+            disposable.dispose();
+        super.onDestroy();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener

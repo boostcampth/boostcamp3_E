@@ -151,6 +151,7 @@ public class SearchMapPresenter implements SearchMapContract.Presenter {
 
     @Override
     public void onDetach() {
-
+        if(disposable!=null&&!disposable.isDisposed())
+            disposable.dispose();
     }
 }

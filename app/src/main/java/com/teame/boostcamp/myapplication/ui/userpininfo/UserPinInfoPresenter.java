@@ -34,7 +34,8 @@ public class UserPinInfoPresenter implements UserPinInfoContract.Presenter {
 
     @Override
     public void onDetach() {
-
+        if(disposable!=null&&!disposable.isDisposed())
+            disposable.dispose();
     }
 
     @Override

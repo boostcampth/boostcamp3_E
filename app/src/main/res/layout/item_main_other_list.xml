@@ -16,7 +16,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mcv_user_header"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginRight="16dp"
@@ -24,7 +24,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_city"
@@ -62,10 +62,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="@dimen/space_x_small"
                 android:text="@{item.stringDate}"
                 android:textSize="12sp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_list_title"
+                app:layout_constraintTop_toBottomOf="@id/cg_hash_tag_scroll"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="2019.22.22" />
 
 
@@ -90,23 +92,49 @@
                 app:layout_constraintTop_toTopOf="@+id/tv_start_date"
                 tools:text="2019.33.33" />
 
-            <HorizontalScrollView
-                android:id="@+id/cg_hash_tag_scroll"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="16dp"
-                android:scrollbars="none"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:id="@+id/ll_empty_view"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/space_small"
+                android:layout_marginBottom="@dimen/space_small"
+                android:layout_height="30dp"
+                android:gravity="center"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_start_date"
-                app:layout_goneMarginBottom="8dp">
+                app:layout_constraintTop_toBottomOf="@id/tv_list_title"
+                app:layout_constraintBottom_toTopOf="@id/tv_start_date">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_no_result_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No Hash Tags!"/>
+
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_margin="@dimen/space_small"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_list_title"
+                app:layout_constraintBottom_toTopOf="@id/tv_start_date">
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/cg_hash_tag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    app:singleLine="true"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
             </HorizontalScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
