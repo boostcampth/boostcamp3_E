@@ -78,7 +78,7 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
         binding.rvExList.setLayoutManager(layoutManager);
         binding.rvExList.setAdapter(adapter);
         binding.rvExList.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-        binding.rvExList.addItemDecoration(new MarginDecorator(32));
+        //binding.rvExList.addItemDecoration(new MarginDecorator(32));
         binding.toolbarSearch.setNavigationIcon(R.drawable.btn_back);
         binding.toolbarSearch.setNavigationOnClickListener(__ -> {
             getFragmentManager().beginTransaction().remove(this).commit();

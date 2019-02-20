@@ -15,6 +15,7 @@
         android:layout_marginLeft="@dimen/space_median"
         android:layout_marginRight="@dimen/space_median"
         app:elevation="6dp"
+        android:background="?android:attr/selectableItemBackground"
         android:layout_width="150dp"
         android:layout_height="200dp">
 

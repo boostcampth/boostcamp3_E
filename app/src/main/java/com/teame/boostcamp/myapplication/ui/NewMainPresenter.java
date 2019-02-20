@@ -5,9 +5,10 @@ import android.view.View;
 import com.google.android.gms.maps.model.LatLng;
 import com.teame.boostcamp.myapplication.adapter.FamousPlaceAdapter;
 import com.teame.boostcamp.myapplication.adapter.LocationBaseGoodsListRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.MainOtherListRecyclerAdapter;
+import com.teame.boostcamp.myapplication.adapter.MainOtherListViewPagerAdapter;
 import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
+import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.model.repository.UserPinRepository;
 import com.teame.boostcamp.myapplication.util.Constant;
@@ -20,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickListener {
@@ -31,7 +31,8 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
     private LocationBaseGoodsListRecyclerAdapter goodsAdapter;
     private static final int MAX=5;
     private static final int PERIOD=2;
-    private FamousPlaceAdapter viewPagerAdapter;
+    private FamousPlaceAdapter famousViewPagerAdapter;
+    private MainOtherListViewPagerAdapter userViewPagerAdapter;
 
     public NewMainPresenter(NewMainContract.View view) {
         this.view = view;
@@ -42,7 +43,7 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
 
     @Override
     public void onItemClick(View v, int position) {
-        view.bannerClick(viewPagerAdapter.getItem(position).getCountryCode());
+        view.bannerClick(famousViewPagerAdapter.getItem(position).getCountryCode());
     }
 
     @Override
@@ -52,6 +53,24 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
             Goods goods=goodsAdapter.getItem(position);
             view.showGoodsDetail(goods);
         });
+    }
+
+    @Override
+    public void setUserViewPagerAdapter(MainOtherListViewPagerAdapter adapter) {
+        userViewPagerAdapter=adapter;
+        userViewPagerAdapter.setOnClickListener((v, position) -> {
+            GoodsListHeader header= userViewPagerAdapter.getItem(position);
+            getGoodsListFromHeader(header);
+        });
+    }
+
+    private void getGoodsListFromHeader(GoodsListHeader header){
+        disposable.add(userPinRepository.getUserPinGoodsList(header.getKey())
+                .subscribe(list->{
+                    view.showUserShoppingActivity(list,header);
+                },e->{
+                    DLogUtil.e(e.toString());
+                }));
     }
 
     @Override
@@ -76,7 +95,6 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
                 .subscribe(
                         goods -> {
                             list.add(goods);
-                            DLogUtil.d(list.toString());
                         },
                         e -> {
                             DLogUtil.d(e.getMessage());
@@ -95,15 +113,14 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
 
     @Override
     public void setViewPagerAdapter(FamousPlaceAdapter adapter) {
-        this.viewPagerAdapter=adapter;
-        viewPagerAdapter.setOnClickListener(this);
+        this.famousViewPagerAdapter=adapter;
+        famousViewPagerAdapter.setOnClickListener(this);
         disposable.add(Observable.interval(PERIOD, TimeUnit.SECONDS)
                 .map(Long::intValue)
-                .map(value->value%viewPagerAdapter.getCount())
+                .map(value->value%famousViewPagerAdapter.getCount())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item->{
-                    DLogUtil.e(item.toString());
                     view.showViewPage(item);
                 },e->{
                     DLogUtil.e(e.toString());
@@ -111,7 +128,7 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
     }
 
     @Override
-    public void loadHeaderKeys(LatLng center, MainOtherListRecyclerAdapter listAdapter) {
+    public void loadHeaderKeys(LatLng center) {
         List<String> keyList=new ArrayList<>();
         disposable.add(userPinRepository.getUserVisitedLocationToSubject(center)
                 .take(MAX+1)
@@ -125,17 +142,15 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
                     else if(keyList.size()<=MAX)
                         view.setVisitedMoreView(false);
                     keyList.remove(keyList.size()-1);
-                    loadHeaders(keyList, listAdapter);
+                    loadHeaders(keyList);
                 }));
     }
 
-    @Override
-    public void loadHeaders(List<String> keyList, MainOtherListRecyclerAdapter listAdapter) {
+    private void loadHeaders(List<String> keyList) {
         disposable.add(userPinRepository.getUserHeaderList(keyList)
                 .subscribe(
                         list -> {
-                            DLogUtil.e(list.toString());
-                            listAdapter.initItems(list);
+                            userViewPagerAdapter.setHeaderlist(list);
                         },
                         e -> DLogUtil.d(e.getMessage())
                 ));

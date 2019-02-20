@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="item"
+            type="com.teame.boostcamp.myapplication.model.entitiy.Goods"/>
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcv_user_item"
+        app:cardCornerRadius="4dp"
+        android:layout_margin="@dimen/space_x_small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.teame.boostcamp.myapplication.util.view.SquareImageView
+                error="@{@drawable/ic_no_image}"
+                imgUrl="@{item.img}"
+                android:layout_marginTop="@dimen/space_x_small"
+                android:layout_marginBottom="@dimen/space_x_small"
+                android:layout_marginLeft="@dimen/space_large"
+                android:id="@+id/siv_no_check_user_item_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                tools:src="@drawable/ic_filled_star"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_marginLeft="@dimen/space_median"
+                android:ellipsize="end"
+                android:id="@+id/tv_no_check_user_item_name"
+                android:textColor="@color/colorBlack"
+                android:textSize="15sp"
+                android:text="@{item.name}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toRightOf="@id/siv_no_check_user_item_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tv_no_check_user_price"
+                tools:text="TEST"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_no_check_static_price"
+                android:text="최저가: "
+                android:layout_marginLeft="@dimen/space_median"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toRightOf="@id/siv_no_check_user_item_image"
+                app:layout_constraintRight_toLeftOf="@id/tv_no_check_user_price"
+                app:layout_constraintTop_toTopOf="@id/tv_no_check_user_price"
+                app:layout_constraintBottom_toBottomOf="@id/tv_no_check_user_price"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_no_check_user_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{item.lprice}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/tv_no_check_static_price"
+                app:layout_constraintTop_toBottomOf="@id/tv_no_check_user_item_name"
+                tools:text="TEST" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_marginRight="@dimen/space_median"
+                android:id="@+id/iv_no_check_user_item_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/btn_show_detail"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

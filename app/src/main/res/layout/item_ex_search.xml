@@ -4,6 +4,8 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/space_small"
+        android:background="?android:attr/selectableItemBackground"
         android:orientation="horizontal"
         android:weightSum="1">
         <androidx.appcompat.widget.AppCompatImageView

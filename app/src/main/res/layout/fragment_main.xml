@@ -58,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:overScrollMode="never"
+            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -97,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginTop="@dimen/space_large"
+                    android:layout_marginTop="@dimen/space_x_large"
                     android:text="HOT ITEMS!"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -118,13 +119,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
+                    android:layout_marginTop="@dimen/space_x_large"
                     android:layout_marginRight="12dp"
-                    android:layout_marginTop="8dp"
                     android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/tv_hot_post"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_location_honey_items"/>
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.666"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_location_honey_items" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_set_location"
@@ -143,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/space_x_large"
                     android:text="USER ITEM LIST"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -159,15 +161,14 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/tv_hot_post"/>
 
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/rv_other_list"
+                <com.teame.boostcamp.myapplication.util.view.VisitedViewPager
+                    android:id="@+id/vp_visited_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="60dp"
                     android:paddingRight="60dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginTop="8dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:layout_marginTop="@dimen/space_x_large"
                     android:layout_marginBottom="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -1,27 +1,17 @@
 package com.teame.boostcamp.myapplication.ui;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.airbnb.lottie.LottieDrawable;
 import com.google.android.gms.maps.model.LatLng;
-import com.teame.boostcamp.myapplication.MainApplication;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.FamousPlaceAdapter;
 import com.teame.boostcamp.myapplication.adapter.LocationBaseGoodsListRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.MainOtherListRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
+import com.teame.boostcamp.myapplication.adapter.MainOtherListViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentMainBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Banner;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
@@ -30,8 +20,7 @@ import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.ui.searchmap.SearchMapActivity;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
-import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
+import com.teame.boostcamp.myapplication.ui.usershoppinglist.UserShoppinglistActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,11 +28,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
-import androidx.recyclerview.widget.SnapHelper;
-import androidx.viewpager.widget.ViewPager;
 
 public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainContract.Presenter> implements NewMainContract.View {
     @Override
@@ -165,27 +150,29 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         binding.tvVisitedMore.setOnClickListener(__->{
             SearchMapActivity.startActivity(getContext(),"osaka");
         });
+
         binding.rvLocationBaseItems.setLayoutManager(bannerLayoutManager);
         binding.rvLocationBaseItems.setAdapter(goodsAdapter);
-        MainOtherListRecyclerAdapter listAdapter = new MainOtherListRecyclerAdapter();
+        MainOtherListViewPagerAdapter listAdapter = new MainOtherListViewPagerAdapter(getContext());
         LinearLayoutManager listLayoutManager = new LinearLayoutManager(getContext());
         listLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
-        // 하단 리사이클러뷰 구경하기 버튼 온클릭 리스너! -- GoodsHeaderList 가지고 import하는 레이아웃으로 이동하시면 됩니다!
-        listAdapter.setOnShowDetailClickListener((v, position) -> showToast(position+""));
-        binding.rvOtherList.setLayoutManager(listLayoutManager);
-        binding.rvOtherList.setAdapter(listAdapter);
+        presenter.setUserViewPagerAdapter(listAdapter);
+        binding.vpVisitedList.setAdapter(listAdapter);
+        binding.vpVisitedList.setClipToPadding(false);
+        binding.vpVisitedList.setPageMargin(50);
 
         binding.rvLocationBaseItems.setNestedScrollingEnabled(false);
-        //binding.rvOtherList.setNestedScrollingEnabled(false);
-
-
 
 
         // TODO- 아래의 두 부분을 조건에 따라 실행시키고 위치정보가 바뀌었을떄 다시 실행시켜주어야 합니다
         presenter.loadListData(goodsAdapter, "JP", "osaka");
-        presenter.loadHeaderKeys(new LatLng(34.683036, 135.487775), listAdapter);
+        presenter.loadHeaderKeys(new LatLng(34.683036, 135.487775));
 
+    }
+
+    @Override
+    public void showUserShoppingActivity(List<Goods> list, GoodsListHeader header) {
+        UserShoppinglistActivity.startActivity(getContext(),header,(ArrayList<Goods>)list);
     }
 
     @Override

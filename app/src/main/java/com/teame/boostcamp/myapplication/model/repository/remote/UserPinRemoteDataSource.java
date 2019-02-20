@@ -200,7 +200,11 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
         List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
         for(String key: keyList){
             Task<DocumentSnapshot> task = firestore.collection(QUERY_LOCATION).document(key)
-                    .get().addOnSuccessListener(documentSnapshot -> subject.onNext(documentSnapshot.toObject(GoodsListHeader.class)))
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                        GoodsListHeader header=documentSnapshot.toObject(GoodsListHeader.class);
+                        header.setKey(key);
+                        subject.onNext(header);
+                    })
                     .addOnFailureListener(e -> subject.onError(e));
             tasks.add(task);
         }

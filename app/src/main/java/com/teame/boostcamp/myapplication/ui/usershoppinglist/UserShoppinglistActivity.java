@@ -77,8 +77,8 @@ public class UserShoppinglistActivity extends BaseMVPActivity<ActivityUsersShopp
                 return true;
             case android.R.id.home:
                 if(list.size()!=0&&!presenter.getExit()){
-                    AlertDialog.Builder dialog=new AlertDialog.Builder(this);
-                    dialog.setMessage("체크한 아이템이 있습니다 정말 나가시겠습니까?")
+                    AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                    builder.setMessage("체크한 아이템이 있습니다 정말 나가시겠습니까?")
                             .setPositiveButton("확인", (__, ___) -> {
                                 setIntent(false);
                                 finish();
@@ -86,8 +86,16 @@ public class UserShoppinglistActivity extends BaseMVPActivity<ActivityUsersShopp
                             .setCancelable(true)
                             .setNegativeButton("취소", (__, ___) -> {
                                 return;
-                            })
-                            .show();
+                            });
+                    AlertDialog dialog=builder.create();
+                    dialog.setOnShowListener(__ -> {
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+
+                    });
+                    dialog.show();
                 }
                 else{
                     setIntent(false);
@@ -102,8 +110,8 @@ public class UserShoppinglistActivity extends BaseMVPActivity<ActivityUsersShopp
     public void onBackPressed() {
         ArrayList<Goods> list=presenter.getSelectedList();
         if(list.size()!=0&&!presenter.getExit()){
-            AlertDialog.Builder dialog=new AlertDialog.Builder(this);
-            dialog.setMessage("체크한 아이템이 있습니다 정말 나가시겠습니까?")
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
+            builder.setMessage("체크한 아이템이 있습니다 정말 나가시겠습니까?")
                     .setPositiveButton("확인", (dialog1, which) -> {
                         setIntent(false);
                         finish();
@@ -111,8 +119,15 @@ public class UserShoppinglistActivity extends BaseMVPActivity<ActivityUsersShopp
                     .setCancelable(true)
                     .setNegativeButton("취소", (__, ___) -> {
                         return;
-                    })
-                    .show();
+                    });
+            AlertDialog dialog=builder.create();
+            dialog.setOnShowListener(__ -> {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+            });
+            dialog.show();
         }
         else{
             setIntent(false);
