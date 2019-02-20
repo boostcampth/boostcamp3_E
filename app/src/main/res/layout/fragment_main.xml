@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay"
-            app:elevation="0dp">
+            android:stateListAnimator="@drawable/selector_appbar_shadow">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
@@ -30,7 +30,6 @@
                     android:id="@+id/toolbar_main"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:elevation="4dp"
                     app:layout_collapseMode="pin">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
