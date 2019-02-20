@@ -23,6 +23,8 @@ public interface GoodsDetailContract {
     interface Presenter extends BasePresenter {
         void loadReplyList(GoodsDetailRecyclerAdapter adapter, String itemUid);
 
+        void reLoadReplyList(String itemUid);
+
         void writeReply(Reply item);
 
         void deleteReply(String itemId,int position);
