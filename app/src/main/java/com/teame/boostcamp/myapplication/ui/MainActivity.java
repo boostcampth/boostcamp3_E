@@ -43,13 +43,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements F
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding.bnvMainNavigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
-        binding.test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                finish();
-            }
-        });
         disposable.add(TedPermissionUtil.requestPermission(getApplicationContext(),
                         "권한설정",
                         "권한설정이 필요합니다 권한을 설정하시겠습니까?",

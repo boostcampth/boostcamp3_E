@@ -11,13 +11,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/test"
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
+            
             <com.teame.boostcamp.myapplication.util.view.MainViewPager
                 android:id="@+id/vp_fragment"
                 android:layout_width="0dp"
