@@ -73,6 +73,11 @@
         <activity
             android:name=".ui.usershoppinglist.UserShoppinglistActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.nocheckusershoppinglist.NoCheckUserShoppinglistActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.goodsdetail.GoodsDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />

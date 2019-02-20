@@ -1,28 +1,28 @@
 package com.teame.boostcamp.myapplication.ui;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.airbnb.lottie.LottieDrawable;
 import com.google.android.gms.maps.model.LatLng;
-import com.teame.boostcamp.myapplication.MainApplication;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.FamousPlaceAdapter;
 import com.teame.boostcamp.myapplication.adapter.LocationBaseGoodsListRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.MainOtherListRecyclerAdapter;
-import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
+import com.teame.boostcamp.myapplication.adapter.MainOtherListViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentMainBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Banner;
+import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
-import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
+import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
+import com.teame.boostcamp.myapplication.ui.nocheckusershoppinglist.NoCheckUserShoppinglistActivity;
+import com.teame.boostcamp.myapplication.ui.searchmap.SearchMapActivity;
+import com.teame.boostcamp.myapplication.ui.usershoppinglist.UserShoppinglistActivity;
+import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,11 +30,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
-import androidx.recyclerview.widget.SnapHelper;
-import androidx.viewpager.widget.ViewPager;
 
 public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainContract.Presenter> implements NewMainContract.View {
     @Override
@@ -44,7 +40,7 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
 
     @Override
     protected NewMainContract.Presenter getPresenter() {
-        return new NewMainPresenter(this);
+        return presenter;
     }
 
     @Override
@@ -60,7 +56,7 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setPresenter(new NewMainPresenter(this));
+        setPresenter(new NewMainPresenter(this,new ResourceProvider(getContext())));
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -72,10 +68,67 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+    }
+
+    @Override
+    public void showGoodsDetail(Goods goods) {
+        GoodsDetailActivity.startActivity(getContext(),goods);
+    }
+
+    @Override
+    public void setGoodsMoreView(boolean state) {
+        if(state)
+            binding.tvItemMore.setVisibility(View.VISIBLE);
+        else
+            binding.tvItemMore.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setVisitedMoreView(boolean state) {
+        if(state)
+            binding.tvVisitedMore.setVisibility(View.VISIBLE);
+        else
+            binding.tvVisitedMore.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showGoodsEmptyView(boolean state) {
+        if(state){
+            binding.includeLocationEmptyView.clLocationContainer.setVisibility(View.VISIBLE);
+            binding.rvLocationBaseItems.setVisibility(View.GONE);
+        }
+        else{
+            binding.includeLocationEmptyView.clLocationContainer.setVisibility(View.GONE);
+            binding.rvLocationBaseItems.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    @Override
+    public void showVisitedEmptyView(boolean state) {
+        if(state){
+            binding.includeVisitedEmptyView.clVisitedContainer.setVisibility(View.VISIBLE);
+            binding.vpVisitedList.setVisibility(View.GONE);
+        }
+        else{
+            binding.includeVisitedEmptyView.clVisitedContainer.setVisibility(View.GONE);
+            binding.vpVisitedList.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void setCurrentLocation(String nation, String city) {
+        binding.tvCurrentLoaction.setText(nation+" "+city);
     }
 
     @Override
@@ -85,8 +138,6 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
     }
 
     private void initView() {
-
-
         // TODO - 초기 위치정보를 받아와야 합니다. 위치정보가 없을 시 default 값으로 설정해 주어야 합니다.
         // 초기의 상단 배너 리소스와 텍스트 초기화 - 하드코딩
         List<Integer> drawableId = new ArrayList<>();
@@ -95,59 +146,76 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         List<Banner> banner = new ArrayList<>();
         banner.add(new Banner("오사카", "쇼핑의 천국 일본! 환율이 떨어진 만큼 부담없는 쇼핑!", "JP"));
         banner.add(new Banner("태국", "저렴한 물가, 맛있는 음식! 태국에서 꼭 사야할 꿀템들!", "TH"));
-        binding.setBanner(banner.get(0));
-        binding.tvBannerCreate.setOnClickListener(__ -> bannerCreateList(banner.get(0).getCountryCode()));
-        binding.includeLoading.lavLoading.playAnimation();
-        binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
+        FamousPlaceAdapter famousAdapter=new FamousPlaceAdapter(getContext(),drawableId,banner);
+        presenter.setViewPagerAdapter(famousAdapter);
+        binding.vpFamousplace.setAdapter(famousAdapter);
 
-        binding.vpFamousPlace.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        binding.ivSearchPlace.setOnClickListener(__->{
+            onSearchButtonClick();
+        });
+        binding.ablMain.addOnOffsetChangedListener((appBarLayout, i) -> {
+            if(Math.abs(i)>=appBarLayout.getTotalScrollRange()){
+                binding.ivSearchPlace.setImageResource(R.drawable.btn_search);
             }
-
-            @Override
-            public void onPageSelected(int position) {
-                binding.setBanner(banner.get(position));
-                binding.tvBannerCreate.setOnClickListener(__ -> bannerCreateList(banner.get(position).getCountryCode()));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            else if(i==0){
+                binding.ivSearchPlace.setImageResource(R.drawable.btn_search_white);
             }
         });
-
         // 리사이클러뷰 초기화
         LocationBaseGoodsListRecyclerAdapter goodsAdapter = new LocationBaseGoodsListRecyclerAdapter();
         LinearLayoutManager bannerLayoutManager = new LinearLayoutManager(getContext());
         bannerLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        binding.ivLoactionSearch.setOnClickListener(__ -> onSearchButtonClick());
+        presenter.setLocationAdapter(goodsAdapter);
         binding.ivSetLocation.setOnClickListener(__ -> onSetLocationClick());
+        binding.tvItemMore.setOnClickListener(__->{
+            presenter.locationMoreClick();
+        });
+        binding.tvVisitedMore.setOnClickListener(__->{
+            presenter.visitedMoreClick();
+        });
 
         binding.rvLocationBaseItems.setLayoutManager(bannerLayoutManager);
         binding.rvLocationBaseItems.setAdapter(goodsAdapter);
-
-        MainOtherListRecyclerAdapter listAdapter = new MainOtherListRecyclerAdapter();
+        MainOtherListViewPagerAdapter listAdapter = new MainOtherListViewPagerAdapter(getContext());
         LinearLayoutManager listLayoutManager = new LinearLayoutManager(getContext());
         listLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        presenter.setUserViewPagerAdapter(listAdapter);
+        binding.vpVisitedList.setAdapter(listAdapter);
+        binding.vpVisitedList.setClipToPadding(false);
+        binding.vpVisitedList.setPageMargin(50);
 
-        // 하단 리사이클러뷰 구경하기 버튼 온클릭 리스너! -- GoodsHeaderList 가지고 import하는 레이아웃으로 이동하시면 됩니다!
-        listAdapter.setOnShowDetailClickListener((v, position) -> showToast(position+""));
-        binding.rvOtherList.setLayoutManager(listLayoutManager);
-        binding.rvOtherList.setAdapter(listAdapter);
+        binding.rvLocationBaseItems.setNestedScrollingEnabled(false);
 
-        binding.vpFamousPlace.setAdapter(new FamousPlaceAdapter(getContext(), drawableId));
-        binding.tlCountryIndicator.setupWithViewPager(binding.vpFamousPlace, true);
+        presenter.getCurrentLocation();
 
+        binding.includeLocationEmptyView.clLocationContainer.setOnClickListener(__->{
+            onSearchButtonClick();
+        });
 
+        binding.includeVisitedEmptyView.clVisitedContainer.setOnClickListener(__->{
+            presenter.visitedMoreClick();
+        });
+    }
 
+    @Override
+    public void showCreateListActivity(GoodsListHeader header) {
+        CreateListActivity.startActivity(getContext(),header);
+    }
 
-        // TODO- 아래의 두 부분을 조건에 따라 실행시키고 위치정보가 바뀌었을떄 다시 실행시켜주어야 합니다
-        presenter.loadListData(goodsAdapter, "JP", "osaka");
-        presenter.loadHeaderKeys(new LatLng(34.683036, 135.487775), listAdapter);
+    @Override
+    public void showSearchMapActivity(String place) {
+        SearchMapActivity.startActivity(getContext(),place);
+    }
 
+    @Override
+    public void showUserShoppingActivity(List<Goods> list, GoodsListHeader header) {
+        NoCheckUserShoppinglistActivity.startActivity(getContext(),header,(ArrayList<Goods>)list);
+    }
+
+    @Override
+    public void showViewPage(int position) {
+        binding.vpFamousplace.setCurrentItem(position);
     }
 
     private void onSearchButtonClick(){
@@ -157,27 +225,27 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
 
     private void onSetLocationClick(){
         // TODO - 위치 버튼 클릭 -> 지도 검색 후 위치 선택 -> 메인으로 돌아와서 위치 set 및 recycler view 갱신
+        presenter.getCurrentLocation();
     }
 
-    private void bannerCreateList(String countryCode){
+    @Override
+    public void bannerClick(String country) {
         //Country Code 는 국가 코드 ex) JP, TH, 국가의 꿀템 리스트를 보여주는 액티비티로 전환 되어야 함.
-        switch(countryCode){
+        switch(country){
             case "JP" :
-                CreateListActivity.startActivity(getContext(), new GoodsListHeader(countryCode, "oskaka", Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), 34.683036, 135.487775));
+                CreateListActivity.startActivity(getContext(), new GoodsListHeader(country, "oskaka", Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), 34.683036, 135.487775));
                 break;
             case "TH" :
-                CreateListActivity.startActivity(getContext(), new GoodsListHeader(countryCode, countryCode, Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), 13.7522, 100.5267));
+                CreateListActivity.startActivity(getContext(), new GoodsListHeader(country, "bangkok", Calendar.getInstance().getTime(), Calendar.getInstance().getTime(), 13.7522, 100.5267));
                 break;
         }
     }
 
     @Override
-    public void finishLoad() {
-        binding.tvShowWhole.setVisibility(View.VISIBLE);
-        binding.includeLoading.lavLoading.cancelAnimation();
-        binding.includeLoading.lavLoading.setVisibility(View.GONE);
+    public void onDetach() {
+        presenter.onDetach();
+        super.onDetach();
     }
-
 }
 
 

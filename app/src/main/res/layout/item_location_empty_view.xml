@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_location_container"
+        android:layout_width="150dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_height="200dp">
+
+        <com.teame.boostcamp.myapplication.util.view.SquareImageView
+            android:id="@+id/siv_empty_image"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@drawable/ic_no_location_item"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_no_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="@dimen/space_x_small"
+            app:layout_constraintTop_toBottomOf="@id/siv_empty_image"
+            android:textSize="11sp"
+            android:text="이 지역의 상품이 없네요."/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_go_search"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_no_item"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textStyle="bold"
+            android:text="클릭하여 검색"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -38,6 +38,12 @@ public class UserPinInfoFragment extends BaseFragment<FragmentUserpininfoBinding
         UserShoppinglistActivity.startActivity(getContext(),presenter.getGoodsListHeader(),(ArrayList<Goods>)list);
     }
 
+    @Override
+    public void onDetach() {
+        presenter.onDetach();
+        super.onDetach();
+    }
+
     public static UserPinInfoFragment newInstance(GoodsListHeader header){
         UserPinInfoFragment userPinInfoFragment=new UserPinInfoFragment();
         Bundle bundle=new Bundle();

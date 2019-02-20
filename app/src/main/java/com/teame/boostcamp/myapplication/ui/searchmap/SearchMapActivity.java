@@ -216,6 +216,7 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
     @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.onDetach();
         if(disposable!=null&&!disposable.isDisposed())
             disposable.dispose();
         binding.mvGooglemap.onDestroy();

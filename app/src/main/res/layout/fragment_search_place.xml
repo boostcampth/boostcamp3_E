@@ -79,9 +79,10 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_ex_list"
-            android:background="@color/colorWhite"
+            android:background="@drawable/ripple_white_background"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:clipToPadding="false"
             tools:listitem="@layout/item_ex_search"
             app:layout_constraintTop_toBottomOf="@id/view_line"
             app:layout_constraintLeft_toLeftOf="parent"

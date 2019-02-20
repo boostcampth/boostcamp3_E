@@ -9,8 +9,10 @@ import com.teame.boostcamp.myapplication.model.repository.remote.UserPinRemoteDa
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.subjects.Subject;
 
 public class UserPinRepository implements UserPinDataSource {
     private static UserPinRepository INSTANCE;
@@ -25,6 +27,11 @@ public class UserPinRepository implements UserPinDataSource {
             INSTANCE=new UserPinRepository();
         }
         return INSTANCE;
+    }
+
+    @Override
+    public Observable<Pair<LatLng, String>> getUserVisitedLocationToSubject(LatLng center) {
+        return shoppingListRemoteDataSource.getUserVisitedLocationToSubject(center);
     }
 
     @Override

@@ -37,6 +37,7 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.SingleSubject;
+import io.reactivex.subjects.Subject;
 
 public class UserPinRemoteDataSource implements UserPinDataSource {
     private static String QUERY_LOCATION="location";
@@ -46,7 +47,7 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
     private static UserPinRemoteDataSource INSTANCE;
 
     private static String FIREBASE_URL="https://boostcamp-1548575868471.firebaseio.com/_geofire";
-    private static final int QUERY_RADIUS=50;
+    private static final int QUERY_RADIUS=10;
     private DatabaseReference firebase= FirebaseDatabase.getInstance().getReferenceFromUrl(FIREBASE_URL);
 
     private UserPinRemoteDataSource(){
@@ -120,7 +121,42 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
                         DLogUtil.e(result.getException().toString());
                     }
                 });
-        return subject;
+        return subject.subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Observable<Pair<LatLng, String>> getUserVisitedLocationToSubject(LatLng center) {
+        PublishSubject<Pair<LatLng,String>> subject=PublishSubject.create();
+        GeoFire geoFire=new GeoFire(firebase);
+        GeoQuery query=geoFire.queryAtLocation(new GeoLocation(center.latitude,center.longitude),QUERY_RADIUS);
+        query.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+                LatLng latlng=new LatLng(location.latitude,location.longitude);
+                subject.onNext(new Pair<LatLng,String>(latlng,key));
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+                DLogUtil.d("Exit");
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+                DLogUtil.d("Move");
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+                subject.onComplete();
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+                DLogUtil.d(error.toString());
+            }
+        });
+        return subject.subscribeOn(Schedulers.io());
     }
 
     @Override
@@ -155,7 +191,7 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
                 DLogUtil.d(error.toString());
             }
         });
-        return subject.toList();
+        return subject.subscribeOn(Schedulers.io()).toList();
     }
 
     @Override
@@ -164,7 +200,11 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
         List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
         for(String key: keyList){
             Task<DocumentSnapshot> task = firestore.collection(QUERY_LOCATION).document(key)
-                    .get().addOnSuccessListener(documentSnapshot -> subject.onNext(documentSnapshot.toObject(GoodsListHeader.class)))
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                        GoodsListHeader header=documentSnapshot.toObject(GoodsListHeader.class);
+                        header.setKey(key);
+                        subject.onNext(header);
+                    })
                     .addOnFailureListener(e -> subject.onError(e));
             tasks.add(task);
         }
@@ -177,7 +217,7 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
             }
         });
 
-        return subject.toList();
+        return subject.subscribeOn(Schedulers.io()).toList();
     }
 
 }

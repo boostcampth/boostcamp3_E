@@ -21,4 +21,5 @@
     <color name="colorIphoneBlack">#4a4a4f</color>
     <color name="colorIphoneSubBlack">#86868b</color>
     <color name="colorIphoneCaption">#ededef</color>
+    <color name="colorMaterialRipple">#1f000000</color>
 </resources>
