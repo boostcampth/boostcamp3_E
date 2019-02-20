@@ -35,6 +35,7 @@ interface GoodsCartContract {
         GoodsListHeader getHeaderData();
 
         void removeHashTag(String tag);
+
         void saveCartList(String title);
 
         void detectIsAllCheck();

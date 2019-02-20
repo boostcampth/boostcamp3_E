@@ -205,6 +205,36 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
     }
 
     @Override
+    public void onBackPressed() {
+        if (binding.includeLoading.clLoadingBackground.getVisibility() == View.VISIBLE) {
+            return;
+        }
+
+        if (isChange) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.would_you_save)
+                    .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
+                        presenter.saveCartList(binding.etTitle.getText().toString());
+                        showToast(getString(R.string.success_save));
+                        finish();
+                    })
+                    .setNegativeButton(R.string.cancle, (__, ___) -> finish());
+
+            final AlertDialog dialog = builder.create();
+            dialog.setOnShowListener(__ -> {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+
+            });
+            dialog.show();
+        } else {
+            finish();
+        }
+    }
+
+    @Override
     public void successSave() {
         showToast("성공");
         binding.includeLoading.clLoadingBackground.setVisibility(View.GONE);
@@ -212,6 +242,15 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         binding.includeLoading.lavLoading.cancelAnimation();
         binding.includeLoading.lavLoading.setVisibility(View.GONE);
         finish();
+    }
+
+    @Override
+    public void emptyList() {
+        binding.llcNoAddItem.setVisibility(View.VISIBLE);
+        binding.llcAllCheckRoot.setVisibility(View.GONE);
+        binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIphoneBlack));
+        binding.tvDicideCart.setOnClickListener(null);
+        binding.tvTotalPrice.setVisibility(View.GONE);
     }
 
     @Override
