@@ -47,7 +47,7 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
     private static UserPinRemoteDataSource INSTANCE;
 
     private static String FIREBASE_URL="https://boostcamp-1548575868471.firebaseio.com/_geofire";
-    private static final int QUERY_RADIUS=50;
+    private static final int QUERY_RADIUS=10;
     private DatabaseReference firebase= FirebaseDatabase.getInstance().getReferenceFromUrl(FIREBASE_URL);
 
     private UserPinRemoteDataSource(){
@@ -121,11 +121,11 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
                         DLogUtil.e(result.getException().toString());
                     }
                 });
-        return subject;
+        return subject.subscribeOn(Schedulers.io());
     }
 
     @Override
-    public Subject<Pair<LatLng, String>> getUserVisitedLocationToSubject(LatLng center) {
+    public Observable<Pair<LatLng, String>> getUserVisitedLocationToSubject(LatLng center) {
         PublishSubject<Pair<LatLng,String>> subject=PublishSubject.create();
         GeoFire geoFire=new GeoFire(firebase);
         GeoQuery query=geoFire.queryAtLocation(new GeoLocation(center.latitude,center.longitude),QUERY_RADIUS);
@@ -156,7 +156,7 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
                 DLogUtil.d(error.toString());
             }
         });
-        return subject;
+        return subject.subscribeOn(Schedulers.io());
     }
 
     @Override
@@ -191,7 +191,7 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
                 DLogUtil.d(error.toString());
             }
         });
-        return subject.toList();
+        return subject.subscribeOn(Schedulers.io()).toList();
     }
 
     @Override
@@ -217,7 +217,7 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
             }
         });
 
-        return subject.toList();
+        return subject.subscribeOn(Schedulers.io()).toList();
     }
 
 }

@@ -22,6 +22,7 @@ import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 import com.teame.boostcamp.myapplication.ui.nocheckusershoppinglist.NoCheckUserShoppinglistActivity;
 import com.teame.boostcamp.myapplication.ui.searchmap.SearchMapActivity;
 import com.teame.boostcamp.myapplication.ui.usershoppinglist.UserShoppinglistActivity;
+import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,7 +40,7 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
 
     @Override
     protected NewMainContract.Presenter getPresenter() {
-        return new NewMainPresenter(this);
+        return presenter;
     }
 
     @Override
@@ -55,7 +56,7 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setPresenter(new NewMainPresenter(this));
+        setPresenter(new NewMainPresenter(this,new ResourceProvider(getContext())));
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -94,17 +95,40 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
 
     @Override
     public void setVisitedMoreView(boolean state) {
+        if(state)
+            binding.tvVisitedMore.setVisibility(View.VISIBLE);
+        else
+            binding.tvVisitedMore.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showGoodsEmptyView(boolean state) {
+        if(state){
+            binding.includeLocationEmptyView.clLocationContainer.setVisibility(View.VISIBLE);
+            binding.rvLocationBaseItems.setVisibility(View.GONE);
+        }
+        else{
+            binding.includeLocationEmptyView.clLocationContainer.setVisibility(View.GONE);
+            binding.rvLocationBaseItems.setVisibility(View.VISIBLE);
+        }
 
     }
 
     @Override
-    public void showGoodsEmptyView() {
-
+    public void showVisitedEmptyView(boolean state) {
+        if(state){
+            binding.includeVisitedEmptyView.clVisitedContainer.setVisibility(View.VISIBLE);
+            binding.vpVisitedList.setVisibility(View.GONE);
+        }
+        else{
+            binding.includeVisitedEmptyView.clVisitedContainer.setVisibility(View.GONE);
+            binding.vpVisitedList.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
-    public void showVisitedEmptyView() {
-
+    public void setCurrentLocation(String nation, String city) {
+        binding.tvCurrentLoaction.setText(nation+" "+city);
     }
 
     @Override
@@ -137,7 +161,6 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
                 binding.ivSearchPlace.setImageResource(R.drawable.btn_search_white);
             }
         });
-
         // 리사이클러뷰 초기화
         LocationBaseGoodsListRecyclerAdapter goodsAdapter = new LocationBaseGoodsListRecyclerAdapter();
         LinearLayoutManager bannerLayoutManager = new LinearLayoutManager(getContext());
@@ -146,10 +169,10 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         presenter.setLocationAdapter(goodsAdapter);
         binding.ivSetLocation.setOnClickListener(__ -> onSetLocationClick());
         binding.tvItemMore.setOnClickListener(__->{
-            CreateListActivity.startActivity(getContext(),new GoodsListHeader("JP","osaka",34.683036, 135.487775));
+            presenter.locationMoreClick();
         });
         binding.tvVisitedMore.setOnClickListener(__->{
-            SearchMapActivity.startActivity(getContext(),"osaka");
+            presenter.visitedMoreClick();
         });
 
         binding.rvLocationBaseItems.setLayoutManager(bannerLayoutManager);
@@ -164,11 +187,25 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
 
         binding.rvLocationBaseItems.setNestedScrollingEnabled(false);
 
+        presenter.getCurrentLocation();
 
-        // TODO- 아래의 두 부분을 조건에 따라 실행시키고 위치정보가 바뀌었을떄 다시 실행시켜주어야 합니다
-        presenter.loadListData(goodsAdapter, "JP", "osaka");
-        presenter.loadHeaderKeys(new LatLng(34.683036, 135.487775));
+        binding.includeLocationEmptyView.clLocationContainer.setOnClickListener(__->{
+            onSearchButtonClick();
+        });
 
+        binding.includeVisitedEmptyView.clVisitedContainer.setOnClickListener(__->{
+            presenter.visitedMoreClick();
+        });
+    }
+
+    @Override
+    public void showCreateListActivity(GoodsListHeader header) {
+        CreateListActivity.startActivity(getContext(),header);
+    }
+
+    @Override
+    public void showSearchMapActivity(String place) {
+        SearchMapActivity.startActivity(getContext(),place);
     }
 
     @Override
@@ -188,6 +225,7 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
 
     private void onSetLocationClick(){
         // TODO - 위치 버튼 클릭 -> 지도 검색 후 위치 선택 -> 메인으로 돌아와서 위치 set 및 recycler view 갱신
+        presenter.getCurrentLocation();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.teame.boostcamp.myapplication.ui;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -13,9 +15,12 @@ import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;
 import com.teame.boostcamp.myapplication.model.repository.UserPinRepository;
 import com.teame.boostcamp.myapplication.util.Constant;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.LastKnownLocationUtil;
+import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -28,14 +33,19 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
     private CompositeDisposable disposable;
     private GoodsListRepository shoppingListRepository;
     private UserPinRepository userPinRepository;
-    private LocationBaseGoodsListRecyclerAdapter goodsAdapter;
+    private ResourceProvider provider;
     private static final int MAX=5;
     private static final int PERIOD=2;
+    private LocationBaseGoodsListRecyclerAdapter goodsAdapter;
     private FamousPlaceAdapter famousViewPagerAdapter;
     private MainOtherListViewPagerAdapter userViewPagerAdapter;
+    private LatLng lastKnownPosition;
+    private String lastKnownCode;
+    private String lastKnownCity;
 
-    public NewMainPresenter(NewMainContract.View view) {
+    public NewMainPresenter(NewMainContract.View view, ResourceProvider provider) {
         this.view = view;
+        this.provider=provider;
         this.shoppingListRepository = GoodsListRepository.getInstance();
         this.userPinRepository = UserPinRepository.getInstance();
         disposable = new CompositeDisposable();
@@ -44,6 +54,34 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
     @Override
     public void onItemClick(View v, int position) {
         view.bannerClick(famousViewPagerAdapter.getItem(position).getCountryCode());
+    }
+
+    @Override
+    public void locationMoreClick() {
+        view.showCreateListActivity(new GoodsListHeader(lastKnownCode,lastKnownCity,lastKnownPosition.latitude,lastKnownPosition.longitude));
+    }
+
+    @Override
+    public void visitedMoreClick() {
+        view.showSearchMapActivity(lastKnownCity);
+    }
+
+    @Override
+    public void getCurrentLocation() {
+        disposable.add(LastKnownLocationUtil.getLastPosition(provider.getApplicationContext())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(latlng->{
+                    lastKnownPosition=latlng;
+                    Geocoder geocoder=new Geocoder(provider.getApplicationContext(), Locale.KOREA);
+                    List<Address> result=geocoder.getFromLocation(latlng.latitude,latlng.longitude,1);
+                    lastKnownCode=result.get(0).getCountryCode();
+                    lastKnownCity=result.get(0).getLocality();
+                    view.setCurrentLocation(result.get(0).getCountryName(),lastKnownCity);
+                    loadListData(goodsAdapter,lastKnownCode,lastKnownCity);
+                    loadHeaderKeys(latlng);
+                },e->{
+                    DLogUtil.e(e.toString());
+                }));
     }
 
     @Override
@@ -66,6 +104,7 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
 
     private void getGoodsListFromHeader(GoodsListHeader header){
         disposable.add(userPinRepository.getUserPinGoodsList(header.getKey())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list->{
                     view.showUserShoppingActivity(list,header);
                 },e->{
@@ -92,6 +131,7 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
         List<Goods> list=new ArrayList<>();
         disposable.add(shoppingListRepository.getItemListToObservable(nation, city)
                 .take(MAX+1)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         goods -> {
                             list.add(goods);
@@ -100,10 +140,18 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
                             DLogUtil.d(e.getMessage());
                         },
                         ()->{
-                            if(list.size()<=MAX)
+                            if(list.size()== Constant.LOADING_NONE_ITEM) {
+                                view.showGoodsEmptyView(true);
                                 view.setGoodsMoreView(false);
-                            else if(list.size()== Constant.LOADING_NONE_ITEM)
-                                view.showGoodsEmptyView();
+                                return;
+                            }
+                            else if(list.size()<=MAX) {
+                                view.setGoodsMoreView(false);
+                            }
+                            else{
+                                view.setGoodsMoreView(true);
+                            }
+                            view.showGoodsEmptyView(false);
                             list.remove(list.size()-1);
                             goodsAdapter.initItems(list);
                         }
@@ -132,15 +180,25 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
         List<String> keyList=new ArrayList<>();
         disposable.add(userPinRepository.getUserVisitedLocationToSubject(center)
                 .take(MAX+1)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(pair -> {
                     keyList.add(pair.second);
                 },
                 e -> DLogUtil.d(e.getMessage())
                 ,()->{
-                    if(keyList.size()== Constant.LOADING_NONE_ITEM)
-                        view.showGoodsEmptyView();
-                    else if(keyList.size()<=MAX)
+                    view.setVisitedMoreView(false);
+                    if(keyList.size()== Constant.LOADING_NONE_ITEM) {
+                        view.showVisitedEmptyView(true);
                         view.setVisitedMoreView(false);
+                        return;
+                    }
+                    else if(keyList.size()<=MAX) {
+                        view.setVisitedMoreView(false);
+                    }
+                    else{
+                        view.setVisitedMoreView(true);
+                    }
+                    view.showVisitedEmptyView(false);
                     keyList.remove(keyList.size()-1);
                     loadHeaders(keyList);
                 }));
@@ -148,6 +206,7 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
 
     private void loadHeaders(List<String> keyList) {
         disposable.add(userPinRepository.getUserHeaderList(keyList)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         list -> {
                             userViewPagerAdapter.setHeaderlist(list);
