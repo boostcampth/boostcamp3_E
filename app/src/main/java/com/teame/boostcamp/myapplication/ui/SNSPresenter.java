@@ -61,7 +61,7 @@ public class SNSPresenter implements SNSContract.Presenter {
                         list -> {
                             adapter.initItems(list);
                             DLogUtil.d(list.toString());
-                            view.stopRefreshIcon();
+                            view.stopRefreshIcon(list.size());
                         },
                         e -> DLogUtil.d(e.getMessage())
                 )

@@ -17,6 +17,8 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.teame.boostcamp.myapplication.R;
+import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
+import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
 import com.teame.boostcamp.myapplication.adapter.PreviewImageAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityAddPostBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
@@ -33,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import io.reactivex.disposables.Disposable;
@@ -74,7 +77,10 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     }
 
     private void initView() {
-        adapter = new PreviewImageAdapter(getApplicationContext(), new ArrayList<>());
+        adapter = new PreviewImageAdapter();
+        adapter.setOnDeleteClickListener((v, position) -> {
+            adapter.removeItem(position);
+        });
         binding.ivGalleryPick.setOnClickListener(__ -> onAddImagesButtonClicked());
         binding.ivTakePicture.setOnClickListener(__ -> onTakePictureButtonClicked());
         binding.btAddPost.setOnClickListener(__ -> onAddPostButtonClicked());
@@ -128,13 +134,7 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
 
     private void onAddPostButtonClicked() {
         String content = binding.etPostContent.getText().toString();
-
-        if (!TextUtils.isEmpty(content)) {
-            presenter.addPost(content, adapter.getUriList());
-        }
-        else{
-            showToast("내용을 입력해 주세요");
-        }
+        presenter.addPost(content, adapter.itemList);
     }
 
     @Override
@@ -163,7 +163,8 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
             try{
                 photoFile = createImageFile();
             }catch (IOException ex){
-                //TODO-아이오 익셉션 핸들링
+                showToast(getString(R.string.problem_occur));
+                return;
             }
             if(photoFile != null){
                 Uri photoURI = FileProvider.getUriForFile(this, "com.teame.boostcamp.myapplication.fileprovider", photoFile);
@@ -183,14 +184,14 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             try {
                 if (resultData.getData() != null) {
-                    adapter.add(resultData.getData());
+                    adapter.addItem(resultData.getData());
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         if (resultData.getClipData() != null) {
                             ClipData mClipData = resultData.getClipData();
                             for (int i = 0; i < mClipData.getItemCount(); i++) {
                                 ClipData.Item item = mClipData.getItemAt(i);
-                                adapter.add(item.getUri());
+                                adapter.addItem(item.getUri());
                             }
                         }
                     }
@@ -200,7 +201,7 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
             }
 
         }else if(requestCode == TAKE_PICTURE_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            adapter.add(Uri.fromFile(new File(photoPath)));
+            adapter.addItem(Uri.fromFile(new File(photoPath)));
         }
     }
 
@@ -224,10 +225,16 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     @Override
     public void failAddPost() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("쇼핑리스트를 선택해 주세요!");
-        builder.setMessage("쇼핑리스트를 선택하셔야지만 글을 게시할 수 있습니다!");
-        builder.setPositiveButton("OK", (dialog, __) -> dialog.cancel());
-        builder.show();
+        builder.setTitle(getString(R.string.shopping_list_select));
+        builder.setMessage(getString(R.string.shopping_list_alert));
+        builder.setPositiveButton(getString(R.string.confirm), (dialog, __) -> dialog.cancel());
+
+        final AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(__ -> {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+        });
+        dialog.show();
     }
 
     @Override
@@ -241,6 +248,11 @@ public class AddPostActivity extends BaseMVPActivity<ActivityAddPostBinding, Add
     public void showSelectionLoading() {
         binding.tvListSelect.setVisibility(View.INVISIBLE);
         binding.clpbSelect.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showContentAlert() {
+        showToast("내용을 입력해 주세요");
     }
 
 

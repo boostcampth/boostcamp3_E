@@ -108,6 +108,10 @@
         <activity
             android:name=".ui.snsgoodsdetail.SnsGoodsDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.mypost.MyPostActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
     <!-- 네이버 쇼핑 API

@@ -11,6 +11,7 @@ import com.teame.boostcamp.myapplication.adapter.SnsSearchRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSnsBinding;
 import com.teame.boostcamp.myapplication.ui.addpost.AddPostActivity;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
+import com.teame.boostcamp.myapplication.ui.mypost.MyPostActivity;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
 import androidx.annotation.NonNull;
@@ -78,6 +79,7 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
         exAdapter.setOnDeleteListener((v, position) -> {
             exAdapter.removeItem(position);
         });
+        binding.ivSnsMypost.setOnClickListener(__ -> MyPostActivity.startActivity(getContext()));
         binding.rvSnsSearch.setLayoutManager(new LinearLayoutManager(getContext(),
                 RecyclerView.VERTICAL,
                 false));
@@ -89,6 +91,8 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
         binding.svSns.setOnSearchClickListener(v -> {
             binding.ivSnsBack.setVisibility(View.VISIBLE); // 뒤로가기버튼 보여줌
             binding.rvSnsSearch.setVisibility(View.VISIBLE); // 최근 검색 뷰 보여줌
+            binding.ivSnsMypost.setVisibility(View.GONE);
+            binding.tvBuyThis.setVisibility(View.GONE);
         });
         // 시처뷰 클로즈 되었을떄
         binding.svSns.setOnCloseListener((() -> {
@@ -96,6 +100,8 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
             binding.rvSnsSearch.setVisibility(View.INVISIBLE);
             binding.rvSnsSearchPost.setVisibility(View.INVISIBLE);
             binding.clNoSearch.setVisibility(View.INVISIBLE);
+            binding.ivSnsMypost.setVisibility(View.VISIBLE);
+            binding.tvBuyThis.setVisibility(View.VISIBLE);
 
             return false;
         }));
@@ -115,7 +121,7 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
                 binding.rvSnsSearch.setVisibility(View.VISIBLE);
             }
         });
-
+        binding.clNoPost.setOnClickListener(__ -> AddPostActivity.startActivity(getContext()));
         binding.svSns.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -160,8 +166,13 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
     }
 
     @Override
-    public void stopRefreshIcon() {
+    public void stopRefreshIcon(int size) {
         binding.srlSns.setRefreshing(false);
+        if(size == 0){
+            binding.clNoPost.setVisibility(View.VISIBLE);
+        }else{
+            binding.clNoPost.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
