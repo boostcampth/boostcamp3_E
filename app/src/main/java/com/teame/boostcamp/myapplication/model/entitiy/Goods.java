@@ -124,7 +124,7 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
         if (lprice == null) {
             return null;
         }
-        return DataStringUtil.makeStringComma(lprice);
+        return DataStringUtil.makeStringComma(lprice.replaceAll(",",""));
     }
 
     public void setLprice(String lprice) {
@@ -195,8 +195,8 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
             return null;
         }
 
-        int tmpLprice = Integer.valueOf(lprice);
-        setTotalPrice(Integer.toString(tmpLprice * count));
+        int tmpLprice = Integer.valueOf(lprice.replaceAll(",",""));
+        totalPrice = (Integer.toString(tmpLprice * count));
 
 
         return DataStringUtil.makeStringComma(totalPrice);
@@ -225,7 +225,8 @@ public class Goods extends BaseObservable implements Parcelable, Cloneable {
         if (lprice == null) {
             return 0;
         }
-        int tmpLprice = Integer.valueOf(lprice);
+
+        int tmpLprice = Integer.valueOf( lprice.replaceAll(",",""));
         return tmpLprice * count;
     }
 

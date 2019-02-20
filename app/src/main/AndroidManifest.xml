@@ -24,13 +24,16 @@
             android:name=".ui.addgoods.AddGoodsActivity"
             android:label="@string/title_activity_add_goods"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.goodscart.GoodsCartActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.writereply.WriteReplyActivity"
             android:label="댓글작성"
             android:theme="@style/AppTheme.NoActionBar" /> <!-- 구글맵 3.3 이슈 해결 -->
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -96,6 +99,7 @@
         <activity
             android:name=".ui.modifypost.ModifyPostActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
 
         <activity
             android:name=".ui.othershoppinglist.OtherShoppingListActivity"

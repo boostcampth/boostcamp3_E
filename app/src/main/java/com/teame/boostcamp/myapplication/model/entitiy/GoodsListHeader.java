@@ -2,7 +2,6 @@ package com.teame.boostcamp.myapplication.model.entitiy;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.TextUtils;
 
 import com.google.firebase.firestore.Exclude;
 
@@ -39,16 +38,16 @@ public class GoodsListHeader implements Parcelable {
     public GoodsListHeader() {
     }
 
-    public GoodsListHeader(String nation, String city){
+    public GoodsListHeader(String nation, String city) {
         this.nation = nation;
         this.city = city;
     }
 
-    public GoodsListHeader(String nation, String city,Date start, Date end, Double lat, Double lng) {
+    public GoodsListHeader(String nation, String city, Date start, Date end, Double lat, Double lng) {
         this.nation = nation;
         this.city = city;
-        startDate=start;
-        endDate=end;
+        startDate = start;
+        endDate = end;
         this.lat = lat;
         this.lng = lng;
     }
@@ -111,9 +110,6 @@ public class GoodsListHeader implements Parcelable {
     }
 
     public String getTitle() {
-        if (TextUtils.isEmpty(title)) {
-            return getDefaultTitle();
-        }
         return title;
     }
 
@@ -190,11 +186,6 @@ public class GoodsListHeader implements Parcelable {
         return dateFormat.format(endDate);
     }
 
-    @Exclude
-    public String getDefaultTitle() {
-        return this.nation + "-" + this.city + this.getStringDate();
-    }
-
 
     public Map<String, Boolean> getHashTag() {
         return hashTag;
@@ -237,6 +228,7 @@ public class GoodsListHeader implements Parcelable {
             parcel.writeInt(entry.getValue() ? 1 : 0);
         }
     }
+
     @Override
     public String toString() {
         return "GoodsListHeader{" +

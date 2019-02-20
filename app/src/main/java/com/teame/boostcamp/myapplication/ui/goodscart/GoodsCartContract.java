@@ -16,27 +16,32 @@ interface GoodsCartContract {
 
         void duplicationTag();
 
-        void noSelectGoods();
+        void errorSaveGoods(int flag);
 
         void successSave();
+
+        void emptyList();
+
+        void setLoadData(GoodsListHeader header);
     }
 
     interface Presenter extends BasePresenter {
         void addHashTag(String tag);
 
-        void loadData(GoodsCartAdapter adapter);
+        int loadData(GoodsCartAdapter adapter);
 
         void deleteItem(int position);
 
         GoodsListHeader getHeaderData();
 
         void removeHashTag(String tag);
-        void saveCartList();
+
+        void saveCartList(String title);
 
         void detectIsAllCheck();
 
         void calculatorPrice();
 
-        void saveMyList();
+        void saveMyList(String title);
     }
 }

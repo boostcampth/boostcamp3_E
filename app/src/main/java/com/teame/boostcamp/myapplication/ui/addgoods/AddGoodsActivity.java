@@ -1,12 +1,10 @@
 package com.teame.boostcamp.myapplication.ui.addgoods;
 
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -23,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
@@ -63,21 +60,34 @@ public class AddGoodsActivity extends BaseMVPActivity<ActivityAddGoodsBinding, A
 
     void initView() {
         String goodsName = getIntent().getStringExtra(EXTRA_GOODS_NAME);
-        binding.tieTitle.setText(goodsName);
+        binding.etTitle.setText(goodsName);
 
         binding.tvAddGoods.setOnClickListener(view -> {
             Intent resultIntent = new Intent();
             // Default set
-            resultGoods.setName(binding.tieTitle.getText().toString());
+            resultGoods.setName(binding.etTitle.getText().toString());
             resultGoods.setCount(1);
             resultGoods.setCheck(true);
             resultIntent.putExtra(EXTRA_ADD_GOODS, resultGoods);
             setResult(RESULT_OK, resultIntent);
             finish();
         });
-        binding.ivGalleryPick.setOnClickListener(__ -> onAddImagesButtonClicked());
-        binding.ivTakePicture.setOnClickListener(__ -> onTakePictureButtonClicked());
+
+        BottomCameraDialogFragment bottomCameraDialogFragment = BottomCameraDialogFragment.newInstance();
+        bottomCameraDialogFragment.setOnCameraClickListener(__ -> {
+            onTakePictureButtonClicked();
+            bottomCameraDialogFragment.dismiss();
+        });
+        bottomCameraDialogFragment.setOnGalleryClickListener(__ -> {
+            onAddImagesButtonClicked();
+            bottomCameraDialogFragment.dismiss();
+        });
+
+        binding.ivItemImage.setOnClickListener(view -> bottomCameraDialogFragment.show(getSupportFragmentManager(),
+                "add_photo_dialog_fragment"));
     }
+
+
 
     private void onAddImagesButtonClicked() {
         if (ActivityCompat.checkSelfPermission(this, TedPermissionUtil.READ_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -151,7 +161,7 @@ public class AddGoodsActivity extends BaseMVPActivity<ActivityAddGoodsBinding, A
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             try {
                 if (resultData.getData() != null) {
-                    binding.ivItemImage.setImageBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(this, resultData.getData(), 400), LocalImageUtil.getPath(this, resultData.getData())));
+                    binding.ivItemImage.setImageBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(this, resultData.getData(), 800), LocalImageUtil.getPath(this, resultData.getData())));
                     resultGoods.setUserCustomUri(resultData.getData().toString());
                 }
             } catch (Exception e) {
@@ -159,7 +169,7 @@ public class AddGoodsActivity extends BaseMVPActivity<ActivityAddGoodsBinding, A
             }
 
         } else if (requestCode == TAKE_PICTURE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            binding.ivItemImage.setImageBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(this, Uri.fromFile(new File(photoPath)), 400), LocalImageUtil.getPath(this, Uri.fromFile(new File(photoPath)))));
+            binding.ivItemImage.setImageBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(this, Uri.fromFile(new File(photoPath)), 800), LocalImageUtil.getPath(this, Uri.fromFile(new File(photoPath)))));
             resultGoods.setUserCustomUri(resultData.getData().toString());
         }
     }

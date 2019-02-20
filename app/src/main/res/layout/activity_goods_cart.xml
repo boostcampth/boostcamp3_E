@@ -28,6 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="@color/colorBlurGray"
+                    android:elevation="10dp"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="pin"
                     app:navigationIcon="@drawable/btn_all_back"
@@ -57,76 +58,93 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="60dp"
+            android:focusable="false"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="8dp"
                     tools:context=".ui.createlistinfo.CreateListInfo">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/til_title"
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/et_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        android:hint="@string/title"
-                        app:counterEnabled="true"
-                        app:counterMaxLength="30"
-                        app:helperTextEnabled="true"
+                        android:background="@color/colorWhite"
+                        android:hint="이번 여행 제목 (최대 20자)"
+                        android:maxLength="20"
+                        android:maxLines="1"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="15dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="15dp"
+                        android:singleLine="true"
+                        android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/tie_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLength="30"
-                            android:maxLines="1"
-                            android:singleLine="true" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:background="@color/colorIphoneSubBlack"
+                        app:layout_constraintBottom_toTopOf="@id/cg_hash_set"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/et_title" />
 
                     <com.google.android.material.chip.ChipGroup
+
                         android:id="@+id/cg_hash_set"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
+                        android:background="@color/colorWhite"
+                        android:paddingLeft="16dp"
+                        android:paddingTop="4dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="@id/view_end_line"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/til_title">
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_tag"
-                            android:layout_width="match_parent"
+                        app:layout_constraintTop_toBottomOf="@id/et_title">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/et_tag"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="@string/hashtag"
-                            app:counterEnabled="true"
-                            app:counterMaxLength="15"
-                            app:helperText="@string/hashtag_hint">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/tie_hashtag"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:drawableLeft="@drawable/ic_hash"
-                                android:imeOptions="actionNext"
-                                android:maxLength="15"
-                                android:maxLines="1"
-                                android:singleLine="true" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
+                            android:background="@color/colorWhite"
+                            android:hint="이번 여행 포인트! #먹방"
+                            android:maxLength="15"
+                            android:maxLines="1"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="18dp"
+                            android:singleLine="true"
+                            android:textSize="14sp" />
                     </com.google.android.material.chip.ChipGroup>
+
+                    <View
+                        android:id="@+id/view_end_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:background="@color/colorIphoneSubBlack"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llc_all_check_root"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -146,12 +164,58 @@
                         android:textSize="16sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llc_no_add_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingTop="50dp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_empty_result_search"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:srcCompat="@drawable/no_add_items" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="16dp"
+                        android:text="@string/empty_add_item"
+                        android:textColor="@color/colorIphoneBlack"
+                        android:textSize="16sp" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_cart_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/colorDivide"
-                    tools:listitem="@layout/item_cart" />
+                    android:focusable="false"
+                    tools:listitem="@layout/item_cart"
+                    tools:visibility="gone" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_total_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_margin="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:singleLine="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.core.widget.NestedScrollView>
@@ -159,51 +223,36 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_bottom_root"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom"
-            android:background="@color/colorBottom"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/tv_dicide_cart"
                 android:layout_width="0dp"
                 android:layout_height="42dp"
-                android:layout_margin="8dp"
-                android:background="@drawable/layout_accent_round_board"
+                android:background="@drawable/layout_accent_top_rounded"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
                 android:singleLine="true"
                 android:text="@string/confrim_goods"
                 android:textColor="@color/colorWhite"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_total_price"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_total_price"
-                android:layout_width="wrap_content"
-                android:layout_height="42dp"
-                android:layout_margin="8dp"
-                android:background="@drawable/layout_accent_round_stroke"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="1"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:singleLine="true"
-                android:textColor="@color/colorAccent"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <include
+            android:id="@+id/include_loading"
+            layout="@layout/layout_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

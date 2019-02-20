@@ -11,13 +11,13 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_screen"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:fitsSystemWindows="true"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/btn_all_back"
-            app:popupTheme="@style/AppToolbar"/>
+            app:popupTheme="@style/AppToolbar" />
 
 
         <View
@@ -27,42 +27,54 @@
             android:background="@color/colorDivide"
             app:layout_constraintTop_toBottomOf="@id/toolbar_screen" />
 
-        <androidx.appcompat.widget.AppCompatRatingBar
-            android:id="@+id/rb_reply"
-            style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/space_x_small"
-            android:isIndicator="false"
-            android:stepSize="1.0"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llc_select_score"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_screen" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar_screen">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/activity_vertical_margin"
-            android:text="@string/hint_select_star"
-            app:layout_constraintBottom_toBottomOf="@+id/rb_reply"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/rb_reply" />
+            <androidx.appcompat.widget.AppCompatRatingBar
+                android:id="@+id/rb_reply"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:isIndicator="true"
+                android:rating="0"
+                android:stepSize="0.5" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:gravity="center"
+                android:text="@string/hint_select_star" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
 
         <View
             android:id="@+id/view_star_divide"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/activity_vertical_margin"
-            android:layout_marginTop="16dp"
             android:layout_marginRight="@dimen/activity_vertical_margin"
             android:background="@color/colorDivide"
-            app:layout_constraintTop_toBottomOf="@id/rb_reply" />
+            app:layout_constraintTop_toBottomOf="@id/llc_select_score" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_reply_content"
             android:layout_width="0dp"
             android:layout_height="200dp"
+            android:textSize="14sp"
             android:layout_marginLeft="@dimen/activity_vertical_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_vertical_margin"

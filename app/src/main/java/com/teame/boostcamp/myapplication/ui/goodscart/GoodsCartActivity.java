@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
+import com.airbnb.lottie.LottieDrawable;
 import com.google.android.material.chip.Chip;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsCartAdapter;
@@ -14,6 +17,9 @@ import com.teame.boostcamp.myapplication.databinding.ActivityGoodsCartBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 
+import java.util.Map;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,7 +46,7 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage(R.string.would_you_save)
                             .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
-                                presenter.saveCartList();
+                                presenter.saveCartList(binding.etTitle.getText().toString());
                                 showToast(getString(R.string.success_save));
                                 finish();
                             })
@@ -68,7 +74,6 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         return true;
     }
 
-
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, GoodsCartActivity.class);
         context.startActivity(intent);
@@ -89,25 +94,15 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
                 RecyclerView.VERTICAL,
                 false);
 
-        presenter.loadData(adapter);
+        int size = presenter.loadData(adapter);
         presenter.calculatorPrice();
         presenter.detectIsAllCheck();
+        binding.includeLoading.clLoadingBackground.setVisibility(View.GONE);
         GoodsListHeader header = presenter.getHeaderData();
 
-        binding.tieTitle.setOnFocusChangeListener((__, hasFocus) -> {
-            if (hasFocus) {
-                binding.tilTitle.setHint("title");
-            } else {
-                String title = binding.tieTitle.getText().toString();
-                if (title.length() <= 0) {
-                    binding.tilTitle.setHint(header.getDefaultTitle());
-                }
-            }
-        });
-
-        binding.tieHashtag.setOnEditorActionListener((__, actionId, ___) -> {
-            if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                presenter.addHashTag(binding.tieHashtag.getText().toString());
+        binding.etTag.setOnEditorActionListener((__, actionId, ___) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                presenter.addHashTag(binding.etTag.getText().toString());
             }
             return false;
         });
@@ -131,12 +126,19 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
             boolean check = binding.cbAll.isChecked();
             adapter.allCheck(check);
         });
-
         binding.rvCartList.setLayoutManager(linearLayoutManager);
         binding.rvCartList.setAdapter(adapter);
         binding.tvDicideCart.setOnClickListener(view -> {
-            presenter.saveMyList();
+            binding.includeLoading.clLoadingBackground.setVisibility(View.VISIBLE);
+            binding.includeLoading.lavLoading.playAnimation();
+            binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
+            binding.includeLoading.clLoadingBackground.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.colorBlurGray));
+            presenter.saveMyList(binding.etTitle.getText().toString());
         });
+
+        if (size <= 0) {
+            emptyList();
+        }
     }
 
     @Override
@@ -146,12 +148,20 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         chip.setCloseIconEnabled(true); // 대체방법을 못찾음
         chip.setClickable(false);
         chip.setCheckable(false);
-        binding.cgHashSet.addView(chip);
+
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(4, 4, 4, 4);
+        chip.setLayoutParams(params);
+
+        binding.cgHashSet.addView(chip,binding.cgHashSet.getChildCount() - 1);
         chip.setOnCloseIconClickListener(view -> {
             binding.cgHashSet.removeView(chip);
             presenter.removeHashTag(chip.getText().toString());
         });
-        binding.tieHashtag.setText("");
+        binding.etTag.setText("");
     }
 
 
@@ -168,16 +178,108 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
     @Override
     public void setAllorNoneCheck(boolean allCheck) {
         binding.cbAll.setChecked(allCheck);
+        if (allCheck) {
+            binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
+            binding.tvDicideCart.setClickable(true);
+            binding.tvTotalPrice.setVisibility(View.VISIBLE);
+        } else {
+            binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIphoneBlack));
+            binding.tvDicideCart.setClickable(false);
+            binding.tvTotalPrice.setVisibility(View.GONE);
+        }
     }
 
     @Override
-    public void noSelectGoods() {
-        showToast(getString(R.string.no_select_item));
+    public void errorSaveGoods(int flag) {
+        if(flag == 0 ){
+            showToast(getString(R.string.no_select_item));
+        }else if(flag == 1){
+            showToast(getString(R.string.would_you_set_title));
+        }
+
+
+        binding.includeLoading.clLoadingBackground.setVisibility(View.GONE);
+        binding.includeLoading.clLoadingBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+        binding.includeLoading.lavLoading.cancelAnimation();
+        binding.includeLoading.lavLoading.setVisibility(View.GONE);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (binding.includeLoading.clLoadingBackground.getVisibility() == View.VISIBLE) {
+            return;
+        }
+
+        if (isChange) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.would_you_save)
+                    .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
+                        presenter.saveCartList(binding.etTitle.getText().toString());
+                        showToast(getString(R.string.success_save));
+                        finish();
+                    })
+                    .setNegativeButton(R.string.cancle, (__, ___) -> finish());
+
+            final AlertDialog dialog = builder.create();
+            dialog.setOnShowListener(__ -> {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+
+            });
+            dialog.show();
+        } else {
+            finish();
+        }
+    }
 
     @Override
     public void successSave() {
         showToast("성공");
+        binding.includeLoading.clLoadingBackground.setVisibility(View.GONE);
+        binding.includeLoading.clLoadingBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
+        binding.includeLoading.lavLoading.cancelAnimation();
+        binding.includeLoading.lavLoading.setVisibility(View.GONE);
+        finish();
     }
+
+    @Override
+    public void emptyList() {
+        binding.llcNoAddItem.setVisibility(View.VISIBLE);
+        binding.llcAllCheckRoot.setVisibility(View.GONE);
+        binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIphoneBlack));
+        binding.tvDicideCart.setOnClickListener(null);
+        binding.tvTotalPrice.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setLoadData(GoodsListHeader header) {
+        binding.etTitle.setText(header.getTitle());
+        Map<String,Boolean> hashTag = header.getHashTag();
+
+        for(String tag : hashTag.keySet()){
+
+            Chip chip = new Chip(this);
+            chip.setText(tag);
+            chip.setCloseIconEnabled(true); // 대체방법을 못찾음
+            chip.setClickable(false);
+            chip.setCheckable(false);
+
+            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(4, 4, 4, 4);
+            chip.setLayoutParams(params);
+
+            binding.cgHashSet.addView(chip,binding.cgHashSet.getChildCount() - 1);
+            chip.setOnCloseIconClickListener(view -> {
+                binding.cgHashSet.removeView(chip);
+                presenter.removeHashTag(chip.getText().toString());
+            });
+            binding.etTag.setText("");
+        }
+    }
+
 }
