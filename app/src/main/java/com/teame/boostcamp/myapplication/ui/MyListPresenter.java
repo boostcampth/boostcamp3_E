@@ -38,6 +38,21 @@ public class MyListPresenter implements MyListContract.Presenter {
     }
 
     @Override
+    public void reLoadMyList() {
+        disposable.add(repository.getMyList()
+                .subscribe(list -> {
+                            DLogUtil.d(list.toString());
+                            view.finishLoad(list.size());
+                            adapter.initItems(list);
+                        },
+                        e -> {
+                            view.finishLoad(Constant.FAIL_LOAD);
+                            DLogUtil.e(e.getMessage());
+                        })
+        );
+    }
+
+    @Override
     public void getMyListUid(int position) {
         GoodsListHeader header = adapter.getItem(position);
 
