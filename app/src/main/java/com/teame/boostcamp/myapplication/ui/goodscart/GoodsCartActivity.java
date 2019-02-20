@@ -15,6 +15,7 @@ import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsCartAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityGoodsCartBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
+import com.teame.boostcamp.myapplication.ui.MainActivity;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 
 import java.util.Map;
@@ -241,6 +242,7 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         binding.includeLoading.clLoadingBackground.setBackgroundColor(ContextCompat.getColor(this, R.color.colorClear));
         binding.includeLoading.lavLoading.cancelAnimation();
         binding.includeLoading.lavLoading.setVisibility(View.GONE);
+        MainActivity.startActivity(this);
         finish();
     }
 
