@@ -22,12 +22,11 @@
 - Retrofit/Rx를 통한 API 비동기 처리
 - SNS에서 여러 이미지가져오기위한  Glide
 - 위치기반 서비스를 위한 Geo Fire Query (알림)
-- 내부디비 Room 사용 (edited) 
 
 ### 사용 라이브러리 (가이드 링크) 
 - Use [MVP](https://github.com/googlesamples/android-architecture)
 - Image : [Glide](https://github.com/bumptech/glide)
-- AAC : [Room](https://developer.android.com/reference/androidx/room/package-summary), [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager/basics)
+- AAC : [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager/basics)
 - Serverless & Network : [Firebase](https://firebase.google.com/docs/android/setup), [Naver shopping API](https://developers.naver.com/docs/search/shopping/), [retrofit2](https://github.com/square/retrofit)
 - Degine : [material](https://material.io/develop/android/)
 - Util : [AndroidX](https://developer.android.com/jetpack/androidx/), [DataBinding](https://developer.android.com/topic/libraries/data-binding/?hl=ko), [Rxjava2](https://github.com/ReactiveX/RxJava) ([Rxjava2 Marble](http://reactivex.io/documentation/operators.html)), [TedPermission](https://github.com/ParkSangGwon/TedPermission)

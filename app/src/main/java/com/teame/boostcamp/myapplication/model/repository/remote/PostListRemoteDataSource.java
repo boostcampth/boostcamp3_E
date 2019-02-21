@@ -376,5 +376,39 @@ public class PostListRemoteDataSource implements PostListDataSource {
 
         return subject.toList();
     }
+
+   @Override
+    public Single<List<Post>> getMyPostList() {
+        DLogUtil.d(":: 진입");
+
+        PublishSubject<Post> subject = PublishSubject.create();
+
+        // 모든 게시물(post) List를 가져옴
+        Task base = userRef.document(auth.getUid()).collection(QUERY_MY_POST).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
+
+                        for (DocumentSnapshot document : documents) {
+                            Post post = document.toObject(Post.class);
+                            String key = document.getReference().getId();
+                            post.setKey(key);
+                            subject.onNext(post);
+                        }
+                    } else {
+                        DLogUtil.d("No such document");
+                    }
+                })
+                .addOnFailureListener(Throwable::getMessage);
+
+        // 베이스(모든 포스트) 리스트를 가져오는데 성공하면 아이템을 반환해줌
+        Tasks.whenAll(base).addOnCompleteListener(task -> {
+            subject.onComplete();
+        })
+                .addOnFailureListener(e -> DLogUtil.e("error : " + e.toString()));
+
+        // 모든 포스트 List 반환
+        return subject.toList();
+    }
 }
 

@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.adapter;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -10,76 +9,60 @@ import android.widget.ImageView;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemPreviewImageBinding;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.LocalImageUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PreviewImageAdapter extends RecyclerView.Adapter<PreviewImageAdapter.ItemViewHolder> implements OnPreviewImageClickListener {
-    private List<Uri> uriList;
-    Context context;
+public class PreviewImageAdapter extends BaseRecyclerAdatper<Uri, PreviewImageAdapter.ViewHolder> {
+    private OnItemClickListener listener;
 
-    public List<Uri> getUriList() {
-        return uriList;
-    }
-
-    public void add(Uri uri) {
-        uriList.add(uri);
-        notifyDataSetChanged();
-    }
-
-    public PreviewImageAdapter(Context context, ArrayList<Uri> uriList) {
-        this.context = context;
-        this.uriList = uriList;
+    public void setOnDeleteClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_preview_image, viewGroup, false);
-        ItemViewHolder holder = new ItemViewHolder(view);
-        holder.setPreviewImageClickListener(this);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_preview_image, parent, false);
+        final ViewHolder holder = new ViewHolder(itemView);
+
+        holder.binding.ibDeletePreviewImage.setOnClickListener(view -> {
+            int position = holder.getLayoutPosition();
+            DLogUtil.e("리스너 :" + holder.getAdapterPosition());
+            if (listener != null) {
+                listener.onItemClick(view, position);
+            }
+        });
         return holder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Uri uri = itemList.get(position);
+        holder.binding.setBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(holder.binding.getRoot().getContext(), uri, 400), LocalImageUtil.getPath(holder.binding.getRoot().getContext(), uri)));
+
+        DLogUtil.d(itemList.get(position).toString());
+    }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        private ItemPreviewImageBinding binding;
+
+        ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            binding = DataBindingUtil.bind(itemView);
+        }
+
     }
 
     @BindingAdapter({"loadImage"})
     public static void setImageBitmap(ImageView imageView, Bitmap bitmap) {
         imageView.setImageBitmap(bitmap);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
-        holder.binding.setBitmap(LocalImageUtil.getRotatedBitmap(LocalImageUtil.getResizedBitmap(context, uriList.get(i), 400), LocalImageUtil.getPath(context, uriList.get(i))));
-        holder.binding.ibDeletePreviewImage.setOnClickListener(__ -> onDeleteButtonClick(i));
-    }
-
-    @Override
-    public int getItemCount() {
-        return uriList.size();
-    }
-
-    @Override
-    public void onDeleteButtonClick(int i) {
-        uriList.remove(i);
-        notifyDataSetChanged();
-    }
-
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
-        ItemPreviewImageBinding binding;
-        private OnPreviewImageClickListener mListener;
-
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            binding = DataBindingUtil.bind(itemView);
-        }
-
-        public void setPreviewImageClickListener(OnPreviewImageClickListener onClick) {
-            mListener = onClick;
-        }
     }
 }
