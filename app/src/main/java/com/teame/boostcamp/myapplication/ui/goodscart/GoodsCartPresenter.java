@@ -10,6 +10,7 @@ import com.teame.boostcamp.myapplication.model.repository.local.preference.CartP
 import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreferenceHelper;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.DataStringUtil;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,7 +22,7 @@ import java.util.Map;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class GoodsCartPresenter implements GoodsCartContract.Presenter {
+public class GoodsCartPresenter implements GoodsCartContract.Presenter, DatePickerDialog.OnDateSetListener {
 
     private HashSet<String> hashTagSet = new HashSet<>();
     private GoodsCartAdapter adapter;
@@ -46,6 +47,11 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
     @Override
     public void onDetach() {
 
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        DLogUtil.e(""+year+" "+monthOfYear+" "+dayOfMonth);
     }
 
     @Override

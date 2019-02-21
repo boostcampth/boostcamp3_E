@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +12,23 @@ import android.view.inputmethod.EditorInfo;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.google.android.material.chip.Chip;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsCartAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityGoodsCartBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.MainActivity;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
+import com.teame.boostcamp.myapplication.ui.period.PeriodActivity;
+import com.teame.boostcamp.myapplication.util.CalendarUtil;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.date.DateRangeLimiter;
 
+import java.util.Calendar;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +37,9 @@ import androidx.recyclerview.widget.RecyclerView;
 public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding, GoodsCartContract.Presenter> implements GoodsCartContract.View {
 
     private boolean isChange = false;
+    private static final int REQUEST_CODE=1;
+    private static final String EXTRA_FIRSTDAY="EXTRA_FIRSTDAY";
+    private static final String EXTRA_LASTDAY="EXTRA_LASTDAY";
 
     @Override
     protected GoodsCartContract.Presenter getPresenter() {
@@ -86,6 +98,22 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         initView();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode==REQUEST_CODE){
+            CalendarDay first=data.getParcelableExtra(EXTRA_FIRSTDAY);
+            CalendarDay last=data.getParcelableExtra(EXTRA_LASTDAY);
+            Calendar firstDay=Calendar.getInstance();
+            firstDay.set(first.getYear(),first.getMonth(),first.getDay());
+            Calendar lastDay=Calendar.getInstance();
+            lastDay.set(last.getYear(),last.getMonth(),last.getDay());
+            String str="";
+            str+=first.getYear()+"년 "+first.getMonth()+"월 "+first.getDay()+"일 ~ ";
+            str+=last.getYear()+"년 "+last.getMonth()+"월 "+last.getDay()+"일, "+ CalendarUtil.daysBetween(firstDay,lastDay);
+            binding.tvTotalDate.setText(str);
+        }
+    }
+
     void initView() {
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
@@ -107,6 +135,14 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
             }
             return false;
         });
+
+        binding.tvTotalDate.setOnClickListener(__-> PeriodActivity.startActivity(this));
+        String str="";
+        Calendar today=Calendar.getInstance();
+        str+=today.get(Calendar.YEAR)+"년 "+Integer.toString(today.get(Calendar.MONTH)+1)+"월 "+today.get(Calendar.DATE)+"일 ~ ";
+        today.add(Calendar.DATE,1);
+        str+=today.get(Calendar.YEAR)+"년 "+Integer.toString(today.get(Calendar.MONTH)+1)+"월 "+today.get(Calendar.DATE)+"일, 1박";
+        binding.tvTotalDate.setText(str);
 
         adapter.setOnItemDeleteListener((v, position) -> {
             isChange = true;
