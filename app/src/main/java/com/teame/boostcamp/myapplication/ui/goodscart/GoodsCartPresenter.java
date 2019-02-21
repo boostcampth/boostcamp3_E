@@ -36,7 +36,7 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter, DatePick
     private MyListRepository repository;
     private ResourceProvider provider;
     private static final String PREF_ACTIVITY_FIRST_DATE="PREF_ACTIVITY_FIRST_DATE";
-    private static final String PREF_ACTIVITY_LAST_DATE="EXTRA_ACTIVITY_LAST_DATE";
+    private static final String PREF_ACTIVITY_LAST_DATE="PREF_ACTIVITY_LAST_DATE";
     GoodsListHeader header ;
 
     public GoodsCartPresenter(GoodsCartContract.View view, ResourceProvider provider) {
@@ -194,10 +194,15 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter, DatePick
         }
         header.setTitle(title);
 
-        //TODO: TEST 코드 입니다.
-        if(header.getStartDate()==null||header.getEndDate()==null){
-            header.setStartDate(Calendar.getInstance().getTime());
-            header.setEndDate(Calendar.getInstance().getTime());
+        String startDate= SharedPreferenceUtil.getString(provider.getApplicationContext(),PREF_ACTIVITY_FIRST_DATE);
+        String endDate= SharedPreferenceUtil.getString(provider.getApplicationContext(),PREF_ACTIVITY_LAST_DATE);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy년 MM월 dd일");
+
+        try{
+            header.setStartDate(sdf.parse(startDate));
+            header.setEndDate(sdf.parse(endDate));
+        }catch (Exception e){
+            DLogUtil.e(e.toString());
         }
 
         DLogUtil.d(itemList.toString());
