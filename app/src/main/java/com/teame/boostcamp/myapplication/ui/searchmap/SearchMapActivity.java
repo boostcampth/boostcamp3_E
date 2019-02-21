@@ -37,6 +37,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,SearchMapContract.Presenter> implements OnMapReadyCallback
@@ -233,6 +234,17 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
         super.onSaveInstanceState(outState);
         binding.mvGooglemap.onSaveInstanceState(outState);
     }
+
+    @Override
+    public void failSearch() {
+        showToast("찾으시는 장소가 없습니다.");
+        disposable.add(LastKnownLocationUtil.getLastPosition(getApplicationContext())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(latLng -> {
+                    moveCamera(latLng);
+                }));
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map=googleMap;

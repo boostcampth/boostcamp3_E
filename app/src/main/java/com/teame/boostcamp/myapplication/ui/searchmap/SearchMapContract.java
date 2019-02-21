@@ -15,6 +15,7 @@ import io.reactivex.Single;
 public interface SearchMapContract {
     interface View extends BaseView<Presenter> {
         void showSearchResult(String place);
+        void failSearch();
         void moveCamera(LatLng latlng);
         void setUserPinMarker(LatLng latlng);
         void userPinMarkerFinish(Marker marker);
