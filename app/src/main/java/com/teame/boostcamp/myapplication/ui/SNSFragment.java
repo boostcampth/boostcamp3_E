@@ -93,6 +93,7 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
             binding.rvSnsSearch.setVisibility(View.VISIBLE); // 최근 검색 뷰 보여줌
             binding.ivSnsMypost.setVisibility(View.GONE);
             binding.tvBuyThis.setVisibility(View.GONE);
+            binding.clNoPost.setVisibility(View.INVISIBLE);
         });
         // 시처뷰 클로즈 되었을떄
         binding.svSns.setOnCloseListener((() -> {
@@ -102,6 +103,9 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
             binding.clNoSearch.setVisibility(View.INVISIBLE);
             binding.ivSnsMypost.setVisibility(View.VISIBLE);
             binding.tvBuyThis.setVisibility(View.VISIBLE);
+            if(adapter.postList.size() == 0){
+                binding.clNoPost.setVisibility(View.VISIBLE);
+            }
 
             return false;
         }));
