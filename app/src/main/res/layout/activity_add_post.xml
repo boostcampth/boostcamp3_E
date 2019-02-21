@@ -45,11 +45,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/btn_back_black"
-                    tools:src="@drawable/btn_back_black" />
+                    app:srcCompat="@drawable/btn_back" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -161,6 +162,7 @@
                 android:layout_marginBottom="8dp"
                 android:scaleType="centerCrop"
                 android:overScrollMode="never"
+                android:clickable="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_take_picture"
@@ -173,6 +175,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/btn_image_add" />
@@ -182,6 +186,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_gallery_pick"
                 app:srcCompat="@drawable/btn_camera" />

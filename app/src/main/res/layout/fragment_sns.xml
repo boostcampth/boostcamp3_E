@@ -20,11 +20,31 @@
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|enterAlways">
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_buy_this"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="이거사!"
+                    android:textStyle="bold" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_sns_mypost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="right"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    app:srcCompat="@drawable/btn_my_post"/>
+
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/sv_sns"
                     android:layout_gravity="right"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true">
+
                 </androidx.appcompat.widget.SearchView>
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -32,7 +52,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="invisible"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
                     app:srcCompat="@drawable/btn_back"/>
+
+
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -120,6 +144,45 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appCompatImageView" />
 
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_no_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true">
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/appCompatImageView2"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_none_item" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/no_post"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatImageView2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -30,4 +30,6 @@ public interface PostListDataSource {
     Single<Post> modifyPost(Post oldPost, String content, List<Uri> uriList);
 
     Single<List<Post>> searchPostList(String tag);
+
+    Single<List<Post>> getMyPostList();
 }

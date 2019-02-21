@@ -17,6 +17,7 @@ import android.view.View;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
+import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.adapter.PreviewImageAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityModifyPostBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
@@ -78,7 +79,8 @@ public class ModifyPostActivity extends BaseMVPActivity<ActivityModifyPostBindin
     private void initView() {
         Post post = getIntent().getParcelableExtra(EXTRA_POST);
         binding.setPost(post);
-        adapter = new PreviewImageAdapter(getApplicationContext(), new ArrayList<>());
+        adapter = new PreviewImageAdapter();
+        adapter.setOnDeleteClickListener((__, position) -> adapter.removeItem(position));
         binding.ivGalleryPick.setOnClickListener(__ -> onAddImagesButtonClicked());
         binding.ivTakePicture.setOnClickListener(__ -> onTakePictureButtonClicked());
         binding.btModifyPost.setOnClickListener(__ -> onModifyPostButtonClicked(post));
@@ -187,14 +189,14 @@ public class ModifyPostActivity extends BaseMVPActivity<ActivityModifyPostBindin
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             try {
                 if (resultData.getData() != null) {
-                    adapter.add(resultData.getData());
+                    adapter.addItem(resultData.getData());
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         if (resultData.getClipData() != null) {
                             ClipData mClipData = resultData.getClipData();
                             for (int i = 0; i < mClipData.getItemCount(); i++) {
                                 ClipData.Item item = mClipData.getItemAt(i);
-                                adapter.add(item.getUri());
+                                adapter.addItem(item.getUri());
                             }
                         }
                     }
@@ -204,7 +206,7 @@ public class ModifyPostActivity extends BaseMVPActivity<ActivityModifyPostBindin
             }
 
         } else if (requestCode == TAKE_PICTURE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            adapter.add(Uri.fromFile(new File(photoPath)));
+            adapter.addItem(Uri.fromFile(new File(photoPath)));
         }
     }
 

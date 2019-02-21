@@ -93,6 +93,15 @@ public class PostListRepository implements PostListDataSource {
         return postListRemoteDataSource.searchPostList(tag);
     }
 
+    @Override
+    public Single<List<Post>> getMyPostList() {
+        return postListRemoteDataSource.getMyPostList()
+                .map(unsortedList -> {
+                    List<Post> sortedList = new ArrayList<>(unsortedList);
+                    Collections.sort(sortedList, new PostListRepository.PostAscToDateSort());
+                    return sortedList;
+                });
+    }
 
     // Reply데이터 오름차순 정렬 Comparator
     class ReplyAscToDateSort implements Comparator<Reply> {

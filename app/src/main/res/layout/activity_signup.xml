@@ -20,11 +20,12 @@
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/btn_back"/>
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorBlack"
-                    android:text="@string/signup"/>
+                    android:layout_gravity="center"
+                    android:text="@string/sign_up_word"
+                    android:textStyle="bold" />
 
 
 

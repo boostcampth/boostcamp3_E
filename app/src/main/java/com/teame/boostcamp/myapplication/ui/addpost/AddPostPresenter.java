@@ -2,7 +2,9 @@ package com.teame.boostcamp.myapplication.ui.addpost;
 
 import android.app.ProgressDialog;
 import android.net.Uri;
+import android.text.TextUtils;
 
+import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
@@ -50,6 +52,10 @@ public class AddPostPresenter implements AddPostContract.Presenter {
     public void addPost(String content, List<Uri> uriList) {
         if (selectedListHeader == null) {
             view.failAddPost();
+            return;
+        }
+        if (TextUtils.isEmpty(content)) {
+            view.showContentAlert();
             return;
         }
         loading = view.showLoading();

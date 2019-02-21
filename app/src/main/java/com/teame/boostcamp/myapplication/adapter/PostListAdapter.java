@@ -2,9 +2,10 @@ package com.teame.boostcamp.myapplication.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
@@ -62,11 +63,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
         holder.setPostClickListener(this);
         return holder;
     }
-    @BindingConversion
-    public static int showIndicator(int size){
-        return size > 1 ? View.VISIBLE : View.GONE;
-    }
-
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int i) {
@@ -99,17 +95,17 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position, @NonNull List<Object> payloads) {
-        if(payloads.isEmpty()){
+        if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads);
-        }else{
-            for(Object payload : payloads){
-                if (payload instanceof String){
+        } else {
+            for (Object payload : payloads) {
+                if (payload instanceof String) {
                     String type = (String) payload;
-                    if(TextUtils.equals(type, LIKE_UPDATE) && holder instanceof ItemViewHolder){
+                    if (TextUtils.equals(type, LIKE_UPDATE) && holder instanceof ItemViewHolder) {
                         holder.binding.setPost(postList.get(position));
                         holder.binding.ivPostLike.setVisibility(View.VISIBLE);
                         holder.binding.clpbPostLike.setVisibility(View.INVISIBLE);
-                    }else if(TextUtils.equals(type, SHOW_LIKE_LOADING) && holder instanceof ItemViewHolder){
+                    } else if (TextUtils.equals(type, SHOW_LIKE_LOADING) && holder instanceof ItemViewHolder) {
                         holder.binding.clpbPostLike.setVisibility(View.VISIBLE);
                         holder.binding.ivPostLike.setVisibility(View.INVISIBLE);
                     }
@@ -167,6 +163,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
         });
         menu.show();
     }
+
+
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         ItemPostBinding binding;

@@ -36,7 +36,7 @@ public class ModifyPostPresenter implements ModifyPostContract.Presenter {
             DLogUtil.e(list.toString());
             for(Uri uri : list){
                 loading.dismiss();
-                adapter.add(uri);
+                adapter.addItem(uri);
             }
         }, e -> view.occurServerError()));
     }
@@ -44,7 +44,7 @@ public class ModifyPostPresenter implements ModifyPostContract.Presenter {
     @Override
     public void modifyPost(Post oldPost, String content) {
         loading = view.showLoading();
-        disposable.add(postListRep.modifyPost(oldPost, content, adapter.getUriList())
+        disposable.add(postListRep.modifyPost(oldPost, content, adapter.itemList)
                 .subscribe(list -> {
                             DLogUtil.d(list.toString());
                             loading.dismiss();

@@ -8,7 +8,7 @@ import com.teame.boostcamp.myapplication.ui.base.BaseView;
 
 public interface SNSContract {
     interface View extends BaseView<Presenter> {
-        void stopRefreshIcon();
+        void stopRefreshIcon(int size);
         void succeedSearch(PostListAdapter searchAdapter);
     }
 

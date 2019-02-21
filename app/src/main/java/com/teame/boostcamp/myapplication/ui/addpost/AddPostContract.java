@@ -3,6 +3,7 @@ package com.teame.boostcamp.myapplication.ui.addpost;
 import android.app.ProgressDialog;
 import android.net.Uri;
 
+import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
 import com.teame.boostcamp.myapplication.ui.base.BaseView;
@@ -25,6 +26,8 @@ public interface AddPostContract {
         void occurServerError();
 
         void showSelectionLoading();
+
+        void showContentAlert();
 
         ProgressDialog showLoading();
     }
