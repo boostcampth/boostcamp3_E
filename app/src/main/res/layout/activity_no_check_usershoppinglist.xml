@@ -25,6 +25,7 @@
         </androidx.appcompat.widget.Toolbar>
 
         <HorizontalScrollView
+            android:layout_marginTop="@dimen/space_median"
             android:layout_marginLeft="@dimen/space_median"
             android:layout_marginRight="@dimen/space_median"
             android:id="@+id/hsv_no_check_chip_scroll"

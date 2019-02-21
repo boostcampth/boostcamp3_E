@@ -143,6 +143,15 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_total_date"
+                    android:layout_marginLeft="@dimen/space_median"
+                    android:background="@drawable/shape_roundedbox"
+                    android:padding="@dimen/space_x_small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 2019.01.23~2019.03.04, 7박 "/>
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/llc_all_check_root"
                     android:layout_width="match_parent"

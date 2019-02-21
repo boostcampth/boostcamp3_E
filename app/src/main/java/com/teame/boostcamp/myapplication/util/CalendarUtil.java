@@ -1,33 +1,28 @@
 package com.teame.boostcamp.myapplication.util;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class CalendarUtil {
 
     public static int daysBetween(Calendar day1, Calendar day2){
-        Calendar dayOne = (Calendar) day1.clone(),
-                dayTwo = (Calendar) day2.clone();
 
-        if (dayOne.get(Calendar.YEAR) == dayTwo.get(Calendar.YEAR)) {
-            return Math.abs(dayOne.get(Calendar.DAY_OF_YEAR) - dayTwo.get(Calendar.DAY_OF_YEAR));
-        } else {
-            if (dayTwo.get(Calendar.YEAR) > dayOne.get(Calendar.YEAR)) {
-                //swap them
-                Calendar temp = dayOne;
-                dayOne = dayTwo;
-                dayTwo = temp;
-            }
-            int extraDays = 0;
+        GregorianCalendar dayOne = new GregorianCalendar(day1.get(Calendar.YEAR),day1.get(Calendar.MONTH),day1.get(Calendar.DAY_OF_MONTH));
+        GregorianCalendar dayTwo = new GregorianCalendar(day2.get(Calendar.YEAR),day2.get(Calendar.MONTH),day2.get(Calendar.DAY_OF_MONTH));
 
-            int dayOneOriginalYearDays = dayOne.get(Calendar.DAY_OF_YEAR);
+        DateTime startDay=new DateTime(dayOne);
+        startDay.minusMonths(1);
+        DateTime endDay=new DateTime(dayTwo);
+        endDay.minusMonths(1);
 
-            while (dayOne.get(Calendar.YEAR) > dayTwo.get(Calendar.YEAR)) {
-                dayOne.add(Calendar.YEAR, -1);
-                // getActualMaximum() important for leap years
-                extraDays += dayOne.getActualMaximum(Calendar.DAY_OF_YEAR);
-            }
+        int diff=Days.daysBetween(startDay,endDay).getDays();
 
-            return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays ;
-        }
+        return diff;
     }
 }

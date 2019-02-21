@@ -29,6 +29,9 @@
             android:name=".ui.goodscart.GoodsCartActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity android:name=".ui.period.PeriodActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".ui.writereply.WriteReplyActivity"
             android:label="댓글작성"
@@ -62,18 +65,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.example.ExampleActivity" />
+
         <activity android:name=".ui.searchmap.SearchMapActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".ui.MainActivity"
             android:windowSoftInputMode="adjustPan|adjustResize"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".ui.signup.SignUpActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".ui.addpost.AddPostActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.usershoppinglist.UserShoppinglistActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -85,13 +94,16 @@
         <activity
             android:name=".ui.goodsdetail.GoodsDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.createlist.CreateListActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|adjustResize"></activity>
+            android:windowSoftInputMode="adjustPan|adjustResize"/>
+
         <activity
             android:name=".ui.selectedgoods.SelectedGoodsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.postreply.PostReplyActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -99,7 +111,6 @@
         <activity
             android:name=".ui.modifypost.ModifyPostActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
 
         <activity
             android:name=".ui.othershoppinglist.OtherShoppingListActivity"
