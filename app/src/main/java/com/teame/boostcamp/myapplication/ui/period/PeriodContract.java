@@ -11,7 +11,7 @@ import java.util.List;
 public interface PeriodContract {
     interface View extends BaseView<Presenter> {
         void setBetweenDate(String text);
-        void finishActivity(CalendarDay start, CalendarDay end);
+        void saveCalendar(CalendarDay start, CalendarDay end);
     }
 
     interface Presenter extends BasePresenter {

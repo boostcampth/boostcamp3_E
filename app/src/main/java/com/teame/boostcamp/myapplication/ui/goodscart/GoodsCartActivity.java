@@ -21,9 +21,13 @@ import com.teame.boostcamp.myapplication.ui.MainActivity;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.period.PeriodActivity;
 import com.teame.boostcamp.myapplication.util.CalendarUtil;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
+import com.teame.boostcamp.myapplication.util.ResourceProvider;
+import com.teame.boostcamp.myapplication.util.SharedPreferenceUtil;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.date.DateRangeLimiter;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -40,10 +44,13 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
     private static final int REQUEST_CODE=1;
     private static final String EXTRA_FIRSTDAY="EXTRA_FIRSTDAY";
     private static final String EXTRA_LASTDAY="EXTRA_LASTDAY";
+    private static final String PREF_ACTIVITY_FIRST_DATE="PREF_ACTIVITY_FIRST_DATE";
+    private static final String PREF_ACTIVITY_LAST_DATE="EXTRA_ACTIVITY_LAST_DATE";
+
 
     @Override
     protected GoodsCartContract.Presenter getPresenter() {
-        return new GoodsCartPresenter(this);
+        return new GoodsCartPresenter(this, new ResourceProvider(getApplicationContext()));
     }
 
     @Override
@@ -101,15 +108,24 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode==REQUEST_CODE){
-            CalendarDay first=data.getParcelableExtra(EXTRA_FIRSTDAY);
-            CalendarDay last=data.getParcelableExtra(EXTRA_LASTDAY);
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy년 MM월 dd일");
+            String firstString=SharedPreferenceUtil.getString(this,"PREF_ACTIVITY_FIRST_DATE");
+            String lastString=SharedPreferenceUtil.getString(this,"PREF_ACTIVITY_LAST_DATE");
+
             Calendar firstDay=Calendar.getInstance();
-            firstDay.set(first.getYear(),first.getMonth(),first.getDay());
             Calendar lastDay=Calendar.getInstance();
-            lastDay.set(last.getYear(),last.getMonth(),last.getDay());
+            try {
+                firstDay.setTime(sdf.parse(firstString));
+                lastDay.setTime(sdf.parse(lastString));
+            }catch(Exception e){
+                DLogUtil.e(e.toString());
+            }
+
+            int between=CalendarUtil.daysBetween(firstDay,lastDay);
+
             String str="";
-            str+=first.getYear()+"년 "+first.getMonth()+"월 "+first.getDay()+"일 ~ ";
-            str+=last.getYear()+"년 "+last.getMonth()+"월 "+last.getDay()+"일, "+ CalendarUtil.daysBetween(firstDay,lastDay);
+            str+=firstString+" ~ "+ lastString+", "+between+"박";
+
             binding.tvTotalDate.setText(str);
         }
     }
@@ -137,11 +153,20 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         });
 
         binding.tvTotalDate.setOnClickListener(__-> PeriodActivity.startActivity(this));
+
         String str="";
         Calendar today=Calendar.getInstance();
+        Calendar tomarrow=(Calendar)today.clone();
+        tomarrow.add(Calendar.DATE,1);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy년 MM월 dd일");
+        String todayString=sdf.format(today.getTime());
+        String tomarrowString=sdf.format(tomarrow.getTime());
+
+        SharedPreferenceUtil.putString(getApplicationContext(),"PREF_ACTIVITY_FIRST_DATE",todayString);
+        SharedPreferenceUtil.putString(getApplicationContext(),"PREF_ACTIVITY_LAST_DATE",tomarrowString);
+
         str+=today.get(Calendar.YEAR)+"년 "+Integer.toString(today.get(Calendar.MONTH)+1)+"월 "+today.get(Calendar.DATE)+"일 ~ ";
-        today.add(Calendar.DATE,1);
-        str+=today.get(Calendar.YEAR)+"년 "+Integer.toString(today.get(Calendar.MONTH)+1)+"월 "+today.get(Calendar.DATE)+"일, 1박";
+        str+=tomarrow.get(Calendar.YEAR)+"년 "+Integer.toString(tomarrow.get(Calendar.MONTH)+1)+"월 "+tomarrow.get(Calendar.DATE)+"일, 1박";
         binding.tvTotalDate.setText(str);
 
         adapter.setOnItemDeleteListener((v, position) -> {

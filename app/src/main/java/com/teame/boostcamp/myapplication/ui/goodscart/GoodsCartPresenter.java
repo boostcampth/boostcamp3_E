@@ -10,8 +10,11 @@ import com.teame.boostcamp.myapplication.model.repository.local.preference.CartP
 import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreferenceHelper;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.DataStringUtil;
+import com.teame.boostcamp.myapplication.util.ResourceProvider;
+import com.teame.boostcamp.myapplication.util.SharedPreferenceUtil;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -31,12 +34,16 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter, DatePick
     private List<Goods> itemList;
     private CompositeDisposable disposable = new CompositeDisposable();
     private MyListRepository repository;
+    private ResourceProvider provider;
+    private static final String PREF_ACTIVITY_FIRST_DATE="PREF_ACTIVITY_FIRST_DATE";
+    private static final String PREF_ACTIVITY_LAST_DATE="EXTRA_ACTIVITY_LAST_DATE";
     GoodsListHeader header ;
 
-    public GoodsCartPresenter(GoodsCartContract.View view) {
+    public GoodsCartPresenter(GoodsCartContract.View view, ResourceProvider provider) {
         this.view = view;
         cartPreferenceHelper = new CartPreference();
         repository = MyListRepository.getInstance();
+        this.provider=provider;
     }
 
     @Override
@@ -107,6 +114,16 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter, DatePick
         }
         header.setTitle(title);
         header.setHashTag(hashTag);
+        String startDate= SharedPreferenceUtil.getString(provider.getApplicationContext(),PREF_ACTIVITY_FIRST_DATE);
+        String endDate= SharedPreferenceUtil.getString(provider.getApplicationContext(),PREF_ACTIVITY_LAST_DATE);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy년 MM월 dd일");
+
+        try{
+            header.setStartDate(sdf.parse(startDate));
+            header.setEndDate(sdf.parse(endDate));
+        }catch (Exception e){
+            DLogUtil.e(e.toString());
+        }
         cartPreferenceHelper.saveListHeader(header);
         cartPreferenceHelper.saveGoodsCartList(itemList);
 

@@ -16,9 +16,6 @@ public class CalendarUtil {
         GregorianCalendar dayOne = new GregorianCalendar(day1.get(Calendar.YEAR),day1.get(Calendar.MONTH),day1.get(Calendar.DAY_OF_MONTH));
         GregorianCalendar dayTwo = new GregorianCalendar(day2.get(Calendar.YEAR),day2.get(Calendar.MONTH),day2.get(Calendar.DAY_OF_MONTH));
 
-        dayOne.add(Calendar.MONTH,-1);
-        dayTwo.add(Calendar.MONTH,-1);
-
         DateTime startDay=new DateTime(dayOne);
         startDay.minusMonths(1);
         DateTime endDay=new DateTime(dayTwo);
