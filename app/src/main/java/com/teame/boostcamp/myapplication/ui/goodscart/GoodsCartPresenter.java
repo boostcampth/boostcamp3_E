@@ -108,14 +108,13 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter {
 
     @Override
     public void detectIsAllCheck() {
-        boolean allCheck = true;
         for (Goods item : itemList) {
-            allCheck = allCheck && item.isCheck();
-            if (!allCheck) {
-                view.setAllorNoneCheck(false);
+            if (item.isCheck()) {
+                view.setAllorNoneCheck(true);
+                return;
             }
         }
-        view.setAllorNoneCheck(allCheck);
+        view.setAllorNoneCheck(false);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.teame.boostcamp.myapplication.ui;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,10 +13,11 @@ import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.ui.selectedgoods.SelectedGoodsActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -67,10 +69,58 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
                 false);
 
         adapter.setOnItemClickListener((v, position) -> presenter.getMyListUid(position));
-        adapter.setOnItemDeleteListener((v, position) -> presenter.deleteMyList(position));
+        adapter.setOnItemDeleteListener((v, position) -> {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage(getString(R.string.would_you_remove_check_list))
+                    .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
+                        presenter.deleteMyList(position);
+                    })
+                    .setNegativeButton(getString(R.string.cancle), (dialogInterface, i) -> {
+
+                    })
+                    .setCancelable(true);
+
+            final AlertDialog dialog = builder.create();
+            dialog.setOnShowListener(__ -> {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorClear));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorClear));
+
+            });
+
+            dialog.show();
+
+            });
         binding.rvMyList.setLayoutManager(linearLayoutManager);
+        binding.rvMyList.setItemAnimator(new DefaultItemAnimator());
         binding.rvMyList.setAdapter(adapter);
         presenter.loadMyList(adapter);
+
+        binding.svMylist.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Toast like print
+                presenter.diffSerchList(query);
+                binding.svMylist.onActionViewCollapsed();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String typingQuery) {
+                if (typingQuery.length() != 0) {
+                    presenter.diffSerchList(typingQuery);
+                }
+
+                return false;
+            }
+        });
+
+        binding.srlMyList.setOnRefreshListener(() -> {
+            presenter.setOriginList();
+            binding.srlMyList.setRefreshing(false);
+        });
     }
 
     @Override

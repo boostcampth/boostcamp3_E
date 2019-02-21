@@ -28,7 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="@color/colorBlurGray"
-                    android:elevation="10dp"
+                    android:elevation="30dp"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="pin"
                     app:navigationIcon="@drawable/btn_all_back"
@@ -57,7 +57,7 @@
             android:id="@+id/nsv_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="50dp"
             android:focusable="false"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -206,10 +206,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
                     android:layout_margin="8dp"
+                    android:layout_gravity="end"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:ellipsize="end"
-                    android:gravity="center"
+                    tools:text="10,000원"
+                    android:gravity="end|center"
                     android:maxLines="1"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
@@ -220,29 +222,18 @@
 
         </androidx.core.widget.NestedScrollView>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_bottom_root"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
-
             <androidx.appcompat.widget.AppCompatButton
+                android:layout_gravity="bottom"
                 android:id="@+id/tv_dicide_cart"
-                android:layout_width="0dp"
-                android:layout_height="42dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:background="@drawable/layout_accent_top_rounded"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="@string/confrim_goods"
                 android:textColor="@color/colorWhite"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:textSize="16sp"/>
 
         <include
             android:id="@+id/include_loading"

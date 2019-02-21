@@ -99,6 +99,8 @@
     <string name="email">이메일</string>
     <string name="complete_but_goods">입력하신 모든 꿀템을 구입했어요!\n즐거운 여행 되세요 ^^\n(완료된 리스트는 수정이 불가능합니다.)</string>
     <string name="would_you_set_title">제목을 입력해 주세요 :)</string>
+    <string name="would_you_remove_check_list">삭제된 리스트는 복구되지 않아요! 정말로 삭제하시겠습니까?</string>
+
     <string name="sign_up_word">회원가입</string>
     <string name="shopping_list_alert">쇼핑리스트를 선택하셔야지만 글을 게시할 수 있습니다!</string>
     <string name="problem_occur">문제가 생겼습니다. 다시 시도해 주세요!</string>
