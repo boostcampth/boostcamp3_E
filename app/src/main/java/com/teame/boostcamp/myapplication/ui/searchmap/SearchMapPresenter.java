@@ -128,6 +128,7 @@ public class SearchMapPresenter implements SearchMapContract.Presenter {
                     }));
         }catch(Exception e){
             DLogUtil.e(e.toString());
+            view.failSearch();
             return;
         }
     }
