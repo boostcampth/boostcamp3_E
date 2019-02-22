@@ -37,20 +37,6 @@ public class OtherShoppingListActivity extends BaseMVPActivity<ActivityOtherUser
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            default:
-                break;
-        }
-
-        return true;
-    }
-
-
     public static void startActivity(Context context, String headerUid, String userEmail) {
         Intent intent = new Intent(context, OtherShoppingListActivity.class);
         intent.putExtra(EXTRA_HEADER_UID, headerUid);
@@ -72,20 +58,17 @@ public class OtherShoppingListActivity extends BaseMVPActivity<ActivityOtherUser
         headerUid = intent.getStringExtra(EXTRA_HEADER_UID);
         userEmail = intent.getStringExtra(EXTRA_EMAIL);
         binding.setEmail(userEmail);
+        binding.ivOtherListBack.setOnClickListener(__ -> finish());
         DLogUtil.e("실패???");
         if (headerUid == null) {
             finish();
             return;
         }
 
-        setSupportActionBar(binding.toolbarScreen);
-        getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_back);
-        binding.includeLoading.lavLoading.playAnimation();
-        binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
+
 
         GoodsOtherListAdapter adapter = new GoodsOtherListAdapter();
-        adapter.setOnItemClickListener((v, position) -> SnsGoodsDetailActivity.startActivity(getApplicationContext(), adapter.getItem(position)));
+        adapter.setOnItemClickListener((v, position) -> SnsGoodsDetailActivity.startActivity(this, adapter.getItem(position)));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
                 false);

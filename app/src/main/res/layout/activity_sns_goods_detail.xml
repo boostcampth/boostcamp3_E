@@ -26,12 +26,10 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="fadfdafad"
                 android:fitsSystemWindows="true"
+                android:text="fadfdafad"
                 app:collapsedTitleTextAppearance="@style/TextAppearance.Detail.CollapsedAppBar"
                 app:contentScrim="@color/colorMyListAppBar"
-                app:expandedTitleMarginBottom="50dp"
-                app:expandedTitleMarginStart="16dp"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:title="@{item.name}"
                 tools:title="테스트글자">
@@ -50,57 +48,13 @@
                     android:background="@drawable/ic_detail_goods_background"
                     app:layout_collapseMode="parallax" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:orientation="horizontal">
-
-                    <androidx.appcompat.widget.LinearLayoutCompat
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:orientation="vertical">
-
-                        <androidx.appcompat.widget.AppCompatRatingBar
-                            android:id="@+id/rb_reply"
-                            style="?android:attr/ratingBarStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:rating="0"
-                            android:stepSize="0.5" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tv_item_min_price"
-                            style="@style/Widget.DetailItem.TextView"
-                            android:text="@{item.lprice != null ? String.format(@string/min_price(item.lprice)) : @string/none_min_price}"
-                            android:textColor="@color/colorPrimaryDark"
-                            tools:text="최저가 : 10,000" />
-
-
-                    </androidx.appcompat.widget.LinearLayoutCompat>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_screen"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/btn_back"
+                    app:navigationIcon="@drawable/btn_all_back"
                     app:popupTheme="@style/AppToolbar" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -143,6 +97,28 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="평가 및 리뷰" />
 
+                <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rb_reply"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="16dp"
+                    android:rating="0"
+                    android:stepSize="0.5"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_total_reply_count"
+                    app:layout_constraintLeft_toRightOf="@id/tv_item_ratio" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_item_min_price"
+                    style="@style/Widget.DetailItem.TextView"
+                    android:layout_marginRight="16dp"
+                    android:text="@{item.lprice != null ? String.format(@string/min_price(item.lprice)) : @string/none_min_price}"
+                    android:textColor="@color/colorAccent"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_item_ratio_label"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:text="최저가 : 10,000" />
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_item_ratio"
                     style="@style/Widget.DetailItem.TextView"
@@ -161,21 +137,21 @@
                     android:id="@+id/tv_total_reply_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorIphoneSubBlack"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_ratio"
                     android:layout_marginRight="16dp"
                     android:text="88개의 평가"
+                    android:textColor="@color/colorIphoneSubBlack"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_ratio"
                     app:layout_constraintRight_toRightOf="parent"
                     tools:text="88개의 평가" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_replyList"
-                    android:baselineAlignBottom="false"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/space_median"
                     android:layout_marginRight="@dimen/space_median"
                     android:background="@drawable/layout_boader_round_reply"
+                    android:baselineAlignBottom="false"
                     android:nestedScrollingEnabled="false"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -195,8 +171,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
 
-
-            <androidx.appcompat.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/tv_write_reply"
                 android:layout_width="0dp"
                 android:layout_height="42dp"
@@ -280,14 +255,14 @@
                 android:layout_height="0dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:text="@{item.name}"
                 android:textColor="@color/colorIphoneSubBlack"
                 app:layout_constraintBottom_toTopOf="@+id/tv_select_goods"
                 app:layout_constraintLeft_toLeftOf="@+id/view_content"
                 app:layout_constraintRight_toLeftOf="@id/llc_picker_layout"
                 app:layout_constraintTop_toTopOf="@+id/llc_picker_layout"
-                android:maxLines="2"
-                android:ellipsize="end"
                 tools:text="아이템 이름" />
 
             <androidx.appcompat.widget.LinearLayoutCompat

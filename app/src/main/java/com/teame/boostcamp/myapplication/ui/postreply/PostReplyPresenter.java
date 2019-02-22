@@ -12,9 +12,9 @@ public class PostReplyPresenter implements PostReplyContract.Presenter {
     private PostReplyContract.View view;
     private PostReplyAdapter adapter;
 
-    public PostReplyPresenter(PostReplyContract.View view, PostListRepository postListRepository) {
+    public PostReplyPresenter(PostReplyContract.View view) {
         this.view = view;
-        this.postListRepository = postListRepository;
+        this.postListRepository = PostListRepository.getInstance();
         disposable = new CompositeDisposable();
     }
 
@@ -29,7 +29,6 @@ public class PostReplyPresenter implements PostReplyContract.Presenter {
         if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
         }
-        adapter.disposableDispose();
     }
 
     @Override
@@ -37,7 +36,7 @@ public class PostReplyPresenter implements PostReplyContract.Presenter {
         disposable.add(postListRepository
                 .writePostReply(postUid, content)
                 .subscribe(reply -> {
-                            adapter.add(reply);
+                            adapter.addItem(reply);
                             view.successWriteReply();
                         },
                         e -> DLogUtil.e(e.getMessage())
@@ -50,13 +49,23 @@ public class PostReplyPresenter implements PostReplyContract.Presenter {
         disposable.add(postListRepository.loadPostReplyList(postUid)
                 .subscribe(list -> {
                             adapter.initItems(list);
-                            view.stopRefreshIcon();
+                            view.stopRefreshIcon(list.size());
                             DLogUtil.d(list.toString());
                         },
                         e -> {
                             DLogUtil.e(e.getMessage());
-                            view.stopRefreshIcon();
+                            view.stopRefreshIcon(0);
                         })
         );
+    }
+
+    @Override
+    public void deleteReply(String postUid, int position) {
+        disposable.add(postListRepository.deleteReply(postUid, adapter.getItem(position).getKey())
+                .subscribe(b -> {
+                            adapter.removeItem(position);
+                            view.controlNo(adapter.getItemCount());
+                        },
+                        e -> DLogUtil.e(e.getMessage())));
     }
 }

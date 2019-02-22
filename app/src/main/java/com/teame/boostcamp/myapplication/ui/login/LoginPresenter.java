@@ -3,7 +3,6 @@ package com.teame.boostcamp.myapplication.ui.login;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -11,9 +10,10 @@ public class LoginPresenter implements LoginContract.Presenter {
     private LoginContract.View view;
     private FirebaseAuth auth;
     private ProgressDialog loading;
-    public LoginPresenter(LoginContract.View view, FirebaseAuth auth) {
+
+    public LoginPresenter(LoginContract.View view) {
         this.view = view;
-        this.auth = auth;
+        this.auth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -32,7 +32,7 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void checkLogIn() {
-        if (auth.getCurrentUser() != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             view.isLogIn(true);
         } else {
             view.isLogIn(false);
@@ -46,6 +46,6 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void onDetach() {
-        this.view=null;
+        this.view = null;
     }
 }

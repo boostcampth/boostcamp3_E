@@ -9,9 +9,11 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorWhite">
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -25,7 +27,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/sign_up_word"
-                    android:textStyle="bold" />
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
 
 
 

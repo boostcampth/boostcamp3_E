@@ -20,28 +20,30 @@
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|enterAlways">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_buy_this"
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_buy_this"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="이거사!"
-                    android:textStyle="bold" />
+                    android:layout_gravity="center"
+                    android:src="@mipmap/ic_toolbar_text" />
+
+
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_sns_mypost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    android:layout_marginRight="10dp"
                     android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    app:srcCompat="@drawable/btn_my_post"/>
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/btn_my_post" />
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/sv_sns"
-                    android:layout_gravity="right"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_gravity="right"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true">
 
@@ -51,11 +53,10 @@
                     android:id="@+id/iv_sns_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    app:srcCompat="@drawable/btn_back"/>
-
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/btn_back" />
 
 
             </androidx.appcompat.widget.Toolbar>

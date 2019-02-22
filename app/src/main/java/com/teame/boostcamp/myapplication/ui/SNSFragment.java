@@ -1,9 +1,11 @@
 package com.teame.boostcamp.myapplication.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
@@ -87,12 +89,18 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
         binding.rvSnsSearch.setAdapter(exAdapter);
         presenter.createList(exAdapter);
 
+        ImageView icon = binding.svSns.findViewById(androidx.appcompat.R.id.search_button);
+        icon.setColorFilter(Color.BLACK);
+        ImageView iconClose = binding.svSns.findViewById(androidx.appcompat.R.id.search_close_btn);
+        iconClose.setColorFilter(Color.BLACK);
+
+
         // 서치뷰 활성화(클릭되었을떄)
         binding.svSns.setOnSearchClickListener(v -> {
             binding.ivSnsBack.setVisibility(View.VISIBLE); // 뒤로가기버튼 보여줌
             binding.rvSnsSearch.setVisibility(View.VISIBLE); // 최근 검색 뷰 보여줌
             binding.ivSnsMypost.setVisibility(View.GONE);
-            binding.tvBuyThis.setVisibility(View.GONE);
+            binding.ivBuyThis.setVisibility(View.GONE);
             binding.clNoPost.setVisibility(View.INVISIBLE);
         });
         // 시처뷰 클로즈 되었을떄
@@ -102,7 +110,7 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
             binding.rvSnsSearchPost.setVisibility(View.INVISIBLE);
             binding.clNoSearch.setVisibility(View.INVISIBLE);
             binding.ivSnsMypost.setVisibility(View.VISIBLE);
-            binding.tvBuyThis.setVisibility(View.VISIBLE);
+            binding.ivBuyThis.setVisibility(View.VISIBLE);
             if(adapter.postList.size() == 0){
                 binding.clNoPost.setVisibility(View.VISIBLE);
             }

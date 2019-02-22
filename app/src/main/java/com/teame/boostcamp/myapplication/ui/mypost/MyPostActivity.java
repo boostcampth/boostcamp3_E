@@ -49,15 +49,15 @@ public class MyPostActivity extends BaseMVPActivity<ActivityMyPostBinding, MyPos
     private void initView() {
         binding.srlPost.setRefreshing(true);
         binding.setUserEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-        binding.rvMyPost.setLayoutManager(new LinearLayoutManager(getApplicationContext(),
+        binding.rvMyPost.setLayoutManager(new LinearLayoutManager(this,
                 RecyclerView.VERTICAL,
                 false));
         PostListAdapter adapter = new PostListAdapter(this);
         binding.rvMyPost.setAdapter(adapter);
-        binding.ivMyAddPost.setOnClickListener(__ -> AddPostActivity.startActivity(getApplicationContext()));
+        binding.ivMyAddPost.setOnClickListener(__ -> AddPostActivity.startActivity(this));
         binding.ivMyPostBack.setOnClickListener(__ -> finish());
         binding.srlPost.setOnRefreshListener(() -> initView());
-        binding.clNoPost.setOnClickListener(__ -> AddPostActivity.startActivity(getApplicationContext()));
+        binding.clNoPost.setOnClickListener(__ -> AddPostActivity.startActivity(this));
         presenter.loadMyPost(adapter);
 
     }
