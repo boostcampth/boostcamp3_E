@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import com.google.android.material.chip.Chip;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemMainOtherListBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,29 +15,27 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
 public class MainOtherListViewPagerAdapter extends PagerAdapter {
 
-    private Context context;
     private OnItemClickListener onShowDetailClickListener;
-    private List<GoodsListHeader> headerlist=new ArrayList<>();
+    private List<GoodsListHeader> headerlist = new ArrayList<>();
 
-    public MainOtherListViewPagerAdapter(Context context) {
-        this.context = context;
+    public MainOtherListViewPagerAdapter() {
+
     }
 
-    public void setHeaderlist(List<GoodsListHeader> list){
-        headerlist=list;
+    public void setHeaderlist(List<GoodsListHeader> list) {
+        headerlist = list;
         notifyDataSetChanged();
     }
 
-    public void setOnClickListener(OnItemClickListener listener){
-        onShowDetailClickListener=listener;
+    public void setOnClickListener(OnItemClickListener listener) {
+        onShowDetailClickListener = listener;
     }
 
-    public GoodsListHeader getItem(int position){
+    public GoodsListHeader getItem(int position) {
         return headerlist.get(position);
     }
 
@@ -47,10 +43,10 @@ public class MainOtherListViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         ItemMainOtherListBinding binding;
-        binding=DataBindingUtil.inflate(LayoutInflater.from(context),R.layout.item_main_other_list,container,false);
+        binding = DataBindingUtil.inflate(LayoutInflater.from(container.getContext()), R.layout.item_main_other_list, container, false);
         binding.setItem(headerlist.get(position));
-        binding.mcvUserHeader.setOnClickListener(v->{
-            onShowDetailClickListener.onItemClick(v,position);
+        binding.mcvUserHeader.setOnClickListener(v -> {
+            onShowDetailClickListener.onItemClick(v, position);
         });
         // 해쉬테그가 없으면 GONE
         if (headerlist.get(position).getHashTag().size() > 0) {

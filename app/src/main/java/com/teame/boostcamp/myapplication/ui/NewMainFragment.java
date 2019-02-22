@@ -177,7 +177,7 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
 
         binding.rvLocationBaseItems.setLayoutManager(bannerLayoutManager);
         binding.rvLocationBaseItems.setAdapter(goodsAdapter);
-        MainOtherListViewPagerAdapter listAdapter = new MainOtherListViewPagerAdapter(getContext());
+        MainOtherListViewPagerAdapter listAdapter = new MainOtherListViewPagerAdapter();
         LinearLayoutManager listLayoutManager = new LinearLayoutManager(getContext());
         listLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         presenter.setUserViewPagerAdapter(listAdapter);

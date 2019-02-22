@@ -24,7 +24,8 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar_sns"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_my_post_back"
@@ -39,16 +40,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textStyle="bold"
-                    tools:text="@{userEmail + @string/email_my_post}"/>
+                    android:textColor="@color/colorBlack"
+                    tools:text="@{userEmail}" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_my_add_post"
+                    android:layout_marginRight="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:layout_gravity= "end"
-                    app:srcCompat="@drawable/btn_add_item"/>
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:layout_gravity= "right"
+                    app:srcCompat="@drawable/btn_my_post_add"/>
 
 
 

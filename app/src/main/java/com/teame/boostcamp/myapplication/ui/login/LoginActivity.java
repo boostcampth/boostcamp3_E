@@ -1,11 +1,8 @@
 package com.teame.boostcamp.myapplication.ui.login;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.view.WindowManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
@@ -13,8 +10,12 @@ import com.teame.boostcamp.myapplication.databinding.ActivityLoginBinding;
 import com.teame.boostcamp.myapplication.ui.MainActivity;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.signup.SignUpActivity;
+import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginContract.Presenter> implements LoginContract.View {
+    private CompositeDisposable disposable=new CompositeDisposable();
 
     @Override
     protected int getLayoutResourceId() {
@@ -23,7 +24,7 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
 
     @Override
     protected LoginContract.Presenter getPresenter() {
-        return new LoginPresenter(this, FirebaseAuth.getInstance());
+        return new LoginPresenter(this);
     }
 
     @Override
@@ -34,8 +35,21 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initView();
-
+        disposable.add(TedPermissionUtil.requestPermission(getApplicationContext(),
+                "권한설정",
+                "권한설정이 필요합니다 권한을 설정하시겠습니까?",
+                TedPermissionUtil.LOCATION,TedPermissionUtil.WRITE_STORAGE,TedPermissionUtil.READ_STORAGE,TedPermissionUtil.CAMERA)
+                .subscribe(result->{
+                    if(result.isGranted()){
+                        initView();
+                    }
+                    else {
+                        showToast("앱을 이용하기 위해 권한설정을 해주세요!");
+                        finish();
+                    }
+                },e->{
+                    finish();
+                }));
     }
 
     private void initView() {
@@ -89,6 +103,8 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     protected void onDestroy() {
         super.onDestroy();
         presenter.onDetach();
+        if(disposable!=null&&!disposable.isDisposed())
+            disposable.dispose();
     }
 
     @Override

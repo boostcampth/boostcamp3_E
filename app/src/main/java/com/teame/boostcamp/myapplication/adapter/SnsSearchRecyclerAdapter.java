@@ -66,7 +66,8 @@ public class SnsSearchRecyclerAdapter extends BaseRecyclerAdatper<String, SnsSea
         }
 
     }
-    public List<String> getItemList(){
+
+    public List<String> getItemList() {
         return this.itemList;
     }
 
