@@ -121,6 +121,7 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
             presenter.setOriginList();
             binding.srlMyList.setRefreshing(false);
         });
+
     }
 
     @Override

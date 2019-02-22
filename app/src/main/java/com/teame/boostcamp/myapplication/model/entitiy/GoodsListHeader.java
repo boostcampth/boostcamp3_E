@@ -183,6 +183,9 @@ public class GoodsListHeader implements Parcelable ,Cloneable{
     @Exclude
     public String getStringEndDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        if(endDate == null){
+            endDate = startDate;
+        }
         return dateFormat.format(endDate);
     }
 

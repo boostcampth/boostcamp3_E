@@ -18,8 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
-                android:theme="@style/AppTheme.AppBarOverlay"
-                app:elevation="0dp">
+                android:theme="@style/AppTheme.AppBarOverlay">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:layout_width="match_parent"
@@ -31,17 +30,21 @@
                         android:id="@+id/toolbar_screen"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
-                        android:fitsSystemWindows="true"
-                        app:navigationIcon="@drawable/btn_all_back"
+                        android:background="@color/colorWhite"
+                        app:navigationIcon="@drawable/btn_back"
                         app:popupTheme="@style/AppToolbar">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/toolbar_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="?attr/actionBarSize"
+                            android:background="@color/colorWhite"
                             android:gravity="center"
-                            android:text="프랑스"
-                            android:textColor="@color/colorBlack" />
+                            android:text="dasdsadsa"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp" />
                     </androidx.appcompat.widget.Toolbar>
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -51,14 +54,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_gravity="top"
+                    android:background="@color/colorWhite"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <View
                         android:id="@+id/view_line"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/colorIphoneSubBlack" />
+                        android:background="@color/colorDivide" />
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
@@ -113,7 +117,7 @@
                     android:id="@+id/iv_empty_result_search"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/ic_no_result_search"/>
+                    android:background="@drawable/ic_no_result_search" />
 
                 <TextView
                     android:layout_width="wrap_content"

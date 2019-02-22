@@ -84,7 +84,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         iconClose.setColorFilter(Color.BLACK);
 
         EditText editText = svGoods.findViewById(androidx.appcompat.R.id.search_src_text);
-        editText.setHintTextColor(ContextCompat.getColor(this, R.color.colorIphoneBlack));
         editText.setTextColor(Color.BLACK);
 
         iconClose.setOnClickListener(view -> initToolbar());
@@ -211,7 +210,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_all_back);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_back);
         binding.toolbarTitle.setText(header.getCity());
         GoodsListRecyclerAdapter adapter = new GoodsListRecyclerAdapter();
         binding.rvRecommendList.setLayoutManager(new GridLayoutManager(this, 3));
@@ -224,27 +223,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
 
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.space_line);
         binding.rvRecommendList.addItemDecoration(new ListSpaceItemDecoration(spacingInPixels, 3));
-        //TODO API 21 이하 대응 필요
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.rvRecommendList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                }
-
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-
-                    if (binding.rvRecommendList.canScrollVertically(SCROLL_DIRECTION_UP)) {
-                        binding.ablTopControl.setElevation(10);
-                    } else {
-                        binding.ablTopControl.setElevation(0);
-                    }
-                }
-            });
-        }
         presenter.loadListData(adapter, header.getNation(), header.getCity());
         binding.llcAddGoods.setOnClickListener(view -> {
             presenter.addGoods();

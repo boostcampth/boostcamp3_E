@@ -91,12 +91,12 @@
             <HorizontalScrollView
                 android:id="@+id/cg_hash_tag_scroll"
                 android:layout_width="0dp"
-                android:scrollbars="none"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="16dp"
                 android:overScrollMode="never"
+                android:scrollbars="none"
                 app:layout_constraintBottom_toTopOf="@id/rv_images"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -126,6 +126,15 @@
                 app:layout_constraintTop_toBottomOf="@id/cg_hash_tag_scroll"
                 tools:listitem="@layout/item_my_list_image" />
 
+            <View
+                android:id="@+id/view_fake_click"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintRight_toRightOf="@id/rv_images"
+                app:layout_constraintBottom_toBottomOf="@id/rv_images"
+                app:layout_constraintTop_toTopOf="@id/rv_images"
+                app:layout_constraintLeft_toLeftOf="@id/rv_images"
+                />
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_delete"
                 android:layout_width="24dp"

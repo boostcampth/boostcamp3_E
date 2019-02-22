@@ -13,8 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:elevation="0dp">
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
@@ -27,26 +26,21 @@
                     android:id="@+id/toolbar_screen"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorBlurGray"
-                    android:elevation="30dp"
+                    android:background="@color/colorWhite"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/btn_all_back"
+                    app:navigationIcon="@drawable/btn_back"
                     app:popupTheme="@style/AppToolbar">
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_marginLeft="@dimen/space_x_small"
-                        app:srcCompat="@drawable/ic_logo_ejusa" />
-
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="16dp"
-                        android:text="이거 사!"
+                        android:layout_marginRight="?attr/actionBarSize"
+                        android:gravity="center"
+                        android:text="마이리스트 등록"
                         android:textColor="@color/colorBlack"
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
                 </androidx.appcompat.widget.Toolbar>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -145,12 +139,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_total_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/space_median"
                     android:background="@drawable/shape_roundedbox"
                     android:padding="@dimen/space_x_small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" 2019.01.23~2019.03.04, 7박 "/>
+                    android:text=" 2019.01.23~2019.03.04, 7박 " />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/llc_all_check_root"
@@ -214,35 +208,35 @@
                     android:id="@+id/tv_total_price"
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
-                    android:layout_margin="8dp"
                     android:layout_gravity="end"
+                    android:layout_margin="8dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:ellipsize="end"
-                    tools:text="10,000원"
                     android:gravity="end|center"
                     android:maxLines="1"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:singleLine="true"
                     android:textColor="@color/colorAccent"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="10,000원" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.core.widget.NestedScrollView>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_gravity="bottom"
-                android:id="@+id/tv_dicide_cart"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/layout_accent_top_rounded"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@string/confrim_goods"
-                android:textColor="@color/colorWhite"
-                android:textSize="16sp"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tv_dicide_cart"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/layout_accent_top_rounded"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/confrim_goods"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp" />
 
         <include
             android:id="@+id/include_loading"
