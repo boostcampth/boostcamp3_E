@@ -61,6 +61,17 @@ public class SearchPlacePresenter implements SearchPlaceContract.Presenter {
     }
 
     @Override
+    public void goMapButtonClick() {
+        disposable.add(LastKnownLocationUtil.getLastPosition(provider.getApplicationContext())
+                .subscribe(latLng -> {
+                    Geocoder geocoder=new Geocoder(provider.getApplicationContext(), Locale.KOREA);
+                    List<Address> result=geocoder.getFromLocation(latLng.latitude,latLng.longitude,1);
+                    String address=result.get(0).getAddressLine(0);
+                    view.showMapActivity(address);
+                }));
+    }
+
+    @Override
     public void search(String text) {
         if(adapterModel.searchList(text)){
             if(adapterModel.getList().size()>=STRING_CAPACITY){

@@ -9,6 +9,7 @@ import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ItemUsershoppinglistBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
+import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,18 @@ public class UserShoppingListAdapter extends RecyclerView.Adapter<UserShoppingLi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_usershoppinglist,parent,false);
         ViewHolder holder=new ViewHolder(view);
+        holder.binding.getRoot().setOnClickListener(v -> {
+            boolean click=list.get(holder.getLayoutPosition()).isCheck();
+            if(click) {
+                holder.binding.cbUserCheck.setChecked(false);
+                list.get(holder.getLayoutPosition()).setCheck(false);
+            }
+            else {
+                holder.binding.cbUserCheck.setChecked(true);
+                list.get(holder.getLayoutPosition()).setCheck(true);
+            }
+            listener.OnItemClick(holder.binding.cbUserCheck.isChecked(),holder.getLayoutPosition());
+        });
         holder.binding.cbUserCheck.setOnClickListener(v -> {
             listener.OnItemClick(holder.binding.cbUserCheck.isChecked(),holder.getLayoutPosition());
         });

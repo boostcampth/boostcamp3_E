@@ -14,6 +14,7 @@ public interface SearchPlaceContract {
 
     interface View extends BaseView<SearchPlaceContract.Presenter> {
         void showCreateList(GoodsListHeader header);
+        void showMapActivity(String city);
     }
 
     interface Presenter extends BasePresenter {
@@ -24,5 +25,6 @@ public interface SearchPlaceContract {
         void setAdapterView(ExListAdapterContract.View view);
         void setAdapterModel(ExListAdapterContract.Model model);
         void search(String text);
+        void goMapButtonClick();
     }
 }

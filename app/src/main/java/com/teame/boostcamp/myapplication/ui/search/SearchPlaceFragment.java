@@ -84,14 +84,13 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
         binding.rvExList.setLayoutManager(layoutManager);
         binding.rvExList.setAdapter(adapter);
         binding.rvExList.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-        //binding.rvExList.addItemDecoration(new MarginDecorator(32));
         binding.toolbarSearch.setNavigationIcon(R.drawable.btn_back);
         binding.toolbarSearch.setNavigationOnClickListener(__ -> {
             getFragmentManager().beginTransaction().remove(this).commit();
         });
         binding.etSearchPlace.setOnEditorActionListener((v, actionId, __) -> {
             if(actionId== EditorInfo.IME_ACTION_SEARCH){
-                SearchMapActivity.startActivity(getContext(),v.getText().toString());
+                showMapActivity(v.getText().toString());
                 presenter.search(v.getText().toString());
                 return true;
             }
@@ -103,10 +102,15 @@ public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding
         });
         binding.buttonGoMap.setOnClickListener(__->{
             //TODO: SearchMapActivity 생성
-            SearchMapActivity.startActivity(getContext());
+            presenter.goMapButtonClick();
         });
         presenter.setAdapterModel(adapter);
         presenter.setAdapterView(adapter);
+    }
+
+    @Override
+    public void showMapActivity(String city) {
+        SearchMapActivity.startActivity(getContext(),city);
     }
 
     @Override

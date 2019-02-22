@@ -21,6 +21,7 @@ import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ActivityMapSearchBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
+import com.teame.boostcamp.myapplication.ui.MainActivity;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.ui.userpininfo.UserPinInfoFragment;
@@ -85,6 +86,10 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
                 GoodsListHeader header=presenter.getGoodsListHeader();
                 header.setLat(map.getCameraPosition().target.latitude);
                 header.setLng(map.getCameraPosition().target.longitude);
+                if(header.getNation()==null||header.getCity()==null){
+                    showToast("장소 값이 없습니다. 다시 시도해 주세요");
+                    MainActivity.startActivity(this);
+                }
                 if(presenter.getSelectedList()==null)
                     CreateListActivity.startActivity(getApplicationContext(),header);
                 else
@@ -263,7 +268,7 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
             presenter.getGoodsListHeaderFromMarker(marker)
                     .subscribe(header -> {
                         FragmentManager manager=getSupportFragmentManager();
-                        boolean isPop=manager.popBackStackImmediate();
+                        manager.popBackStackImmediate();
                         FragmentTransaction transaction=manager.beginTransaction();
                         transaction.replace(R.id.view_userpininfo, UserPinInfoFragment.newInstance(header));
                         transaction.addToBackStack(null);
