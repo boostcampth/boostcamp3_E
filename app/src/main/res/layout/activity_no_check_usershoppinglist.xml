@@ -6,23 +6,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_no_check_back_import"
-            android:background="@color/colorWhite"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/abl_no_check_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?android:attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_no_check_userlist_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorBlack"
-                android:textSize="16dp"
-                tools:text="TESTESTTESTESTEST" />
-        </androidx.appcompat.widget.Toolbar>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_no_check_back_import"
+                android:background="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_no_check_userlist_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16dp"
+                    tools:text="TESTESTTESTESTEST" />
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <HorizontalScrollView
             android:layout_marginTop="@dimen/space_median"
@@ -32,7 +39,7 @@
             android:layout_width="0dp"
             android:scrollbars="none"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_no_check_back_import"
+            app:layout_constraintTop_toBottomOf="@id/abl_no_check_toolbar"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toTopOf="@id/rv_no_check_user_shoppinglist">
