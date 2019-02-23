@@ -6,14 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 
 import com.teame.boostcamp.myapplication.R;
+import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
 import com.teame.boostcamp.myapplication.adapter.SnsSearchRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSnsBinding;
 import com.teame.boostcamp.myapplication.ui.addpost.AddPostActivity;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
+import com.teame.boostcamp.myapplication.ui.modifypost.ModifyPostActivity;
 import com.teame.boostcamp.myapplication.ui.mypost.MyPostActivity;
+import com.teame.boostcamp.myapplication.ui.othershoppinglist.OtherShoppingListActivity;
+import com.teame.boostcamp.myapplication.ui.postreply.PostReplyActivity;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 
 import androidx.annotation.NonNull;
@@ -71,7 +76,25 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
     }
 
     private void initView() {
-        PostListAdapter adapter = new PostListAdapter(getContext());
+        PostListAdapter adapter = new PostListAdapter();
+        presenter.setAdapter(adapter);
+        adapter.setOnReplyClickListener((__, position) -> PostReplyActivity.startActivity(getContext(), adapter.getItem(position).getKey()));
+        adapter.setOnShowListClickListener((__, position) -> OtherShoppingListActivity.startActivity(getContext(), adapter.getItem(position).getUid(), adapter.getItem(position).getHeader().getKey(), adapter.getItem(position).getWriter()));
+        adapter.setOnMenuClickListener((v, position) -> {
+            PopupMenu menu = new PopupMenu(getContext(), v);
+            getActivity().getMenuInflater().inflate(R.menu.menu_post, menu.getMenu());
+            menu.setOnMenuItemClickListener(item -> {
+                if (item.toString().equals("수정")) {
+                    ModifyPostActivity.startActivity(getContext(), adapter.getItem(position));
+                } else {
+                    presenter.deletePost(adapter.getItem(position).getKey(), adapter.getItem(position).getImagePathList(), position);
+                }
+                return false;
+            });
+            menu.show();
+        });
+        adapter.setOnLikeClickListener((v, position) -> { presenter.adjustLike(adapter.getItem(position).getKey(), position); });
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
                 RecyclerView.VERTICAL,
                 false);
@@ -111,7 +134,7 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
             binding.clNoSearch.setVisibility(View.INVISIBLE);
             binding.ivSnsMypost.setVisibility(View.VISIBLE);
             binding.ivBuyThis.setVisibility(View.VISIBLE);
-            if(adapter.postList.size() == 0){
+            if (adapter.itemList.size() == 0) {
                 binding.clNoPost.setVisibility(View.VISIBLE);
             }
 
@@ -126,8 +149,7 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
         binding.svSns.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 binding.svSns.setIconified(true);
-            }
-            else{
+            } else {
                 binding.rvSnsSearchPost.setVisibility(View.INVISIBLE);
                 binding.clNoSearch.setVisibility(View.INVISIBLE);
                 binding.rvSnsSearch.setVisibility(View.VISIBLE);
@@ -137,7 +159,25 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
         binding.svSns.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                presenter.loadSearchPost(new PostListAdapter(getContext()), query);
+                PostListAdapter searchAdapter = new PostListAdapter();
+                searchAdapter.setOnReplyClickListener((__, position) -> PostReplyActivity.startActivity(getContext(), searchAdapter.getItem(position).getKey()));
+                searchAdapter.setOnShowListClickListener((__, position) -> OtherShoppingListActivity.startActivity(getContext(), searchAdapter.getItem(position).getUid(), searchAdapter.getItem(position).getHeader().getKey(), searchAdapter.getItem(position).getWriter()));
+                searchAdapter.setOnMenuClickListener((v, position) -> {
+                    PopupMenu menu = new PopupMenu(getContext(), v);
+                    getActivity().getMenuInflater().inflate(R.menu.menu_post, menu.getMenu());
+                    menu.setOnMenuItemClickListener(item -> {
+                        if (item.toString().equals("수정")) {
+                            ModifyPostActivity.startActivity(getContext(), searchAdapter.getItem(position));
+                        } else {
+                            presenter.deleteSearchPost(searchAdapter.getItem(position).getKey(), searchAdapter.getItem(position).getImagePathList(), position);
+                        }
+                        return false;
+                    });
+                    menu.show();
+                });
+                searchAdapter.setOnLikeClickListener((v, position) -> { presenter.searchAdjustLike(searchAdapter.getItem(position).getKey(), position); });
+
+                presenter.loadSearchPost(searchAdapter, query);
                 return false;
             }
 
@@ -180,9 +220,9 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
     @Override
     public void stopRefreshIcon(int size) {
         binding.srlSns.setRefreshing(false);
-        if(size == 0){
+        if (size == 0) {
             binding.clNoPost.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             binding.clNoPost.setVisibility(View.INVISIBLE);
         }
     }
@@ -195,14 +235,40 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
 
     @Override
     public void succeedSearch(PostListAdapter searchAdapter) {
-        if(searchAdapter.postList.size()==0){
+        if (searchAdapter.itemList.size() == 0) {
             binding.clNoSearch.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             binding.clNoSearch.setVisibility(View.INVISIBLE);
         }
         binding.rvSnsSearchPost.setAdapter(searchAdapter);
         binding.rvSnsSearch.setVisibility(View.INVISIBLE);
         binding.rvSnsSearchPost.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void succeedDelete(int size) {
+        if(size == 0 ){
+            binding.clNoPost.setVisibility(View.VISIBLE);
+        }
+        else{
+            binding.clNoPost.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void succeedSearchDelete(int size) {
+        if(size == 0){
+            binding.clNoSearch.setVisibility(View.VISIBLE);
+        }
+        else{
+            binding.clNoSearch.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initView();
     }
 }
 

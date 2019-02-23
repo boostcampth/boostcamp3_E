@@ -10,6 +10,7 @@ import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.SharedPreferenceUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -30,6 +31,10 @@ public class SNSPresenter implements SNSContract.Presenter {
         this.provider = provider;
         disposable = new CompositeDisposable();
 
+    }
+
+    public void setAdapter(PostListAdapter adapter) {
+        this.adapter = adapter;
     }
 
     @Override
@@ -53,6 +58,29 @@ public class SNSPresenter implements SNSContract.Presenter {
             this.exAdapter.initItems(gson.fromJson(exJson,new TypeToken<ArrayList<String>>(){}.getType()));
         }
     }
+
+    @Override
+    public void deletePost(String key, List<String> imagePathList, int position) {
+        disposable.add(postListRepository.deletePost(key, imagePathList)
+                .subscribe(b -> {
+                            adapter.removeItem(position);
+                            view.succeedDelete(adapter.getItemCount());
+                        },
+                        e -> DLogUtil.e(e.getMessage())));
+    }
+
+    @Override
+    public void deleteSearchPost(String key, List<String> imagePathList, int position) {
+        disposable.add(postListRepository.deletePost(key, imagePathList)
+                .subscribe(b -> {
+                            adapter.removeItem(position);
+                            searchAdapter.removeItem(position);
+                            view.succeedSearchDelete(searchAdapter.getItemCount());
+                        },
+                        e -> DLogUtil.e(e.getMessage())));
+    }
+
+
     @Override
     public void loadPostData(PostListAdapter adapter) {
         this.adapter = adapter;
@@ -89,6 +117,33 @@ public class SNSPresenter implements SNSContract.Presenter {
         Gson gson=new Gson();
         String toJson = gson.toJson(exAdapter.getItemList());
         SharedPreferenceUtil.putString(provider.getApplicationContext(), PREF_SNS_SEARCH, toJson);
+    }
+
+    @Override
+    public void adjustLike(String key, int position) {
+        disposable.add(postListRepository.adjustLike(key)
+                .subscribe(post -> {
+                            adapter.itemList.set(position, post);
+                            adapter.notifyItemChanged(position, PostListAdapter.LIKE_UPDATE);
+                        },
+                        e -> {
+                            DLogUtil.e(e.getMessage());
+                        })
+        );
+    }
+    @Override
+    public void searchAdjustLike(String key, int position) {
+        disposable.add(postListRepository.adjustLike(key)
+                .subscribe(post -> {
+                            adapter.itemList.set(position, post);
+                            adapter.notifyItemChanged(position, PostListAdapter.LIKE_UPDATE);
+                            searchAdapter.itemList.set(position, post);
+                            searchAdapter.notifyItemChanged(position, PostListAdapter.LIKE_UPDATE);
+                        },
+                        e -> {
+                            DLogUtil.e(e.getMessage());
+                        })
+        );
     }
 
 }

@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
-public class Post implements Parcelable {
+public class Post implements Parcelable{
+    private String uid;
     private String key;
     private String content;
     private String writer;
@@ -25,7 +26,8 @@ public class Post implements Parcelable {
 
     public Post(){};
 
-    public Post(String content, String writer, GoodsListHeader header){
+    public Post(String uid, String content, String writer, GoodsListHeader header){
+        this.uid = uid;
         this.content = content;
         this.like = 0;
         this.writer = writer;
@@ -35,6 +37,7 @@ public class Post implements Parcelable {
     }
 
     protected Post(Parcel in) {
+        uid = in.readString();
         key = in.readString();
         content = in.readString();
         writer = in.readString();
@@ -156,6 +159,14 @@ public class Post implements Parcelable {
         this.modifiedDate = modifyideDate;
     }
 
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -163,6 +174,7 @@ public class Post implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uid);
         dest.writeString(key);
         dest.writeString(content);
         dest.writeString(writer);
