@@ -86,9 +86,9 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
                 header.setLat(map.getCameraPosition().target.latitude);
                 header.setLng(map.getCameraPosition().target.longitude);
                 if(presenter.getSelectedList()==null)
-                    CreateListActivity.startActivity(getApplicationContext(),header);
+                    CreateListActivity.startActivity(this,header);
                 else
-                    CreateListActivity.startActivity(getApplicationContext(),header,presenter.getSelectedList());
+                    CreateListActivity.startActivity(this,header,presenter.getSelectedList());
                 return true;
             case android.R.id.home:
                 finish();
