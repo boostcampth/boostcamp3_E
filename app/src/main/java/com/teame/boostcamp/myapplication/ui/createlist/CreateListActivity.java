@@ -242,7 +242,7 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
     @Override
     public void showDetailItem(Goods item) {
 
-        if (item.getUserCustomUri() != null && item.getKey() == null) {
+        if (item.getUserCustomUri() != null || item.getKey() == null) {
             showToast(getString(R.string.none_click_goods));
             return;
         }
@@ -257,7 +257,6 @@ public class CreateListActivity extends BaseMVPActivity<ActivityCreateListBindin
         if (size == Constant.LOADING_NONE_ITEM) {
             binding.llcAddGoods.setVisibility(View.VISIBLE);
             binding.llcNoSearchResult.setVisibility(View.VISIBLE);
-            showLongToast(String.format(getString(R.string.none_item), getString(R.string.toast_goods)));
         } else if (size == Constant.FAIL_LOAD) {
             showLongToast(getString(R.string.fail_load));
         }

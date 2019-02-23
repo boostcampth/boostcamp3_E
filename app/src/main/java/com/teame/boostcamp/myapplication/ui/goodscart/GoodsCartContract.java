@@ -12,7 +12,7 @@ interface GoodsCartContract {
 
         void setResultPrice(String resultPrice);
 
-        void setAllorNoneCheck(boolean allCheck);
+        void setAllorNoneCheck(int allCheck);
 
         void duplicationTag();
 

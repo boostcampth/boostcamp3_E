@@ -210,6 +210,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         binding.tvAddList.setOnClickListener(view -> {
             behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
+
         presenter.loadReplyList(adapter, item.getKey());
 
         binding.tvItemMinPrice.setOnClickListener(view -> {
@@ -294,7 +295,6 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         binding.includeLoading.lavLoading.cancelAnimation();
         binding.includeLoading.lavLoading.setVisibility(View.GONE);
         if (size == Constant.LOADING_NONE_ITEM) {
-            showLongToast(String.format(getString(R.string.none_item), getString(R.string.toast_reply)));
             binding.tvTotalReplyCount.setText(String.format(getString(R.string.ratio_count), size));
             return;
         } else if (size == Constant.FAIL_LOAD) {

@@ -137,7 +137,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
-                    android:text="88개의 평가"
+                    android:text="0개의 평가"
                     android:textColor="@color/colorIphoneSubBlack"
                     app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_ratio"
                     app:layout_constraintRight_toRightOf="parent"

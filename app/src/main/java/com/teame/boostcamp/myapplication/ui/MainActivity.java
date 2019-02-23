@@ -20,7 +20,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
-import io.reactivex.subjects.PublishSubject;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> implements FragmentCallback {
 
@@ -59,36 +58,16 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements F
         disposable.add(
                 subject.buffer(2, 1)
                         .subscribeOn(Schedulers.computation())
-                        .observeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .filter(buffer -> {
+                        .subscribe(buffer -> {
                             boolean isExit = buffer.get(1) - buffer.get(0) <= 2000;
                             if (isExit) {
+                                finish();
+                            } else {
                                 showToast("뒤로가기를 누르면 종료됩니다.");
                             }
-                            return isExit;
                         })
-                        .subscribe(ignored -> finish())
         );
-
-
-      /*  disposable.add(
-                subject.buffer(2, 1)
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(Schedulers.computation())
-                        .filter(buffer -> buffer.get(1) - buffer.get(0) > 2000)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(ignored -> showToast("뒤로가기를 누르면 종료됩니다."))
-        );
-
-        disposable.add(
-                subject.buffer(2, 1)
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(Schedulers.computation())
-                        .filter(buffer -> buffer.get(1) - buffer.get(0) <= 2000)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(ignored -> finish())
-        );*/
 
     }
 

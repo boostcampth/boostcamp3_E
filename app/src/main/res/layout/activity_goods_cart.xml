@@ -137,13 +137,17 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/tv_total_date"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_median"
+                    android:singleLine="true"
+                    android:layout_gravity="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     android:background="@drawable/shape_roundedbox"
-                    android:padding="@dimen/space_x_small"
                     android:text=" 2019.01.23~2019.03.04, 7박 " />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
