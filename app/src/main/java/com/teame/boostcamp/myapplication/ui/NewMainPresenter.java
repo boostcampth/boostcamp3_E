@@ -68,6 +68,10 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
 
     @Override
     public void getCurrentLocation() {
+        view.setVisitedMoreView(false);
+        view.setGoodsMoreView(false);
+        view.showVisitedEmptyView(false);
+        view.showGoodsEmptyView(false);
         disposable.add(LastKnownLocationUtil.getLastPosition(provider.getApplicationContext())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(latlng->{
@@ -130,7 +134,7 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
         this.goodsAdapter = goodsAdapter;
         List<Goods> list=new ArrayList<>();
         disposable.add(shoppingListRepository.getItemListToObservable(nation, city)
-                .take(MAX+1)
+                .take(MAX)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         goods -> {
@@ -145,14 +149,13 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
                                 view.setGoodsMoreView(false);
                                 return;
                             }
-                            else if(list.size()<=MAX) {
+                            else if(list.size()<MAX) {
                                 view.setGoodsMoreView(false);
                             }
                             else{
                                 view.setGoodsMoreView(true);
                             }
                             view.showGoodsEmptyView(false);
-                            list.remove(list.size()-1);
                             goodsAdapter.initItems(list);
                         }
                 )
@@ -179,34 +182,31 @@ public class NewMainPresenter implements NewMainContract.Presenter, OnItemClickL
     public void loadHeaderKeys(LatLng center) {
         List<String> keyList=new ArrayList<>();
         disposable.add(userPinRepository.getUserVisitedLocationToSubject(center)
-                .take(MAX+1)
+                .take(MAX)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(pair -> {
                     keyList.add(pair.second);
                 },
                 e -> DLogUtil.d(e.getMessage())
                 ,()->{
-                    view.setVisitedMoreView(false);
                     if(keyList.size()== Constant.LOADING_NONE_ITEM) {
                         view.showVisitedEmptyView(true);
                         view.setVisitedMoreView(false);
                         return;
                     }
-                    else if(keyList.size()<=MAX) {
+                    else if(keyList.size()<MAX) {
                         view.setVisitedMoreView(false);
                     }
                     else{
                         view.setVisitedMoreView(true);
                     }
                     view.showVisitedEmptyView(false);
-                    keyList.remove(keyList.size()-1);
                     loadHeaders(keyList);
                 }));
     }
 
     private void loadHeaders(List<String> keyList) {
         disposable.add(userPinRepository.getUserHeaderList(keyList)
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         list -> {
                             userViewPagerAdapter.setHeaderlist(list);

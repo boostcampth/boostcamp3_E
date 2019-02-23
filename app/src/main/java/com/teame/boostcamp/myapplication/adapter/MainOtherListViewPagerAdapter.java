@@ -31,8 +31,14 @@ public class MainOtherListViewPagerAdapter extends PagerAdapter {
     }
 
     public void setHeaderlist(List<GoodsListHeader> list){
-        headerlist=list;
+        headerlist.clear();
+        headerlist.addAll(list);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return POSITION_NONE;
     }
 
     public void setOnClickListener(OnItemClickListener listener){

@@ -1,5 +1,7 @@
 package com.teame.boostcamp.myapplication.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,6 +32,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainContract.Presenter> implements NewMainContract.View {
@@ -153,6 +156,27 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         binding.ivSearchPlace.setOnClickListener(__->{
             onSearchButtonClick();
         });
+        // 리사이클러뷰 초기화
+        LocationBaseGoodsListRecyclerAdapter goodsAdapter = new LocationBaseGoodsListRecyclerAdapter();
+        LinearLayoutManager bannerLayoutManager = new LinearLayoutManager(getContext());
+        bannerLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        presenter.setLocationAdapter(goodsAdapter);
+        binding.ivSetLocation.setOnClickListener(__ -> {
+            AlertDialog.Builder checkDialog=new AlertDialog.Builder(getContext())
+                    .setMessage("현재 위치를 갱신하시겠습니까?")
+                    .setPositiveButton("확인", (___, ____) -> onSetLocationClick())
+                    .setNegativeButton("취소",(_____, ______)->{});
+
+            AlertDialog dialog=checkDialog.create();
+            dialog.setOnShowListener(______ -> {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorClear));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorClear));
+            });
+            dialog.show();
+        });
         binding.ablMain.addOnOffsetChangedListener((appBarLayout, i) -> {
             if(Math.abs(i)>=appBarLayout.getTotalScrollRange()){
                 binding.ivSearchPlace.setImageResource(R.drawable.btn_search);
@@ -161,13 +185,6 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
                 binding.ivSearchPlace.setImageResource(R.drawable.btn_search_white);
             }
         });
-        // 리사이클러뷰 초기화
-        LocationBaseGoodsListRecyclerAdapter goodsAdapter = new LocationBaseGoodsListRecyclerAdapter();
-        LinearLayoutManager bannerLayoutManager = new LinearLayoutManager(getContext());
-        bannerLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
-        presenter.setLocationAdapter(goodsAdapter);
-        binding.ivSetLocation.setOnClickListener(__ -> onSetLocationClick());
         binding.tvItemMore.setOnClickListener(__->{
             presenter.locationMoreClick();
         });
