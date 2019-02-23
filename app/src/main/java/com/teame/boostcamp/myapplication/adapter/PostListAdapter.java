@@ -2,8 +2,6 @@ package com.teame.boostcamp.myapplication.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +24,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.databinding.BindingConversion;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
@@ -86,9 +83,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
         holder.binding.ivPostReply.setOnClickListener(__ -> onReplyButtonClick(i));
         holder.binding.ivPostLike.setOnClickListener(__ -> onLikeButtonClick(i));
         holder.binding.ivShoppingList.setOnClickListener(__ -> onListButtonClick(i));
+        holder.binding.ivPostMenu.setOnClickListener(v -> onMenuButtonClick(v, i));
         holder.binding.vpPostImages.setAdapter(new PostImagePagerAdapter(postList.get(i).getImagePathList()));
         holder.binding.tlImageIndicator.setupWithViewPager(holder.binding.vpPostImages, true);
-        holder.binding.ivPostMenu.setOnClickListener(v -> onMenuButtonClick(v, i));
 
     }
 
@@ -163,7 +160,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ItemVi
         });
         menu.show();
     }
-
 
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {

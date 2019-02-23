@@ -6,49 +6,48 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_text"
-            android:background="@color/colorWhite"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/abl_map_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tv_indicate">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/mv_googlemap">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_text"
+                android:background="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorBlack"
+                    android:text="지도에서 선택"
+                    android:textSize="18sp"/>
+
+            </androidx.appcompat.widget.Toolbar>
+
+
+            <View
+                android:background="@color/colorGray"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorBlack"
-                android:text="지도에서 선택"
-                android:textSize="18sp"/>
+                android:paddingTop="4dp"
+                android:id="@+id/tv_indicate"
+                android:background="@color/colorWhite"
+                android:text="지도를 움직여 아이콘을 원하는 위치로 옮기세요"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="26dp"/>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        </androidx.appcompat.widget.Toolbar>
-
-
-        <View
-            android:background="@color/colorGray"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_text"
-            app:layout_constraintBottom_toTopOf="@id/tv_indicate"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:paddingTop="4dp"
-            android:id="@+id/tv_indicate"
-            android:background="@color/colorWhite"
-            android:text="지도를 움직여 아이콘을 원하는 위치로 옮기세요"
-            android:textSize="12sp"
-            android:textAlignment="center"
-            android:layout_width="match_parent"
-            android:layout_height="26dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_text"
-            app:layout_constraintBottom_toTopOf="@id/mv_googlemap"/>
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mv_googlemap"
@@ -58,7 +57,7 @@
             app:layout_constraintBottom_toTopOf="@id/view_bottom"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_indicate" />
+            app:layout_constraintTop_toBottomOf="@id/abl_map_toolbar" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
@@ -66,7 +65,7 @@
             android:layout_marginBottom="35dp"
             android:visibility="visible"
             app:srcCompat="@drawable/btn_location_marker"
-            app:layout_constraintTop_toBottomOf="@id/tv_indicate"
+            app:layout_constraintTop_toBottomOf="@id/abl_map_toolbar"
             app:layout_constraintBottom_toTopOf="@id/view_bottom"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>

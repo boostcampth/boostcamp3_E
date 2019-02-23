@@ -91,9 +91,9 @@ public class SearchMapActivity extends BaseMVPActivity<ActivityMapSearchBinding,
                     MainActivity.startActivity(this);
                 }
                 if(presenter.getSelectedList()==null)
-                    CreateListActivity.startActivity(getApplicationContext(),header);
+                    CreateListActivity.startActivity(this,header);
                 else
-                    CreateListActivity.startActivity(getApplicationContext(),header,presenter.getSelectedList());
+                    CreateListActivity.startActivity(this,header,presenter.getSelectedList());
                 return true;
             case android.R.id.home:
                 finish();

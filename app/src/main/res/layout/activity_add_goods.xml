@@ -6,16 +6,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_screen"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/abl_top_control"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/btn_all_back"
-            app:popupTheme="@style/AppToolbar"
-            app:title="꿀템 등록" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_screen"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorWhite"
+                app:navigationIcon="@drawable/btn_back"
+                app:popupTheme="@style/AppToolbar">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/toolbar_title"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorBlack"
+                    android:background="@color/colorWhite"
+                    android:text="꿀템등록"
+                    android:textSize="18sp"/>
+
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <com.teame.boostcamp.myapplication.util.view.SquareImageView
             android:id="@+id/iv_item_image"
@@ -28,7 +49,7 @@
             app:layout_constraintBottom_toTopOf="@+id/view_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar_screen"
+            app:layout_constraintTop_toBottomOf="@+id/abl_top_control"
             app:srcCompat="@drawable/ic_no_image" />
 
         <View
@@ -44,6 +65,7 @@
             android:layout_height="0dp"
             android:background="@color/colorWhite"
             android:drawableLeft="@drawable/ic_goods_label"
+            android:layout_marginLeft="16dp"
             android:hint="꿀템 이름을 작성해주세요!(30자)"
             android:imeOptions="actionDone"
             android:maxLength="30"

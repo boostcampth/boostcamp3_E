@@ -20,16 +20,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:elevation="0dp">
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
-                android:text="fadfdafad"
+                android:background="@color/colorWhite"
                 app:collapsedTitleTextAppearance="@style/TextAppearance.Detail.CollapsedAppBar"
-                app:contentScrim="@color/colorMyListAppBar"
+                app:contentScrim="@color/colorWhite"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:title="@{item.name}"
                 tools:title="테스트글자">
@@ -54,7 +53,7 @@
                     android:layout_height="?attr/actionBarSize"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/btn_all_back"
+                    app:navigationIcon="@drawable/btn_back"
                     app:popupTheme="@style/AppToolbar" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -138,7 +137,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
-                    android:text="88개의 평가"
+                    android:text="0개의 평가"
                     android:textColor="@color/colorIphoneSubBlack"
                     app:layout_constraintBaseline_toBaselineOf="@+id/tv_item_ratio"
                     app:layout_constraintRight_toRightOf="parent"

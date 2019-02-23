@@ -118,9 +118,10 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
         });
 
         binding.srlMyList.setOnRefreshListener(() -> {
-            presenter.setOriginList();
+            presenter.reLoadMyList();
             binding.srlMyList.setRefreshing(false);
         });
+
     }
 
     @Override
@@ -134,9 +135,9 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
         binding.includeLoading.lavLoading.cancelAnimation();
         binding.includeLoading.lavLoading.setVisibility(View.GONE);
         if (size == Constant.LOADING_NONE_ITEM) {
-            showLongToast(String.format(getString(R.string.none_item), getString(R.string.toast_mylist)));
+            binding.llcNoSearchResult.setVisibility(View.VISIBLE);
         } else if (size == Constant.FAIL_LOAD) {
-            showLongToast(getString(R.string.fail_load));
+            binding.llcNoSearchResult.setVisibility(View.VISIBLE);
         }
     }
 

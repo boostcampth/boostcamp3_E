@@ -1,6 +1,5 @@
 package com.teame.boostcamp.myapplication.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import com.google.android.material.chip.Chip;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemMainOtherListBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
-import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,17 +15,15 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
 public class MainOtherListViewPagerAdapter extends PagerAdapter {
 
-    private Context context;
     private OnItemClickListener onShowDetailClickListener;
-    private List<GoodsListHeader> headerlist=new ArrayList<>();
+    private List<GoodsListHeader> headerlist = new ArrayList<>();
 
-    public MainOtherListViewPagerAdapter(Context context) {
-        this.context = context;
+    public MainOtherListViewPagerAdapter() {
+
     }
 
     public void setHeaderlist(List<GoodsListHeader> list){
@@ -45,7 +41,7 @@ public class MainOtherListViewPagerAdapter extends PagerAdapter {
         onShowDetailClickListener=listener;
     }
 
-    public GoodsListHeader getItem(int position){
+    public GoodsListHeader getItem(int position) {
         return headerlist.get(position);
     }
 

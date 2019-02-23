@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.view.inputmethod.EditorInfo;
 
 import com.airbnb.lottie.LottieDrawable;
 import com.google.android.material.chip.Chip;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsCartAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityGoodsCartBinding;
@@ -24,14 +22,11 @@ import com.teame.boostcamp.myapplication.util.CalendarUtil;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
 import com.teame.boostcamp.myapplication.util.SharedPreferenceUtil;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.date.DateRangeLimiter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -41,11 +36,11 @@ import androidx.recyclerview.widget.RecyclerView;
 public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding, GoodsCartContract.Presenter> implements GoodsCartContract.View {
 
     private boolean isChange = false;
-    private static final int REQUEST_CODE=1;
-    private static final String EXTRA_FIRSTDAY="EXTRA_FIRSTDAY";
-    private static final String EXTRA_LASTDAY="EXTRA_LASTDAY";
-    private static final String PREF_ACTIVITY_FIRST_DATE="PREF_ACTIVITY_FIRST_DATE";
-    private static final String PREF_ACTIVITY_LAST_DATE="EXTRA_ACTIVITY_LAST_DATE";
+    private static final int REQUEST_CODE = 1;
+    private static final String EXTRA_FIRSTDAY = "EXTRA_FIRSTDAY";
+    private static final String EXTRA_LASTDAY = "EXTRA_LASTDAY";
+    private static final String PREF_ACTIVITY_FIRST_DATE = "PREF_ACTIVITY_FIRST_DATE";
+    private static final String PREF_ACTIVITY_LAST_DATE = "EXTRA_ACTIVITY_LAST_DATE";
 
 
     @Override
@@ -107,24 +102,24 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode==REQUEST_CODE){
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy년 MM월 dd일");
-            String firstString=SharedPreferenceUtil.getString(this,"PREF_ACTIVITY_FIRST_DATE");
-            String lastString=SharedPreferenceUtil.getString(this,"PREF_ACTIVITY_LAST_DATE");
+        if (requestCode == REQUEST_CODE) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
+            String firstString = SharedPreferenceUtil.getString(this, "PREF_ACTIVITY_FIRST_DATE");
+            String lastString = SharedPreferenceUtil.getString(this, "PREF_ACTIVITY_LAST_DATE");
 
-            Calendar firstDay=Calendar.getInstance();
-            Calendar lastDay=Calendar.getInstance();
+            Calendar firstDay = Calendar.getInstance();
+            Calendar lastDay = Calendar.getInstance();
             try {
                 firstDay.setTime(sdf.parse(firstString));
                 lastDay.setTime(sdf.parse(lastString));
-            }catch(Exception e){
+            } catch (Exception e) {
                 DLogUtil.e(e.toString());
             }
 
-            int between=CalendarUtil.daysBetween(firstDay,lastDay);
+            int between = CalendarUtil.daysBetween(firstDay, lastDay);
 
-            String str="";
-            str+=firstString+" ~ "+ lastString+", "+between+"박";
+            String str = "";
+            str += firstString + " ~ " + lastString + ", " + between + "박";
 
             binding.tvTotalDate.setText(str);
         }
@@ -140,6 +135,9 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
                 false);
 
         int size = presenter.loadData(adapter);
+
+        binding.rvCartList.setLayoutManager(linearLayoutManager);
+        binding.rvCartList.setAdapter(adapter);
         presenter.calculatorPrice();
         presenter.detectIsAllCheck();
         binding.includeLoading.clLoadingBackground.setVisibility(View.GONE);
@@ -152,21 +150,21 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
             return false;
         });
 
-        binding.tvTotalDate.setOnClickListener(__-> PeriodActivity.startActivity(this));
+        binding.tvTotalDate.setOnClickListener(__ -> PeriodActivity.startActivity(this));
 
-        String str="";
-        Calendar today=Calendar.getInstance();
-        Calendar tomarrow=(Calendar)today.clone();
-        tomarrow.add(Calendar.DATE,1);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy년 MM월 dd일");
-        String todayString=sdf.format(today.getTime());
-        String tomarrowString=sdf.format(tomarrow.getTime());
+        String str = "";
+        Calendar today = Calendar.getInstance();
+        Calendar tomarrow = (Calendar) today.clone();
+        tomarrow.add(Calendar.DATE, 1);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
+        String todayString = sdf.format(today.getTime());
+        String tomarrowString = sdf.format(tomarrow.getTime());
 
-        SharedPreferenceUtil.putString(getApplicationContext(),"PREF_ACTIVITY_FIRST_DATE",todayString);
-        SharedPreferenceUtil.putString(getApplicationContext(),"PREF_ACTIVITY_LAST_DATE",tomarrowString);
+        SharedPreferenceUtil.putString(getApplicationContext(), "PREF_ACTIVITY_FIRST_DATE", todayString);
+        SharedPreferenceUtil.putString(getApplicationContext(), "PREF_ACTIVITY_LAST_DATE", tomarrowString);
 
-        str+=today.get(Calendar.YEAR)+"년 "+Integer.toString(today.get(Calendar.MONTH)+1)+"월 "+today.get(Calendar.DATE)+"일 ~ ";
-        str+=tomarrow.get(Calendar.YEAR)+"년 "+Integer.toString(tomarrow.get(Calendar.MONTH)+1)+"월 "+tomarrow.get(Calendar.DATE)+"일, 1박";
+        str += today.get(Calendar.YEAR) + "년 " + Integer.toString(today.get(Calendar.MONTH) + 1) + "월 " + today.get(Calendar.DATE) + "일 ~ ";
+        str += tomarrow.get(Calendar.YEAR) + "년 " + Integer.toString(tomarrow.get(Calendar.MONTH) + 1) + "월 " + tomarrow.get(Calendar.DATE) + "일, 1박";
         binding.tvTotalDate.setText(str);
 
         adapter.setOnItemDeleteListener((v, position) -> {
@@ -187,9 +185,9 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
             isChange = true;
             boolean check = binding.cbAll.isChecked();
             adapter.allCheck(check);
+            presenter.detectIsAllCheck();
+            presenter.calculatorPrice();
         });
-        binding.rvCartList.setLayoutManager(linearLayoutManager);
-        binding.rvCartList.setAdapter(adapter);
         binding.tvDicideCart.setOnClickListener(view -> {
             binding.includeLoading.clLoadingBackground.setVisibility(View.VISIBLE);
             binding.includeLoading.lavLoading.playAnimation();
@@ -218,7 +216,7 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
         params.setMargins(4, 4, 4, 4);
         chip.setLayoutParams(params);
 
-        binding.cgHashSet.addView(chip,binding.cgHashSet.getChildCount() - 1);
+        binding.cgHashSet.addView(chip, binding.cgHashSet.getChildCount() - 1);
         chip.setOnCloseIconClickListener(view -> {
             binding.cgHashSet.removeView(chip);
             presenter.removeHashTag(chip.getText().toString());
@@ -238,24 +236,35 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
     }
 
     @Override
-    public void setAllorNoneCheck(boolean allCheck) {
-        binding.cbAll.setChecked(allCheck);
-        if (allCheck) {
-            binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
-            binding.tvDicideCart.setClickable(true);
-            binding.tvTotalPrice.setVisibility(View.VISIBLE);
-        } else {
+    public void setAllorNoneCheck(int isAllUnCheck) {
+
+
+        if (isAllUnCheck == binding.rvCartList.getAdapter().getItemCount()) {
+            // 모두 언책
             binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorIphoneBlack));
             binding.tvDicideCart.setClickable(false);
             binding.tvTotalPrice.setVisibility(View.GONE);
+            binding.cbAll.setChecked(false);
+        } else if (isAllUnCheck > 0) {
+            // 하나라도 unCheck이 있는것
+            binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
+            binding.tvDicideCart.setClickable(true);
+            binding.tvTotalPrice.setVisibility(View.VISIBLE);
+            binding.cbAll.setChecked(false);
+        } else {
+            // 모두 트루
+            binding.tvDicideCart.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
+            binding.tvDicideCart.setClickable(true);
+            binding.tvTotalPrice.setVisibility(View.VISIBLE);
+            binding.cbAll.setChecked(true);
         }
     }
 
     @Override
     public void errorSaveGoods(int flag) {
-        if(flag == 0 ){
+        if (flag == 0) {
             showToast(getString(R.string.no_select_item));
-        }else if(flag == 1){
+        } else if (flag == 1) {
             showToast(getString(R.string.would_you_set_title));
         }
 
@@ -319,9 +328,9 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
     @Override
     public void setLoadData(GoodsListHeader header) {
         binding.etTitle.setText(header.getTitle());
-        Map<String,Boolean> hashTag = header.getHashTag();
+        Map<String, Boolean> hashTag = header.getHashTag();
 
-        for(String tag : hashTag.keySet()){
+        for (String tag : hashTag.keySet()) {
 
             Chip chip = new Chip(this);
             chip.setText(tag);
@@ -336,7 +345,7 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
             params.setMargins(4, 4, 4, 4);
             chip.setLayoutParams(params);
 
-            binding.cgHashSet.addView(chip,binding.cgHashSet.getChildCount() - 1);
+            binding.cgHashSet.addView(chip, binding.cgHashSet.getChildCount() - 1);
             chip.setOnCloseIconClickListener(view -> {
                 binding.cgHashSet.removeView(chip);
                 presenter.removeHashTag(chip.getText().toString());

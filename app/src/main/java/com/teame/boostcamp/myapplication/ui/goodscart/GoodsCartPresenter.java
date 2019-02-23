@@ -131,13 +131,13 @@ public class GoodsCartPresenter implements GoodsCartContract.Presenter, DatePick
 
     @Override
     public void detectIsAllCheck() {
+        int isAllUnCheck = 0;
         for (Goods item : itemList) {
-            if (item.isCheck()) {
-                view.setAllorNoneCheck(true);
-                return;
+            if (!item.isCheck()) {
+                isAllUnCheck ++;
             }
         }
-        view.setAllorNoneCheck(false);
+        view.setAllorNoneCheck(isAllUnCheck);
     }
 
     @Override

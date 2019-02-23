@@ -24,7 +24,6 @@ public class AlarmWork extends Worker {
     private String CHANNEL_NAME="test";
     private static String KEY_SELECTED="KEY_SELECTED";
     private String CHANNEL_ID="test";
-    private ArrayList<String> itemNames=new ArrayList<>();
 
     public AlarmWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -43,7 +42,7 @@ public class AlarmWork extends Worker {
         body=body.substring(0,body.length()-2);
 
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-            channel=new NotificationChannel("TEST","NAME", NotificationManager.IMPORTANCE_HIGH);
+            channel=new NotificationChannel(CHANNEL_ID,CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription("Test Alarm Channel");
             channel.enableLights(true);
             channel.setLightColor(Color.GREEN);

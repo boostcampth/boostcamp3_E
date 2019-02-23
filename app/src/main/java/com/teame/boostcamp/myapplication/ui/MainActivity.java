@@ -3,12 +3,9 @@ package com.teame.boostcamp.myapplication.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityMainBinding;
@@ -16,17 +13,18 @@ import com.teame.boostcamp.myapplication.ui.base.BaseActivity;
 import com.teame.boostcamp.myapplication.ui.search.SearchPlaceFragment;
 import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 
-import java.util.ArrayList;
-
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.BehaviorSubject;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> implements FragmentCallback {
 
-    private CompositeDisposable disposable=new CompositeDisposable();
+    private CompositeDisposable disposable = new CompositeDisposable();
+    private BehaviorSubject<Long> subject = BehaviorSubject.createDefault(0L);
 
     @Override
     protected int getLayoutResourceId() {
@@ -44,22 +42,38 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements F
         super.onCreate(savedInstanceState);
         binding.bnvMainNavigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
         disposable.add(TedPermissionUtil.requestPermission(getApplicationContext(),
-                        "권한설정",
-                        "권한설정이 필요합니다 권한을 설정하시겠습니까?",
-                        TedPermissionUtil.LOCATION,TedPermissionUtil.WRITE_STORAGE,TedPermissionUtil.READ_STORAGE,TedPermissionUtil.CAMERA)
-                        .subscribe(result->{
-                            if(result.isGranted())
-                                setupViewPager();
-                            else
+                "권한설정",
+                "권한설정이 필요합니다 권한을 설정하시겠습니까?",
+                TedPermissionUtil.LOCATION, TedPermissionUtil.WRITE_STORAGE, TedPermissionUtil.READ_STORAGE, TedPermissionUtil.CAMERA)
+                .subscribe(result -> {
+                    if (result.isGranted())
+                        setupViewPager();
+                    else
+                        finish();
+                }, e -> {
+                    finish();
+                }));
+
+
+        disposable.add(
+                subject.buffer(2, 1)
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(buffer -> {
+                            boolean isExit = buffer.get(1) - buffer.get(0) <= 2000;
+                            if (isExit) {
                                 finish();
-                        },e->{
-                            finish();
-                        }));
+                            } else {
+                                showToast("뒤로가기를 누르면 종료됩니다.");
+                            }
+                        })
+        );
+
     }
 
     @Override
     protected void onDestroy() {
-        if(disposable!=null&&!disposable.isDisposed())
+        if (disposable != null && !disposable.isDisposed())
             disposable.dispose();
         super.onDestroy();
     }
@@ -90,15 +104,20 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements F
         mainViewPagerAdapter.addFragment(fragmentWallet);
         mainViewPagerAdapter.addFragment(fragmentNavigationDrawer);
         binding.vpFragment.setAdapter(mainViewPagerAdapter);
-        binding.vpFragment.setOffscreenPageLimit(mainViewPagerAdapter.getCount()-1);
+        binding.vpFragment.setOffscreenPageLimit(mainViewPagerAdapter.getCount() - 1);
     }
 
     @Override
     public void startNewFragment() {
-        FragmentManager manager=getSupportFragmentManager();
-        FragmentTransaction transaction=manager.beginTransaction();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fl_change, SearchPlaceFragment.newInstance());
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        subject.onNext(System.currentTimeMillis());
     }
 }

@@ -13,40 +13,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:elevation="0dp">
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
-                app:contentScrim="@color/colorMyListAppBar"
+                app:contentScrim="@color/colorWhite"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_screen"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/colorBlurGray"
-                    android:elevation="10dp"
+                    android:background="@color/colorWhite"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/btn_all_back"
+                    app:navigationIcon="@drawable/btn_back"
                     app:popupTheme="@style/AppToolbar">
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_marginLeft="@dimen/space_x_small"
-                        app:srcCompat="@drawable/ic_logo_ejusa" />
-
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="16dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="?attr/actionBarSize"
+
                         android:text="이거 사!"
                         android:textColor="@color/colorBlack"
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
                 </androidx.appcompat.widget.Toolbar>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>

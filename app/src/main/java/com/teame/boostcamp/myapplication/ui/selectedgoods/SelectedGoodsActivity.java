@@ -78,7 +78,7 @@ public class SelectedGoodsActivity extends BaseMVPActivity<ActivitySelectedGoods
 
         setSupportActionBar(binding.toolbarScreen);
         getSupportActionBar().setDisplayShowHomeEnabled(true); //홈 아이콘을 숨김처리합니다.
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_all_back);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_back);
         binding.includeLoading.lavLoading.playAnimation();
         binding.includeLoading.lavLoading.setRepeatCount(LottieDrawable.INFINITE);
 

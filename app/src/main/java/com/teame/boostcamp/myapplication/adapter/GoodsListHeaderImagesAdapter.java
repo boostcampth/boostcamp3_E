@@ -13,11 +13,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class GoodsListHeaderImagesAdapter extends BaseRecyclerAdatper<String, GoodsListHeaderImagesAdapter.ViewHolder> {
 
+
+    public void setItemClickListener(View.OnClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    View.OnClickListener itemClickListener;
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_my_list_image, parent, false);
         final GoodsListHeaderImagesAdapter.ViewHolder holder = new GoodsListHeaderImagesAdapter.ViewHolder(itemView);
+        holder.binding.getRoot().setOnClickListener(view -> {
+            if(itemClickListener!=null){
+                itemClickListener.onClick(view);
+            }
+        });
         return holder;
     }
 
