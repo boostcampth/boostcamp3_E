@@ -4,7 +4,6 @@ package com.teame.boostcamp.myapplication.ui;
 import android.text.TextUtils;
 
 import com.teame.boostcamp.myapplication.adapter.GoodsListHeaderRecyclerAdapter;
-import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.util.Constant;
@@ -87,6 +86,10 @@ public class MyListPresenter implements MyListContract.Presenter {
     public void reLoadMyList() {
         disposable.add(repository.getMyList()
                 .subscribe(list -> {
+                            itemList = list;
+                            for (GoodsListHeader item : itemList) {
+                                originList.add(item.clone());
+                            }
                             DLogUtil.d(list.toString());
                             view.finishLoad(list.size());
                             adapter.initItems(list);

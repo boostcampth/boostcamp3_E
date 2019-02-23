@@ -65,12 +65,17 @@ public class AddGoodsActivity extends BaseMVPActivity<ActivityAddGoodsBinding, A
         binding.tvAddGoods.setOnClickListener(view -> {
             Intent resultIntent = new Intent();
             // Default set
-            resultGoods.setName(binding.etTitle.getText().toString());
-            resultGoods.setCount(1);
-            resultGoods.setCheck(true);
-            resultIntent.putExtra(EXTRA_ADD_GOODS, resultGoods);
-            setResult(RESULT_OK, resultIntent);
-            finish();
+            String title = binding.etTitle.getText().toString();
+            if(title.length() == 0 ){
+                showToast("아이템 이름을 입력해주세요 :)");
+            }else{
+                resultGoods.setName(title);
+                resultGoods.setCount(1);
+                resultGoods.setCheck(true);
+                resultIntent.putExtra(EXTRA_ADD_GOODS, resultGoods);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
         });
 
         BottomCameraDialogFragment bottomCameraDialogFragment = BottomCameraDialogFragment.newInstance();

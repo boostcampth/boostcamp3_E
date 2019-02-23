@@ -1,5 +1,6 @@
 package com.teame.boostcamp.myapplication.adapter;
 
+import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import com.teame.boostcamp.myapplication.databinding.ItemCartBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,15 +29,29 @@ public class GoodsCartAdapter extends BaseRecyclerAdatper<Goods, GoodsCartAdapte
         final GoodsCartAdapter.ViewHolder holder = new GoodsCartAdapter.ViewHolder(itemView);
 
 
-        holder.binding.cbSelect.setOnCheckedChangeListener((buttonView, isCheck) -> {
+        holder.binding.cbSelect.setClickable(false);
+        holder.binding.cbSelect.setOnTouchListener(null);
 
+        holder.binding.getRoot().setOnClickListener(view -> {
             int position = holder.getLayoutPosition();
-            itemList.get(position).setCheck(isCheck);
-            if (onItemCheckListener != null) {
-                onItemCheckListener.onItemClick(buttonView, position);
-            }
-        });
+            boolean currentCheck = itemList.get(position).isCheck();
 
+            if (currentCheck) {
+                itemList.get(position).setCheck(false);
+                holder.binding.cbSelect.setChecked(false);
+                if (onItemCheckListener != null) {
+                    onItemCheckListener.onItemClick(view, position);
+                }
+            } else {
+                itemList.get(position).setCheck(true);
+                holder.binding.cbSelect.setChecked(true);
+                if (onItemCheckListener != null) {
+                    onItemCheckListener.onItemClick(view, position);
+                }
+            }
+
+
+        });
 
         holder.binding.tvDelete.setOnClickListener(view -> {
             int position = holder.getLayoutPosition();

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -35,7 +34,6 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -159,19 +157,6 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         // 밑줄 넣기
         binding.tvItemMinPrice.setPaintFlags(binding.tvItemMinPrice.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-
-        //TODO API 21 이상 대응 필요
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.nsvContent.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                if (scrollY == 0) {
-                    binding.ablTopControl.setElevation(0);
-                } else {
-                    binding.ablTopControl.setElevation(10);
-                }
-
-            });
-        }
-
         GoodsDetailRecyclerAdapter adapter = new GoodsDetailRecyclerAdapter();
         adapter.setOnItemDeleteListener((v, position) -> {
             Reply selectedReply = presenter.getItem(position);
@@ -225,6 +210,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         binding.tvAddList.setOnClickListener(view -> {
             behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
+
         presenter.loadReplyList(adapter, item.getKey());
 
         binding.tvItemMinPrice.setOnClickListener(view -> {
@@ -309,7 +295,6 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         binding.includeLoading.lavLoading.cancelAnimation();
         binding.includeLoading.lavLoading.setVisibility(View.GONE);
         if (size == Constant.LOADING_NONE_ITEM) {
-            showLongToast(String.format(getString(R.string.none_item), getString(R.string.toast_reply)));
             binding.tvTotalReplyCount.setText(String.format(getString(R.string.ratio_count), size));
             return;
         } else if (size == Constant.FAIL_LOAD) {

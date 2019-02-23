@@ -1,16 +1,15 @@
 package com.teame.boostcamp.myapplication.adapter;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.chip.Chip;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemMyListHeaderBinding;
-import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
-import com.teame.boostcamp.myapplication.util.GoodsDiffUtilCallBack;
 import com.teame.boostcamp.myapplication.util.GoodsListHeaderDiffUtilCallBack;
 
 import java.util.ArrayList;
@@ -39,6 +38,19 @@ public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsLis
                 int position = holder.getLayoutPosition();
                 onItemClickListener.onItemClick(view, position);
             }
+        });
+
+        holder.binding.viewFakeClick.setOnTouchListener((view, motionEvent) -> {
+            if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+
+                if (onItemClickListener != null) {
+                    DLogUtil.d("position :" + holder.getLayoutPosition());
+                    int position = holder.getLayoutPosition();
+                    onItemClickListener.onItemClick(view, position);
+                }
+                holder.binding.viewFakeClick.performClick();
+            }
+            return false;
         });
 
         holder.binding.ivDelete.setOnClickListener(view -> {
@@ -101,6 +113,9 @@ public class GoodsListHeaderRecyclerAdapter extends BaseRecyclerAdatper<GoodsLis
 
             binding.rvImages.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
             GoodsListHeaderImagesAdapter imagesAdapter = new GoodsListHeaderImagesAdapter();
+            imagesAdapter.setItemClickListener(view -> {
+                onItemClickListener.onItemClick(view, 0);
+            });
             binding.rvImages.setAdapter(imagesAdapter);
         }
     }
