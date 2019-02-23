@@ -47,4 +47,9 @@ public class MyListRepository implements MyListDataSoruce {
     public Single<Boolean> deleteMyList(String headerUid) {
         return myListRemoteDataSource.deleteMyList(headerUid).observeOn(AndroidSchedulers.mainThread());
     }
+
+    @Override
+    public Single<List<Goods>> getOtherListItems(String uid, String headerUid) {
+        return myListRemoteDataSource.getOtherListItems(uid, headerUid).observeOn(AndroidSchedulers.mainThread());
+    }
 }

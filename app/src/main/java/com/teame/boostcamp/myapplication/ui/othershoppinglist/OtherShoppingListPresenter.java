@@ -40,11 +40,13 @@ public class OtherShoppingListPresenter implements OtherShoppingListContract.Pre
      * 쇼핑리스트를 고르는데 필요한 정보를 가져옴
      */
     @Override
-    public void loadListData(GoodsOtherListAdapter adapter, String headerUid) {
+    public void loadListData(GoodsOtherListAdapter adapter, String uid, String headerUid) {
         this.adapter = adapter;
-        disposable.add(myListRepository.getMyListItems(headerUid)
+        disposable.add(myListRepository.getOtherListItems(uid, headerUid)
                 .subscribe(
                         list -> {
+                            DLogUtil.e(headerUid);
+                            DLogUtil.e(list.toString());
                             adapter.initItems(list);
                             itemList = list;
                             view.finishLoad(list.size());
@@ -57,45 +59,4 @@ public class OtherShoppingListPresenter implements OtherShoppingListContract.Pre
                 )
         );
     }
-    /*
-    @Override
-    public void calculatorPrice() {
-        int total = 0;
-        int remainCount = 0;
-        boolean isAlpha = false;
-
-        String formatedResult;
-
-        if (itemList == null) {
-            formatedResult = "통신에 장애가 있어요 :<";
-            view.setResultPrice(formatedResult);
-            return;
-        }
-
-        for (Goods item : itemList) {
-            if (!item.isCheck()) {
-                total += item.totalPrice();
-                remainCount++;
-                if (item.getLprice() == null) {
-                    isAlpha = true;
-                }
-            }
-        }
-
-        String result = DataStringUtil.makeStringComma(Integer.toString(total));
-
-        if (itemList.size() == 0) {
-            view.setOfferDelete();
-            return;
-        } else if (remainCount == 0) {
-            formatedResult = String.format(Locale.getDefault(), "모든 물품을 구입했어요!", result, remainCount);
-        } else if (isAlpha) {
-            formatedResult = String.format(Locale.getDefault(), "예상금액 : %s원 + α / %d개", result, remainCount);
-        } else {
-            formatedResult = String.format(Locale.getDefault(), "예상금액 : %s원 / %d개", result, remainCount);
-        }
-
-        view.setResultPrice(formatedResult);
-    }
-    */
 }
