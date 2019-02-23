@@ -1,32 +1,23 @@
 package com.teame.boostcamp.myapplication.adapter;
 
-import android.app.Activity;
-import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
 
 import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.databinding.ItemPostBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Post;
-import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
-import com.teame.boostcamp.myapplication.ui.modifypost.ModifyPostActivity;
-import com.teame.boostcamp.myapplication.ui.othershoppinglist.OtherShoppingListActivity;
-import com.teame.boostcamp.myapplication.ui.postreply.PostReplyActivity;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.disposables.CompositeDisposable;
 
 public class PostListAdapter extends BaseRecyclerAdatper<Post, PostListAdapter.ViewHolder> {
 
@@ -39,7 +30,8 @@ public class PostListAdapter extends BaseRecyclerAdatper<Post, PostListAdapter.V
     private OnItemClickListener onMenuClickListener;
 
 
-    public PostListAdapter() { }
+    public PostListAdapter() {
+    }
 
 
     @NonNull
@@ -98,13 +90,6 @@ public class PostListAdapter extends BaseRecyclerAdatper<Post, PostListAdapter.V
         }
         holder.binding.setPost(itemList.get(i));
         holder.binding.setAuth(FirebaseAuth.getInstance());
-        /*
-        holder.binding.ivPostReply.setOnClickListener(__ -> onReplyButtonClick(i));
-        holder.binding.ivPostLike.setOnClickListener(__ -> onLikeButtonClick(i));
-        holder.binding.ivShoppingList.setOnClickListener(__ -> onListButtonClick(i));
-        holder.binding.ivPostMenu.setOnClickListener(v -> onMenuButtonClick(v, i));
-        */
-
         holder.binding.vpPostImages.setAdapter(new PostImagePagerAdapter(itemList.get(i).getImagePathList()));
         holder.binding.tlImageIndicator.setupWithViewPager(holder.binding.vpPostImages, true);
 
@@ -138,58 +123,9 @@ public class PostListAdapter extends BaseRecyclerAdatper<Post, PostListAdapter.V
         return itemList.size();
     }
 
-    /*
-    public void onReplyButtonClick(int i) {
-        PostReplyActivity.startActivity(context, postList.get(i).getKey());
-    }
-
-    public void onMenuButtonClick(View view, int i) {
-        PopupMenu menu = new PopupMenu(context, view);
-        ((Activity) context).getMenuInflater().inflate(R.menu.menu_post, menu.getMenu());
-        menu.setOnMenuItemClickListener(item -> {
-            if (item.toString().equals("수정")) {
-                ModifyPostActivity.startActivity(context, postList.get(i));
-            } else {
-                disposable.add(rep.deletePost(postList.get(i).getKey(), postList.get(i).getImagePathList())
-                        .subscribe(b -> {
-                                    postList.remove(i);
-                                    notifyDataSetChanged();
-                                },
-                                e -> DLogUtil.e(e.getMessage())));
-            }
-            return false;
-        });
-        menu.show();
-    }
-
-    public void onListButtonClick(int i) {
-        OtherShoppingListActivity.startActivity(context, postList.get(i).getHeader().getKey(), postList.get(i).getWriter());
-    }
-
-
-    public void onLikeButtonClick(int i) {
-        notifyItemChanged(i, SHOW_LIKE_LOADING);
-        disposable.add(rep.adjustLike(postList.get(i).getKey())
-                .subscribe(post -> {
-                            postList.set(i, post);
-                            notifyItemChanged(i, LIKE_UPDATE);
-                        },
-                        e -> {
-                            DLogUtil.e(e.getMessage());
-                        })
-        );
-    }
-    */
-
-
-
-
-
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemPostBinding binding;
-        private OnPostClickListener mListener;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

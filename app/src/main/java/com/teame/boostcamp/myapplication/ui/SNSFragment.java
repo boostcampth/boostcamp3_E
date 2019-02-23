@@ -270,6 +270,8 @@ public class SNSFragment extends BaseFragment<FragmentSnsBinding, SNSContract.Pr
         super.onResume();
         initView();
     }
+
+    
 }
 
 
