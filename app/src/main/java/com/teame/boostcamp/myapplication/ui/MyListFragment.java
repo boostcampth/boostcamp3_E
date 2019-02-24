@@ -1,15 +1,19 @@
 package com.teame.boostcamp.myapplication.ui;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieDrawable;
+import com.google.firebase.auth.FirebaseAuth;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.GoodsListHeaderRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentMyListBinding;
 import com.teame.boostcamp.myapplication.model.repository.MyListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
+import com.teame.boostcamp.myapplication.ui.login.LoginActivity;
 import com.teame.boostcamp.myapplication.ui.selectedgoods.SelectedGoodsActivity;
 import com.teame.boostcamp.myapplication.util.Constant;
 
@@ -93,6 +97,41 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
             dialog.show();
 
             });
+
+        binding.svMylist.setOnSearchClickListener(v -> {binding.ivToolbarText.setVisibility(View.GONE);
+        binding.ivLogOut.setVisibility(View.GONE);});
+        binding.svMylist.setOnCloseListener(() -> {
+            binding.ivToolbarText.setVisibility(View.VISIBLE);
+            binding.ivLogOut.setVisibility(View.VISIBLE);
+            return false;
+        });
+        binding.ivLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage("로그아웃 하시겠습니까?")
+                        .setPositiveButton(getString(R.string.confirm), (__, ___) -> {
+                            FirebaseAuth.getInstance().signOut();
+                            LoginActivity.startActivity(getContext());
+                            getActivity().finish();
+                        })
+                        .setNegativeButton(getString(R.string.cancle), (dialogInterface, i) -> {
+
+                        })
+                        .setCancelable(true);
+
+                final AlertDialog dialog = builder.create();
+                dialog.setOnShowListener(__ -> {
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorClear));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorClear));
+
+                });
+
+                dialog.show();
+            }
+        });
         binding.rvMyList.setLayoutManager(linearLayoutManager);
         binding.rvMyList.setItemAnimator(new DefaultItemAnimator());
         binding.rvMyList.setAdapter(adapter);
@@ -121,6 +160,11 @@ public class MyListFragment extends BaseFragment<FragmentMyListBinding, MyListCo
             presenter.reLoadMyList();
             binding.srlMyList.setRefreshing(false);
         });
+
+        ImageView icon = binding.svMylist.findViewById(androidx.appcompat.R.id.search_button);
+        icon.setColorFilter(Color.BLACK);
+        ImageView iconClose = binding.svMylist.findViewById(androidx.appcompat.R.id.search_close_btn);
+        iconClose.setColorFilter(Color.BLACK);
 
     }
 

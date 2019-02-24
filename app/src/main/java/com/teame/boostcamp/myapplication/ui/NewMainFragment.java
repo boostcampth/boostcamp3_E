@@ -182,9 +182,11 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         binding.ablMain.addOnOffsetChangedListener((appBarLayout, i) -> {
             if(Math.abs(i)>=appBarLayout.getTotalScrollRange()){
                 binding.ivSearchPlace.setImageResource(R.drawable.btn_search);
+                binding.ivToolbarText.setVisibility(View.VISIBLE);
             }
             else if(i==0){
                 binding.ivSearchPlace.setImageResource(R.drawable.btn_search_white);
+                binding.ivToolbarText.setVisibility(View.GONE);
             }
         });
         binding.tvItemMore.setOnClickListener(__->{

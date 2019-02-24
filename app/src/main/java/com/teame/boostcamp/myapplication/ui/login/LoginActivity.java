@@ -1,6 +1,8 @@
 package com.teame.boostcamp.myapplication.ui.login;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -30,6 +32,11 @@ public class LoginActivity extends BaseMVPActivity<ActivityLoginBinding, LoginCo
     @Override
     public void setPresenter(Object presenter) {
 
+    }
+
+    public static void startActivity(Context context){
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
     }
 
     @Override
