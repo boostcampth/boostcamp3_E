@@ -102,7 +102,7 @@ public class PeriodActivity extends BaseMVPActivity<ActivityPeriodBinding,Period
         str+=lastDate.get(Calendar.YEAR)+"년 "+Integer.toString(lastDate.get(Calendar.MONTH)+1)+"월 "+lastDate.get(Calendar.DATE)+"일, "+between+ "박";
         binding.tvDate.setText(str);
         binding.tvDate.setOnClickListener(__->{
-            presenter.buttonClick();
+            finish();
         });
     }
 

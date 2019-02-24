@@ -37,10 +37,6 @@ public class GoodsCartActivity extends BaseMVPActivity<ActivityGoodsCartBinding,
 
     private boolean isChange = false;
     private static final int REQUEST_CODE = 1;
-    private static final String EXTRA_FIRSTDAY = "EXTRA_FIRSTDAY";
-    private static final String EXTRA_LASTDAY = "EXTRA_LASTDAY";
-    private static final String PREF_ACTIVITY_FIRST_DATE = "PREF_ACTIVITY_FIRST_DATE";
-    private static final String PREF_ACTIVITY_LAST_DATE = "EXTRA_ACTIVITY_LAST_DATE";
 
 
     @Override
