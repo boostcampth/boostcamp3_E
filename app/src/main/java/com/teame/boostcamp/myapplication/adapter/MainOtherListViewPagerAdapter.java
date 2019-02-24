@@ -49,7 +49,7 @@ public class MainOtherListViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         ItemMainOtherListBinding binding;
-        binding=DataBindingUtil.inflate(LayoutInflater.from(context),R.layout.item_main_other_list,container,false);
+        binding=DataBindingUtil.inflate(LayoutInflater.from(container.getContext()),R.layout.item_main_other_list,container,false);
         binding.setItem(headerlist.get(position));
         binding.mcvUserHeader.setOnClickListener(v->{
             onShowDetailClickListener.onItemClick(v,position);
