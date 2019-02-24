@@ -148,6 +148,7 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:background="@drawable/shape_roundedbox"
+                    android:textSize="11sp"
                     android:text=" 2019.01.23~2019.03.04, 7박 " />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
