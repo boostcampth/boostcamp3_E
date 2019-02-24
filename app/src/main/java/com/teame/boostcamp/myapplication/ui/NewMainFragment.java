@@ -150,7 +150,7 @@ public class NewMainFragment extends BaseFragment<FragmentMainBinding, NewMainCo
         List<Banner> banner = new ArrayList<>();
         banner.add(new Banner("오사카", "쇼핑의 천국 일본! 환율이 떨어진 만큼 부담없는 쇼핑!", "JP"));
         banner.add(new Banner("태국", "저렴한 물가, 맛있는 음식! 태국에서 꼭 사야할 꿀템들!", "TH"));
-        banner.add(new Banner("다낭", "다양한 저가항공의 취항과 저렴한 물가 등 매력적인 요소가 많은 여행지", "VN"));
+        banner.add(new Banner("다낭", "아름다운 해변과 저렴한 물가 호캉스 여행지!", "VN"));
         FamousPlaceAdapter famousAdapter=new FamousPlaceAdapter(getContext(),drawableId,banner);
         presenter.setViewPagerAdapter(famousAdapter);
         binding.vpFamousplace.setAdapter(famousAdapter);

@@ -118,6 +118,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements F
 
     @Override
     public void onBackPressed() {
-        subject.onNext(System.currentTimeMillis());
+        FragmentManager manager=getSupportFragmentManager();
+        boolean isPop=manager.popBackStackImmediate();
+        if(!isPop){
+            subject.onNext(System.currentTimeMillis());
+        }
     }
 }

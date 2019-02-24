@@ -30,6 +30,7 @@
             android:layout_marginBottom="16dp"
             android:paddingTop="@dimen/space_small"
             android:paddingBottom="@dimen/space_small"
+            android:textSize="11sp"
             android:background="@drawable/shape_roundedbox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
