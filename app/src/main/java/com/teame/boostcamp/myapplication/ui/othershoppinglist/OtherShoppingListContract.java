@@ -13,8 +13,7 @@ public interface OtherShoppingListContract {
     }
 
     interface Presenter extends BasePresenter {
-        void loadListData(GoodsOtherListAdapter adapter, String headerUid);
-        //void calculatorPrice();
+        void loadListData(GoodsOtherListAdapter adapter, String uid, String headerUid);
     }
 
 }

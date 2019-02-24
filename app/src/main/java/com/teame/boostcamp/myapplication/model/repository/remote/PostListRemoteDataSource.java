@@ -133,7 +133,7 @@ public class PostListRemoteDataSource implements PostListDataSource {
     @Override
     public Single<Post> writePost(String content, List<Uri> uriList, GoodsListHeader selectedListHeader) {
         PublishSubject<Post> subject = PublishSubject.create();
-        Post post = new Post(content, FirebaseAuth.getInstance().getCurrentUser().getEmail(), selectedListHeader);
+        Post post = new Post(auth.getUid(), content, FirebaseAuth.getInstance().getCurrentUser().getEmail(), selectedListHeader);
         post.setTags(selectedListHeader.getHashTag());
         long now = System.currentTimeMillis();
         Date nowDate = new Date(now);

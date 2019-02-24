@@ -129,6 +129,41 @@ public class MyListRemoteDataSource implements MyListDataSoruce {
     }
 
     @Override
+    public Single<List<Goods>> getOtherListItems(String uid, String headerUid) {
+        DLogUtil.d(":: 진입");
+        PublishSubject<Goods> subject = PublishSubject.create();
+        Task myList = userRef.document(uid).collection(QUERY_MY_LIST)
+                .document(headerUid)
+                .collection(QUERY_MY_GOODS).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
+
+                        for (DocumentSnapshot document : documents) {
+                            Goods item = document.toObject(Goods.class);
+                            String key = document.getReference().getId();
+                            item.setKey(key);
+                            subject.onNext(item);
+                        }
+                    } else {
+                        DLogUtil.d("No such document");
+                    }
+                })
+                .addOnFailureListener(Throwable::getMessage);
+
+        // 두 리스트가 가져오는데 성공하면 아이템을 반환해줌
+        Tasks.whenAll(myList).addOnCompleteListener(task -> {
+            subject.onComplete();
+        })
+                .addOnFailureListener(e -> DLogUtil.e("error : " + e.toString()));
+
+        // 가져온 리스트를 MinPriceAPI를 통해 최저가를 붙여준 후 모든아이템을 List로 반환해줌
+        return subject
+                .subscribeOn(Schedulers.io())
+                .toList();
+    }
+
+    @Override
     public Single<Boolean> saveMyList(List<Goods> goodsList, List<String> hashTag, GoodsListHeader header) {
         DLogUtil.d(":: 진입");
         PublishSubject<Boolean> subject = PublishSubject.create();

@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OtherShoppingListActivity extends BaseMVPActivity<ActivityOtherUserShoppingListBinding, OtherShoppingListContract.Presenter> implements OtherShoppingListContract.View {
 
+    public static final String EXTRA_USER_UID = "EXTRA_USER_UID";
     public static final String EXTRA_HEADER_UID = "EXTRA_HEADER_UID";
     public static final String EXTRA_EMAIL = "EXTRA_EMAIL";
 
@@ -37,8 +38,9 @@ public class OtherShoppingListActivity extends BaseMVPActivity<ActivityOtherUser
     }
 
 
-    public static void startActivity(Context context, String headerUid, String userEmail) {
+    public static void startActivity(Context context, String uid, String headerUid, String userEmail) {
         Intent intent = new Intent(context, OtherShoppingListActivity.class);
+        intent.putExtra(EXTRA_USER_UID, uid);
         intent.putExtra(EXTRA_HEADER_UID, headerUid);
         intent.putExtra(EXTRA_EMAIL, userEmail);
         context.startActivity(intent);
@@ -53,8 +55,10 @@ public class OtherShoppingListActivity extends BaseMVPActivity<ActivityOtherUser
 
     public void initView() {
         Intent intent = getIntent();
+        final String uid;
         final String headerUid;
         final String userEmail;
+        uid = intent.getStringExtra(EXTRA_USER_UID);
         headerUid = intent.getStringExtra(EXTRA_HEADER_UID);
         userEmail = intent.getStringExtra(EXTRA_EMAIL);
         binding.setEmail(userEmail);
@@ -74,7 +78,7 @@ public class OtherShoppingListActivity extends BaseMVPActivity<ActivityOtherUser
                 false);
         binding.rvCartList.setLayoutManager(linearLayoutManager);
         binding.rvCartList.setAdapter(adapter);
-        presenter.loadListData(adapter, headerUid);
+        presenter.loadListData(adapter, uid, headerUid);
 
         binding.rvCartList.setLayoutManager(linearLayoutManager);
         binding.rvCartList.setAdapter(adapter);

@@ -32,13 +32,17 @@ public class ModifyPostPresenter implements ModifyPostContract.Presenter {
     public void loadModifyImage(List<String> imagePath, PreviewImageAdapter adapter) {
         loading = view.showLoading();
         this.adapter = adapter;
-        disposable.add(postListRep.loadModifyImages(imagePath).subscribe(list ->{
-            DLogUtil.e(list.toString());
-            for(Uri uri : list){
-                loading.dismiss();
-                adapter.addItem(uri);
-            }
-        }, e -> view.occurServerError()));
+        if(imagePath.size() == 0){
+            loading.dismiss();
+        }else{
+            disposable.add(postListRep.loadModifyImages(imagePath).subscribe(list ->{
+                DLogUtil.e(list.toString());
+                for(Uri uri : list){
+                    loading.dismiss();
+                    adapter.addItem(uri);
+                }
+            }, e -> view.occurServerError()));
+        }
     }
 
     @Override

@@ -9,6 +9,8 @@ import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
 import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
+import java.util.List;
+
 import io.reactivex.disposables.CompositeDisposable;
 
 public class MyPostPresenter implements MyPostContract.Presenter {
@@ -46,6 +48,29 @@ public class MyPostPresenter implements MyPostContract.Presenter {
                         e -> DLogUtil.d(e.getMessage())
                 )
         );
+    }
+
+    @Override
+    public void adjustLike(String key, int position) {
+        disposable.add(postListRepository.adjustLike(key)
+                .subscribe(post -> {
+                            adapter.itemList.set(position, post);
+                            adapter.notifyItemChanged(position, PostListAdapter.LIKE_UPDATE);
+                        },
+                        e -> {
+                            DLogUtil.e(e.getMessage());
+                        })
+        );
+    }
+
+    @Override
+    public void deletePost(String key, List<String> imagePathList, int position) {
+        disposable.add(postListRepository.deletePost(key, imagePathList)
+                .subscribe(b -> {
+                            adapter.removeItem(position);
+                            view.succeedDelete(adapter.getItemCount());
+                        },
+                        e -> DLogUtil.e(e.getMessage())));
     }
 }
 
