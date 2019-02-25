@@ -79,6 +79,7 @@ public class PostListAdapter extends BaseRecyclerAdatper<Post, PostListAdapter.V
             holder.binding.cgHashTag.setVisibility(View.GONE);
         } else {
             holder.binding.cgHashTag.setVisibility(View.VISIBLE);
+            holder.binding.cgHashTag.removeAllViews();
             for (String tag : itemList.get(i).getTags().keySet()) {
                 Chip chip = new Chip(holder.itemView.getContext());
                 chip.setText("#" + tag);
