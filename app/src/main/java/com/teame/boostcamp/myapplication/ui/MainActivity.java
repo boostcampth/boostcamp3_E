@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.facebook.stetho.Stetho;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.teame.boostcamp.myapplication.R;
 import com.teame.boostcamp.myapplication.adapter.MainViewPagerAdapter;
@@ -16,6 +17,7 @@ import com.teame.boostcamp.myapplication.util.TedPermissionUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.work.WorkInfo;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -40,6 +42,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> implements F
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stetho.initializeWithDefaults(this);
         binding.bnvMainNavigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
         disposable.add(TedPermissionUtil.requestPermission(getApplicationContext(),
                 "권한설정",

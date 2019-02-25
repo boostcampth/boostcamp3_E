@@ -21,9 +21,9 @@ import androidx.work.WorkerParameters;
 
 public class AlarmWork extends Worker {
 
-    private String CHANNEL_NAME="test";
+    private String CHANNEL_NAME="OneTime";
     private static String KEY_SELECTED="KEY_SELECTED";
-    private String CHANNEL_ID="test";
+    private String CHANNEL_ID="OneTime";
 
     public AlarmWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -49,7 +49,7 @@ public class AlarmWork extends Worker {
             channel.enableVibration(true);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             manager.createNotificationChannel(channel);
-            notiBuilder.setChannelId("TEST");
+            notiBuilder.setChannelId(CHANNEL_ID);
         }
         PendingIntent intent=PendingIntent.getActivity(getApplicationContext(),0,new Intent(getApplicationContext(), MainActivity.class),PendingIntent.FLAG_ONE_SHOT);
 
