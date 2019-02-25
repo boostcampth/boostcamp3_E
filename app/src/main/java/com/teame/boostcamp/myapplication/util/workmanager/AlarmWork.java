@@ -61,8 +61,14 @@ public class AlarmWork extends Worker {
                 .setContentText(body)
                 .setContentTitle("이거 사셨나요?")
                 .setContentIntent(intent)
-                .setStyle(style)
-                .setSmallIcon(R.drawable.ic_logo_ejusa);
+                .setStyle(style);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            notiBuilder.setSmallIcon(R.drawable.ic_noti_logo_ejusa)
+                    .setColor(getApplicationContext().getResources().getColor(R.color.colorWhite));
+        }
+        else {
+            notiBuilder.setSmallIcon(R.drawable.ic_noti_logo_ejusa);
+        }
 
         manager.notify(11,notiBuilder.build());
 
