@@ -337,13 +337,13 @@ public class PostListRemoteDataSource implements PostListDataSource {
                 post.increaseLike();
                 post.setKey(postUid);
                 transaction.set(postRefer, post);
-                transaction.set(userRef.document(uid).collection(QUERY_MY_POST).document(postUid), post);
+                transaction.set(userRef.document(post.getUid()).collection(QUERY_MY_POST).document(postUid), post);
             } else {
                 post.getLikedUidList().remove(uid);
                 post.decreaseLike();
                 post.setKey(postUid);
                 transaction.set(postRefer, post);
-                transaction.set(userRef.document(uid).collection(QUERY_MY_POST).document(postUid), post);
+                transaction.set(userRef.document(post.getUid()).collection(QUERY_MY_POST).document(postUid), post);
             }
             return post;
         }).addOnSuccessListener(post -> subject.onNext(post)).addOnFailureListener(subject::onError);
