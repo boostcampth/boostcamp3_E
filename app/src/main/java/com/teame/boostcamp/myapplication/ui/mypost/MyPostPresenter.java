@@ -38,7 +38,7 @@ public class MyPostPresenter implements MyPostContract.Presenter {
     @Override
     public void loadMyPost(PostListAdapter adapter) {
         this.adapter = adapter;
-        disposable.add(postListRepository.getPostList()
+        disposable.add(postListRepository.getMyPostList()
                 .subscribe(
                         list -> {
                             adapter.initItems(list);
