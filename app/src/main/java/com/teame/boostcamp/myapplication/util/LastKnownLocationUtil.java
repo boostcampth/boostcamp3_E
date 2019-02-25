@@ -19,7 +19,7 @@ public class LastKnownLocationUtil {
             fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
                 LatLng latlng;
                 if(task.getResult()==null)
-                    latlng = new LatLng(0,0);
+                    latlng = new LatLng(37.566581, 126.978641);
                 else
                     latlng=new LatLng(task.getResult().getLatitude(),task.getResult().getLongitude());
                 subject.onSuccess(latlng);
