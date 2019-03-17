@@ -5,6 +5,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.protobuf.Empty;
 import com.teame.boostcamp.myapplication.model.MinPriceAPI;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.MinPriceResponse;
@@ -19,6 +20,7 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
+import retrofit2.Response;
 
 public class GoodsListRemoteDataSource implements GoodsListDataSource {
 
@@ -110,9 +112,9 @@ public class GoodsListRemoteDataSource implements GoodsListDataSource {
                         .zipWith(MinPriceAPI.getInstance()
                                         .api
                                         .getMinPrice(targetItem.getName())
-                                        .subscribeOn(Schedulers.io()),
-                                (item, response) -> {
-                                    MinPriceResponse minPriceResponse = response.body();
+                                        .subscribeOn(Schedulers.io())
+                                        .onErrorReturnItem(new MinPriceResponse()),
+                                (item, minPriceResponse) -> {
                                     item.setMinPriceResponse(minPriceResponse);
 
                                     return item;
@@ -194,9 +196,9 @@ public class GoodsListRemoteDataSource implements GoodsListDataSource {
                         .zipWith(MinPriceAPI.getInstance()
                                         .api
                                         .getMinPrice(targetItem.getName())
-                                        .subscribeOn(Schedulers.io()),
-                                (item, response) -> {
-                                    MinPriceResponse minPriceResponse = response.body();
+                                        .subscribeOn(Schedulers.io())
+                                        .onErrorReturnItem(new MinPriceResponse()),
+                                (item, minPriceResponse) -> {
                                     item.setMinPriceResponse(minPriceResponse);
 
                                     return item;
