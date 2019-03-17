@@ -1,15 +1,14 @@
-package com.teame.boostcamp.myapplication.adapter.searchadapter;
+package com.teame.boostcamp.myapplication.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.teame.boostcamp.myapplication.R;
+import com.teame.boostcamp.myapplication.adapter.listener.OnItemDeleteClickListener;
 import com.teame.boostcamp.myapplication.databinding.ItemExSearchBinding;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -18,14 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ExListAdapter extends RecyclerView.Adapter<ExListAdapter.ExListView> implements ExListAdapterContract.Model, ExListAdapterContract.View {
     private ArrayList<String> list=new ArrayList<>();
-    private OnItemClickListener clickListener;
+    private OnItemDeleteClickListener clickListener;
 
     public ExListAdapter(){
         clickListener= __ -> {};
     }
 
     @Override
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemDeleteClickListener listener) {
         clickListener=listener;
     }
 

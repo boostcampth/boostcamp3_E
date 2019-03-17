@@ -1,6 +1,6 @@
-package com.teame.boostcamp.myapplication.adapter.usershoppinglist;
+package com.teame.boostcamp.myapplication.adapter;
 
-import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
+import com.teame.boostcamp.myapplication.adapter.listener.OnUserShoppingItemClick;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 
 public interface UserShoppingListAdapterContract {

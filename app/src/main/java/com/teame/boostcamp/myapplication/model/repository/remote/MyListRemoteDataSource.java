@@ -4,7 +4,6 @@ import android.net.Uri;
 
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,13 +22,12 @@ import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.MyListDataSoruce;
 import com.teame.boostcamp.myapplication.util.CalendarUtil;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
-import com.teame.boostcamp.myapplication.util.workmanager.AlarmWork;
+import com.teame.boostcamp.myapplication.util.AlarmWork;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;

@@ -3,15 +3,11 @@ package com.teame.boostcamp.myapplication.ui.othershoppinglist;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.airbnb.lottie.LottieDrawable;
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.GoodsMyListAdapter;
 import com.teame.boostcamp.myapplication.adapter.GoodsOtherListAdapter;
-import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ActivityOtherUserShoppingListBinding;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
 import com.teame.boostcamp.myapplication.ui.snsgoodsdetail.SnsGoodsDetailActivity;

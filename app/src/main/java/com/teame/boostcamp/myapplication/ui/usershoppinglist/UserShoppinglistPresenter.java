@@ -3,8 +3,8 @@ package com.teame.boostcamp.myapplication.ui.usershoppinglist;
 
 import android.text.TextUtils;
 
-import com.teame.boostcamp.myapplication.adapter.usershoppinglist.OnUserShoppingItemClick;
-import com.teame.boostcamp.myapplication.adapter.usershoppinglist.UserShoppingListAdapterContract;
+import com.teame.boostcamp.myapplication.adapter.listener.OnUserShoppingItemClick;
+import com.teame.boostcamp.myapplication.adapter.UserShoppingListAdapterContract;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.local.preference.CartPreference;

@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.teame.boostcamp.myapplication.R;
+import com.teame.boostcamp.myapplication.adapter.base.BaseRecyclerAdatper;
+import com.teame.boostcamp.myapplication.adapter.listener.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ItemPreviewImageBinding;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 import com.teame.boostcamp.myapplication.util.LocalImageUtil;

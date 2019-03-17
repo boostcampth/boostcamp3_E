@@ -6,12 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.adapter.PostReplyAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityPostReplyBinding;
-import com.teame.boostcamp.myapplication.model.repository.PostListRepository;
 import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
-import com.teame.boostcamp.myapplication.util.DividerItemDecorator;
 import com.teame.boostcamp.myapplication.util.InputKeyboardUtil;
 
 import androidx.recyclerview.widget.LinearLayoutManager;

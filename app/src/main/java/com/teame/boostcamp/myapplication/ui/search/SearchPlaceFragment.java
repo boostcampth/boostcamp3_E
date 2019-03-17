@@ -1,35 +1,24 @@
 package com.teame.boostcamp.myapplication.ui.search;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapter;
+import com.teame.boostcamp.myapplication.adapter.ExListAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSearchPlaceBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseFragment;
 import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.ui.searchmap.SearchMapActivity;
-import com.teame.boostcamp.myapplication.util.LastKnownLocationUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
 public class SearchPlaceFragment extends BaseFragment<FragmentSearchPlaceBinding, SearchPlaceContract.Presenter> implements SearchPlaceContract.View {
     @Override

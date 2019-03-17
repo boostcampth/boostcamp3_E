@@ -1,25 +1,19 @@
 package com.teame.boostcamp.myapplication.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.teame.boostcamp.myapplication.R;
+import com.teame.boostcamp.myapplication.adapter.listener.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ItemFamousPlaceBinding;
-import com.teame.boostcamp.myapplication.databinding.ItemPostImagePagerBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Banner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.PagerAdapter;
 

@@ -4,18 +4,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Checkable;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.databinding.ItemListGoodsBinding;
+import com.teame.boostcamp.myapplication.adapter.base.BaseRecyclerAdatper;
+import com.teame.boostcamp.myapplication.adapter.listener.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ItemLocationBaseListGoodsBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;

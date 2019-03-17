@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.adapter.PostListAdapter;
 import com.teame.boostcamp.myapplication.adapter.SnsSearchRecyclerAdapter;
 import com.teame.boostcamp.myapplication.databinding.FragmentSnsBinding;

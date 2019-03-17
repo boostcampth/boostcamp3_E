@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.teame.boostcamp.myapplication.adapter.FamousPlaceAdapter;
 import com.teame.boostcamp.myapplication.adapter.LocationBaseGoodsListRecyclerAdapter;
 import com.teame.boostcamp.myapplication.adapter.MainOtherListViewPagerAdapter;
-import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
+import com.teame.boostcamp.myapplication.adapter.listener.OnItemClickListener;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.model.repository.GoodsListRepository;

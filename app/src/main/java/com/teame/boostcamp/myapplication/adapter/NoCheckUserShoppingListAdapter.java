@@ -1,13 +1,11 @@
-package com.teame.boostcamp.myapplication.adapter.nocheckusershoppinglist;
+package com.teame.boostcamp.myapplication.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ItemNoCheckShoppinglistBinding;
-import com.teame.boostcamp.myapplication.databinding.ItemUsershoppinglistBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.ui.goodsdetail.GoodsDetailActivity;
 

@@ -5,10 +5,8 @@ import android.location.Geocoder;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.teame.boostcamp.myapplication.adapter.searchadapter.ExListAdapterContract;
+import com.teame.boostcamp.myapplication.adapter.ExListAdapterContract;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
-import com.teame.boostcamp.myapplication.model.repository.PlaceTextDataRepository;
-import com.teame.boostcamp.myapplication.ui.createlist.CreateListActivity;
 import com.teame.boostcamp.myapplication.ui.searchmap.SearchMapActivity;
 import com.teame.boostcamp.myapplication.util.LastKnownLocationUtil;
 import com.teame.boostcamp.myapplication.util.ResourceProvider;

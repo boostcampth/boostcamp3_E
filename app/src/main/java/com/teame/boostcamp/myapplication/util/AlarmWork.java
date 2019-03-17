@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.util.workmanager;
+package com.teame.boostcamp.myapplication.util;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

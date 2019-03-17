@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.google.android.material.chip.Chip;
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.usershoppinglist.UserShoppingListAdapter;
+import com.teame.boostcamp.myapplication.adapter.UserShoppingListAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityUsersShoppinglistBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;

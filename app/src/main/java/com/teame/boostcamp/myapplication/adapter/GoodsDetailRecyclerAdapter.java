@@ -5,13 +5,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.teame.boostcamp.myapplication.R;
+import com.teame.boostcamp.myapplication.adapter.base.BaseRecyclerAdatper;
+import com.teame.boostcamp.myapplication.adapter.listener.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ItemDetailReplyBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Reply;
 import com.teame.boostcamp.myapplication.util.DLogUtil;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GoodsDetailRecyclerAdapter extends BaseRecyclerAdatper<Reply, GoodsDetailRecyclerAdapter.ViewHolder> {
