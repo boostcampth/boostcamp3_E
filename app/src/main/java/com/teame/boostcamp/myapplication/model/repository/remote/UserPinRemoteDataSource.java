@@ -96,9 +96,9 @@ public class UserPinRemoteDataSource implements UserPinDataSource {
                         .zipWith(MinPriceAPI.getInstance()
                                         .api
                                         .getMinPrice(targetItem.getName())
-                                        .subscribeOn(Schedulers.io()),
-                                (item, response) -> {
-                                    MinPriceResponse minPriceResponse = response.body();
+                                        .subscribeOn(Schedulers.io())
+                                        .onErrorReturnItem(new MinPriceResponse()),
+                                (item, minPriceResponse) -> {
                                     item.setMinPriceResponse(minPriceResponse);
                                     return item;
                                 }))

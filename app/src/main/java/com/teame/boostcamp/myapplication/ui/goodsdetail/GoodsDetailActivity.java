@@ -193,20 +193,6 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
         binding.rvReplyList.setLayoutManager(linearLayoutManager);
         binding.rvReplyList.setAdapter(adapter);
 
-        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-
-                }
-            }
-
-            @Override
-            public void onSlide(View bottomSheet, float slideOffset) {
-
-            }
-        });
-
         binding.tvAddList.setOnClickListener(view -> {
             behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
@@ -249,6 +235,7 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
             presenter.addCartGoods(item);
             behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         });
+
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
                                             @Override
                                             public void onStateChanged(@NonNull View view, int i) {
@@ -346,8 +333,9 @@ public class GoodsDetailActivity extends BaseMVPActivity<ActivityGoodsDetailBind
             if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                 Rect outRect = new Rect();
                 binding.llcAddBottom.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY()))
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
                     behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
             }
         }
         return super.dispatchTouchEvent(event);

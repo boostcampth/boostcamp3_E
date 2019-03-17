@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">이거 사!</string>
-    <string name="bottom_tab_main">Main</string>
-    <string name="bottom_tab_my_list">MyList</string>
+    <string name="bottom_tab_main">Map</string>
+    <string name="bottom_tab_my_list">My</string>
     <string name="bottom_tab_sns">SNS</string>
     <string name="login_success">로그인 성공</string>
     <string name="login_error">이메일과 비밀번호를 확인해 주세요</string>
