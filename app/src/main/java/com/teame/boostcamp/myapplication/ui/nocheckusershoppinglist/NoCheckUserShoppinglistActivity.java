@@ -1,27 +1,18 @@
 package com.teame.boostcamp.myapplication.ui.nocheckusershoppinglist;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.chip.Chip;
 import com.teame.boostcamp.myapplication.R;
-import com.teame.boostcamp.myapplication.adapter.nocheckusershoppinglist.NoCheckUserShoppingListAdapter;
-import com.teame.boostcamp.myapplication.adapter.usershoppinglist.UserShoppingListAdapter;
+import com.teame.boostcamp.myapplication.adapter.NoCheckUserShoppingListAdapter;
 import com.teame.boostcamp.myapplication.databinding.ActivityNoCheckUsershoppinglistBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 import com.teame.boostcamp.myapplication.model.entitiy.GoodsListHeader;
 import com.teame.boostcamp.myapplication.ui.base.BaseActivity;
-import com.teame.boostcamp.myapplication.ui.base.BaseMVPActivity;
-import com.teame.boostcamp.myapplication.ui.base.BasePresenter;
-import com.teame.boostcamp.myapplication.ui.usershoppinglist.UserShoppinglistActivity;
-import com.teame.boostcamp.myapplication.ui.usershoppinglist.UserShoppinglistPresenter;
 
 import java.util.ArrayList;
 

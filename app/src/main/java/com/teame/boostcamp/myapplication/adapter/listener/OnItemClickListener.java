@@ -1,4 +1,4 @@
-package com.teame.boostcamp.myapplication.adapter;
+package com.teame.boostcamp.myapplication.adapter.listener;
 
 import android.view.View;
 

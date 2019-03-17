@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.teame.boostcamp.myapplication.R;
+import com.teame.boostcamp.myapplication.adapter.base.BaseRecyclerAdatper;
+import com.teame.boostcamp.myapplication.adapter.listener.OnItemClickListener;
 import com.teame.boostcamp.myapplication.databinding.ItemMyCheckGoodsBinding;
 import com.teame.boostcamp.myapplication.model.entitiy.Goods;
 

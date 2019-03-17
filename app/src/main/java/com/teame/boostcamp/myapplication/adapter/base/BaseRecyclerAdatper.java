@@ -1,11 +1,11 @@
-package com.teame.boostcamp.myapplication.adapter;
+package com.teame.boostcamp.myapplication.adapter.base;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-abstract class BaseRecyclerAdatper<T,H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> {
+public abstract class BaseRecyclerAdatper<T,H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> {
 
     public List<T> itemList = new ArrayList<>();
 
